@@ -1,0 +1,75 @@
+.sidenav {
+	height: 100%; 
+  width: 240px; /* 0 width - change this with JavaScript */
+  position: fixed;
+  z-index: 1; 
+  top: 0; 
+  left: 0;
+  background-color: $color-black; 
+  overflow-x: hidden; 
+  padding-top: 25px; 
+	padding: 25px;
+  transition: all 0.3s ease 0s;
+	@media screen and (max-width: 1140px){
+		width: 215px;
+	}
+
+	&__logo {
+		margin-bottom: 75px;
+		padding: 0px 20px;
+	}
+
+	&__menu {
+		
+	}
+
+	&__title {
+		font-size: 13px;
+		line-height: 16px;
+		color: $color-yellow;
+		text-transform: uppercase;
+		margin-bottom: 15px;
+		padding-left: 20px;
+	}
+
+	&__link {
+		display: flex;
+		font-size: 16px;
+		line-height: 20px;
+		color: $color-grey;
+		padding: 14px 0 6px 20px;
+		width: 100%;
+		transition: all 0.3s ease 0s;
+		margin-bottom: 8px;
+		path{
+			transition: all 0.3s ease 0s;
+		}
+		&--active{
+			text-shadow: 0 0 .9px $color-yellow, 0 0 .9px $color-yellow, 0 0 .9px $color-yellow;
+			color: $color-yellow;
+			background-color: $color-yellow-opacity;
+			border-radius: 4px;
+			.sidenav__icon{
+					path{
+						fill: $color-yellow;
+					}
+			}
+		}
+		&:hover{
+			text-shadow: 0 0 .9px $color-yellow, 0 0 .9px $color-yellow, 0 0 .9px $color-yellow;
+			color: $color-yellow;
+			background-color: $color-yellow-opacity;
+			border-radius: 4px;
+			.sidenav__icon{
+					path{
+						fill: $color-yellow;
+					}
+			}
+		}
+	}
+
+	&__icon{
+		transition: all 0.3s ease 0s;
+		margin-right: 10px;
+	}
+}
