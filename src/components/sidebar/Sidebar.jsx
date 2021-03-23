@@ -1,26 +1,27 @@
 import { Link } from "react-router-dom";
+import routes from "../../constants/routes";
 
 export default function Sidebar(params) {
   return (
     <div className="sidebar">
       <ul>
         <li>
-          <Link to="/">Home</Link>
+          <Link to={routes.home}>Home</Link>
         </li>
         <li>
-          <Link to="/users">Users</Link>
+          <Link to={routes.users}>Users</Link>
         </li>
         <li>
-          <Link to="/setting">Settings</Link>
+          <Link to={routes.setting}>Settings</Link>
         </li>
         <li>
-          <Link to="/files">Files</Link>
+          <Link to={routes.files}>Files</Link>
         </li>
         <li>
-          <Link to="/logs">Activity logs</Link>
+          <Link to={routes.logs}>Activity logs</Link>
         </li>
         <li>
-          <Link to="/groups">Store groups</Link>
+          <Link to={routes.groups}>Store groups</Link>
         </li>
       </ul>
     </div>

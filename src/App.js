@@ -1,10 +1,10 @@
 import CustomRouter from "./pages/Router";
-import styles from './app.module.css';
+import styles from './app.module.scss';
 
 function App() {
   return (
-    <div className={styles.app}>
-      <CustomRouter />
+    <div className={styles.container}>
+				<CustomRouter />
     </div>
   );
 }
