@@ -1,0 +1,46 @@
+.hidden-nav {
+	width: 90px;
+	background-color: $color-black;
+	padding: 25px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	height: 100%;
+	/* 0 width - change this with JavaScript */
+	position: fixed;
+	z-index: 1;
+	top: 0;
+	left: 0;
+
+	&__logo {
+		margin-bottom: 120px;
+	}
+
+	&__icons {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+
+		.hidden-nav__active {
+			path {
+				fill: $color-yellow;
+			}
+		}
+
+		svg {
+			margin-bottom: 35px;
+			cursor: pointer;
+
+			&:hover {
+				path {
+					fill: $color-yellow;
+				}
+			}
+
+			path {
+				fill: $color-grey;
+				transition: all 0.3s ease 0s;
+			}
+		}
+	}
+}

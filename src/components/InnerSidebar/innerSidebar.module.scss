@@ -1,0 +1,42 @@
+@import "../../scss/variables";
+
+.innerMenu {
+	padding: 60px 32px;
+	display: flex;
+	flex-direction: column;
+	border-right: 1px solid #F2F2F2;
+	min-width: 185px;
+
+	&__title {
+		font-size: 13px;
+		line-height: 16px;
+		text-transform: uppercase;
+		color: $color-yellow;
+		margin-bottom: 20px;
+	}
+
+	&__link {
+		font-size: 15px;
+		line-height: 19px;
+		color: rgba(51, 51, 51, 0.7);
+		margin-bottom: 20px;
+
+		&.active {
+			color: #333333;
+			font-weight: 700;
+			background-image: url(../../images/active-arrow.svg);
+			background-repeat: no-repeat;
+			background-position: top 1px right;
+			background-repeat: no-repeat;
+		}
+	}
+
+	&__link--active {
+		color: #333333;
+		font-weight: 700;
+		//background-image: url(../img/icons/active-arrow.svg);
+		background-repeat: no-repeat;
+		background-position: top 1px right;
+		background-repeat: no-repeat;
+	}
+}

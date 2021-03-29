@@ -1,0 +1,111 @@
+@import "../../../scss/variables";
+
+.header {
+	background: #FFFFFF;
+	border: 1px solid #F2F2F2;
+	margin-bottom: 30px;
+
+	& .container {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 22px 36px;
+	}
+
+	&__wrapper {
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	&__search {
+		display: flex;
+		align-items: center;
+		flex: 1 1 300px;
+		margin-right: 20px;
+		position: relative;
+
+		svg {
+			width: 16px;
+			height: 16px;
+			cursor: pointer;
+		}
+	}
+
+	&__searchBox {
+		display: flex;
+		align-items: center;
+		position: relative;
+		flex: 0 0 300px;
+	}
+
+	&__searchInput {
+		appearance: none;
+		border: 0px;
+		padding: 10px 16px 10px 16px;
+		width: 40px;
+		border: 1px solid transparent;
+		transition: all 0.3s ease 0s;
+		font-size: 15px;
+		line-height: 19px;
+		letter-spacing: -0.03em;
+		background-image: url(../../../images/searh.svg);
+		background-size: 16px 16px;
+		background-position: center left 10px;
+		background-repeat: no-repeat;
+		cursor: pointer;
+		transition: width ease .7s, background-size ease 0.3s;
+		color: transparent;
+
+		&::placeholder {
+			color: transparent;
+		}
+
+		&:focus {
+			background-color: #FFFFFF;
+			background-size: 0px 0px;
+			border: 1px solid #E0E0E0;
+			border-radius: 4px;
+			width: 100%;
+			max-width: 300px;
+			cursor: auto;
+			color: $color-black;
+
+			&::placeholder {
+				font-size: 15px;
+				line-height: 19px;
+				letter-spacing: -0.03em;
+				color: rgba(51, 51, 51, 0.4);
+			}
+		}
+
+		&:focus {
+			outline: none;
+		}
+	}
+	&__icons{
+		display: flex;
+		color: $color-black;
+	}
+	&__bellWrapper{
+		position: relative;
+	}
+}
+
+.burger {
+	margin-right: 36px;
+	width: 14px;
+	height: 14px;
+	cursor: pointer;
+}
+
+.indicator{
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background-color: $color-red;
+	position: absolute;
+	right: 20px;
+	top: 9px
+}

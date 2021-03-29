@@ -1,25 +1,26 @@
-import { Route, Switch } from "react-router";
-import Sidebar from "../components/sidebar/Sidebar";
-import ActivityLogsPage from "./ActivityLogsPage";
-import FilesPage from "./FilesPage";
-import SettingsPage from "./SettingsPage/SettingsPage";
-import StoreGroupsPage from "./StoreGroupsPage";
-import StoreListPage from "./StoreListPage";
-import UsersPage from "./UsersPage";
-import routes from "../constants/routes";
+import {Route, Switch} from 'react-router-dom';
+import {useState} from 'react';
+import Sidebar from '../components/Sidebar';
+import mainNavigation from './../constants/main-navigation';
+import HeaderDashboard from "../components/header/HeaderDashboard";
 
-export default function CustomRouter(params) {
+export default function CustomRouter() {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOverlap, setIsSidebarOverlap] = useState(false);
+
+  const sidebarToggle = () => {
+    setIsSidebarOpen((prev) => !prev);
+  };
+
   return (
-    <>
-      <Sidebar />
-      <Switch>
-        <Route exact path={routes.home} component={StoreListPage} />
-        <Route exact path={routes.users} component={UsersPage} />
-        <Route exact path={routes.setting} component={SettingsPage} />
-        <Route exact path={routes.files} component={FilesPage} />
-        <Route exact path={routes.logs} component={ActivityLogsPage} />
-        <Route exact path={routes.groups} component={StoreGroupsPage} />
-      </Switch>
-    </>
+    <div className="wrapper">
+      <Sidebar isOpen={isSidebarOpen} isOverlap={isSidebarOverlap}/>
+      <div className="dashboard">
+        <HeaderDashboard sidebarToggle={sidebarToggle}/>
+        <Switch>
+          {mainNavigation.map(({to, component}) => <Route path={to} component={component} key={to}/>)}
+        </Switch>
+      </div>
+    </div>
   );
 }

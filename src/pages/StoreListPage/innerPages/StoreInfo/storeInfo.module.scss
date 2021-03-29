@@ -1,0 +1,44 @@
+@import "../../../../scss/variables";
+
+.inner{
+  display: flex;
+}
+
+.wrapper{
+  padding-left: 36px;
+  //padding: 0px 36px;
+  width: 100%;
+}
+
+.innerMenu {
+  padding: 60px 32px;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #F2F2F2;
+  min-width: 185px;
+
+  &__title {
+    font-size: 13px;
+    line-height: 16px;
+    text-transform: uppercase;
+    color: $color-yellow;
+    margin-bottom: 20px;
+
+  }
+
+  &__link {
+    font-size: 15px;
+    line-height: 19px;
+    color: rgba(51, 51, 51, 0.7);
+    margin-bottom: 20px;
+  }
+
+  &__link--active {
+    color: #333333;
+    font-weight: 700;
+    //background-image: url(../img/icons/active-arrow.svg);
+    background-repeat: no-repeat;
+    background-position: top 1px right;
+    background-repeat: no-repeat;
+  }
+}

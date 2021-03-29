@@ -1,0 +1,85 @@
+@import "../../../scss/variables";
+
+.notifications {
+	z-index: 10;
+	position: absolute;
+	right: 0;
+	top: 100%;
+	background-color: #fff;
+	border: 1px solid #F2F2F2;
+	box-shadow: 0px 6px 14px -6px rgba(24, 39, 75, 0.12), 0px 10px 32px -4px rgba(24, 39, 75, 0.1);
+	border-radius: $border-radius;
+	width: 430px;
+	margin-top: 16px;
+	color: $color-black;
+	transition: all 0.5s ease 0s;
+
+	&.show-block {
+		transition: all 0.5s ease 0s;
+		visibility: visible;
+		opacity: 1;
+	}
+
+	&__title {
+		font-weight: 700;
+		font-size: 16px;
+		line-height: 20px;
+		letter-spacing: -0.02em;
+		padding: 18px 20px 16px 24px;
+		border-bottom: 1px solid #F2F2F2;
+	}
+
+	&__item {
+		padding: 18px 20px 16px 24px;
+		border-bottom: 1px solid #F2F2F2;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	&__info {}
+
+	&__msg {
+		font-size: 16px;
+		line-height: 20px;
+		letter-spacing: -0.02em;
+		margin-bottom: 6px;
+
+		&--error {
+			color: $color-red;
+		}
+	}
+
+	&__store {
+		font-size: 16px;
+		line-height: 20px;
+		letter-spacing: -0.02em;
+		margin-right: 16px;
+		font-weight: 700;
+		color: $color-black;
+
+	}
+
+	&__text {
+		display: inline-block;
+		margin-right: 21px;
+		font-size: 14px;
+		line-height: 18px;
+		letter-spacing: -0.02em;
+		color: rgba(51, 51, 51, 0.7);
+	}
+
+	&__icon {
+		width: 42px;
+		height: 37px;
+		border-radius: $border-radius;
+		background-color: $color-yellow-opacity;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		&--error {
+			background-color: rgba(219, 0, 7, 0.1);
+		}
+	}
+}

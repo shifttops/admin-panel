@@ -1,6 +1,7 @@
 .dashboard {
-	.conatiner {
+	&__wrapper {
 		padding: 0px 36px;
+		width: 100%;
 	}
 
 	&__search-wrapper {
@@ -61,10 +62,10 @@
 		border: 1px solid #E0E0E0;
 		border-radius: 4px;
 		font-size: 13px;
-		line-height: 15px;
+		line-height: 18px;
 		letter-spacing: -0.03em;
 		color: $color-black;
-		padding: 11px 11px 8px 34px;
+		padding: 11px 11px 5px 34px;
 		background-image: url(../img/icons/searh.svg);
 		background-repeat: no-repeat;
 		background-position: center left 13px;
@@ -83,6 +84,7 @@
 
 	&__print {
 		display: none;
+		margin-right: 0px;
 	}
 
 	&__report {
@@ -204,7 +206,7 @@
 		}
 		
 		svg{
-			margin: -2px 4px 0px 0px;
+			margin: -3px 4px 0px 0px;
 		}
 
 		path {
@@ -305,6 +307,9 @@
 		border-spacing: 0;
 
 		th.table__center {
+			text-align: center;
+		}
+		& .table__center{
 			text-align: center;
 		}
 	}

@@ -1,0 +1,131 @@
+@import "../../scss/variables";
+
+.sidebar {
+	width: 100%;
+	width: 90px;
+	background-color: $color-black;
+	padding: 25px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	height: 100%;
+	z-index: 1;
+
+	&__title {
+		display: none;
+	}
+
+	&__logo {
+		margin-bottom: 120px;
+	}
+
+	&__wrap {
+		max-width: 240px;
+	}
+
+	&__icon {
+		margin-bottom: 35px;
+		color: $color-grey;
+
+		svg path {
+			transition: all 0.3s ease 0s;
+		}
+
+		&:hover {
+			color: $color-yellow;
+
+			svg path {
+				fill: $color-yellow;
+			}
+		}
+	}
+
+	&__item {
+		padding: 0px;
+
+		&.active {
+			svg path {
+				fill: $color-yellow;
+			}
+		}
+
+		&:hover {
+			svg path {
+				fill: $color-yellow;
+			}
+		}
+	}
+
+	&__link {
+		display: none;
+	}
+
+	&__title {
+		font-size: 13px;
+		line-height: 16px;
+		color: #ffc300;
+		text-transform: uppercase;
+		margin-bottom: 15px;
+		padding-left: 20px;
+	}
+}
+
+
+
+
+.sidebarOpen {
+	width: 240px;
+	align-items: flex-start;
+
+	// .sidebar__wrap{
+	// 	width: 240px;
+	// }
+
+	.sidebar__title {
+		display: block;
+	}
+
+	.sidebar__link {
+		display: block;
+	}
+
+	.sidebar__icon {
+		margin: 0px 10px;
+		margin-bottom: 0px;
+		margin-right: 10px;
+	}
+
+	.sidebar__item {
+		color: $color-grey;
+		display: flex;
+		align-items: center;
+		font-size: 16px;
+		line-height: 20px;
+		color: $color-grey;
+		padding: 14px 0 6px 20px;
+		width: 100%;
+		transition: all 0.3s ease 0s;
+		margin-bottom: 8px;
+		border-radius: 4px;
+
+		&.active {
+			color: $color-yellow;
+			text-shadow: 0 0 .9px $color-yellow, 0 0 .9px $color-yellow, 0 0 .9px $color-yellow;
+			background-color: $color-yellow-opacity;
+		}
+
+		svg path {
+			transition: all 0.3s ease 0s;
+		}
+
+		&:hover {
+			color: $color-yellow;
+			text-shadow: 0 0 .9px $color-yellow, 0 0 .9px $color-yellow, 0 0 .9px $color-yellow;
+			background-color: $color-yellow-opacity;
+
+			svg path {
+				fill: $color-yellow;
+			}
+		}
+	}
+}
