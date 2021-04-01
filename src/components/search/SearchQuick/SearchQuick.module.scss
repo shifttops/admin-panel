@@ -1,0 +1,28 @@
+@import "../../../scss/variables";
+
+.search {
+  margin-right: 24px;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  font-size: 13px;
+  line-height: 18px;
+  letter-spacing: -0.03em;
+  color: $color-black;
+  padding: 12px 11px 8px 34px;
+  background-image: url(../../../images/searh.svg);
+  background-repeat: no-repeat;
+  background-position: center left 13px;
+  max-width: 164px;
+
+  &:focus {
+    outline: none;
+  }
+
+  &::placeholder {
+    font-size: 13px;
+    line-height: 15px;
+    letter-spacing: -0.03em;
+    color: rgba(51, 51, 51, 0.7);
+  }
+}

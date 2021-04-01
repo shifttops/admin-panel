@@ -1,56 +1,58 @@
 @import "../../scss/variables";
 
-.storeList{
-	&__checkbox {
-		cursor: pointer;
-	}
+.storeList {
+  &__checkbox {
+    cursor: pointer;
+  }
 
-	&__checkboxWrap {
-		cursor: pointer;
+  &__checkboxWrap {
+    cursor: pointer;
 
-		& >.checkbox__input {
-			position: absolute;
-			z-index: -1;
-			opacity: 0;
-		}
+    & > .checkbox__input {
+      position: absolute;
+      z-index: -1;
+      opacity: 0;
+    }
 
-		& >.checkbox__input:not(:disabled):not(:checked)+.store-list__label:hover::before {
-			border-color: #E0E0E0;
-		}
+    &
+      > .checkbox__input:not(:disabled):not(:checked)
+      + .store-list__label:hover::before {
+      border-color: #e0e0e0;
+    }
 
-		& >.checkbox__input:not(:disabled):active+.store-list__label::before {
-			border-color: #E0E0E0;
-		}
+    & > .checkbox__input:not(:disabled):active + .store-list__label::before {
+      border-color: #e0e0e0;
+    }
 
-		& >.checkbox__input:checked+span::before {
-			background-image: url("../../images/check.svg");
-			background-size: 9px 9px;
-		}
+    & > .checkbox__input:checked + span::before {
+      background-image: url("../../images/check.svg");
+      background-size: 9px 9px;
+    }
 
-		& >.checkbox__input:disabled+span::before {
-			background-color: #e9ecef;
-		}
-	}
+    & > .checkbox__input:disabled + span::before {
+      background-color: #e9ecef;
+    }
+  }
 
-	&__label {
-		display: inline-flex;
-		align-items: center;
-		user-select: none;
+  &__label {
+    display: inline-flex;
+    align-items: center;
+    user-select: none;
 
-		&::before {
-			content: "";
-			display: inline-block;
-			margin-right: 20px;
-			margin-top: -5px;
-			width: 14px;
-			height: 14px;
-			background-color: #fff;
-			border: 1px solid #E0E0E0;
-			border-radius: 2px;
-			flex-shrink: 0;
-			flex-grow: 0;
-			background-repeat: no-repeat;
-			background-position: center center;
-		}
-	}
+    &::before {
+      content: "";
+      display: inline-block;
+      margin-right: 20px;
+      margin-top: -5px;
+      width: 14px;
+      height: 14px;
+      background-color: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 2px;
+      flex-shrink: 0;
+      flex-grow: 0;
+      background-repeat: no-repeat;
+      background-position: center center;
+    }
+  }
 }

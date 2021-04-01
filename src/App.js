@@ -1,7 +1,7 @@
 import CustomRouter from "./pages/Router";
 
 function App() {
-  return <CustomRouter/>;
+  return <CustomRouter />;
 }
 
 export default App;

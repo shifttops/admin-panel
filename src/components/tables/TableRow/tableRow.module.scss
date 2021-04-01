@@ -1,91 +1,96 @@
 @import "../../../scss/variables";
 
 td {
-	text-align: left;
-	border: none;
-	padding: 17px 15px 12px 15px;
-	font-size: 14px;
-	vertical-align: middle;
-	border-bottom: 1px solid #f2f2f2;
-	max-width: 280px;
-	color: #333;
-	letter-spacing: -.03em;
+  text-align: left;
+  border: none;
+  padding: 17px 15px 12px 15px;
+  font-size: 14px;
+  vertical-align: middle;
+  border-bottom: 1px solid #f2f2f2;
+  max-width: 280px;
+  color: #333;
+  letter-spacing: -0.03em;
+
+  label {
+    font-weight: 700;
+  }
+}
+
+tr {
+  background-color: #fff;
 }
 
 .storeList__label {
-	font-weight: 700;
+  font-weight: 700;
 }
 
 .store {
-	&__center {
-		text-align: center;
-	}
+  &__center {
+    text-align: center;
+  }
 
-	&__status {}
+  &__icon {
+    margin: 0 auto;
+    border-radius: 4px;
+    font-size: 13px;
+    line-height: 16px;
+    letter-spacing: -0.03em;
+    font-weight: 700;
+    color: $color-yellow;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    padding: 7px 11px 5px 11px;
+    width: 100%;
+    max-width: 180px;
+    position: relative;
+    background-color: $color-yellow-opacity;
 
-	&__more {}
+    @media screen and (max-width: 1140px) {
+      font-size: 11px;
+      white-space: nowrap;
+    }
 
-	&__icon {
-		margin: 0 auto;
-		border-radius: 4px;
-		font-size: 13px;
-		line-height: 16px;
-		letter-spacing: -0.03em;
-		font-weight: 700;
-		color: $color-yellow;
-		height: 30px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		transition: all 0.3s ease 0s;
-		cursor: pointer;
-		padding: 7px 11px 5px 11px;
-		width: 100%;
-		max-width: 180px;
-		position: relative;
+    svg {
+      margin: -3px 4px 0px 0px;
+    }
 
-		@media screen and (max-width: 1140px) {
-			font-size: 11px;
-			white-space: nowrap;
-		}
+    path {
+      transition: all 0.3s ease 0s;
+    }
 
-		svg {
-			margin: -3px 4px 0px 0px;
-		}
+    &.store__done {
+      background-color: $color-green;
+    }
 
-		path {
-			transition: all 0.3s ease 0s;
-		}
+    &.store__configuration {
+      color: $color-yellow;
+      background: $color-yellow-opacity;
 
-		&.store__done {
-			background-color: $color-green;
-		}
+      &::after {
+        background-color: $color-yellow;
+      }
+    }
 
-		&.store__configuration {
-			color: $color-yellow;
-			background: $color-yellow-opacity;
+    &.store__test {
+      color: $color-yellow;
+      background: $color-yellow-opacity;
+    }
 
-			&::after {
-				background-color: $color-yellow;
-			}
-		}
+    &.store__deployment {
+      color: $color-green;
+      background: rgba(170, 194, 63, 0.1);
+    }
 
-		&.store__test {
-			color: $color-yellow;
-			background: $color-yellow-opacity;
-		}
+    &.store__deployed {
+      background: $color-green;
+    }
 
-		&.store__deployment {
-			color: $color-green;
-			background: rgba(170, 194, 63, 0.1);
-		}
-
-		&.store__deployed {
-			background: $color-green
-		}
-
-		&.store__maintenance {
-			background: $color-red;
-		}
-	}
+    &.store__maintenance {
+      background: $color-red;
+    }
+  }
 }

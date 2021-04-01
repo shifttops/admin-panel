@@ -1,7 +1,6 @@
 import styles from "./buttonIcon.module.scss";
-import cn from 'classnames';
+import cn from "classnames";
 import iconButtonTypes from "../../../types/iconButtonTypes";
-
 
 const iconButtonClassNameTypeMap = {
   [iconButtonTypes.yellow]: styles.yellowButton,
@@ -10,17 +9,28 @@ const iconButtonClassNameTypeMap = {
   [iconButtonTypes.green]: styles.greenButton,
   [iconButtonTypes.error]: styles.errorButton,
   [iconButtonTypes.grey]: styles.greyButton,
-}
+};
 
-export default function ButtonIcon({Icon = () => null, onClick, onBlur, type, className, style}) {
+export default function ButtonIcon({
+  Icon = () => null,
+  onClick,
+  onBlur,
+  type,
+  className,
+  style,
+}) {
   return (
     <button
       style={style}
       onClick={onClick}
       onBlur={onBlur}
-      className={cn(styles.dashboardIcon, className, iconButtonClassNameTypeMap[type])}
+      className={cn(
+        styles.dashboardIcon,
+        className,
+        iconButtonClassNameTypeMap[type]
+      )}
     >
-      <Icon/>
+      <Icon />
     </button>
   );
 }

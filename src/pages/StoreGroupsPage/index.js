@@ -1,1 +1,1 @@
-export {default} from "./StoreGroupsPage";
+export { default } from "./StoreGroupsPage";

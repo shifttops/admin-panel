@@ -1,0 +1,70 @@
+@import "../../scss/variables";
+
+.checkboxWrapper {
+  margin-bottom: 8px;
+}
+
+.label {
+  font-size: 15px;
+  line-height: 19px;
+  letter-spacing: -0.01em;
+  color: #333333;
+  margin-right: 12px;
+  margin-top: 6px;
+  cursor: pointer;
+}
+
+.error {
+  color: $color-red;
+}
+
+.switcher {
+  cursor: pointer;
+
+  label {
+    padding: 0;
+    display: flex;
+    align-items: center;
+
+    input {
+      display: none;
+
+      & + span {
+        position: relative;
+        display: inline-block;
+        width: 32px;
+        height: 18px;
+        background: #bdbdbd;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        padding: 2px;
+        cursor: pointer;
+
+        small {
+          position: absolute;
+          display: block;
+          width: 14px;
+          height: 14px;
+          background: #fff;
+          border-radius: 50%;
+          transition: all 0.3s ease;
+          left: 2px;
+          top: 2px;
+        }
+      }
+
+      &:checked + span {
+        background: $color-green;
+        border-color: $color-green;
+
+        small {
+          left: 50%;
+        }
+      }
+    }
+  }
+}
+
+.wrapperCheckbox {
+  margin-bottom: 8px;
+}

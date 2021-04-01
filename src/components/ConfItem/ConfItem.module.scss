@@ -1,0 +1,30 @@
+@import "../../scss/variables";
+
+.text {
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: -0.01em;
+  color: $color-black;
+  span {
+    font-weight: 400;
+  }
+}
+
+.date {
+  font-size: 14px;
+  line-height: 18px;
+  letter-spacing: -0.03em;
+  font-feature-settings: "pnum" on, "lnum" on;
+  color: #333333;
+  opacity: 0.5;
+}
+
+.period {
+  font-size: 14px;
+  line-height: 18px;
+  letter-spacing: -0.03em;
+  font-feature-settings: "pnum" on, "lnum" on;
+  color: #333333;
+  opacity: 0.5;
+}

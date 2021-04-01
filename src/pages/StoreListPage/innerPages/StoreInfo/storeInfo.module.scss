@@ -1,11 +1,11 @@
 @import "../../../../scss/variables";
 
-.inner{
+.inner {
   display: flex;
 }
 
-.wrapper{
-  padding-left: 36px;
+.wrapper {
+  padding: 30px 0px 0px 36px;
   //padding: 0px 36px;
   width: 100%;
 }
@@ -14,7 +14,7 @@
   padding: 60px 32px;
   display: flex;
   flex-direction: column;
-  border-right: 1px solid #F2F2F2;
+  border-right: 1px solid #f2f2f2;
   min-width: 185px;
 
   &__title {
@@ -23,7 +23,6 @@
     text-transform: uppercase;
     color: $color-yellow;
     margin-bottom: 20px;
-
   }
 
   &__link {

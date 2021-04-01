@@ -3,24 +3,14 @@
 .plannerItem {
   display: flex;
   align-items: center;
-  background: #FFFFFF;
-  border: 1px solid #F2F2F2;
+  background: #ffffff;
+  border: 1px solid #f2f2f2;
   border-radius: 4px;
   margin-bottom: 8px;
   padding: 11px 16px 8px 16px;
 
   &.error {
-    border: 1px solid #FFB1B4;
-  }
-
-  &__text {
-    font-weight: 700;
-    font-size: 16px;
-    line-height: 20px;
-    letter-spacing: -0.01em;
-    color: $color-black;
-    width: 44%;
-    flex: 1 1 auto;
+    border: 1px solid #ffb1b4;
   }
 
   &__date {
@@ -50,6 +40,28 @@
 }
 
 .errorContainer td {
-	border-top: 1px solid $color-red;
-	border-bottom: 1px solid $color-red;
+  border-top: 1px solid $color-red;
+  border-bottom: 1px solid $color-red;
+  background-color: #f9f9f9;
+
+  &:first-child {
+    border-left: 1px solid $color-red;
+    border-radius: 4px 0px 0px 4px;
+  }
+
+  &:last-child {
+    border-right: 1px solid $color-red;
+    border-radius: 0px 4px 4px 0px;
+  }
+}
+
+td.plannerItem__text {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: -0.01em;
+  color: $color-black;
+  width: 44%;
+  flex: 1 1 auto;
+  padding-left: 16px;
 }
