@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
-import logo from "./../../images/logo.svg";
-import minLogo from "./../../images/min-logo.svg";
-import mainNavigation from "./../../constants/main-navigation";
+import logo from "images/logo.svg";
+import minLogo from "images/min-logo.svg";
+import mainNavigation from "constants/main-navigation";
 import styles from "./sidebar.module.scss";
 import cn from "classnames";
 

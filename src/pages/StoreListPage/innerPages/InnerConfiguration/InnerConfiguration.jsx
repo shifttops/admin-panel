@@ -1,16 +1,15 @@
-import Button from "../../../../components/buttons/Button";
-import styles from "./innerConfiguration.module.scss";
-import SearchQuick from "../../../../components/search/SearchQuick";
-import PlannerItem from "../../../../components/PlannerItem/PlannerItem";
+import styles from "./inner-configuration.module.scss";
 import {
   ErrorIcon,
   PauseIcon,
   PlannerIcon,
   PlayIcon,
   ProcessIcon,
-} from "../../../../icons/icons";
-import iconButtonTypes from "../../../../types/iconButtonTypes";
-import ConfItem from "../../../../components/ConfItem";
+} from "icons";
+import SearchQuick from "components/search/SearchQuick";
+import Button from "components/buttons/Button";
+import ConfItem from "components/ConfItem";
+import iconButtonTypes from "types/iconButtonTypes";
 
 export default function InnerConfiguration() {
   return (

@@ -3,7 +3,8 @@
 .dashboardHead {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 32px;
+  padding-left: 36px;
+  margin: 30px 0px 32px 0px;
 
   &__title {
     font-size: 21px;
@@ -16,7 +17,6 @@
   }
 
   &__print {
-    // display: none;
     margin-right: 0px;
   }
 

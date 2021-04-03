@@ -1,22 +1,14 @@
+import styles from "./status-list.module.scss";
+
 export default function StatusList() {
   return (
-    <ul className="status-change">
-      <li className="status-change__item status-change__item--green">
-        Deployed
-      </li>
-      <li className="status-change__item status-change__item--green">
-        Deployment
-      </li>
-      <li className="status-change__item status-change__item--green">
-        Ready for deployment
-      </li>
-      <li className="status-change__item status-change__item--yellow">
-        Algorithm Configuration
-      </li>
-      <li className="status-change__item status-change__item--yellow">Test</li>
-      <li className="status-change__item status-change__item--error">
-        Under Maintenance
-      </li>
+    <ul className={styles.statusChange}>
+      <li className={styles.statusChange__item}>Deployed</li>
+      <li className={styles.statusChange__item}>Deployment</li>
+      <li className={styles.statusChange__item}>Ready for deployment</li>
+      <li className={styles.statusChange__item}>Algorithm Configuration</li>
+      <li className={styles.statusChange__item}>Test</li>
+      <li className={styles.statusChange__item}>Under Maintenance</li>
     </ul>
   );
 }

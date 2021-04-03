@@ -1,8 +1,8 @@
-import InnerSidebar from "../../../../components/InnerSidebar/InnerSidebar";
-import styles from "./storeInfo.module.scss";
+import styles from "./store-info.module.scss";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import innerNavigation from "../../../../constants/inner-navigation";
-import InnerHead from "../../../../components/header/innerHead/InnerHead";
+import innerNavigation from "constants/inner-navigation";
+import InnerHead from "components/header/InnerHead";
+import InnerSidebar from "components/InnerSidebar";
 
 export default function StoreInfo() {
   return (

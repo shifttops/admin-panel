@@ -1,11 +1,11 @@
-import "./slider-checkbox.scss";
+import styles from "./slider-checkbox.module.scss";
 
 export default function SliderCheckbox() {
   return (
-    <div className={"wrapperCheckbox"}>
-      <div className={"switcher"}>
+    <div className={styles.wrapperCheckbox}>
+      <div className={styles.switcher}>
         <label>
-          <small className={"label"}>Cameras #53</small>
+          <small className={styles.label}>Cameras #53</small>
           <input type="checkbox" value="" />
           <span>
             <small></small>

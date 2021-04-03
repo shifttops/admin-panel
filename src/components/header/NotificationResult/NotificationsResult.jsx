@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import styles from "./notifications.module.scss";
-import notificationsIcon from "../../../images/chat-notification.svg";
+import notificationsIcon from "images/chat-notification.svg";
 
 export default function NotificationResult() {
   return (

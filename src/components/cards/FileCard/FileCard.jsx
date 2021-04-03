@@ -1,6 +1,6 @@
-import { MoreIcon } from "../../../icons/icons";
-import ButtonIcon from "../../buttons/ButtonIcon/ButtonIcon";
-import styles from "./FileCard.module.scss";
+import styles from "./file-card.module.scss";
+import ButtonIcon from "components/buttons/ButtonIcon";
+import { MoreIcon } from "icons";
 
 export default function FileCard({ screen }) {
   return (

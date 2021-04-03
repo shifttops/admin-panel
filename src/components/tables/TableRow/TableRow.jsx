@@ -1,9 +1,9 @@
-import { CheckIcon, ConfigIcon, MoreIcon } from "../../../icons/icons";
-import ButtonIcon from "../../buttons/ButtonIcon/ButtonIcon";
-import Checkbox from "../../Checkbox/Checkbox";
-import styles from "./tableRow.module.scss";
+import styles from "./table-row.module.scss";
 import { NavLink } from "react-router-dom";
-import routes from "../../../constants/routes";
+import Checkbox from "components/Checkbox";
+import { ConfigIcon, MoreIcon } from "icons";
+import routes from "constants/routes";
+import ButtonIcon from "components/buttons/ButtonIcon";
 
 export default function TableRow({ status, Icon }) {
   return (

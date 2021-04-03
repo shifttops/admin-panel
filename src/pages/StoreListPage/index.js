@@ -1,3 +1,1 @@
-import StoreListPage from "./StoreListPage";
-
-export default StoreListPage;
+export { default } from "./StoreListPage";

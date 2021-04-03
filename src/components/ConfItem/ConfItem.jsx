@@ -1,6 +1,6 @@
-import styles from "./ConfItem.module.scss";
+import styles from "./conf-item.module.scss";
 import ButtonIcon from "../buttons/ButtonIcon";
-import { MoreIcon, PathIcon } from "../../icons/icons";
+import { MoreIcon, PathIcon } from "icons";
 
 export default function ConfItem({ Icon = () => null, iconColor }) {
   return (

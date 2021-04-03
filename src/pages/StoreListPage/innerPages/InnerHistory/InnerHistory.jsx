@@ -1,18 +1,12 @@
-import styles from "./InnerHistory.module.scss";
-import Button from "../../../../components/buttons/Button";
-import SearchQuick from "../../../../components/search/SearchQuick";
-import ButtonIcon from "../../../../components/buttons/ButtonIcon";
-import {
-  ArrowDownIcon,
-  ConfigIcon,
-  ErrorIcon,
-  MoreIcon,
-  SortIcon,
-} from "../../../../icons/icons";
-import Checkbox from "../../../../components/Checkbox/Checkbox";
+import styles from "./inner-history.module.scss";
+import { ArrowDownIcon, MoreIcon, SortIcon } from "icons";
 import { NavLink } from "react-router-dom";
-import routes from "../../../../constants/routes";
 import cn from "classnames";
+import SearchQuick from "components/search/SearchQuick";
+import ButtonIcon from "components/buttons/ButtonIcon";
+import Button from "components/buttons/Button";
+import Checkbox from "components/Checkbox";
+import routes from "constants/routes";
 
 export default function InnerHistory() {
   return (

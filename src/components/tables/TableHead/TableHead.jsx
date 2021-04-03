@@ -1,6 +1,6 @@
-import Checkbox from "../../Checkbox/Checkbox";
-import styles from "./tableHead.module.scss";
-import { SortIcon } from "../../../icons/icons";
+import styles from "./table-head.module.scss";
+import { SortIcon } from "icons";
+import Checkbox from "components/Checkbox";
 
 export default function TableHead({ th }) {
   return (

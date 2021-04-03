@@ -1,0 +1,70 @@
+@import "../../scss/variables";
+
+.message {
+  background: #ffffff;
+  border: 1px solid #f2f2f2;
+  border-radius: 4px;
+  padding: 8px 8px 24px 24px;
+  margin-bottom: 16px;
+  &__head {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  &__info {
+    align-self: flex-end;
+    svg {
+      margin-left: 8px;
+    }
+  }
+  &__sender {
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: -0.03em;
+    font-weight: 700;
+    &--you {
+      color: $color-yellow;
+    }
+  }
+  &__time {
+    padding: 0px 22px 0px 22px;
+    color: $color-black-05;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: -0.03em;
+  }
+  &__reply {
+    cursor: pointer;
+    color: $color-black-05;
+    text-decoration: underline;
+    transition: all 0.3s ease 0s;
+    &:hover {
+      text-decoration: none;
+    }
+  }
+  &__buttons {
+    display: flex;
+    align-items: center;
+  }
+  &__replyMessage {
+    margin-top: 16px;
+    padding-left: 25px;
+    position: relative;
+    &::before {
+      content: "";
+      position: absolute;
+      left: 12px;
+      top: -3px;
+      width: 2px;
+      height: 100%;
+      background-color: $color-yellow;
+    }
+  }
+  &__text {
+    font-size: 16px;
+    line-height: 150%;
+    letter-spacing: -0.03em;
+    color: rgba(51, 51, 51, 0.7);
+    padding-right: 16px;
+  }
+}

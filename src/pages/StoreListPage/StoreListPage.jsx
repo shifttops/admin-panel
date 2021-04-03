@@ -1,11 +1,10 @@
 import { Route, Switch, BrowserRouter } from "react-router-dom";
-import routes from "../../constants/routes";
-import DashboardHead from "../../components/header/dashboardHead/DashboardHead";
-import TableHead from "../../components/tables/TableHead";
-import TableRow from "../../components/tables/TableRow";
-import StoreInfo from "./innerPages/StoreInfo/StoreInfo";
-import styles from "./storeListPageStyles.module.scss";
-import { CheckIcon } from "../../icons/icons";
+import styles from "./store-list-page.module.scss";
+import routes from "constants/routes";
+import TableHead from "components/tables/TableHead";
+import TableRow from "components/tables/TableRow";
+import DashboardHead from "components/header/DashboardHead";
+import StoreInfo from "pages/StoreListPage/innerPages/StoreInfo/StoreInfo";
 
 export default function StoreListPage(params) {
   return (

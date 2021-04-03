@@ -1,10 +1,11 @@
 import { useState } from "react";
-import ButtonIcon from "../../buttons/ButtonIcon";
-import styles from "./headerDashboard.module.scss";
-import burger from "../../../images/burger.svg";
-import { ChatIcon, BellIcon } from "../../../icons/icons";
-import SearchResult from "../searchResult/searchResult";
-import NotificationResult from "../notifications/notificationsResult";
+import ButtonIcon from "components/buttons/ButtonIcon";
+import styles from "./header-dashboard.module.scss";
+import burger from "images/burger.svg";
+import { ChatIcon, BellIcon } from "icons";
+
+import SearchResult from "components/header/SearchResult";
+import NotificationResult from "components/header/NotificationResult";
 
 function HeaderDashboard({ sidebarToggle }) {
   const [searchValue, setSearchValue] = useState("");

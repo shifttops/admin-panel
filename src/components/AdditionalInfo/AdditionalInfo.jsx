@@ -1,7 +1,7 @@
-import styles from "./AdditionalInfo.module.scss";
-import SliderCheckbox from "../SliderCheckbox";
-import { ArrowDownIcon, SpeedIcon, TempIcon } from "../../icons/icons";
+import styles from "./additional-info.module.scss";
+import { ArrowDownIcon, SpeedIcon, TempIcon } from "icons";
 import cn from "classnames";
+import SliderCheckbox from "components/SliderCheckbox";
 
 export default function AdditionalInfo({ leftTitle, rightTitle }) {
   return (

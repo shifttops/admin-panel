@@ -1,4 +1,4 @@
-import styles from "./SearchQuick.module.scss";
+import styles from "./search-quick.module.scss";
 
 export default function SearchQuick() {
   return (

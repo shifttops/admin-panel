@@ -7,7 +7,7 @@ export default function Checkbox({ label }) {
         <input
           className={styles.checkbox__input}
           type="checkbox"
-          name="store-id-20"
+          name="store-id"
         />
         <span className={styles.storeList__label}>{label}</span>
       </label>

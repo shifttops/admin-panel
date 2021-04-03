@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
-import innerNavigation from "../../constants/inner-navigation";
-import styles from "./innerSidebar.module.scss";
+import innerNavigation from "constants/inner-navigation";
+import styles from "./inner-sidebar.module.scss";
 
 export default function InnerSidebar() {
   return (

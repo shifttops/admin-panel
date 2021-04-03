@@ -1,8 +1,8 @@
-import Button from "../../buttons/Button";
-import ButtonIcon from "../../buttons/ButtonIcon/ButtonIcon";
-import { CheckIcon, PrintIcon, ReportIcon } from "../../../icons/icons";
-import styles from "./InnerHead.module.scss";
+import styles from "./inner-head.module.scss";
 import { Link } from "react-router-dom";
+import Button from "components/buttons/Button";
+import { CheckIcon, PrintIcon, ReportIcon } from "icons";
+import ButtonIcon from "components/buttons/ButtonIcon";
 
 export default function InnerHead() {
   return (

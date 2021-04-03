@@ -1,13 +1,8 @@
 import styles from "./InnerStatistic.module.scss";
-import {
-  ConfigIcon,
-  DateIcon,
-  MoreIcon,
-  SortIcon,
-} from "../../../../icons/icons";
-import Button from "../../../../components/buttons/Button";
-import AdditionalInfo from "../../../../components/AdditionalInfo";
+import { DateIcon } from "icons";
 import cn from "classnames";
+import Button from "components/buttons/Button";
+import AdditionalInfo from "components/AdditionalInfo";
 
 export default function InnerStatistic() {
   return (

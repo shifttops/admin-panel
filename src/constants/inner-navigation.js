@@ -1,11 +1,11 @@
 import routes from "./routes";
-import StoreInfo from "../pages/StoreListPage/innerPages/StoreInfo/StoreInfo";
-import InnerPlanner from "../pages/StoreListPage/innerPages/innerPlanner/InnerPlanner";
+import InnerPlanner from "../pages/StoreListPage/innerPages/InnerPlanner/InnerPlanner";
 import InnerCameras from "../pages/StoreListPage/innerPages/InnerCameras/InnerCameras";
 import InnerConfiguration from "../pages/StoreListPage/innerPages/InnerConfiguration";
 import InnerHistory from "../pages/StoreListPage/innerPages/InnerHistory/InnerHistory";
 import InnerStatistic from "../pages/StoreListPage/innerPages/InnerStatistic";
 import InnerInfo from "../pages/StoreListPage/innerPages/InnerInfo";
+import InnerChat from "../pages/StoreListPage/innerPages/InnerChat";
 
 const innerNavigation = [
   { to: routes.storeInfo, name: "Store Info", component: () => <InnerInfo /> },
@@ -24,7 +24,7 @@ const innerNavigation = [
     name: "History",
     component: () => <InnerHistory />,
   },
-  { to: routes.innerChat, name: "Chat", component: () => "Chat" },
+  { to: routes.innerChat, name: "Chat", component: () => <InnerChat /> },
   { to: routes.innerFiles, name: "Files", component: () => "Files" },
   {
     to: routes.innerCameras,

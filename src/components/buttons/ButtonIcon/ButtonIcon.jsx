@@ -1,6 +1,6 @@
-import styles from "./buttonIcon.module.scss";
+import styles from "./button-icon.module.scss";
 import cn from "classnames";
-import iconButtonTypes from "../../../types/iconButtonTypes";
+import iconButtonTypes from "types/iconButtonTypes";
 
 const iconButtonClassNameTypeMap = {
   [iconButtonTypes.yellow]: styles.yellowButton,

@@ -1,10 +1,10 @@
-import Button from "../../../../components/buttons/Button";
-import ButtonIcon from "../../../../components/buttons/ButtonIcon/ButtonIcon";
-import FileCard from "../../../../components/cards/FileCard/FileCard";
-import { OpenPathIcon, SaveVideo } from "../../../../icons/icons";
-import styles from "./InnerCamers.module.scss";
-import cameraScreen from "../../../../images/cameraScreen.jpg";
-import cameraScreen2 from "../../../../images/cameraScreen2.jpg";
+import styles from "./inner-camers.module.scss";
+import ButtonIcon from "components/buttons/ButtonIcon";
+import { OpenPathIcon, SaveVideo } from "icons";
+import Button from "components/buttons/Button";
+import FileCard from "components/cards/FileCard";
+import cameraScreen from "images/cameraScreen.jpg";
+import cameraScreen2 from "images/cameraScreen2.jpg";
 
 export default function InnerCameras() {
   return (

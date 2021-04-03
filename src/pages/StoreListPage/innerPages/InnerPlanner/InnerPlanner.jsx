@@ -1,4 +1,4 @@
-import styles from "./innerPlanner.module.scss";
+import styles from "./inner-planner.module.scss";
 import {
   CheckIcon,
   ErrorIcon,
@@ -6,11 +6,11 @@ import {
   PlannerIcon,
   PlayIcon,
   ProcessIcon,
-} from "../../../../icons/icons";
-import Button from "../../../../components/buttons/Button";
-import PlannerItem from "../../../../components/PlannerItem/PlannerItem";
-import ButtonIcon from "../../../../components/buttons/ButtonIcon/ButtonIcon";
-import iconButtonTypes from "../../../../types/iconButtonTypes";
+} from "icons";
+import ButtonIcon from "components/buttons/ButtonIcon";
+import iconButtonTypes from "types/iconButtonTypes";
+import Button from "components/buttons/Button";
+import PlannerItem from "components/PlannerItem";
 
 export default function InnerPlanner() {
   return (

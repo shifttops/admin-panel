@@ -1,0 +1,98 @@
+@import "../../../scss/variables";
+
+.headerAccount {
+  flex: 1 1 260px;
+  display: flex;
+  align-items: center;
+  padding-left: 30px;
+  margin-left: 30px;
+  position: relative;
+
+  &::before {
+    content: "";
+    height: 24px;
+    width: 1px;
+    background-color: #e0e0e0;
+    position: absolute;
+    left: 0;
+    top: 7px;
+  }
+
+  &__info {
+    min-width: 239px;
+    position: absolute;
+    z-index: 6;
+    top: 100%;
+    left: -25px;
+    margin-top: 17px;
+    background-color: #fff;
+    padding: 18px 24px 25px 24px;
+    border: 1px solid #f2f2f2;
+    box-shadow: 0px 6px 14px -6px rgba(24, 39, 75, 0.12),
+      0px 10px 32px -4px rgba(24, 39, 75, 0.1);
+    border-radius: $border-radius;
+    transition: all 0.5s ease 0s;
+    visibility: hidden;
+    opacity: 0;
+
+    &.show-block {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+
+  &__info-name {
+    font-weight: 700;
+    margin-bottom: 4px;
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: -0.02em;
+  }
+
+  &__email {
+    color: rgba(51, 51, 51, 0.712);
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+  }
+
+  &__settings {
+    border-top: 1px solid #f2f2f2;
+    margin: 0px -25px;
+    padding: 19px 25px 0px 25px;
+  }
+
+  &__text {
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+    cursor: pointer;
+
+    &:last-child {
+      margin-bottom: 0px;
+    }
+  }
+
+  &__text--red {
+    color: $color-red;
+    cursor: pointer;
+  }
+
+  &__icon {
+    margin-right: 15px;
+  }
+
+  &__name {
+    cursor: pointer;
+    font-size: 15px;
+    line-height: 19px;
+    color: $color-black;
+    padding-right: 26px;
+    background-image: url(../../../images/arror-dropdown.svg);
+    background-repeat: no-repeat;
+    background-position: right center;
+    padding-top: 4px;
+  }
+}

@@ -1,1 +1,1 @@
-export {default} './InnerHistory'
+export { default } from "./InnerHistory";

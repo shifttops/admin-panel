@@ -1,7 +1,8 @@
-import styles from "./plannerItem.module.scss";
+import styles from "./planner-item.module.scss";
 import ButtonIcon from "../buttons/ButtonIcon/ButtonIcon";
-import { MoreIcon, PathIcon, PlayIcon } from "../../icons/icons";
+
 import cn from "classnames";
+import { MoreIcon, PathIcon } from "icons";
 
 export default function PlannerItem({
   text,

@@ -1,5 +1,5 @@
-import styles from "./InnerInfo.module.scss";
-import AdditionalInfo from "../../../../components/AdditionalInfo";
+import styles from "./inner-info.module.scss";
+import AdditionalInfo from "components/AdditionalInfo";
 
 export default function InnerInfo() {
   return (
