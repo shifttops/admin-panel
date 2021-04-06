@@ -1,7 +1,7 @@
 @import "../../../scss/variables";
 
 .headerAccount {
-  flex: 1 1 260px;
+  flex: 1 1 285px;
   display: flex;
   align-items: center;
   padding-left: 30px;
@@ -15,7 +15,7 @@
     background-color: #e0e0e0;
     position: absolute;
     left: 0;
-    top: 7px;
+    top: 0px;
   }
 
   &__info {
@@ -41,7 +41,7 @@
     }
   }
 
-  &__info-name {
+  &__InfoName {
     font-weight: 700;
     margin-bottom: 4px;
     font-size: 16px;

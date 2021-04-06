@@ -1,0 +1,50 @@
+@import "../../../scss/variables";
+
+.tableRow {
+  background-color: #fff;
+}
+
+.text {
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 18px;
+  letter-spacing: -0.03em;
+  color: $color-black-05;
+}
+
+.img {
+  width: 32px;
+  height: 32px;
+  object-fit: cover;
+  border-radius: 2px;
+}
+
+.name {
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: -0.01em;
+  span {
+    font-weight: 400;
+  }
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+}
+
+.margin {
+  margin-top: 10px;
+  span::before {
+    margin-right: 16px;
+  }
+}
+
+.info {
+  display: flex;
+  align-items: center;
+  img {
+    margin-right: 16px;
+  }
+}

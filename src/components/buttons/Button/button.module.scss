@@ -32,3 +32,10 @@
   margin-right: 16px;
   background-color: $color-yellow;
 }
+
+.greenBorder {
+  margin-right: 16px;
+  background-color: transparent;
+  color: $color-green;
+  border: 1px solid #a9c23f;
+}

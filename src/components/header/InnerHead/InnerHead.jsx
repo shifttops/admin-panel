@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import Button from "components/buttons/Button";
 import { CheckIcon, PrintIcon, ReportIcon } from "icons";
 import ButtonIcon from "components/buttons/ButtonIcon";
+import Popup from "reactjs-popup";
+import ReportPopup from "components/popups/ReportPopup";
 
 export default function InnerHead() {
   return (
@@ -22,7 +24,9 @@ export default function InnerHead() {
             <div className={styles.dashboard__icon}>
               <ButtonIcon Icon={PrintIcon} />
             </div>
-            <Button text="Report" Icon={ReportIcon} disabled />
+            <Popup nested trigger={<Button text="Report" Icon={ReportIcon} />}>
+              {(close) => <ReportPopup onClose={close} />}
+            </Popup>
           </div>
         </div>
         <div className={styles.innerStore__info}>

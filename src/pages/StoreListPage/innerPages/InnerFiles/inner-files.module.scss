@@ -1,0 +1,179 @@
+@import "../../../../scss/variables";
+
+.hr {
+  background-color: #e0e0e0;
+  width: 100%;
+  height: 1px;
+  margin: 0px 0px 47px 0px;
+}
+
+.hrLines {
+  background-color: #e0e0e0;
+  width: 100%;
+  height: 1px;
+  margin: 26px 0px 30px 0px;
+}
+
+.inner {
+  .checkbox_storeList__label__1QsCp {
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: -0.03em;
+    margin-left: -8px;
+  }
+}
+
+.filesButtons {
+  display: flex;
+  align-items: center;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.headInfo {
+  display: flex;
+  align-items: center;
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+  input {
+    margin-right: 16px;
+  }
+}
+
+.title {
+  font-weight: 700;
+  font-size: 21px;
+  line-height: 27px;
+  letter-spacing: -0.01em;
+  color: $color-black;
+  margin-right: 34px;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -27px;
+}
+
+//table
+
+.table {
+  border-spacing: 0 8px;
+  width: 100%;
+
+  tbody tr {
+    cursor: pointer;
+    transition: all 0.3s ease 0s;
+    &:hover {
+      box-shadow: 0px 4px 6px -4px rgba(24, 39, 75, 0.12),
+        0px 8px 8px -4px rgba(24, 39, 75, 0.08);
+    }
+  }
+
+  th {
+    text-align: center;
+    padding: 14px 0px 9px 0px;
+    background: rgba(51, 51, 51, 0.07);
+    text-transform: uppercase;
+    color: rgba(51, 51, 51, 0.5);
+    margin-right: 20px;
+    font-weight: 400;
+  }
+
+  th:first-child {
+    text-align: left;
+    padding-left: 18px;
+    border-radius: 4px 0px 0px 4px;
+  }
+
+  th:last-child {
+    border-right: none;
+    border-radius: 0px 4px 4px 0px;
+  }
+
+  td {
+    vertical-align: middle;
+    line-height: 18px;
+    letter-spacing: -0.03em;
+    padding: 11px 0px 8px 0px;
+    text-align: center;
+    border-top: 1px solid #f2f2f2;
+    border-bottom: 1px solid #f2f2f2;
+    background: #fff;
+
+    &:first-child {
+      text-align: left;
+      width: 500px;
+      padding-left: 18px;
+      border-radius: 4px 0px 0px 4px;
+      padding: 11px 0px 6px 18px;
+    }
+
+    &:last-child {
+      border-right: 1px solid #f2f2f2;
+      border-radius: 0px 4px 4px 0px;
+    }
+
+    & button {
+      margin: 0 auto;
+    }
+  }
+
+  td:first-child {
+    border-left: 1px solid #f2f2f2;
+    border-right: none;
+  }
+}
+
+.tableFiles {
+  tbody tr {
+    cursor: pointer;
+    transition: all 0.3s ease 0s;
+    &:hover {
+      box-shadow: 0px 4px 6px -4px rgba(24, 39, 75, 0.12),
+        0px 8px 8px -4px rgba(24, 39, 75, 0.08);
+    }
+  }
+  tbody td:first-child {
+    width: 485px;
+  }
+}
+
+.checkbox {
+  margin-bottom: 18px;
+  span {
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: -0.03em;
+    color: rgba(51, 51, 51, 0.6);
+    &::before {
+      margin-right: 12px;
+    }
+  }
+}
+
+.checkboxTable {
+  margin-bottom: 18px;
+  margin-top: 18px;
+  span {
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: -0.03em;
+    color: rgba(51, 51, 51, 0.6);
+    &::before {
+      margin-right: 12px;
+    }
+  }
+}

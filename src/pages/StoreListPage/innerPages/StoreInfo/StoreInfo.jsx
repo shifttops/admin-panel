@@ -8,9 +8,7 @@ export default function StoreInfo() {
   return (
     <BrowserRouter>
       <div className={styles.inner}>
-        <div>
-          <InnerSidebar />
-        </div>
+        <InnerSidebar />
         <div className={styles.wrapper}>
           <InnerHead />
           <div>

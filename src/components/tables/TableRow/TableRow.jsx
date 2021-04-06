@@ -7,7 +7,7 @@ import ButtonIcon from "components/buttons/ButtonIcon";
 
 export default function TableRow({ status, Icon }) {
   return (
-    <tr>
+    <tr className={styles.tableRow}>
       <td>
         <Checkbox label="20209" />
       </td>

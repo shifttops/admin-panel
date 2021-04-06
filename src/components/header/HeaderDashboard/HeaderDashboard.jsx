@@ -6,6 +6,7 @@ import { ChatIcon, BellIcon } from "icons";
 
 import SearchResult from "components/header/SearchResult";
 import NotificationResult from "components/header/NotificationResult";
+import Account from "components/header/Account";
 
 function HeaderDashboard({ sidebarToggle }) {
   const [searchValue, setSearchValue] = useState("");
@@ -60,6 +61,7 @@ function HeaderDashboard({ sidebarToggle }) {
             {isNotificationOpen && <NotificationResult />}
           </div>
         </div>
+        <Account />
       </div>
     </header>
   );

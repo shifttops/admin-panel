@@ -1,8 +1,8 @@
 import styles from "./checkbox.module.scss";
 
-export default function Checkbox({ label }) {
+export default function Checkbox({ label, className = "" }) {
   return (
-    <div className={styles.storeList__checkbox}>
+    <div className={styles.storeList__checkbox + " " + className}>
       <label className={styles.storeList__checkboxWrap}>
         <input
           className={styles.checkbox__input}

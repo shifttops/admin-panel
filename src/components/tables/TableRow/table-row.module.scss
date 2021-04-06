@@ -1,6 +1,6 @@
 @import "../../../scss/variables";
 
-td {
+.tableRow td {
   text-align: left;
   border: none;
   padding: 17px 15px 12px 15px;
@@ -14,10 +14,9 @@ td {
   label {
     font-weight: 700;
   }
-}
-
-tr {
-  background-color: #fff;
+  tr {
+    background-color: #fff;
+  }
 }
 
 .storeList__label {

@@ -9,7 +9,7 @@ export default function Account() {
       </div>
       <p className={styles.headerAccount__name}>Ronald Mcdonald</p>
       <div className={styles.headerAccount__info}>
-        <p className={styles.headerAccount__info - name}>Ronald Mcdonald</p>
+        <p className={styles.headerAccount__InfoName}>Ronald Mcdonald</p>
         <p className={styles.headerAccount__email}>Ronald_hate_kfc@gmail.com</p>
         <div className={styles.headerAccount__settings}>
           <p className={styles.headerAccount__text}>Account settings</p>

@@ -1,0 +1,21 @@
+@import "../../../scss/variables";
+
+.text {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+  letter-spacing: -0.01em;
+  color: $color-black-05;
+  span {
+    font-weight: 400;
+  }
+}
+
+.name {
+  label {
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: -0.01em;
+  }
+}
