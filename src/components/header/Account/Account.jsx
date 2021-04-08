@@ -1,22 +1,30 @@
 import styles from "./account.module.scss";
 import accountIcon from "images/accountIcon.svg";
+import { Link } from "react-router-dom";
+import AccountResult from "components/header/AccountResult";
+import { useState } from "react";
 
-export default function Account() {
+export default function Account({ onClick }) {
+  const [isAccountInfo, setIsAccountInfo] = useState(false);
+
+  const isAccountClickHandler = () => {
+    setIsAccountInfo((prevState) => !prevState);
+  };
+
+  const isAccountBlurHandler = () => {
+    setIsAccountInfo(false);
+  };
   return (
-    <div className={styles.headerAccount}>
+    <div
+      className={styles.headerAccount}
+      onClick={isAccountClickHandler}
+      onBlur={isAccountBlurHandler}
+    >
       <div className={styles.headerAccount__icon}>
         <img src={accountIcon} alt="" />
       </div>
       <p className={styles.headerAccount__name}>Ronald Mcdonald</p>
-      <div className={styles.headerAccount__info}>
-        <p className={styles.headerAccount__InfoName}>Ronald Mcdonald</p>
-        <p className={styles.headerAccount__email}>Ronald_hate_kfc@gmail.com</p>
-        <div className={styles.headerAccount__settings}>
-          <p className={styles.headerAccount__text}>Account settings</p>
-          <p className={styles.headerAccount__text}>Help</p>
-          <p className={styles.headerAccount__text}>Sign out</p>
-        </div>
-      </div>
+      {isAccountInfo && <AccountResult />}
     </div>
   );
 }

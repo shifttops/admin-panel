@@ -1,18 +1,16 @@
 import styles from "./button.module.scss";
+import cn from "classnames";
 
 export default function Button({
   text,
   disabled,
-  yellow,
-  greenBorder,
+  className,
   Icon = () => null,
   onClick,
 }) {
   return (
     <button
-      className={`${styles.btn} ${yellow ? styles.yellow : ""} ${
-        greenBorder ? styles.greenBorder : ""
-      }`}
+      className={cn(styles.btn, className)}
       disabled={disabled}
       onClick={onClick}
     >

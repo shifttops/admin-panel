@@ -61,7 +61,11 @@ export default function InnerFiles() {
             }
           />
           <ButtonIcon Icon={ExportIcon} />
-          <ButtonIcon Icon={DeleteIcon} />
+          <ButtonIcon
+            Icon={DeleteIcon}
+            className={styles.deleteButton}
+            disabled
+          />
           <Button text="Create folder" Icon={AddFolderIcon} />
         </div>
       </div>

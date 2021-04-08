@@ -1,0 +1,57 @@
+@import "../../scss/variables";
+
+.wrapper {
+  padding: 50px 0px;
+  background-color: $color-black;
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  position: relative;
+}
+
+.inner {
+  max-width: 400px;
+  width: 100%;
+}
+
+.title {
+  text-align: center;
+  font-weight: bold;
+  font-size: 26px;
+  line-height: 33px;
+  letter-spacing: -0.01em;
+  text-transform: capitalize;
+  color: #ffffff;
+  margin-bottom: 16px;
+}
+
+.text {
+  font-size: 16px;
+  line-height: 20px;
+  text-align: center;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+  max-width: 300px;
+  margin: 0 auto;
+  text-transform: capitalize;
+}
+
+.btn {
+  height: 45px;
+  display: inline-block;
+  font-size: 16px;
+  line-height: 20px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  margin-top: 40px;
+  padding: 13px 30px 9px 30px;
+}
+
+.logo {
+  position: absolute;
+  top: 25px;
+  left: 40px;
+}

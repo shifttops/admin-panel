@@ -12,7 +12,7 @@ import {
   FilesIcon,
   ActivityIcon,
   GroupIcon,
-} from "../icons/icons";
+} from "icons";
 
 const mainNavigation = [
   {

@@ -3,8 +3,8 @@ import ButtonIcon from "components/buttons/ButtonIcon";
 import SearchQuick from "components/search/SearchQuick";
 import { FavoriteIcon, PrintIcon, ReportIcon } from "icons";
 import Popup from "reactjs-popup";
-import Button from "components/buttons/Button";
 import ReportPopup from "components/popups/ReportPopup";
+import Button from "components/buttons/Button";
 
 export default function DashboardHead(params) {
   return (
@@ -23,18 +23,15 @@ export default function DashboardHead(params) {
         <Popup
           modal
           trigger={
-            <button className={styles.dashboardHead__report}>
-              {ReportIcon}
-              Report
-            </button>
+            <Button
+              className={styles.dashboardHead__report}
+              Icon={ReportIcon}
+              text="Report"
+            ></Button>
           }
         >
           {(close) => <ReportPopup onClose={close} />}
         </Popup>
-        {/*<button className={styles.dashboardHead__report}>*/}
-        {/*  {ReportIcon}*/}
-        {/*  Report*/}
-        {/*</button>*/}
       </div>
     </div>
   );

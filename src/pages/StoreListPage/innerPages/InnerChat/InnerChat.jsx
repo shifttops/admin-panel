@@ -56,7 +56,6 @@ export default function InnerChat() {
             <textarea placeholder="Enter your message here..."></textarea>
             <div className={styles.messages__buttons}>
               <div className={styles.messages__chat}>
-                {/*<ButtonIcon Icon={AttachIcon} />*/}
                 <ButtonIcon Icon={EmojiIcon} />
               </div>
               <Button text="Send" />
@@ -76,7 +75,7 @@ export default function InnerChat() {
           </div>
         </div>
         <div className={styles.dropdown}>
-          <div className={cn(styles.dropdown__head, styles.dropdownOpened)}>
+          <div className={cn(styles.dropdown__head, styles.opened)}>
             ATTACHMENTS <ArrowDownIcon />
           </div>
           <div className={styles.dropdown__body}>

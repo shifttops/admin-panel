@@ -15,47 +15,54 @@ import {
   WeightIcon,
 } from "icons";
 import Button from "components/buttons/Button";
+import ButtonIcon from "components/buttons/ButtonIcon";
+
+const ActionButtons = () => {
+  return (
+    <div className={styles.buttons}>
+      <div className={styles.type}>
+        <ButtonIcon Icon={VersionIcon} />
+      </div>
+      <Button greenBorder text="Old version" />
+      <Button yellow text="Add a new" />
+      <Button text="Update" />
+    </div>
+  );
+};
 
 export default function InnerManage() {
   return (
     <div className={styles.wrapper}>
       <h2 className={styles.title}>Manage store</h2>
       <ManageItem
+        ActionButtons={ActionButtons}
         type={manageItemTypes.yellow}
         Icon={VersionManageIcon}
-        ButtonBorder
         title="Update algorithm version"
-        iconButton={VersionIcon}
-        ButtonText="Update"
       />
       <ManageItem
+        ActionButtons={ActionButtons}
         type={manageItemTypes.green}
         Icon={WeightIcon}
-        ButtonText="Refresh"
         title="Update weights"
-        iconButton={VersionIcon}
       />
       <ManageItem
+        ActionButtons={ActionButtons}
         type={manageItemTypes.red}
         Icon={RefreshIcon}
         title="Refresh browser"
-        iconButton={OpenPathIcon}
-        ButtonText="Update"
       />
       <ManageItem
+        ActionButtons={ActionButtons}
         type={manageItemTypes.blue}
         Icon={ScreenIcon}
         title="Change screen"
-        ButtonYellow
-        iconButton={ImagesIcon}
-        ButtonText="Update"
       />
       <ManageItem
+        ActionButtons={ActionButtons}
         type={manageItemTypes.red}
         Icon={VideoManageIcon}
         title="Reboot all cameras"
-        ButtonText="Refresh"
-        iconButton={VersionIcon}
       />
     </div>
   );

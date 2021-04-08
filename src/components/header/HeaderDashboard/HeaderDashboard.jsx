@@ -3,7 +3,6 @@ import ButtonIcon from "components/buttons/ButtonIcon";
 import styles from "./header-dashboard.module.scss";
 import burger from "images/burger.svg";
 import { ChatIcon, BellIcon } from "icons";
-
 import SearchResult from "components/header/SearchResult";
 import NotificationResult from "components/header/NotificationResult";
 import Account from "components/header/Account";

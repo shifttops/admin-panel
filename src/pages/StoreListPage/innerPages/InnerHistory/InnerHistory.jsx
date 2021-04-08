@@ -58,7 +58,7 @@ export default function InnerHistory() {
             <td>
               <Checkbox label="Сar arrived" />
             </td>
-            <td className={cn(styles.error, styles.errorOpened)}>
+            <td className={cn(styles.error, styles.opened)}>
               RuntimeError('[enforce fail at inline_container.cc:222]file not
               found: archive/constants.pkl',):\n Traceback (most recent call
               last):\n File \"/app/entities/StoreManager.py\", line 148, in

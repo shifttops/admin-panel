@@ -177,3 +177,20 @@
     }
   }
 }
+
+.deleteButton[disabled] {
+  color: rgba(51, 51, 51, 0.3);
+  background-color: transparent;
+  &:hover {
+    color: rgba(51, 51, 51, 0.3);
+    background-color: transparent;
+  }
+}
+
+.deleteButton {
+  color: $color-red;
+  &:hover {
+    color: $color-red;
+    background-color: rgba(219, 0, 7, 0.1);
+  }
+}
