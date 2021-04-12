@@ -1,3 +1,1 @@
-import FilesPage from "./FilesPage";
-
-export default FilesPage;
+export { default } from "./FilesPage";

@@ -10,36 +10,35 @@ export default function AdditionalInfo({ leftTitle, rightTitle }) {
         <span>{leftTitle}</span>
         <span>{rightTitle}</span>
       </div>
-      <div className={styles.item}>
-        <p
-          className={cn(
-            styles.category,
-            styles.categoryDropdown,
-            styles.opened
-          )}
-        >
-          Cameras
-          <ArrowDownIcon />
-        </p>
-        <div className={styles.resultError}>One camera is off</div>
-      </div>
-      <div className={styles.text}>
-        <div className="info__error--info">
-          <span className={styles.error}>Error Code 0xa00f4294</span>
-          <p className={styles.descr}>
-            This error is related to the camera not working properly and it is
-            most likely caused by corrupted or missing drivers. This error can
-            also occur due to a recently installed update for Windows 10, or due
-            to corrupted drivers.
+      <div
+        className={styles.item + " " + styles.opened + " " + styles.dropdown}
+      >
+        <div className={styles.dropdownHead}>
+          <p className={cn(styles.category, styles.categoryDropdown)}>
+            Cameras
+            <ArrowDownIcon />
           </p>
+          <div className={styles.resultError}>One camera is off</div>
         </div>
-        <div className="checkbox-wrap">
-          <SliderCheckbox />
-          <SliderCheckbox />
-          <SliderCheckbox />
-          <SliderCheckbox />
+        <div className={styles.text}>
+          <div>
+            <span className={styles.error}>Error Code 0xa00f4294</span>
+            <p className={styles.descr}>
+              This error is related to the camera not working properly and it is
+              most likely caused by corrupted or missing drivers. This error can
+              also occur due to a recently installed update for Windows 10, or
+              due to corrupted drivers.
+            </p>
+          </div>
+          <div>
+            <SliderCheckbox />
+            <SliderCheckbox />
+            <SliderCheckbox />
+            <SliderCheckbox />
+          </div>
         </div>
       </div>
+
       <div className={styles.item}>
         <p className={cn(styles.category, styles.categoryDropdown)}>
           Lateral cameras

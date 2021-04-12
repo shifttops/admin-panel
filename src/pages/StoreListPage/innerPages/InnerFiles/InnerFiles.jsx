@@ -46,24 +46,26 @@ export default function InnerFiles() {
           <ButtonIcon Icon={SortIcon} />
         </div>
         <div className={styles.buttons}>
-          <ButtonIcon
-            Icon={FileGridIcons}
-            onClick={setGridView}
-            type={
-              viewType === viewTypes.grid ? iconButtonTypes.grey : undefined
-            }
-          />
-          <ButtonIcon
-            Icon={FileLinesIcon}
-            onClick={setListView}
-            type={
-              viewType === viewTypes.lines ? iconButtonTypes.grey : undefined
-            }
-          />
+          <div className={styles.viewButton}>
+            <ButtonIcon
+              Icon={FileGridIcons}
+              onClick={setGridView}
+              type={
+                viewType === viewTypes.grid ? iconButtonTypes.grey : undefined
+              }
+            />
+            <ButtonIcon
+              Icon={FileLinesIcon}
+              onClick={setListView}
+              type={
+                viewType === viewTypes.lines ? iconButtonTypes.grey : undefined
+              }
+            />
+          </div>
           <ButtonIcon Icon={ExportIcon} />
           <ButtonIcon
             Icon={DeleteIcon}
-            className={styles.deleteButton}
+            className={styles.deleteButton + " " + styles.headBtn}
             disabled
           />
           <Button text="Create folder" Icon={AddFolderIcon} />

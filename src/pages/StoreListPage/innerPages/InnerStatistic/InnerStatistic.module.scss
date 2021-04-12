@@ -21,6 +21,14 @@
   border-spacing: 0;
   tr {
     background-color: #fff;
+    &:last-child {
+      td:first-child {
+        border-radius: 0px 0px 0px 4px;
+      }
+      td:last-child {
+        border-radius: 0px 0px 0px 4px;
+      }
+    }
   }
   th {
     width: 33.333%;

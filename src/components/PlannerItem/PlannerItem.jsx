@@ -9,13 +9,16 @@ export default function PlannerItem({
   Icon = () => null,
   iconColor,
   hasError,
+  globalStore,
+  className,
 }) {
   return (
     <tr className={cn({ [styles.errorContainer]: hasError })}>
       <td>
         <ButtonIcon Icon={Icon} type={iconColor} />
       </td>
-      <td className={styles.plannerItem__text}>{text}</td>
+      {globalStore && <td className={styles.store}>20209</td>}
+      <td className={styles.plannerItem__text + " " + className}>{text}</td>
       <td className={styles.plannerItem__date}>16 March 2021</td>
       <td className={styles.plannerItem__period}>
         11:00, 13:00, 15:00 Every day

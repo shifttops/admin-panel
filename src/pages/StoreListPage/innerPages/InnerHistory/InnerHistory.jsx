@@ -17,9 +17,8 @@ export default function InnerHistory() {
           <SearchQuick />
           <ButtonIcon Icon={SortIcon} />
         </div>
-
         <div className={styles.buttons}>
-          <Button text="Choose period" />
+          <Button text="Choose period" className={styles.border} />
           <Button text="Create Report" />
         </div>
       </div>
@@ -29,7 +28,7 @@ export default function InnerHistory() {
             <th>
               <Checkbox label="event type" />
             </th>
-            <th>Message</th>
+            <th className={styles.iconPadding}>Message</th>
             <th>DATE</th>
             <th>Time</th>
             <th />
@@ -38,7 +37,7 @@ export default function InnerHistory() {
         <tbody>
           <tr>
             <td>
-              <Checkbox label="Сar arrived" />
+              <Checkbox label="Сar arrived" className={styles.checkbox} />
             </td>
             <td className={styles.error}>
               RuntimeError('[enforce fail at inline_container.cc:222]...
@@ -56,7 +55,7 @@ export default function InnerHistory() {
           </tr>
           <tr>
             <td>
-              <Checkbox label="Сar arrived" />
+              <Checkbox label="Сar arrived" className={styles.checkbox} />
             </td>
             <td className={cn(styles.error, styles.opened)}>
               RuntimeError('[enforce fail at inline_container.cc:222]file not
@@ -91,7 +90,7 @@ export default function InnerHistory() {
           </tr>
           <tr>
             <td>
-              <Checkbox label="Сar arrived" />
+              <Checkbox label="Сar arrived" className={styles.checkbox} />
             </td>
             <td className={styles.error}>
               RuntimeError('[enforce fail at inline_container.cc:222]...

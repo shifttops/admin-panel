@@ -9,7 +9,7 @@ export default function FileCard({ screen }) {
       <div className={styles.cameraDescr}>
         <div className={styles.info}>
           <p className={styles.cameraName}>Camera #52</p>
-          <ButtonIcon Icon={MoreIcon} />
+          <ButtonIcon Icon={MoreIcon} className={styles.cardMore} />
         </div>
         <span className={styles.date}>Updated a day ago</span>
       </div>

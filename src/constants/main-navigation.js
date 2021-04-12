@@ -1,10 +1,5 @@
 import routes from "./routes";
-import ActivityLogsPage from "./../pages/ActivityLogsPage";
-import FilesPage from "./../pages/FilesPage";
-import SettingsPage from "./../pages/SettingsPage/SettingsPage";
-import StoreGroupsPage from "./../pages/StoreGroupsPage";
-import StoreListPage from "./../pages/StoreListPage";
-import UsersPage from "./../pages/UsersPage";
+
 import {
   HomeIcon,
   UserIcon,
@@ -12,7 +7,16 @@ import {
   FilesIcon,
   ActivityIcon,
   GroupIcon,
+  PlannerIcon,
+  PlannerStrokeIcon,
 } from "icons";
+import StoreListPage from "pages/StoreListPage";
+import UsersPage from "pages/UsersPage";
+import SettingsPage from "pages/SettingsPage";
+import FilesPage from "pages/FilesPage";
+import ActivityLogsPage from "pages/ActivityLogsPage";
+import StoreGroupsPage from "pages/StoreGroupsPage";
+import PlannerPage from "pages/PlannerPage";
 
 const mainNavigation = [
   {
@@ -45,6 +49,12 @@ const mainNavigation = [
     name: "Store groups",
     component: StoreGroupsPage,
     icon: <GroupIcon />,
+  },
+  {
+    to: routes.planner,
+    name: "Planner",
+    component: PlannerPage,
+    icon: <PlannerStrokeIcon />,
   },
 ];
 

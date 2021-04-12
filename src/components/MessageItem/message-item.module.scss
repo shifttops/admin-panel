@@ -32,6 +32,23 @@
     font-size: 14px;
     line-height: 20px;
     letter-spacing: -0.03em;
+    position: relative;
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #c4c4c4;
+      top: 3px;
+    }
+    &::before {
+      left: 8px;
+    }
+    &::after {
+      right: 8px;
+    }
   }
   &__reply {
     cursor: pointer;

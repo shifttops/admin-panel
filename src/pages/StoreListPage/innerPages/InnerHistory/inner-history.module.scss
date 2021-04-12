@@ -84,10 +84,10 @@
       width: 195px;
     }
     &:last-child {
-      width: 70px;
+      width: 180px;
       border-right: 1px solid #f2f2f2;
       button {
-        margin-left: auto;
+        margin: 0 auto;
       }
     }
   }
@@ -102,7 +102,7 @@
   padding-left: 20px;
   background-image: url(../../../../images/error-red.svg);
   background-repeat: no-repeat;
-  background-position: left top 30px;
+  background-position: left top 31px;
   cursor: pointer;
   width: 557px;
   span {
@@ -117,4 +117,21 @@
   span {
     transform: rotate(-180deg);
   }
+}
+
+.border {
+  color: $color-green;
+  background-color: transparent;
+  border: 1px solid $color-green;
+}
+
+.checkbox {
+  font-weight: 700;
+  span {
+    margin-top: 3px;
+  }
+}
+
+.iconPadding {
+  padding-left: 0px;
 }

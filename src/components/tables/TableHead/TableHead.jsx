@@ -7,17 +7,28 @@ export default function TableHead({ th }) {
     <thead className={styles.tableHead}>
       <tr>
         <th>
-          <Checkbox label="Store ID" />
+          <Checkbox label={"Store ID"} />
         </th>
-        <th>Location</th>
+        <th className={styles.table__sort}>
+          Location
+          <SortIcon />
+        </th>
         <th className={styles.table__sort}>
           {th}
           <SortIcon />
         </th>
-        <th className={styles.table__center}>Store type</th>
-        <th className={styles.table__center}>Status</th>
-        <th>RFDD</th>
-        <th>DOD</th>
+        <th className={styles.table__center + " " + styles.table__sort}>
+          Store type <SortIcon />
+        </th>
+        <th className={styles.table__center + " " + styles.table__sort}>
+          Status <SortIcon />
+        </th>
+        <th className={styles.table__sort}>
+          RFDD <SortIcon />
+        </th>
+        <th className={styles.table__sort}>
+          DOD <SortIcon />
+        </th>
         <th />
       </tr>
     </thead>

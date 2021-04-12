@@ -32,12 +32,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 30px;
+  margin-bottom: 15px;
 }
 
 .headInfo {
   display: flex;
   align-items: center;
+  margin-bottom: 10px;
   svg {
     width: 16px;
     height: 16px;
@@ -152,7 +153,7 @@
 }
 
 .checkbox {
-  margin-bottom: 18px;
+  margin-bottom: 14px;
   span {
     font-size: 16px;
     line-height: 20px;
@@ -193,4 +194,17 @@
     color: $color-red;
     background-color: rgba(219, 0, 7, 0.1);
   }
+}
+
+.viewButton {
+  display: flex;
+  align-items: center;
+  button {
+    margin-right: 0px;
+  }
+  margin-right: 16px;
+}
+
+.headBtn {
+  margin-right: 16px;
 }

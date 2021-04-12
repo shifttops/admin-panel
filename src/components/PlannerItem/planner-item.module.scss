@@ -1,5 +1,12 @@
 @import "../../scss/variables";
 
+.store {
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: -0.01em;
+  font-weight: 700;
+}
+
 .plannerItem {
   display: flex;
   align-items: center;
@@ -40,17 +47,17 @@
 }
 
 .errorContainer td {
-  border-top: 1px solid $color-red;
-  border-bottom: 1px solid $color-red;
+  border-top: 1px solid #ffb1b4;
+  border-bottom: 1px solid #ffb1b4;
   background-color: #f9f9f9;
 
   &:first-child {
-    border-left: 1px solid $color-red;
+    border-left: 1px solid #ffb1b4;
     border-radius: 4px 0px 0px 4px;
   }
 
   &:last-child {
-    border-right: 1px solid $color-red;
+    border-right: 1px solid #ffb1b4;
     border-radius: 0px 4px 4px 0px;
   }
 }

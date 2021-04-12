@@ -97,3 +97,28 @@
 td.store__center {
   text-align: center;
 }
+
+.deployed {
+  background: #a9c23f;
+  color: #fff;
+}
+.configuration {
+  color: $color-yellow;
+  background-color: $color-yellow-opacity;
+}
+.test {
+  color: $color-yellow;
+  background-color: $color-yellow-opacity;
+}
+.deployment {
+  color: $color-green;
+  background-color: rgba(169, 194, 63, 0.1);
+}
+.ready {
+  color: $color-green;
+  background-color: rgba(169, 194, 63, 0.1);
+}
+.maintenance {
+  color: #fff;
+  background-color: $color-red;
+}

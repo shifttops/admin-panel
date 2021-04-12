@@ -23,8 +23,8 @@ const ActionButtons = () => {
       <div className={styles.type}>
         <ButtonIcon Icon={VersionIcon} />
       </div>
-      <Button greenBorder text="Old version" />
-      <Button yellow text="Add a new" />
+      <Button className={styles.borderGreen} text="Old version" />
+      <Button className={styles.yellow} text="Add a new" />
       <Button text="Update" />
     </div>
   );

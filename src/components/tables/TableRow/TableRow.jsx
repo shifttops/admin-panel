@@ -4,8 +4,25 @@ import Checkbox from "components/Checkbox";
 import { ConfigIcon, MoreIcon } from "icons";
 import routes from "constants/routes";
 import ButtonIcon from "components/buttons/ButtonIcon";
+import statusButtonTypes from "types/statusButtonTypes";
+import iconButtonTypes from "types/iconButtonTypes";
+import cn from "classnames";
 
-export default function TableRow({ status, Icon }) {
+const statusButtonTypeMap = {
+  [statusButtonTypes.deployed]: styles.deployed,
+  [statusButtonTypes.configuration]: styles.configuration,
+  [statusButtonTypes.test]: styles.test,
+  [statusButtonTypes.deployment]: styles.deployment,
+  [statusButtonTypes.ready]: styles.ready,
+  [statusButtonTypes.maintenance]: styles.maintenance,
+};
+
+export default function TableRow({
+  status,
+  Icon = () => null,
+  StatusIcon,
+  type,
+}) {
   return (
     <tr className={styles.tableRow}>
       <td>
@@ -15,8 +32,8 @@ export default function TableRow({ status, Icon }) {
       <td>München</td>
       <td className={styles.store__center}>Franchise</td>
       <td className={styles.store__status}>
-        <div className={styles.store__icon}>
-          <ConfigIcon />
+        <div className={cn(styles.store__icon, statusButtonTypeMap[type])}>
+          {StatusIcon}
           {status}
         </div>
       </td>

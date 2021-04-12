@@ -1,5 +1,9 @@
 @import "../../../scss/variables";
 
+.buttonIcon {
+  margin-right: 16px;
+}
+
 .innerStore {
   &__head {
     margin-bottom: 35px;
@@ -14,7 +18,7 @@
     margin-bottom: 33px;
     background-image: url(../../../images/back.svg);
     background-repeat: no-repeat;
-    background-position: top 2px left;
+    background-position: top 1.5px left;
     cursor: pointer;
     display: inline-block;
   }
@@ -43,24 +47,10 @@
     margin-right: 20px;
   }
 
-  /* &__btn {
-    cursor: pointer;
-    border: 0;
-    background-color: $color-green;
-    color: #fff;
-    font-size: 16px;
-    line-height: 20px;
-    letter-spacing: -0.01em;
-    font-weight: 700;
-    padding: 10px 15px 7px 36px;
-    height: 37px;
-    border-radius: $border-radius;
-    //background-image: url(../img/icons/deployed.svg);
-    background-repeat: no-repeat;
-    background-position: center left 14px;
-    background-size: 14px 14px;
-    min-width: 122px;
-  }*/
+  &__buttons {
+    display: flex;
+    align-items: center;
+  }
 
   &__info {
     display: flex;
@@ -86,4 +76,11 @@
 .dashboard__buttons {
   display: flex;
   align-items: center;
+}
+
+.yellowBorder {
+  border: 1px solid $color-yellow;
+  background-color: transparent;
+  color: $color-yellow;
+  margin-left: 16px;
 }

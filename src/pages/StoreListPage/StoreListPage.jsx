@@ -5,6 +5,8 @@ import TableHead from "components/tables/TableHead";
 import TableRow from "components/tables/TableRow";
 import DashboardHead from "components/header/DashboardHead";
 import StoreInfo from "pages/StoreListPage/innerPages/StoreInfo/StoreInfo";
+import { ConfigIcon } from "icons";
+import statusButtonTypes from "types/statusButtonTypes";
 
 export default function StoreListPage(params) {
   return (
@@ -17,10 +19,21 @@ export default function StoreListPage(params) {
             <table className={styles.table}>
               <TableHead th="Region" />
               <tbody>
-                <TableRow status="Algorithm Configuration" />
-                <TableRow status="Deployed" />
-                <TableRow status="Test" />
-                <TableRow status="Deployment" />
+                <TableRow
+                  status="Algorithm Configuration"
+                  type={statusButtonTypes.configuration}
+                  Icon={ConfigIcon}
+                />
+                <TableRow status="Deployed" type={statusButtonTypes.deployed} />
+                <TableRow status="Test" type={statusButtonTypes.test} />
+                <TableRow
+                  status="Deployment"
+                  type={statusButtonTypes.deployment}
+                />
+                <TableRow
+                  status="Under Maintenance"
+                  type={statusButtonTypes.maintenance}
+                />
               </tbody>
             </table>
           </Route>

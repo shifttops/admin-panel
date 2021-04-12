@@ -41,7 +41,7 @@ export default function InnerPlanner() {
         </tr>
         <tbody>
           <PlannerItem
-            text="Record video from leteral cameras"
+            text="Record video from lateral cameras"
             Icon={PauseIcon}
             iconColor={iconButtonTypes.red}
           />

@@ -19,7 +19,10 @@ export default function InnerConfiguration() {
           <h2 className={styles.title}>Configuration</h2>
           <SearchQuick />
         </div>
-        <Button text="Upload file" />
+        <div className={styles.buttons}>
+          <Button text="Create" className={styles.borderBtn} />
+          <Button text="Upload file" />
+        </div>
       </div>
       <table className={styles.table}>
         <tr>

@@ -1,3 +1,1 @@
-import ActivityLogsPage from "./ActivityLogsPage";
-
-export default ActivityLogsPage;
+export { default } from "./ActivityLogsPage";

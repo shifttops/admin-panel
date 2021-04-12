@@ -2,6 +2,7 @@ const routes = {
   files: "/files",
   groups: "/groups",
   home: "/home",
+  planner: "/planner",
   innerCameras: "/inner-cameras",
   innerChat: "/inner-chat",
   innerConfiguration: "/inner-configuration",
