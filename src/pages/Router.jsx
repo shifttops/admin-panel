@@ -1,6 +1,7 @@
-import { Route, Switch } from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 import { useState } from "react";
-import Sidebar from "components/Sidebar";
+import { useCookies } from 'react-cookie';
+import Sidebar from "components/sidebar";
 import HeaderDashboard from "components/header/HeaderDashboard";
 import mainNavigation from "constants/main-navigation";
 import LoginPage from "pages/LoginPage/LoginPage";
@@ -13,11 +14,14 @@ export default function CustomRouter() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isSidebarOverlap, setIsSidebarOverlap] = useState(false);
 
+  const [cookies, setCookie] = useCookies(['token']);
+
   const sidebarToggle = () => {
     setIsSidebarOpen((prev) => !prev);
   };
 
   return (
+    <>
     <Switch>
       <Route exact path={routes.login}>
         <LoginPage />
@@ -45,5 +49,7 @@ export default function CustomRouter() {
         </div>
       </Route>
     </Switch>
+    {!cookies.token && <Redirect to={routes.login}/>}
+    </>
   );
 }
