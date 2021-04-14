@@ -24,7 +24,7 @@ export default function FilesPage(params) {
         <thead className={styles.head}>
           <tr>
             <th>
-              <Checkbox label="Store name" />
+              <Checkbox label="Store name" className={styles.checkboxHead} />
             </th>
             <th>Region</th>
             <th className={styles.location}>Location</th>
