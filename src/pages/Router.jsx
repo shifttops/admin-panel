@@ -49,7 +49,7 @@ export default function CustomRouter() {
         </div>
       </Route>
     </Switch>
-    {!cookies.token && <Redirect to={routes.login}/>}
+    {!cookies.token ? <Redirect to={routes.login}/> : <Redirect to={routes.home}/>}
     </>
   );
 }

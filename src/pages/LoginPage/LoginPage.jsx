@@ -1,26 +1,40 @@
+import { useState } from "react";
+import { useHistory } from "react-router-dom";
+import { useCookies } from 'react-cookie';
 import styles from "./login-page.module.scss";
 import InputLogin from "components/forms/InputLogin";
 import InputPassword from "components/forms/InputPassword";
 import Button from "components/buttons/Button";
 import { NavLink } from "react-router-dom";
 import logo from "images/logo.svg";
-import { useState } from "react";
 
 export default function LoginPage() {
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(false);
+  const [cookies, setCookie] = useCookies(['token'])
+  const history = useHistory();
+
   const handleLogIn = async (e) => {
     e.preventDefault();
-    try{
+    try {
       const resp = await fetch('https://mcd.avaich.com/api/login', {
         method: 'POST',
-        body: { username: login, password }
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username: login, password })
       });
       const res = await resp.json();
-      console.log(res);
+      if (!res.error && !!res.access_token) {
+        setCookie('token', res.access_token, { path: '/' });
+        history.push("/home");
+      } else {
+        setError(true);
+      }
     }
-    catch(e){
+    catch (e) {
+      console.log(e);
       setError(true);
     }
   }

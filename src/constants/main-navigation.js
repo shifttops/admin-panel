@@ -1,5 +1,4 @@
 import routes from "./routes";
-
 import {
   HomeIcon,
   UserIcon,
@@ -44,6 +43,12 @@ const mainNavigation = [
     component: ActivityLogsPage,
     icon: <ActivityIcon />,
   },
+  // {
+  //   to: routes.storeInfo,
+  //   name: "Store Info",
+  //   component: StoreInfo,
+  //   icon: <StoreInfo />,
+  // },
   {
     to: routes.groups,
     name: "Store groups",
