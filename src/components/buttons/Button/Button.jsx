@@ -7,12 +7,14 @@ export default function Button({
   className,
   Icon = () => null,
   onClick,
+  type='button'
 }) {
   return (
     <button
       className={cn(styles.btn, className)}
       disabled={disabled}
       onClick={onClick}
+      type={type}
     >
       <Icon />
       {text}
