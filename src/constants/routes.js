@@ -19,6 +19,7 @@ const routes = {
   forgotPassword: "/forgot-password",
   newPassword: "/new-password",
   emailSend: "/email-send",
+  mcdStores: "/mcd-stores",
 };
 
 export default routes;

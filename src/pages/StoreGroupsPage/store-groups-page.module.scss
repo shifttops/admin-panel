@@ -1,0 +1,113 @@
+@import "./../../scss/variables";
+
+.pageHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.pageInfo {
+  display: flex;
+  align-items: center;
+}
+
+.title {
+  margin-right: 34px;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+}
+
+.group {
+  display: flex;
+  align-items: center;
+  margin-right: 35px;
+}
+
+.plannerIcon {
+  margin-right: 30px;
+}
+
+.table {
+  border-spacing: 0 8px;
+  width: 100%;
+
+  th {
+    text-align: left;
+    padding: 13px 16px 9px 16px;
+    background: rgba(51, 51, 51, 0.07);
+    color: #f9c941;
+    font-size: 0.9em;
+    font-size: 13px;
+    line-height: 16px;
+    text-transform: uppercase;
+    color: rgba(51, 51, 51, 0.5);
+    margin-right: 20px;
+    font-weight: 400;
+  }
+
+  
+  th:first-child {
+    text-align: left;
+    border-radius: 4px 0px 0px 4px;
+  }
+
+  th:last-child {
+    border-right: none;
+    border-radius: 0px 4px 4px 0px;
+  }
+
+  td {
+    vertical-align: middle;
+    line-height: 18px;
+    letter-spacing: -0.03em;
+    padding: 13px 16px 9px 16px;
+    text-align: left;
+    border-top: 1px solid #f2f2f2;
+    border-bottom: 1px solid #f2f2f2;
+    background-color: #fff;
+    color: $color-black-05;
+
+
+    &:first-child {
+      border-radius: 4px 0px 0px 4px;
+    }
+
+    &:last-child {
+      border-right: 1px solid #f2f2f2;
+      border-radius: 0px 4px 4px 0px;
+    }
+
+    & button {
+      margin: 0 auto;
+    }
+  }
+
+  td:first-child {
+    border-left: 1px solid #f2f2f2;
+    border-right: none;
+    width: 55%;
+  }
+
+  td:nth-child(2) {
+    text-align: left;
+  }
+}
+
+.checkbox{
+  span{
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: -0.01em;
+    color: $color-black;
+  }
+}
+
+.deleteIcon{
+  color: rgba(51, 51, 51, 0.3);
+  margin-right: 16px;
+}

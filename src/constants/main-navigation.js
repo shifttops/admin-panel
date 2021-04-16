@@ -16,6 +16,7 @@ import FilesPage from "pages/FilesPage";
 import ActivityLogsPage from "pages/ActivityLogsPage";
 import StoreGroupsPage from "pages/StoreGroupsPage";
 import PlannerPage from "pages/PlannerPage";
+import GroupPage from "pages/GroupPage";
 
 const mainNavigation = [
   {
@@ -60,6 +61,12 @@ const mainNavigation = [
     name: "Planner",
     component: PlannerPage,
     icon: <PlannerStrokeIcon />,
+  },
+  {
+    to: routes.mcdStores,
+    name: "Group",
+    component: GroupPage,
+    icon: <GroupIcon />,
   },
 ];
 
