@@ -4,7 +4,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 24px;
+  margin-bottom: 35px;
 }
 
 .pageInfo {
@@ -36,7 +36,7 @@
 
   th {
     text-align: center;
-    padding: 14px 0px 9px 0px;
+    padding: 13px 0px 10px 0px;
     background: rgba(51, 51, 51, 0.07);
     text-transform: uppercase;
     color: rgba(51, 51, 51, 0.5);
@@ -79,7 +79,7 @@
     }
   }
   .btnMore {
-    margin: 0 auto;
+    margin: 0px 16px 0px auto;
   }
 
   td:first-child {
@@ -162,7 +162,7 @@ td.dropdown {
 .itemButtons {
   display: flex;
   align-items: center;
-  padding: 18px 20px 28px 20px;
+  padding: 18px 20px 18px 20px;
 }
 
 .btnBorder {

@@ -37,7 +37,7 @@
 
   th {
     text-align: left;
-    padding: 13px 16px 9px 16px;
+    padding: 13px 16px 10px 16px;
     background: rgba(51, 51, 51, 0.07);
     color: #f9c941;
     font-size: 0.9em;
@@ -64,7 +64,7 @@
     vertical-align: middle;
     line-height: 18px;
     letter-spacing: -0.03em;
-    padding: 13px 16px 9px 16px;
+    padding: 13px 0px 9px 16px;
     text-align: left;
     border-top: 1px solid #f2f2f2;
     border-bottom: 1px solid #f2f2f2;
@@ -82,7 +82,7 @@
     }
 
     & button {
-      margin: 0 auto;
+      margin: 0 16px 0 auto;
     }
   }
 

@@ -1,7 +1,6 @@
 @import "../../scss/variables";
 
 .sidebar {
-  width: 100%;
   width: 90px;
   background-color: $color-black;
   padding: 25px;
@@ -71,7 +70,7 @@
   }
 }
 
-.sidebarOpen {
+.sidebarOpen, .sidebar.overlap {
   width: 240px;
   align-items: flex-start;
 
@@ -124,4 +123,16 @@
       }
     }
   }
+}
+
+.sidebar.overlap{
+    height: 100%;
+    width: 240px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: $color-black;
+    overflow-x: hidden;
+    transition: 0.5s;
 }

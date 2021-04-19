@@ -4,7 +4,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 24px;
+  margin-bottom: 35px;
 }
 
 .pageInfo {
@@ -52,8 +52,8 @@
   }
 
   th {
-    text-align: center;
-    padding: 14px 0px 9px 0px;
+    text-align: left;
+    padding: 13px 0px 10px 0px;
     background: rgba(51, 51, 51, 0.07);
     text-transform: uppercase;
     color: rgba(51, 51, 51, 0.5);
@@ -81,8 +81,7 @@
     line-height: 18px;
     letter-spacing: -0.03em;
     padding: 11px 0px 8px 0px;
-    text-align: center;
-    border-top: 1px solid #f2f2f2;
+    text-align: left;
     border-bottom: 1px solid #f2f2f2;
     background: #fff;
     color: $color-black-05;
@@ -104,7 +103,7 @@
     }
   }
   .btnMore {
-    margin: 0 auto;
+    margin: 0 16px 0 auto;
   }
 
   td:first-child {

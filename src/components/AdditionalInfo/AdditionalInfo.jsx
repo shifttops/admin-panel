@@ -31,10 +31,10 @@ export default function AdditionalInfo({ leftTitle, rightTitle }) {
             </p>
           </div>
           <div>
-            <SliderCheckbox />
-            <SliderCheckbox />
-            <SliderCheckbox />
-            <SliderCheckbox />
+            <SliderCheckbox label="Cameras #53" />
+            <SliderCheckbox label="Cameras #54" />
+            <SliderCheckbox label="Cameras #55" />
+            <SliderCheckbox label="Cameras #53" />
           </div>
         </div>
       </div>

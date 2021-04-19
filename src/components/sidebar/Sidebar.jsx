@@ -6,12 +6,14 @@ import styles from "./sidebar.module.scss";
 import cn from "classnames";
 
 export default function Sidebar({ isOpen, isOverlap }) {
+
+
   return (
     <div className={styles.sidebar__wrap}>
       <div
         className={cn(styles.sidebar, {
           [styles.sidebarOpen]: isOpen,
-          [styles.sidebarOverlap]: isOverlap,
+          [styles.overlap]: isOverlap,
         })}
       >
         <img className={styles.sidebar__logo} src={isOpen ? logo : minLogo} />
