@@ -27,7 +27,7 @@ export default function PlannerItem({
       <td>
         <ButtonIcon Icon={PathIcon} />
       </td>
-      <td>
+      <td className={styles.buttons}>
         <ButtonIcon Icon={MoreIcon} />
       </td>
     </tr>

@@ -1,5 +1,12 @@
 @import "../../scss/variables";
 
+.icon{
+  svg{
+    width: 16px;
+    height: 16px;
+  }
+}
+
 .pageHead {
   display: flex;
   align-items: center;

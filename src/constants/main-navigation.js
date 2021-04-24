@@ -8,6 +8,7 @@ import {
   GroupIcon,
   PlannerIcon,
   PlannerStrokeIcon,
+  ChatMenuIcon,
 } from "icons";
 import StoreListPage from "pages/StoreListPage";
 import UsersPage from "pages/UsersPage";
@@ -17,6 +18,7 @@ import ActivityLogsPage from "pages/ActivityLogsPage";
 import StoreGroupsPage from "pages/StoreGroupsPage";
 import PlannerPage from "pages/PlannerPage";
 import GroupPage from "pages/GroupPage";
+import ChatPage from "pages/ChatPage";
 
 const mainNavigation = [
   {
@@ -67,6 +69,12 @@ const mainNavigation = [
     name: "Group",
     component: GroupPage,
     icon: <GroupIcon />,
+  },
+  {
+    to: routes.chat,
+    name: "Chat",
+    component: ChatPage,
+    icon: <ChatMenuIcon />,
   },
 ];
 

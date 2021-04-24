@@ -7,7 +7,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 30px;
+    margin-bottom: 27px;
   }
 
   &__tableHead {
@@ -69,6 +69,10 @@
   }
 }
 
+.iconSwitcher{
+  margin-right: 0px;
+}
+
 .table {
   border-spacing: 0 8px;
   width: 100%;
@@ -87,9 +91,6 @@
     font-weight: 400;
   }
 
-  th:nth-child(2) {
-    padding-left: 16px;
-  }
 
   th:first-child {
     text-align: left;
@@ -110,24 +111,19 @@
     border-top: 1px solid #f2f2f2;
     border-bottom: 1px solid #f2f2f2;
 
-    &:nth-child(2) {
-      padding-left: 16px;
-    }
-
     &:first-child {
       padding: 11px 16px 9px 16px;
-      max-width: 53px;
+      max-width: 65px;
       border-radius: 4px 0px 0px 4px;
     }
 
     &:last-child {
       border-right: 1px solid #f2f2f2;
       border-radius: 0px 4px 4px 0px;
+      margin: 0 0 0 auto;
     }
 
-    & button {
-      margin: 0 auto;
-    }
+
   }
 
   td:first-child {
@@ -137,5 +133,11 @@
 
   td:nth-child(2) {
     text-align: left;
+    padding-left: 0px;
   }
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
 }

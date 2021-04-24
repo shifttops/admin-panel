@@ -26,6 +26,9 @@
   &__icon {
     margin-bottom: 35px;
     color: $color-grey;
+    svg{
+      width: 20px;
+    }
 
     svg path {
       transition: all 0.3s ease 0s;

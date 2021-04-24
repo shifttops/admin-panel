@@ -19,7 +19,11 @@ export default function InnerPlanner() {
         <h2 className="title">Planner</h2>
         <div className={styles.planner__buttons}>
           <div className={styles.planner__process}>
-            <ButtonIcon Icon={PlayIcon} type={iconButtonTypes.grey} />
+            <ButtonIcon
+              Icon={PlayIcon}
+              type={iconButtonTypes.grey}
+              className={styles.iconSwitcher}
+            />
             <ButtonIcon Icon={CheckIcon} />
           </div>
           <ButtonIcon Icon={PlannerIcon} />

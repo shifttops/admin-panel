@@ -31,7 +31,6 @@ export default function InnerConfiguration() {
           <th>Last update</th>
           <th>Added</th>
           <th />
-          <th />
         </tr>
         <tbody>
           <ConfItem Icon={PauseIcon} iconColor={iconButtonTypes.red} />

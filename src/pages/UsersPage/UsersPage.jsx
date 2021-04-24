@@ -1,7 +1,7 @@
 import styles from "./users-page.module.scss";
 import SearchQuick from "components/search/SearchQuick";
 import ButtonIcon from "components/buttons/ButtonIcon";
-import { ArrowDownIcon, MoreIcon, SortIcon } from "icons";
+import { ArrowDownIcon, DeclineIcon, MoreIcon, SortIcon } from "icons";
 import Button from "components/buttons/Button";
 import Checkbox from "components/Checkbox";
 import AccessButton from "components/buttons/AccessButton";
@@ -72,7 +72,7 @@ export default function UsersPage(params) {
               <AccessButton />
             </td>
             <td className={styles.icon}>
-              <AccessButton />
+              <DeclineIcon />
             </td>
             <td className={styles.icon}>
               <AccessButton />
