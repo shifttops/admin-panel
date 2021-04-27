@@ -9,6 +9,7 @@ import {
   FavoriteIcon,
   FavoriteStrokeIcon,
   MoreIcon,
+  PinFileIcon,
   PinFillIcon,
   PinStrokeIcon,
   PptIcon,
@@ -161,7 +162,7 @@ export default function ChatPage() {
               <textarea placeholder="Enter your message here..."></textarea>
               <div className={styles.messages__buttons}>
                 <div className={styles.messages__chat}>
-                  <ButtonIcon Icon={PinStrokeIcon} />
+                  <ButtonIcon Icon={PinFileIcon} />
                   <ButtonIcon Icon={EmojiIcon} />
                 </div>
                 <Button text="Send" />

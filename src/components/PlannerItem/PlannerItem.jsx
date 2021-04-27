@@ -24,11 +24,11 @@ export default function PlannerItem({
         11:00, 13:00, 15:00 Every day
       </td>
       <td className={styles.plannerItem__end}>13.01.2021</td>
-      <td>
-        <ButtonIcon Icon={PathIcon} />
-      </td>
       <td className={styles.buttons}>
-        <ButtonIcon Icon={MoreIcon} />
+        <div className={styles.buttonsWrap}>
+          <ButtonIcon Icon={PathIcon} />
+          <ButtonIcon Icon={MoreIcon} />
+        </div>
       </td>
     </tr>
   );

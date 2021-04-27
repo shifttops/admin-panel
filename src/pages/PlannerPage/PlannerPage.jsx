@@ -41,7 +41,6 @@ export default function PlannerPage() {
             <th>Period</th>
             <th>END DATE</th>
             <th />
-            <th />
           </tr>
         </thead>
         <tbody>

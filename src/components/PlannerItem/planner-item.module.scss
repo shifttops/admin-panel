@@ -78,7 +78,16 @@ td.plannerItem__text {
 }
 
 .buttons {
-  display: flex;
-  align-items: center;
   max-width: 100px;
+}
+
+.buttonsWrap{
+  display: flex;
+  justify-content: flex-end;
+  margin-left: auto;
+  padding-right: 8px;
+  width: 100%;
+  button{
+    margin: 0 8px 0 0;
+  }
 }

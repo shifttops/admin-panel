@@ -10,6 +10,7 @@ import {
   FavoriteStrokeIcon,
   AttachIcon,
   EmojiIcon,
+  PinFileIcon,
 } from "icons";
 import cn from "classnames";
 import styles from "./inner-chat.module.scss";
@@ -56,6 +57,7 @@ export default function InnerChat() {
             <textarea placeholder="Enter your message here..."></textarea>
             <div className={styles.messages__buttons}>
               <div className={styles.messages__chat}>
+                <ButtonIcon Icon={PinFileIcon} />
                 <ButtonIcon Icon={EmojiIcon} />
               </div>
               <Button text="Send" />

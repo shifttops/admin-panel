@@ -61,7 +61,7 @@
   }
   &__item {
     margin-bottom: 4px;
-    padding: 12px 12px 0px 12px;
+    padding: 12px 12px 0px 18px;
     display: flex;
     cursor: pointer;
   }
@@ -93,7 +93,7 @@
 
 .messages {
   overflow-y: auto;
-  height: 500px;
+  height: 100vh;
   -ms-overflow-style: none;
   scrollbar-width: none;
   &::-webkit-scrollbar {
@@ -102,6 +102,10 @@
   }
   &__textarea {
     padding: 24px 36px 36px 0px;
+    position: sticky;
+    bottom: 0px;
+    background-color: #f9f9f9;
+    z-index: 5;
     textarea {
       resize: none;
       background: #ffffff;
