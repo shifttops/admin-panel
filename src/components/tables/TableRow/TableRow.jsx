@@ -2,12 +2,15 @@ import moment from 'moment';
 import { CheckIcon, ConfigIcon, MoreIcon } from "../../../icons/icons";
 import Checkbox from "../../Checkbox/Checkbox";
 import styles from "./table-row.module.scss";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink, useHistory } from "react-router-dom";
 import routes from "constants/routes";
 import ButtonIcon from "components/buttons/ButtonIcon";
 import statusButtonTypes from "types/statusButtonTypes";
 import iconButtonTypes from "types/iconButtonTypes";
 import cn from "classnames";
+import StoresStore from '../../../store/StoresStore';
+import { useState } from 'react';
+import { statusMapper } from '../../../helpers/mappers';
 
 const statusButtonTypeMap = {
   [statusButtonTypes.deployed]: styles.deployed,
@@ -19,27 +22,39 @@ const statusButtonTypeMap = {
 };
 
 export default function TableRow({ status, Icon, id, address, StatusIcon, region, type = 'Franchise', date_deployed, date_ready_deployed }) {
+  const history = useHistory();
+  const [error, setError] = useState(false);
+
+  const handleClick = async () => {
+    history.push(`${routes.storeInfo}/${id}`)
+  }
+
+  const handleOpenMore = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  }
 
   return (
-    <tr className={styles.tableRow}>
+    <tr className={styles.tableRow} onClick={handleClick}>
       <td>
-        <Checkbox label={id} />
+        <Checkbox/>
       </td>
+      <td>{id}</td>
       <td>{address}</td>
       <td>{region}</td>
       <td className={styles.store__center}>{type}</td>
       <td className={styles.store__status}>
-        <div className={cn(styles.store__icon, statusButtonTypeMap[type])}>
+        <div className={cn(styles.store__icon, statusMapper.find(item => item.name === status)?.className)}>
           {StatusIcon}
-          {status}
+          {statusMapper.find(item => item.name === status)?.visibleName}
         </div>
       </td>
-      <td>{date_ready_deployed ? moment(date_ready_deployed).format('DD.MM.YYYY') : 'N/A'}</td>
-      <td>{date_deployed ? moment(date_deployed).format('DD.MM.YYYY') : 'N/A'}</td>
+      <td>{date_ready_deployed}</td>
+      <td>{date_deployed}</td>
       <td>
-        <NavLink to={routes.storeInfo} className={styles.store__more}>
+        <button className={styles.store__more} onClick={handleOpenMore}>
           <ButtonIcon Icon={MoreIcon} />
-        </NavLink>
+        </button>
       </td>
     </tr>
   );

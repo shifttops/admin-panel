@@ -9,6 +9,7 @@
   align-items: center;
   height: 100%;
   z-index: 1;
+  transition: 0.3s;
 
   &__title {
     display: none;
@@ -31,7 +32,7 @@
     }
 
     svg path {
-      transition: all 0.3s ease 0s;
+      transition: 0.3s;
     }
 
     &:hover {
@@ -100,7 +101,7 @@
     color: $color-grey;
     padding: 15px 0 6px 10px;
     width: 100%;
-    transition: all 0.3s ease 0s;
+    transition: 0.3s;
     margin-bottom: 8px;
     border-radius: 4px;
 
@@ -112,7 +113,7 @@
     }
 
     svg path {
-      transition: all 0.3s ease 0s;
+      transition: 0.3s;
     }
 
     &:hover {
@@ -137,5 +138,5 @@
     left: 0;
     background-color: $color-black;
     overflow-x: hidden;
-    transition: 0.5s;
+    transition: 0.3s;
 }

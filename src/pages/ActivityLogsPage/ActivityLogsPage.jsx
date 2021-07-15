@@ -5,8 +5,21 @@ import { ArrowDownIcon, DateIcon, MoreIcon, SortIcon } from "icons";
 import Button from "components/buttons/Button";
 import Checkbox from "components/Checkbox";
 import AccessButton from "components/buttons/AccessButton";
+import ActivityLogsStore from "../../store/ActivityLogsStore";
+import { useEffect } from "react";
+import { useState } from "react";
+import moment from "moment";
+import { observer } from "mobx-react";
 
-export default function ActivityLogsPage(params) {
+const ActivityLogsPage = observer(() => {
+  const { jira_logs, logs, fault_logs, getJiraLogs, getFaultLogs } = ActivityLogsStore;
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    getJiraLogs(setError);
+    getFaultLogs(setError);
+  }, []);
+
   return (
     <div className="page">
       <div className={styles.pageHead}>
@@ -35,20 +48,22 @@ export default function ActivityLogsPage(params) {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td className={styles.name}>
-              <Checkbox className={styles.checkbox} label="Jane Cooper" />
-            </td>
-            <td>Updated the cameras</td>
-            <td className={styles.success}>Success</td>
-            <td>20209</td>
-            <td>17.04.2021</td>
-            <td>09:32</td>
-            <td>
-              <ButtonIcon Icon={MoreIcon} className={styles.btnMore} />
-            </td>
-          </tr>
-          <tr>
+          {logs.map(log => (
+            <tr key={`${log.error_time ? 'Error ' : ""}${log.id}`}>
+              <td className={styles.name}>
+                <Checkbox className={styles.checkbox} label={log.error_time ? 'Fault Log': 'Jira Log'} />
+              </td>
+              <td>{log.error_time ? 'Store Error' : log.status}</td>
+              <td className={log.error_time? styles.fail : styles.success}>{log.error_time ? 'Error': 'Success'}</td>
+              <td>{log.store}</td>
+              <td>{moment(log.error_time ? log.error_time : log.changed_on).format('DD.MM.YYYY')}</td>
+              <td>{moment(log.error_time ? log.error_time : log.changed_on).format('HH:mm')}</td>
+              <td>
+                <ButtonIcon Icon={MoreIcon} className={styles.btnMore} />
+              </td>
+            </tr>
+          ))}
+          {/* <tr>
             <td className={styles.name}>
               <Checkbox
                 className={styles.checkbox}
@@ -63,9 +78,11 @@ export default function ActivityLogsPage(params) {
             <td>
               <ButtonIcon Icon={MoreIcon} className={styles.btnMore} />
             </td>
-          </tr>
+          </tr> */}
         </tbody>
       </table>
     </div>
   );
-}
+});
+
+export default ActivityLogsPage;

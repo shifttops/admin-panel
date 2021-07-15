@@ -5,21 +5,31 @@ import { FavoriteIcon, PrintIcon, ReportIcon, SortIcon } from "icons";
 import Popup from "reactjs-popup";
 import ReportPopup from "components/popups/ReportPopup";
 import Button from "components/buttons/Button";
+import FilterPopup from "../../popups/FilterPopup";
 
-export default function DashboardHead(params) {
+export default function DashboardHead({setSearch}) {
   return (
     <div className={styles.dashboardHead}>
       <div className={styles.dashboardHead__searchWrapper}>
         <p className={styles.dashboardHead__title}>Store list</p>
-        <SearchQuick />
+        <SearchQuick setSearch={setSearch}/>
         <div className={styles.dashboardHead__favorite}>
           <ButtonIcon Icon={SortIcon} className={styles.sortBtn} />
         </div>
       </div>
       <div className={styles.dashboardHead__buttons}>
-        <div className={styles.dashboardHead__print}>
-          <ButtonIcon Icon={PrintIcon} />
-        </div>
+      <Popup
+          modal
+          trigger={
+            <Button
+              className={styles.dashboardHead__report}
+              // Icon={ReportIcon}
+              text="Filter"
+            ></Button>
+          }
+        >
+          {(close) => <FilterPopup onClose={close} />}
+        </Popup>
         <Popup
           modal
           trigger={

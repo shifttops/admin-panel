@@ -4,6 +4,7 @@ import minLogo from "../../images/min-logo.svg";
 import mainNavigation from "../../constants/main-navigation";
 import styles from "./sidebar.module.scss";
 import cn from "classnames";
+import { memo } from "react";
 
 export default function Sidebar({ isOpen, isOverlap }) {
 
@@ -21,7 +22,7 @@ export default function Sidebar({ isOpen, isOverlap }) {
           <p className={styles.sidebar__title}>menu</p>
           {mainNavigation.map(({ to, name, icon }) => (
             <NavLink
-              exact
+              // exact
               className={styles.sidebar__item}
               to={to}
               key={to}

@@ -6,20 +6,9 @@ import InnerSidebar from "components/InnerSidebar";
 
 export default function StoreInfo() {
   return (
-    <BrowserRouter>
+    // <BrowserRouter>
       <div className={styles.inner}>
-        <InnerSidebar />
-        <div className={styles.wrapper}>
-          <InnerHead />
-          <div>
-            <Switch>
-              {innerNavigation.map(({ to, component }) => (
-                <Route path={to} key={to} component={component} />
-              ))}
-            </Switch>
-          </div>
-        </div>
       </div>
-    </BrowserRouter>
+    // {/* </BrowserRouter> */}
   );
 }

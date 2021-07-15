@@ -2,8 +2,99 @@ import styles from "./additional-info.module.scss";
 import { ArrowDownIcon, SpeedIcon, TempIcon } from "icons";
 import cn from "classnames";
 import SliderCheckbox from "components/SliderCheckbox";
+import StoresStore from "../../store/StoresStore";
+import { observer } from "mobx-react";
 
-export default function AdditionalInfo({ leftTitle, rightTitle }) {
+const AdditionalInfo = observer(({ leftTitle, rightTitle }) => {
+  console.table(123);
+  const items = [{
+    name: 'Cameras',
+    result: 'All cameras are working',
+    error: 'All cameras are working',
+    // description: `All cameras working`,
+    // cameras: [53, 54, 55, 56],
+    canOpen: true,
+  }, {
+    name: 'Lateral cameras',
+  }];
+
+  const { storeInfo } = StoresStore;
+
+  const fields = [{
+    visibleName: 'GPU',
+    items: [{
+      icon: <TempIcon />,
+      keyName: "gpu_temp",
+    },
+    {
+      icon: <SpeedIcon />,
+      keyName: "gpu_util",
+    }
+    ],
+  },
+  {
+    visibleName: 'CPU',
+    items: [
+      {
+        icon: <SpeedIcon />,
+        keyName: "cpu_util",
+      }
+    ],
+  },
+  {
+    visibleName: 'OS',
+    keyName: 'machine_os',
+  },
+  {
+    visibleName: 'OS kernel',
+    keyName: 'machine_os_kernel',
+  },
+  {
+    visibleName: 'Name',
+    keyName: 'name',
+  },
+  {
+    visibleName: 'Nvidia driver',
+    keyName: 'nvidia_driver_version',
+  },
+  {
+    visibleName: 'Docker version',
+    keyName: 'docker_version',
+  },
+  {
+    visibleName: 'Internet speed',
+    keyName: 'internet_speed',
+  },
+  {
+    visibleName: 'Local IP',
+    keyName: 'local_ip',
+  },
+  {
+    visibleName: 'Public IP',
+    keyName: 'public_ip',
+  },
+  {
+    visibleName: 'Password',
+    keyName: 'password',
+  },
+  {
+    visibleName: 'Teamviewer ID',
+    keyName: 'teamviewer_id',
+  },
+  {
+    visibleName: 'Teamviewer password',
+    keyName: 'teamviewer_password',
+  },
+  {
+    visibleName: 'Username',
+    keyName: 'username',
+  },
+  {
+    visibleName: 'VPN IP',
+    keyName: 'vpn_ip',
+  },
+  ];
+
   return (
     <div className={styles.system}>
       <div className={styles.head}>
@@ -13,31 +104,36 @@ export default function AdditionalInfo({ leftTitle, rightTitle }) {
       <div
         className={styles.item + " " + styles.opened + " " + styles.dropdown}
       >
-        <div className={styles.dropdownHead}>
+        <button className={styles.dropdownHead}>
           <p className={cn(styles.category, styles.categoryDropdown)}>
-            Cameras
-            <ArrowDownIcon />
+            {items[0].name}
+            {items[0].canOpen ? <ArrowDownIcon /> : ''}
           </p>
-          <div className={styles.resultError}>One camera is off</div>
-        </div>
+          {/* <div className={
+            styles.check
+            // styles.resultError
+          }>{items[0].result}</div> */}
+        </button>
         <div className={styles.text}>
-          <div>
-            <span className={styles.error}>Error Code 0xa00f4294</span>
+          {/* <div>
+            <span className={
+              // styles.error
+              styles.check
+              }>{items[0].error}</span>
             <p className={styles.descr}>
-              This error is related to the camera not working properly and it is
-              most likely caused by corrupted or missing drivers. This error can
-              also occur due to a recently installed update for Windows 10, or
-              due to corrupted drivers.
+              {items[0].description}
             </p>
-          </div>
+          </div> */}
           <div>
-            <SliderCheckbox label="Cameras #53" />
-            <SliderCheckbox label="Cameras #54" />
-            <SliderCheckbox label="Cameras #55" />
-            <SliderCheckbox label="Cameras #53" />
+            {storeInfo.cameras && storeInfo.cameras.map(camera => (
+              <SliderCheckbox key={camera.id} label={camera.view_name} />
+            ))}
           </div>
         </div>
       </div>
+
+
+
 
       <div className={styles.item}>
         <p className={cn(styles.category, styles.categoryDropdown)}>
@@ -46,7 +142,24 @@ export default function AdditionalInfo({ leftTitle, rightTitle }) {
         </p>
         <div className={styles.check}>All cameras are working</div>
       </div>
-      <div className={styles.item}>
+      {fields.map(field => (
+        <div className={styles.item} key={field.visibleName}>
+          <p className={styles.category}>{field.visibleName}</p>
+          {field.items && (field.items.length > 1 || field.items[0]?.icon) ? (
+            <div className={styles.resultInfo}>
+              {field.items.map(item => (
+                <div className={item.keyName.includes('temp') ? styles.temp : styles.process} key={item.keyName}>
+                  {item.icon}
+                  <span>{storeInfo[item.keyName] === 0 || storeInfo[item.keyName] ? `${Math.round(storeInfo[item.keyName])} ${item.keyName.includes('util') ? '%' : ''}` : ''}</span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <span className={styles.result}>{storeInfo[field.keyName]}</span>
+          )}
+        </div>
+      ))}
+      {/* <div className={styles.item}>
         <p className={styles.category}>GPU</p>
         <div className={styles.resultInfo}>
           <div className={styles.temp}>
@@ -71,8 +184,8 @@ export default function AdditionalInfo({ leftTitle, rightTitle }) {
             <span>90%</span>
           </div>
         </div>
-      </div>
-      <div className={styles.item}>
+      </div> */}
+      {/* <div className={styles.item}>
         <p className={styles.category}>Videocard</p>
         <span className={styles.result}>NVIDIA RTX2080 SUPER</span>
       </div>
@@ -89,7 +202,9 @@ export default function AdditionalInfo({ leftTitle, rightTitle }) {
       <div className={styles.item}>
         <p className={styles.category}>OS</p>
         <span className={styles.result}>Windows 10, version 20H2</span>
-      </div>
+      </div> */}
     </div>
   );
-}
+});
+
+export default AdditionalInfo;

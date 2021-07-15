@@ -1,6 +1,7 @@
-import { Redirect, Route, Switch } from "react-router-dom";
-import { useState } from "react";
+import { Redirect, Route, Switch, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
+import { observer } from 'mobx-react';
 
 import HeaderDashboard from "components/header/HeaderDashboard";
 import mainNavigation from "constants/main-navigation";
@@ -9,21 +10,34 @@ import routes from "constants/routes";
 import NewPasswordPage from "pages/NewPasswordPage";
 import EmailSendPage from "pages/EmailSendPage";
 import ForgotPasswordPage from "pages/ForgotPasswordPage";
-import Sidebar from "components/Sidebar";
+import Sidebar from "components/sidebar";
+import innerNavigation from "constants/inner-navigation";
+import InnerHead from "components/header/InnerHead";
+import InnerSidebar from "components/InnerSidebar";
+import styles from "./styles.module.scss";
 
 export default function CustomRouter() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isSidebarOverlap, setIsSidebarOverlap] = useState(false);
 
-  const [cookies, setCookie] = useCookies(["token"]);
-
   const sidebarToggle = () => {
     setIsSidebarOpen((prev) => !prev);
   };
 
+  const location = useLocation();
+
+  useEffect(() => {
+    if (new RegExp(`${routes.home}\/.+`).test(location.pathname) && isSidebarOpen) {
+      setIsSidebarOpen(false);
+    }
+  }, [location.pathname])
+
   return (
     <>
       <Switch>
+        {localStorage.getItem('access') && localStorage.getItem('access') !== 'undefined' && (
+          <Redirect from="/" exact to={routes.home} />
+        )}
         <Route exact path={routes.login}>
           <LoginPage />
         </Route>
@@ -36,25 +50,43 @@ export default function CustomRouter() {
         <Route exact path={routes.forgotPassword}>
           <ForgotPasswordPage />
         </Route>
-        <Route>
-          <div className="wrapper">
-            <Sidebar isOpen={isSidebarOpen} isOverlap={isSidebarOverlap} />
-            <div className="dashboard">
-              <HeaderDashboard sidebarToggle={sidebarToggle} />
-              <Switch>
-                {mainNavigation.map(({ to, component }) => (
-                  <Route path={to} component={component} key={to} />
-                ))}
-              </Switch>
-            </div>
+        <div className="wrapper">
+          <Sidebar isOpen={isSidebarOpen} isOverlap={isSidebarOverlap} />
+          <div className="dashboard">
+            <HeaderDashboard sidebarToggle={sidebarToggle} />
+            {mainNavigation.map(({ to, component }) => (
+              <Route path={to} exact component={() => (
+                <>
+                  {component}
+                </>
+              )} key={to}>
+              </Route>
+            ))}
+            {innerNavigation.map(({ to, component }) => (
+              <Route path={`${to}/:id`} exact key={to} component={(props) => (
+                <div className={styles.inner}>
+                  <InnerSidebar {...props} />
+                  <div className={styles.wrapper}>
+                    <InnerHead />
+                    <div>
+                      {component}
+                    </div>
+                  </div>
+                </div>
+              )} >
+              </Route>
+            )
+            )}
           </div>
-        </Route>
+        </div>
+
       </Switch>
-      {!cookies.token ? (
+      {(!localStorage.getItem('access') || localStorage.getItem('access') === 'undefined') && (
         <Redirect to={routes.login} />
-      ) : (
-        <Redirect to={routes.home} />
       )}
+      {/* ) : (
+        <Redirect to={routes.home} />
+    )} */}
     </>
   );
 }

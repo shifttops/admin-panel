@@ -4,13 +4,13 @@ export default function SliderCheckbox({ label, className }) {
   return (
     <div className={styles.wrapperCheckbox + " " + className}>
       <div className={styles.switcher}>
-        <label>
+        {/* <label> */}
           <small className={styles.label}>{label}</small>
-          <input type="checkbox" value="" />
-          <span>
+          {/* <input type="checkbox" defaultChecked /> */}
+          {/* <span>
             <small></small>
-          </span>
-        </label>
+          </span> */}
+        {/* </label> */}
       </div>
     </div>
   );

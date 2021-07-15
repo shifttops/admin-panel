@@ -4,10 +4,12 @@ import { useHistory } from "react-router-dom";
 import { useCookies } from 'react-cookie';
 
 export default function AccountResult() {
-  const [cookies, setCookie, removeCookie] = useCookies(['token'])
   const history = useHistory();
   const handleLogOut = () => {
-    removeCookie('token');
+    localStorage.removeItem('access');
+    localStorage.removeItem('refresh');
+    localStorage.removeItem('date');
+    localStorage.removeItem('refresh_date');
     history.push('/');
   }
 

@@ -9,7 +9,7 @@ export default function Checkbox({ label, className = "" }) {
           type="checkbox"
           name="store-id"
         />
-        <span className={styles.storeList__label}>{label}</span>
+        <span className={styles.storeList__label}>{ label? label: null }</span>
       </label>
     </div>
   );

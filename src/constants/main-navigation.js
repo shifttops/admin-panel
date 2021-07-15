@@ -24,26 +24,26 @@ const mainNavigation = [
   {
     to: routes.home,
     name: "Store list",
-    component: StoreListPage,
+    component: <StoreListPage />,
     icon: <HomeIcon />,
   },
-  { to: routes.users, name: "Users", component: UsersPage, icon: <UserIcon /> },
+  { to: routes.users, name: "Users", component: <UsersPage />, icon: <UserIcon /> },
   {
     to: routes.setting,
     name: "Settings",
-    component: SettingsPage,
+    component: <SettingsPage />,
     icon: <SettingsIcon />,
   },
   {
     to: routes.files,
     name: "Files",
-    component: FilesPage,
+    component: <FilesPage />,
     icon: <FilesIcon />,
   },
   {
     to: routes.logs,
     name: "Activity logs",
-    component: ActivityLogsPage,
+    component: <ActivityLogsPage />,
     icon: <ActivityIcon />,
   },
   // {
@@ -55,25 +55,25 @@ const mainNavigation = [
   {
     to: routes.groups,
     name: "Store groups",
-    component: StoreGroupsPage,
+    component: <StoreGroupsPage />,
     icon: <GroupIcon />,
   },
   {
     to: routes.planner,
     name: "Planner",
-    component: PlannerPage,
+    component: <PlannerPage />,
     icon: <PlannerStrokeIcon />,
   },
   {
     to: routes.mcdStores,
     name: "Group",
-    component: GroupPage,
+    component: <GroupPage />,
     icon: <GroupIcon />,
   },
   {
     to: routes.chat,
     name: "Chat",
-    component: ChatPage,
+    component: <ChatPage />,
     icon: <ChatMenuIcon />,
   },
 ];

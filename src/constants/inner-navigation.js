@@ -10,38 +10,38 @@ import InnerFiles from "pages/StoreListPage/innerPages/InnerFiles";
 import InnerManage from "pages/StoreListPage/innerPages/InnerManage";
 
 const innerNavigation = [
-  { to: routes.storeInfo, name: "Store Info", component: () => <InnerInfo /> },
+  { to: routes.storeInfo, name: "Store Info", component: <InnerInfo /> },
   {
     to: routes.manageStore,
     name: "Manage Store",
-    component: () => <InnerManage />,
+    component: <InnerManage />,
   },
   {
     to: routes.innerStatistic,
     name: "Statistic",
-    component: () => <InnerStatistic />,
+    component: <InnerStatistic />,
   },
   {
     to: routes.innerHistory,
     name: "History",
-    component: () => <InnerHistory />,
+    component: <InnerHistory />,
   },
-  { to: routes.innerChat, name: "Chat", component: () => <InnerChat /> },
-  { to: routes.innerFiles, name: "Files", component: () => <InnerFiles /> },
+  { to: routes.innerChat, name: "Chat", component: <InnerChat /> },
+  { to: routes.innerFiles, name: "Files", component: <InnerFiles /> },
   {
     to: routes.innerCameras,
     name: "Cameras",
-    component: () => <InnerCameras />,
+    component: <InnerCameras />,
   },
   {
     to: routes.innerConfiguration,
     name: "Configuration",
-    component: () => <InnerConfiguration />,
+    component: <InnerConfiguration />,
   },
   {
     to: routes.innerPlanner,
     name: "Planner",
-    component: () => <InnerPlanner />,
+    component: <InnerPlanner />,
   },
 ];
 

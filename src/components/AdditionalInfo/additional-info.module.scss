@@ -186,5 +186,9 @@
 .dropdownHead {
   padding: 12px 24px 7px 24px;
   display: flex;
+  width: 100%;
   justify-content: space-between;
+  border: none;
+  background-color: transparent;
+  outline: none;
 }

@@ -7,8 +7,24 @@ import ButtonIcon from "components/buttons/ButtonIcon";
 import Button from "components/buttons/Button";
 import Checkbox from "components/Checkbox";
 import routes from "constants/routes";
+import { observer } from "mobx-react";
+import { useEffect } from "react";
+import StoresStore from "../../../../store/StoresStore";
+import { useState } from "react";
+import moment from "moment";
 
-export default function InnerHistory() {
+
+const InnerHistory = observer(() => {
+  const { storeInfo, storeErrors, getStoreErrorLogs } = StoresStore;
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    const id = +location.pathname.split('/')[location.pathname.split('/').length - 1];
+    if (storeInfo.store_id === id) {
+      getStoreErrorLogs(id, setError);
+    }
+  }, [storeInfo.store_id])
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.head}>
@@ -35,79 +51,30 @@ export default function InnerHistory() {
           </tr>
         </thead>
         <tbody>
+          {storeErrors.map(item => (
           <tr>
             <td>
-              <Checkbox label="Сar arrived" className={styles.checkbox} />
+              <Checkbox label="Error" className={styles.checkbox} />
             </td>
             <td className={styles.error}>
-              RuntimeError('[enforce fail at inline_container.cc:222]...
-              <span>
+              {item.description}
+              {/* <span>
                 <ArrowDownIcon />
-              </span>
+              </span> */}
             </td>
-            <td>2021-01-28</td>
-            <td>10:15</td>
+            <td>{moment(item.error_time).format('DD.MM.YYYY')}</td>
+            <td>{moment(item.error_time).format('HH:mm')}</td>
             <td>
               <NavLink to={routes.storeInfo}>
                 <ButtonIcon Icon={MoreIcon} />
               </NavLink>
             </td>
           </tr>
-          <tr>
-            <td>
-              <Checkbox label="Сar arrived" className={styles.checkbox} />
-            </td>
-            <td className={cn(styles.error, styles.opened)}>
-              RuntimeError('[enforce fail at inline_container.cc:222]file not
-              found: archive/constants.pkl',):\n Traceback (most recent call
-              last):\n File \"/app/entities/StoreManager.py\", line 148, in
-              run\n self.update_history()\n File
-              \"/app/entities/StoreManager.py\", line 75, in update_history\n
-              ClassificationModel.net_predict(cam_views)\n File
-              \"/app/utils/ClassificationModel.py\", line 65, in net_predict\n
-              ClassificationModel()\n File
-              \"/app/utils/ClassificationModel.py\", line 46, in __init__\n
-              pytorch_backend = PyTorchBackend()\n File
-              \"/app/utils/ClassificationModel.py\", line 318, in __init__\n
-              GlobalConfig['Classification']['PyTorch']['checkpoint_path'])\n
-              File
-              \"/usr/local/lib/python3.6/dist-packages/torch/jit/_serialization.py\",
-              line 161, in load\n cpp_module = torch._C.import_ir_module(cu, f,
-              map_location, _extra_files)\nRuntimeError: [enforce fail at
-              inline_container.cc:222] . file not found:
-              archive/constants.pkl\n"
-              <span>
-                <ArrowDownIcon />
-              </span>
-            </td>
-            <td>2021-01-28</td>
-            <td>10:15</td>
-            <td>
-              <NavLink to={routes.storeInfo}>
-                <ButtonIcon Icon={MoreIcon} />
-              </NavLink>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <Checkbox label="Сar arrived" className={styles.checkbox} />
-            </td>
-            <td className={styles.error}>
-              RuntimeError('[enforce fail at inline_container.cc:222]...
-              <span>
-                <ArrowDownIcon />
-              </span>
-            </td>
-            <td>2021-01-28</td>
-            <td>10:15</td>
-            <td>
-              <NavLink to={routes.storeInfo}>
-                <ButtonIcon Icon={MoreIcon} />
-              </NavLink>
-            </td>
-          </tr>
-        </tbody>
+          ))}
+       </tbody>
       </table>
     </div>
   );
-}
+});
+
+export default InnerHistory;
