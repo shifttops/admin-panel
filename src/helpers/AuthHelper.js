@@ -2,10 +2,7 @@ import { useHistory } from "react-router-dom";
 import routes from "../constants/routes";
 
 export const refreshToken = async () => {
-  // const history = useHistory();
-  console.log(1231233123);
-
-  console.log(+localStorage.getItem("date") < +new Date(), +localStorage.getItem("refresh_date") , +new Date());
+  // const history = useHistory()
   try {
     if (+localStorage.getItem("date") < +new Date()) {
       if (+localStorage.getItem("refresh_date") < +new Date()) {
@@ -25,7 +22,6 @@ export const refreshToken = async () => {
           }
         );
         const res = await resp.json();
-        console.log(123123131231);
         localStorage.setItem("access", res.access);
         localStorage.setItem("date", +new Date() + 300 * 1000 - 1000);
         return res;

@@ -37,10 +37,21 @@
   .checkbox_div {
     display: flex;
     align-items: center;
+    // .inputRange {
+    //   margin: 0 10px;
+    // }
 
+    // .input-range {
+    //   margin: 0 10px;
+    // }
     input {
       margin: 5px;
     }
+  }
+  .checkbox_div_range {
+    display: flex;
+    align-items: center;
+    margin: 15px;
   }
 }
 
@@ -86,4 +97,8 @@
 .test {
   color: #888783;
   background-color: rgb(255, 235, 0);
+}
+
+.calendar {
+  width: calc(100% - 10px);
 }

@@ -1,6 +1,8 @@
 const routes = {
   home: "/stores",
-  files: "/files",
+  scripts: "/scripts",
+  scriptsEdit: "/scripts/:id/mode=edit",
+  scriptsLaunch: "/scripts/:id/mode=launch",
   groups: "/groups",
   chat: "/chat",
   planner: "/planner",

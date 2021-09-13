@@ -32,6 +32,45 @@ export const statusMapper = [
   },
 ];
 
+export const filtersRequestMapper = [
+  {
+    name: 'date_created',
+    reqName: 'date_created__range',
+  },
+  {
+    name: 'date_deployment',
+    reqName: 'date_deployment__range',
+  },
+  {
+    name: 'view_name',
+    reqName: 'cameras__view_name'
+  },
+  {
+    name: 'machine_os',
+    reqName: 'servers__machine_os'
+  },
+  {
+    name: 'docker_version',
+    reqName: 'servers__docker_version'
+  },
+  {
+    name: 'machine_os',
+    reqName: 'servers__machine_os'
+  },
+  {
+    name: 'machine_os',
+    reqName: 'servers__machine_os'
+  },
+  {
+    name: 'nvidia_driver_version',
+    reqName: 'servers__nvidia_driver_version'
+  },
+  {
+    name: 'internet_speed',
+    reqName: 'servers__internet_speed__range'
+  },
+]
+
 export const categoryMapper = [
     {
       visibleName: 'Country',
@@ -55,7 +94,7 @@ export const categoryMapper = [
     },
     {
       visibleName: 'Store type',
-      name: 'type',
+      name: 'store_type',
     },
     {
       visibleName: 'Building type',
@@ -110,8 +149,8 @@ export const categoryMapper = [
       name: 'nvidia_driver_version',
     },
     {
-      visibleName: 'Statuses',
-      name: 'statuses',
+      visibleName: 'Status',
+      name: 'status',
     },
     {
       visibleName: 'Cameras',

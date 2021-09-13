@@ -11,7 +11,7 @@ export default function Button({
 }) {
   return (
     <button
-      className={cn(styles.btn, className)}
+      className={cn(styles.btn, styles[className])}
       disabled={disabled}
       onClick={onClick}
       type={type}

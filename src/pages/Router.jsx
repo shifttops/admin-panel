@@ -1,7 +1,7 @@
 import { Redirect, Route, Switch, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
-import { observer } from 'mobx-react';
+import { observer } from "mobx-react";
 
 import HeaderDashboard from "components/header/HeaderDashboard";
 import mainNavigation from "constants/main-navigation";
@@ -11,10 +11,11 @@ import NewPasswordPage from "pages/NewPasswordPage";
 import EmailSendPage from "pages/EmailSendPage";
 import ForgotPasswordPage from "pages/ForgotPasswordPage";
 import Sidebar from "components/sidebar";
-import innerNavigation from "constants/inner-navigation";
+import { innerNavigation } from "constants/inner-navigation";
 import InnerHead from "components/header/InnerHead";
 import InnerSidebar from "components/InnerSidebar";
 import styles from "./styles.module.scss";
+import { innerNavigationScripts } from "../constants/inner-navigation";
 
 export default function CustomRouter() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -27,17 +28,21 @@ export default function CustomRouter() {
   const location = useLocation();
 
   useEffect(() => {
-    if (new RegExp(`${routes.home}\/.+`).test(location.pathname) && isSidebarOpen) {
+    if (
+      new RegExp(`${routes.home}\/.+`).test(location.pathname) &&
+      isSidebarOpen
+    ) {
       setIsSidebarOpen(false);
     }
-  }, [location.pathname])
+  }, [location.pathname]);
 
   return (
     <>
       <Switch>
-        {localStorage.getItem('access') && localStorage.getItem('access') !== 'undefined' && (
-          <Redirect from="/" exact to={routes.home} />
-        )}
+        {localStorage.getItem("access") &&
+          localStorage.getItem("access") !== "undefined" && (
+            <Redirect from="/" exact to={routes.home} />
+          )}
         <Route exact path={routes.login}>
           <LoginPage />
         </Route>
@@ -55,33 +60,47 @@ export default function CustomRouter() {
           <div className="dashboard">
             <HeaderDashboard sidebarToggle={sidebarToggle} />
             {mainNavigation.map(({ to, component }) => (
-              <Route path={to} exact component={() => (
-                <>
-                  {component}
-                </>
-              )} key={to}>
-              </Route>
+              <Route
+                path={to}
+                exact
+                component={() => <>{component}</>}
+                key={to}
+              ></Route>
             ))}
             {innerNavigation.map(({ to, component }) => (
-              <Route path={`${to}/:id`} exact key={to} component={(props) => (
-                <div className={styles.inner}>
-                  <InnerSidebar {...props} />
-                  <div className={styles.wrapper}>
-                    <InnerHead />
-                    <div>
-                      {component}
+              <Route
+                path={`${to}/:id`}
+                exact
+                key={to}
+                component={(props) => (
+                  <div className={styles.inner}>
+                    <InnerSidebar {...props} />
+                    <div className={styles.wrapper}>
+                      <InnerHead />
+                      <div>{component}</div>
                     </div>
                   </div>
-                </div>
-              )} >
-              </Route>
-            )
-            )}
+                )}
+              ></Route>
+            ))}
+            {innerNavigationScripts.map(({ to, component }) => (
+              <Route
+                path={to}
+                exact
+                key={to}
+                component={(props) => (
+                  <div className={styles.inner}>
+                    <InnerSidebar links={innerNavigationScripts}  {...props}/>
+                    <div className={styles.wrapper}>{component}</div>
+                  </div>
+                )}
+              ></Route>
+            ))}
           </div>
         </div>
-
       </Switch>
-      {(!localStorage.getItem('access') || localStorage.getItem('access') === 'undefined') && (
+      {(!localStorage.getItem("access") ||
+        localStorage.getItem("access") === "undefined") && (
         <Redirect to={routes.login} />
       )}
       {/* ) : (

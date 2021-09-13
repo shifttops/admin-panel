@@ -35,7 +35,7 @@ const mainNavigation = [
     icon: <SettingsIcon />,
   },
   {
-    to: routes.files,
+    to: routes.scripts,
     name: "Files",
     component: <FilesPage />,
     icon: <FilesIcon />,

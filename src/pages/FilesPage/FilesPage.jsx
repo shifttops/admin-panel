@@ -5,65 +5,132 @@ import styles from "./files-page.module.scss";
 import Button from "components/buttons/Button";
 import FilesTableHead from "components/tables/FilesTableHead";
 import FilesFolderRow from "components/tables/FilesFolderRow";
+import InnerSidebar from "../../components/InnerSidebar";
 import Checkbox from "components/Checkbox";
+import routes from "../../constants/routes";
+import InnerEdit from "./InnerEdit/InnerEdit";
+import InnerLaunch from "./InnerLaunch/InnerLaunch";
+import { useHistory, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { observer } from "mobx-react";
+import ScriptsStore from "../../store/ScriptsStore";
+import { computed, toJS } from "mobx";
 
-export default function FilesPage(params) {
+const FilesPage = observer(() => {
+  const location = useLocation();
+  const history = useHistory();
+  const { tags, getScripts, scriptsByTags } = ScriptsStore;
+  const [error, setError] = useState("");
+  const [enabledTags, setEnabledTags] = useState([]);
+  // const [links, setLinks] = useState([
+  //   {
+  //     to: `${routes.scriptsEdit}`,
+  //     name: "Edit",
+  //     component: <InnerEdit />,
+  //   },
+  //   {
+  //     to: `${routes.scripts}`,
+  //     name: "Launch",
+  //     component: <InnerLaunch />,
+  //   },
+  // ]);
+
+  const handleTagClick = (tag) => {
+    if (enabledTags.includes(tag)) {
+      setEnabledTags((prev) => {
+        prev.splice(prev.indexOf(tag), 1);
+        return [...prev];
+      });
+    } else {
+      setEnabledTags((prev) => [...prev, tag]);
+    }
+  };
+
+  const handleScriptClick = (id) => {
+    history.push(`${routes.scripts}/${id}/mode=edit`);
+  };
+
+  useEffect(() => {
+    // if (!location.search) {
+    //   history.replace(links[0].to);
+    //   console.log(location.search);
+    // }
+    getScripts(setError);
+    // setLinks((prev) => [
+    //   ...prev,
+    //   {
+    //     to: `${routes.scripts}?mode=launch`,
+    //     name: "Launch",
+    //     component: <InnerLaunch />,
+    //   },
+    // ]);
+  }, []);
+
   return (
-    <div className="page">
-      <div className={styles.pageHead}>
-        <div className={styles.pageInfo}>
-          <h2 className={styles.title}>Files</h2>
-          <SearchQuick />
-          <ButtonIcon Icon={SortIcon} className={styles.btnIcon} />
+    <div className={styles.wrapper}>
+      {/* <InnerSidebar links={links} /> */}
+      <div className={styles.page}>
+        <div className={styles.pageHead}>
+          <div className={styles.pageInfo}>
+            <h2 className={styles.title}>Scripts</h2>
+            <SearchQuick />
+            <ButtonIcon Icon={SortIcon} className={styles.btnIcon} />
+          </div>
+          <div className={styles.button}>
+            <Button text="Upload file" />
+          </div>
         </div>
-        <div className={styles.button}>
-          <Button text="Upload file" />
+        <div className={styles.tags}>
+          Tags:{" "}
+          {tags.map((tag) => (
+            <button
+              key={tag}
+              className={`${styles.tag} ${
+                enabledTags.includes(tag) ? styles.enabledTag : ""
+              }`}
+              onClick={() => handleTagClick(tag)}
+            >
+              {tag}
+            </button>
+          ))}
+        </div>
+        <div className={styles.scripts}>
+          {scriptsByTags(enabledTags).map((script) => (
+            <div
+              className={styles.scriptBlock}
+              key={script.playbook_id}
+              onClick={() => handleScriptClick(script.playbook_id)}
+            >
+              <span className={styles.name}>Name: {script.name}</span>
+
+              <div className={styles.tags}>
+                {script.tags &&
+                  script.tags.map(
+                    (tag) => (
+                      <button key={tag} className={styles.tag}>
+                        {tag}
+                      </button>
+                    )
+                  )}
+              </div>
+              <span>Number of executions: {script.number_of_executions}</span>
+              <span>
+                Successfull executions: {script.successfull_executions}
+              </span>
+              <span>
+                Last updated:{" "}
+                {`${new Date(
+                  script.date_created
+                ).toLocaleDateString()} ${new Date(
+                  script.date_created
+                ).toLocaleTimeString("en-US", { hour12: false })}`}
+              </span>
+            </div>
+          ))}
         </div>
       </div>
-      <table className={styles.table}>
-        <thead className={styles.head}>
-          <tr>
-            <th>
-              <Checkbox label="Store name" className={styles.checkboxHead} />
-            </th>
-            <th>Region</th>
-            <th className={styles.location}>Location</th>
-            <th>files</th>
-            <th>Last Edited</th>
-            <th> </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td className={styles.name}>
-              <Checkbox className={styles.checkbox} label="20209" />
-            </td>
-            <td className={styles.text}>München</td>
-            <td className={styles.text + " " + styles.location}>
-              Maria-Probst-Straße 1
-            </td>
-            <td className={styles.text}>64 files</td>
-            <td className={styles.text}>17 March 2021</td>
-            <td>
-              <ButtonIcon Icon={MoreIcon} />
-            </td>
-          </tr>
-          <tr>
-            <td className={styles.name}>
-              <Checkbox className={styles.checkbox} label="20209" />
-            </td>
-            <td className={styles.text}>München</td>
-            <td className={styles.text + " " + styles.location}>
-              Maria-Probst-Straße 1
-            </td>
-            <td className={styles.text}>64 files</td>
-            <td className={styles.text}>17 March 2021</td>
-            <td>
-              <ButtonIcon Icon={MoreIcon} />
-            </td>
-          </tr>
-        </tbody>
-      </table>
     </div>
   );
-}
+});
+
+export default FilesPage;

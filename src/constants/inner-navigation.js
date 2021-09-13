@@ -8,8 +8,10 @@ import InnerConfiguration from "pages/StoreListPage/innerPages/InnerConfiguratio
 import InnerPlanner from "pages/StoreListPage/innerPages/InnerPlanner";
 import InnerFiles from "pages/StoreListPage/innerPages/InnerFiles";
 import InnerManage from "pages/StoreListPage/innerPages/InnerManage";
+import InnerEdit from "../pages/FilesPage/InnerEdit/InnerEdit";
+import InnerLaunch from "../pages/FilesPage/InnerLaunch/InnerLaunch";
 
-const innerNavigation = [
+export const innerNavigation = [
   { to: routes.storeInfo, name: "Store Info", component: <InnerInfo /> },
   {
     to: routes.manageStore,
@@ -45,4 +47,17 @@ const innerNavigation = [
   },
 ];
 
-export default innerNavigation;
+export const innerNavigationScripts = [
+  {
+    to: `${routes.scriptsEdit}`,
+    name: "Edit",
+    component: <InnerEdit />,
+  },
+  {
+    to: `${routes.scriptsLaunch}`,
+    name: "Launch",
+    component: <InnerLaunch />,
+  },
+]
+
+// export default innerNavigation;

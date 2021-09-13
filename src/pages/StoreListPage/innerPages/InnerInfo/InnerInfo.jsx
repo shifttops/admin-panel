@@ -8,7 +8,7 @@ import { useLocation } from "react-router";
 import { categoryMapper } from "../../../../helpers/mappers";
 
 const InnerInfo = observer(() => {
-  const { storeInfo, getStoreInfo, getStoreHardware, getHardwareSetup } = StoresStore;
+  const { storeInfo, getStoreInfo, getStoreHardware, getHardwareSetup, getStoreCameraImages } = StoresStore;
   const [error, setError] = useState(false);
   const location = useLocation();
 
@@ -16,7 +16,7 @@ const InnerInfo = observer(() => {
     const id = +location.pathname.split('/')[location.pathname.split('/').length - 1];
     if (storeInfo.store_id === id) {
       getStoreHardware(id, setError);
-      getHardwareSetup(id, setError);
+      // getHardwareSetup(id, setError);
     }
   }, [storeInfo.store_id])
 

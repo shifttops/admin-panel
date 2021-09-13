@@ -14,12 +14,24 @@
   cursor: pointer;
 }
 
+.check{
+  margin-right: 50%;
+  margin-left: auto;
+  font-size: 15px;
+  line-height: 19px;
+  letter-spacing: -0.01em;
+  color: $color-green;
+}
+
 .error {
   color: $color-red;
 }
 
 .switcher {
   cursor: pointer;
+  display: flex;
+  align-items: baseline;
+  width: 100%;
 
   label {
     padding: 0;

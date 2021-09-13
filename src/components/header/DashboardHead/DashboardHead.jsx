@@ -7,7 +7,7 @@ import ReportPopup from "components/popups/ReportPopup";
 import Button from "components/buttons/Button";
 import FilterPopup from "../../popups/FilterPopup";
 
-export default function DashboardHead({setSearch}) {
+export default function DashboardHead({setSearch, checkedStores}) {
   return (
     <div className={styles.dashboardHead}>
       <div className={styles.dashboardHead__searchWrapper}>
@@ -40,7 +40,7 @@ export default function DashboardHead({setSearch}) {
             ></Button>
           }
         >
-          {(close) => <ReportPopup onClose={close} />}
+          {(close) => <ReportPopup onClose={close} checkedStores={checkedStores}/>}
         </Popup>
       </div>
     </div>

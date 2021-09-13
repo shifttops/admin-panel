@@ -4,95 +4,106 @@ import cn from "classnames";
 import SliderCheckbox from "components/SliderCheckbox";
 import StoresStore from "../../store/StoresStore";
 import { observer } from "mobx-react";
+import DropDownFields from "../DropDownFields";
 
 const AdditionalInfo = observer(({ leftTitle, rightTitle }) => {
   console.table(123);
-  const items = [{
-    name: 'Cameras',
-    result: 'All cameras are working',
-    error: 'All cameras are working',
-    // description: `All cameras working`,
-    // cameras: [53, 54, 55, 56],
-    canOpen: true,
-  }, {
-    name: 'Lateral cameras',
-  }];
+  const items = [
+    {
+      name: "Cameras",
+      result: "All cameras are working",
+      error: "All cameras are working",
+      // description: `All cameras working`,
+      // cameras: [53, 54, 55, 56],
+      canOpen: true,
+    },
+    {
+      name: "Lateral cameras",
+    },
+  ];
 
   const { storeInfo } = StoresStore;
 
-  const fields = [{
-    visibleName: 'GPU',
-    items: [{
-      icon: <TempIcon />,
-      keyName: "gpu_temp",
+  const infoFields = [
+    {
+      visibleName: "GPU",
+      items: [
+        {
+          keyName: "gpu_temp",
+          icon: <TempIcon />,
+        },
+        {
+          icon: <SpeedIcon />,
+          keyName: "gpu_util",
+        },
+        {
+          visibleName: "Nvidia driver",
+          keyName: "nvidia_driver_version",
+        },
+      ],
     },
     {
-      icon: <SpeedIcon />,
-      keyName: "gpu_util",
-    }
-    ],
-  },
-  {
-    visibleName: 'CPU',
-    items: [
-      {
-        icon: <SpeedIcon />,
-        keyName: "cpu_util",
-      }
-    ],
-  },
-  {
-    visibleName: 'OS',
-    keyName: 'machine_os',
-  },
-  {
-    visibleName: 'OS kernel',
-    keyName: 'machine_os_kernel',
-  },
-  {
-    visibleName: 'Name',
-    keyName: 'name',
-  },
-  {
-    visibleName: 'Nvidia driver',
-    keyName: 'nvidia_driver_version',
-  },
-  {
-    visibleName: 'Docker version',
-    keyName: 'docker_version',
-  },
-  {
-    visibleName: 'Internet speed',
-    keyName: 'internet_speed',
-  },
-  {
-    visibleName: 'Local IP',
-    keyName: 'local_ip',
-  },
-  {
-    visibleName: 'Public IP',
-    keyName: 'public_ip',
-  },
-  {
-    visibleName: 'Password',
-    keyName: 'password',
-  },
-  {
-    visibleName: 'Teamviewer ID',
-    keyName: 'teamviewer_id',
-  },
-  {
-    visibleName: 'Teamviewer password',
-    keyName: 'teamviewer_password',
-  },
-  {
-    visibleName: 'Username',
-    keyName: 'username',
-  },
-  {
-    visibleName: 'VPN IP',
-    keyName: 'vpn_ip',
-  },
+      visibleName: "CPU",
+      items: [
+        {
+          icon: <SpeedIcon />,
+          keyName: "cpu_util",
+        },
+      ],
+    },
+    {
+      visibleName: "System",
+      items: [
+        {
+          visibleName: "OS",
+          keyName: "machine_os",
+        },
+        {
+          visibleName: "OS kernel",
+          keyName: "machine_os_kernel",
+        },
+        {
+          visibleName: "Name",
+          keyName: "name",
+        },
+        {
+          visibleName: "Docker version",
+          keyName: "docker_version",
+        },
+        {
+          visibleName: "Internet speed",
+          keyName: "internet_speed",
+        },
+        {
+          visibleName: "Local IP",
+          keyName: "local_ip",
+        },
+        {
+          visibleName: "Public IP",
+          keyName: "public_ip",
+        },
+        {
+          visibleName: "Password",
+          keyName: "password",
+        },
+        {
+          visibleName: "Teamviewer ID",
+          keyName: "teamviewer_id",
+        },
+        {
+          visibleName: "Teamviewer password",
+          keyName: "teamviewer_password",
+        },
+        {
+          visibleName: "Username",
+          keyName: "username",
+        },
+        {
+          visibleName: "VPN IP",
+          keyName: "vpn_ip",
+        },
+      ],
+    },
   ];
 
   return (
@@ -107,7 +118,7 @@ const AdditionalInfo = observer(({ leftTitle, rightTitle }) => {
         <button className={styles.dropdownHead}>
           <p className={cn(styles.category, styles.categoryDropdown)}>
             {items[0].name}
-            {items[0].canOpen ? <ArrowDownIcon /> : ''}
+            {items[0].canOpen ? <ArrowDownIcon /> : ""}
           </p>
           {/* <div className={
             styles.check
@@ -125,39 +136,35 @@ const AdditionalInfo = observer(({ leftTitle, rightTitle }) => {
             </p>
           </div> */}
           <div>
-            {storeInfo.cameras && storeInfo.cameras.map(camera => (
-              <SliderCheckbox key={camera.id} label={camera.view_name} />
-            ))}
+            {storeInfo.cameras &&
+              storeInfo.cameras.map((camera) => (
+                <SliderCheckbox
+                  key={camera.id}
+                  label={camera.view_name}
+                  passed={camera.passed}
+                />
+              ))}
           </div>
         </div>
       </div>
-
-
-
 
       <div className={styles.item}>
         <p className={cn(styles.category, styles.categoryDropdown)}>
           Lateral cameras
           <ArrowDownIcon />
         </p>
-        <div className={styles.check}>All cameras are working</div>
-      </div>
-      {fields.map(field => (
-        <div className={styles.item} key={field.visibleName}>
-          <p className={styles.category}>{field.visibleName}</p>
-          {field.items && (field.items.length > 1 || field.items[0]?.icon) ? (
-            <div className={styles.resultInfo}>
-              {field.items.map(item => (
-                <div className={item.keyName.includes('temp') ? styles.temp : styles.process} key={item.keyName}>
-                  {item.icon}
-                  <span>{storeInfo[item.keyName] === 0 || storeInfo[item.keyName] ? `${Math.round(storeInfo[item.keyName])} ${item.keyName.includes('util') ? '%' : ''}` : ''}</span>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <span className={styles.result}>{storeInfo[field.keyName]}</span>
-          )}
+        <div
+          className={`${styles.check} ${
+            storeInfo.is_all_lateral_works ? "" : styles.error
+          }`}
+        >
+          {storeInfo.is_all_lateral_works
+            ? "All cameras are working"
+            : "Check failed"}
         </div>
+      </div>
+      {infoFields.map((field) => (
+        <DropDownFields field={field} key={field.visibleName} />
       ))}
       {/* <div className={styles.item}>
         <p className={styles.category}>GPU</p>

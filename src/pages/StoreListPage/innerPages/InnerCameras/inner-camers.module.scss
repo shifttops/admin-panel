@@ -1,4 +1,6 @@
+@import "../../../../scss/variables";
 .wrapper {
+  margin-right: 20px;
 }
 
 .head {
@@ -15,6 +17,65 @@
 
 .cards {
   display: flex;
-  margin-right: -27px;
+  // margin-right: -27px;
   flex-wrap: wrap;
+  margin-top: 40px;
+  margin-right: 20px;
+}
+
+.red{
+  color: $color-red;
+}
+
+.green{
+  color: $color-green;
+}
+
+.text{
+  padding: 0;
+  padding-left: 7px;
+}
+
+.table{
+}
+
+.warning{
+  font-size: 15px;
+  line-height: 19px;
+  text-align: right;
+  letter-spacing: -0.01em;
+  color: $color-green;
+  padding-left: 21px;
+  background-image: url(../../../../images/warning.svg);
+  background-position: center;
+  background-size: 15px 13px;
+  background-repeat: no-repeat;
+}
+
+.check {
+  font-size: 15px;
+  line-height: 19px;
+  text-align: right;
+  letter-spacing: -0.01em;
+  color: $color-green;
+  padding-left: 21px;
+  background-image: url(../../../../images/check-green.svg);
+  background-position: center;
+  background-size: 15px 13px;
+  background-repeat: no-repeat;
+}
+
+.error {
+  color: $color-red;
+  background-image: url(../../../../images/dont-access.svg);
+  background-position: center;
+  background-size: 15px 13px;
+  background-repeat: no-repeat;
+  font-size: 15px;
+  line-height: 19px;
+  letter-spacing: -0.01em;
+}
+
+.table_keys{
+  padding: 7px
 }

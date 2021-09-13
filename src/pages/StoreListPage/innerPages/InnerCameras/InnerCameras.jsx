@@ -5,8 +5,93 @@ import Button from "components/buttons/Button";
 import FileCard from "components/cards/FileCard";
 import cameraScreen from "images/cameraScreen.jpg";
 import cameraScreen2 from "images/cameraScreen2.jpg";
+import { observer } from "mobx-react";
+import StoresStore from "../../../../store/StoresStore";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import { toJS } from "mobx";
 
-export default function InnerCameras() {
+const InnerCameras = observer(() => {
+  const { storeInfo, cameras, getStoreCameraImages } = StoresStore;
+  const [error, setError] = useState("");
+  const location = useLocation();
+  const mapperCameras = [
+    {
+      visibleName: "Name",
+      name: "view_name",
+    },
+    {
+      visibleName: "IP",
+      name: "ip_address",
+    },
+    {
+      visibleName: "Can record",
+      name: "can_record_video",
+    },
+    {
+      visibleName: "Profile3 configured",
+      name: "is_profile3_configured",
+    },
+    {
+      visibleName: "Profile5 configured",
+      name: "is_profile5_configured",
+    },
+    {
+      visibleName: "User configured",
+      name: "is_user_configured",
+    },
+    {
+      visibleName: "Admin configured",
+      name: "is_admin_configured",
+    },
+    {
+      visibleName: "Packet loss",
+      name: "packet_loss",
+    },
+    {
+      visibleName: "Ping",
+      name: "ping",
+    },
+    {
+      visibleName: "Reachable",
+      name: "reachable",
+    },
+    {
+      visibleName: "Working",
+      name: "passed",
+    },
+    {
+      visibleName: "Updated",
+      name: "timestamp",
+    },
+  ];
+
+  const addStyles = (key, value) => {
+    if (key === "packet_loss") {
+      return +value > 10 ? styles.red : styles.green;
+    } else if (key === "ping") {
+      return +value > 5 ? styles.red : styles.green;
+    } else if (
+      key !== "ip_address" &&
+      key !== "timestamp" &&
+      key !== "view_name"
+    ) {
+      return value === null
+        ? styles.warning
+        : value
+        ? styles.check
+        : styles.error;
+    } else return styles.text;
+  };
+
+  useEffect(() => {
+    const id =
+      +location.pathname.split("/")[location.pathname.split("/").length - 1];
+    if (storeInfo.store_id === id) {
+      getStoreCameraImages(id, setError);
+    }
+  }, []);
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.head}>
@@ -18,12 +103,53 @@ export default function InnerCameras() {
           <Button text="Plan video recording" />
         </div>
       </div>
+      <table className={styles.table}>
+        <thead>
+          <tr>
+            {mapperCameras.map((key) => (
+              <th className={styles.table_keys} key={key.name}>
+                {key.visibleName}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {cameras.map((camera) => (
+            <tr key={camera.camera}>
+              {mapperCameras.map((key) => (
+                <td
+                  key={key.name}
+                  className={addStyles(key.name, camera[key.name])}
+                >
+                  {camera[key.name] !== undefined && key.name === "timestamp"
+                    ? `${new Date(
+                        camera[key.name]
+                      ).toLocaleDateString()} ${new Date(
+                        camera[key.name]
+                      ).toLocaleTimeString("en-US", { hour12: false })}`
+                    : key.name === "packet_loss"
+                    ? `${camera[key.name] ? camera[key.name] + "%" : "N/A"}`
+                    : key.name === "ping"
+                    ? `${camera[key.name] ? camera[key.name] + "ms" : "N/A"}`
+                    : camera[key.name]}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
       <div className={styles.cards}>
-        <FileCard screen={cameraScreen} />
+        {cameras.map((camera) => (
+          <FileCard key={camera.id} camera={camera} />
+        ))}
+        {/* <FileCard screen={cameraScreen} />
         <FileCard screen={cameraScreen2} />
         <FileCard screen={cameraScreen} />
-        <FileCard screen={cameraScreen2} />
+        <FileCard screen={cameraScreen2} /> */}
       </div>
     </div>
   );
-}
+});
+
+export default InnerCameras;
