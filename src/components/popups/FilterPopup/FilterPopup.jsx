@@ -10,7 +10,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { filtersMapper } from "../../../helpers/mappers";
 import FilterDropdownButton from "../../buttons/FilterDropdownButton";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import queryString from "query-string";
 import { toJS } from "mobx";
 
@@ -19,6 +19,7 @@ const FilterPopup = observer(({ onClose }) => {
   const [error, setError] = useState(false);
   // const [enabledFilters, setEnabledFilters] = useState(queryString.parse(location.search, { arrayFormat: 'comma' }));
   const history = useHistory();
+  const location = useLocation();
 
   const applyFilters = (e) => {
     // Object.keys(enabledFilters).forEach((filterKey) => {

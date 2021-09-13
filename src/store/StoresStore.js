@@ -13,7 +13,7 @@ class StoresStore {
   storeErrors = [];
   filters = {};
   cameras = [];
-  enabledFilters = { ...queryString.parse(location.search, { arrayFormat: 'comma' }) }
+  enabledFilters = { ...queryString.parse(window.location.search, { arrayFormat: 'comma' }) }
 
   constructor() {
     makeAutoObservable(

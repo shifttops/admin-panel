@@ -11,12 +11,14 @@ import { observer } from "mobx-react";
 import { useEffect } from "react";
 import StoresStore from "../../../../store/StoresStore";
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 import moment from "moment";
 
 
 const InnerHistory = observer(() => {
   const { storeInfo, storeErrors, getStoreErrorLogs } = StoresStore;
   const [error, setError] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const id = +location.pathname.split('/')[location.pathname.split('/').length - 1];
