@@ -22,18 +22,6 @@ const FilesPage = observer(() => {
   const { tags, getScripts, scriptsByTags } = ScriptsStore;
   const [error, setError] = useState("");
   const [enabledTags, setEnabledTags] = useState([]);
-  // const [links, setLinks] = useState([
-  //   {
-  //     to: `${routes.scriptsEdit}`,
-  //     name: "Edit",
-  //     component: <InnerEdit />,
-  //   },
-  //   {
-  //     to: `${routes.scripts}`,
-  //     name: "Launch",
-  //     component: <InnerLaunch />,
-  //   },
-  // ]);
 
   const handleTagClick = (tag) => {
     if (enabledTags.includes(tag)) {

@@ -5,85 +5,105 @@ import Checkbox from "components/Checkbox";
 import { useState } from "react";
 import Button from "../../../components/buttons/Button";
 import ScriptsStoresTable from "../../../components/ScriptsStoresTable/ScriptsStoresTable";
+import { observer } from "mobx-react";
+import { useLocation } from "react-router";
+import ScriptsStore from "../../../store/ScriptsStore";
+import { useEffect } from "react";
 
-export default function InnerLaunch(props) {
-  const [rows, setRows] = useState([
-    {
-      key: "",
-      value: "",
-    },
-    {
-      key: "",
-      value: "",
-    },
-    {
-      key: "",
-      value: "",
-    },
-  ]);
+const InnerLaunch = observer(() => {
+  const location = useLocation();
+  const { scripts, hosts, getScripts, getHosts, launchScript } = ScriptsStore;
+  const scriptId =
+    +location.pathname.split("/")[location.pathname.split("/").length - 2];
 
-  const [enabledStores, setEnabledStores] = useState(["123", "456", '98234', '47283' ]);
+  const [rows, setRows] = useState([]);
+  const [error, setError] = useState("");
 
-  const handleChange = (value, index, isKey) => {
+  const [enabledStores, setEnabledStores] = useState({ hosts: [], groups: [] });
+
+  const handleChange = (value, key) => {
     setRows((prev) => {
-      prev.splice(index, 1, {
-        ...prev[index],
-        [isKey ? "key" : "value"]: value,
-      });
-      return [...prev];
+      prev[key] = value;
+      return { ...prev };
     });
   };
 
+  const handleLaunch = () => {
+    launchScript({
+      hosts: enabledStores,
+      playbook_id: scriptId,
+      variables: rows,
+      setError,
+    });
+  };
+
+  useEffect(() => {
+    if (!scripts.length) {
+      getScripts(setError);
+    }
+    if (!Object.keys(hosts).length) {
+      getHosts(setError);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (scripts.length) {
+      const temp = scripts.find((script) => script.playbook_id === scriptId);
+
+      setRows(
+        temp.variables.reduce((res, item) => {
+          res[item] = "";
+          return res;
+        }, {})
+      );
+    }
+  }, [scripts]);
+
   return (
     <div className={styles.page}>
-      <table className={styles.table}>
-        <thead className={styles.head}>
-          <tr>
-            {/* <th>
-              <Checkbox label="Store name" className={styles.checkboxHead} />
-            </th>
-            <th>Region</th>
-            <th className={styles.location}>Location</th> */}
-            <th>Variables</th>
-            <th>Values</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((row, index) => (
-            <tr key={index} className={styles.table_row}>
-              <td>
-                <input
-                  type="text"
-                  value={row.key}
-                  placeholder="Variable"
-                  onChange={(e) => handleChange(e.target.value, index, true)}
-                />
-              </td>
-              <td>
-                <input
-                  type="text"
-                  value={row.value}
-                  placeholder="Value"
-                  onChange={(e) => handleChange(e.target.value, index)}
-                />
-              </td>
-            </tr>
-          ))}
-          <tr className={styles.button_row}>
+      {scripts.length ? (
+        <>
+          <div>
+            <table className={styles.table}>
+              <thead className={styles.head}>
+                <tr>
+                  <th>Variables</th>
+                  <th>Values</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Object.keys(rows).map((variable, index) => (
+                  <tr key={index} className={styles.table_row}>
+                    <td>{variable}</td>
+                    <td>
+                      <input
+                        type="text"
+                        value={rows[variable]}
+                        placeholder="Value"
+                        onChange={(e) => handleChange(e.target.value, variable)}
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
             <Button
-              text="Add row"
-              onClick={() =>
-                setRows((prev) => [...prev, { key: "", value: "" }])
-              }
+              text="Launch"
+              className="launch_btn"
+              onClick={handleLaunch}
             />
-            {/* <Button text="save" onClick={() => console.log(rows)} /> */}
-          </tr>
-        </tbody>
-      </table>
-      <ScriptsStoresTable
-        enabledStores={enabledStores}
-        setEnabledStores={setEnabledStores}
-      />
+          </div>
+
+          <ScriptsStoresTable
+            enabledStores={enabledStores}
+            setEnabledStores={setEnabledStores}
+            hosts={hosts}
+          />
+        </>
+      ) : (
+        "Loading..."
+      )}
     </div>
   );
-}
+});
+export default InnerLaunch;

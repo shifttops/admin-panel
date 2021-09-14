@@ -19,6 +19,8 @@ import StoreGroupsPage from "pages/StoreGroupsPage";
 import PlannerPage from "pages/PlannerPage";
 import GroupPage from "pages/GroupPage";
 import ChatPage from "pages/ChatPage";
+import ScriptsLogsPage from "pages/ScriptsLogsPage";
+
 
 const mainNavigation = [
   {
@@ -44,6 +46,12 @@ const mainNavigation = [
     to: routes.logs,
     name: "Activity logs",
     component: <ActivityLogsPage />,
+    icon: <ActivityIcon />,
+  },
+  {
+    to: routes.scripts_logs,
+    name: "Scripts logs",
+    component: <ScriptsLogsPage />,
     icon: <ActivityIcon />,
   },
   // {

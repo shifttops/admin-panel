@@ -16,6 +16,7 @@ import InnerHead from "components/header/InnerHead";
 import InnerSidebar from "components/InnerSidebar";
 import styles from "./styles.module.scss";
 import { innerNavigationScripts } from "../constants/inner-navigation";
+import ScriptsLogInfo from "./ScriptsLogInfo/ScriptsLogInfo";
 
 export default function CustomRouter() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -67,6 +68,11 @@ export default function CustomRouter() {
                 key={to}
               ></Route>
             ))}
+             <Route
+                path={`${routes.scripts_logs}/:id`}
+                exact
+                component={(props) => <ScriptsLogInfo {...props}/>}
+              ></Route>
             {innerNavigation.map(({ to, component }) => (
               <Route
                 path={`${to}/:id`}
