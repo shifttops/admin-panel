@@ -21,7 +21,7 @@ class ActivityLogsStore {
   searchLogs = computedFn((search) => {
     if (!search) return this.logs;
     return this.logs.filter((log) =>
-        log.store.toString().toLowerCase().includes(search.toLowerCase())
+        log.store.toString().includes(search.toLowerCase())
     );
   });
 

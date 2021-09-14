@@ -1,5 +1,4 @@
 import styles from "./activity-logs-page.module.scss";
-import stylesTH from "../../components/tables/TableHead/table-head.module.scss";
 
 import SearchQuick from "components/search/SearchQuick";
 import ButtonIcon from "components/buttons/ButtonIcon";
@@ -27,14 +26,25 @@ const ActivityLogsPage = observer(() => {
     const { type, field } = sort;
     if (type !== "none" && field) {
       return [...logs].sort((a, b) => {
+        if (field === "status") {
+          if (!b[field]) {
+            b = { ...b, [field]: "Store Error" };
+          }
+          if (!a[field]) {
+            a = { ...a, [field]: "Store Error" };
+          }
+        }
+
         if (type === "desc") {
           if (field === "description") {
             return a[field] ? 1 : b[field] ? -1 : 0;
-          } else return a[field] > b[field] ? 1 : a[field] < b[field] ? -1 : 0;
+          }
+          else return a[field] > b[field] ? 1 : a[field] < b[field] ? -1 : 0;
         } else {
           if (field === "description") {
             return a[field] ? -1 : b[field] ? 1 : 0;
-          } else return b[field] > a[field] ? 1 : b[field] < a[field] ? -1 : 0;
+          }
+          else return b[field] > a[field] ? 1 : b[field] < a[field] ? -1 : 0;
         }
       });
     } else return logs;
@@ -67,25 +77,25 @@ const ActivityLogsPage = observer(() => {
         </div>
       </div>
       <table className={styles.table}>
-        <thead className={stylesTH.tableHead}>
+        <thead className={styles.tableHead}>
           <tr>
             <th>
               <Checkbox label="user" />
             </th>
             <th
-              className={stylesTH.table__sort}
+              className={styles.table__sort}
               onClick={() => handleSort("status")}
             >
               Event type <SortIcon />
             </th>
             <th
-              className={stylesTH.table__sort}
+              className={styles.table__sort}
               onClick={() => handleSort("description")}
             >
               Message <SortIcon />
             </th>
             <th
-              className={stylesTH.table__sort}
+              className={styles.table__sort}
               onClick={() => handleSort("store")}
             >
               Store id <SortIcon />
@@ -110,10 +120,14 @@ const ActivityLogsPage = observer(() => {
               </td>
               <td>{log.store}</td>
               <td>
-                {moment(log.error_time ? log.error_time : log.changed_on).format("DD.MM.YYYY")}
+                {moment(
+                  log.error_time ? log.error_time : log.changed_on
+                ).format("DD.MM.YYYY")}
               </td>
               <td>
-                {moment(log.error_time ? log.error_time : log.changed_on).format("HH:mm")}
+                {moment(
+                  log.error_time ? log.error_time : log.changed_on
+                ).format("HH:mm")}
               </td>
               <td>
                 <ButtonIcon Icon={MoreIcon} className={styles.btnMore} />
