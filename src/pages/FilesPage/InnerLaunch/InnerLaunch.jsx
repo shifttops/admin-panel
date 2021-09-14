@@ -9,6 +9,15 @@ import { observer } from "mobx-react";
 import { useLocation } from "react-router";
 import ScriptsStore from "../../../store/ScriptsStore";
 import { useEffect } from "react";
+import Popup from "reactjs-popup";
+import LaunchPopup from "../../../components/popups/LaunchPopup";
+import {
+  ToastsContainer,
+  ToastsStore,
+  ToastsContainerPosition,
+} from "react-toasts";
+import { NavLink } from "react-router-dom";
+import routes from "../../../constants/routes";
 
 const InnerLaunch = observer(() => {
   const location = useLocation();
@@ -18,6 +27,7 @@ const InnerLaunch = observer(() => {
 
   const [rows, setRows] = useState([]);
   const [error, setError] = useState("");
+  const [log_id, setLogId] = useState("");
 
   const [enabledStores, setEnabledStores] = useState({ hosts: [], groups: [] });
 
@@ -28,13 +38,16 @@ const InnerLaunch = observer(() => {
     });
   };
 
-  const handleLaunch = () => {
-    launchScript({
-      hosts: enabledStores,
-      playbook_id: scriptId,
-      variables: rows,
-      setError,
-    });
+  const handleLaunch = async () => {
+    setLogId(
+      await launchScript({
+        hosts: enabledStores,
+        playbook_id: scriptId,
+        variables: rows,
+        setError,
+      })
+    );
+    setTimeout(() => setLogId(""), 5000);
   };
 
   useEffect(() => {
@@ -49,13 +62,14 @@ const InnerLaunch = observer(() => {
   useEffect(() => {
     if (scripts.length) {
       const temp = scripts.find((script) => script.playbook_id === scriptId);
-
-      setRows(
-        temp.variables.reduce((res, item) => {
-          res[item] = "";
-          return res;
-        }, {})
-      );
+      if (temp) {
+        setRows(
+          temp.variables.reduce((res, item) => {
+            res[item] = "";
+            return res;
+          }, {})
+        );
+      }
     }
   }, [scripts]);
 
@@ -87,17 +101,40 @@ const InnerLaunch = observer(() => {
                 ))}
               </tbody>
             </table>
-            <Button
-              text="Launch"
-              className="launch_btn"
-              onClick={handleLaunch}
-            />
+            <Popup
+              modal
+              trigger={
+                <Button
+                  text="Launch"
+                  className="launch_btn"
+                  // onClick={handleLaunch}
+                />
+              }
+            >
+              {(close) => (
+                <LaunchPopup
+                  handleLaunch={handleLaunch}
+                  enabledStores={enabledStores}
+                  rows={rows}
+                  onClose={close}
+                ></LaunchPopup>
+              )}
+            </Popup>
           </div>
 
           <ScriptsStoresTable
             enabledStores={enabledStores}
             setEnabledStores={setEnabledStores}
             hosts={hosts}
+          />
+          <div className={log_id ? styles.popup : styles.closed}>
+            <NavLink to={`${routes.scripts_logs}/${log_id.task_id}`}>
+              Click here to check execution
+            </NavLink>
+          </div>
+          <ToastsContainer
+            store={ToastsStore}
+            position={ToastsContainerPosition.BOTTOM_RIGHT}
           />
         </>
       ) : (

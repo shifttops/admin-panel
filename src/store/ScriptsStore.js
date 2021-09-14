@@ -1,6 +1,7 @@
 import { computed, observable, action, makeAutoObservable, toJS } from "mobx";
 import { computedFn } from "mobx-utils";
 import { refreshToken } from "../helpers/AuthHelper";
+import { ToastsStore } from "react-toasts";
 
 class ScriptsStore {
   scripts = [];
@@ -110,11 +111,15 @@ class ScriptsStore {
         }
       );
       if (resp.status === 200) {
-        const res = resp.json();
-        setError("");
-      } else setError("Some error");
+        // const res = 
+
+        // setError("");
+        // return res.task_id;
+        return resp.json();
+      } else ToastsStore.error("Something went wrong", 3000, "toast");
     } catch (e) {
-      setError(e.message);
+      // setError(e.message);
+      ToastsStore.error(e.message, 3000, "toast");
     }
   };
 
@@ -166,7 +171,7 @@ class ScriptsStore {
     }
   };
 
-  getScriptLogInfo = async ({task_id, setError}) => {
+  getScriptLogInfo = async ({ task_id, setError }) => {
     try {
       await refreshToken();
 
