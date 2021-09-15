@@ -118,7 +118,7 @@ class StoresStore {
             await this.getStoreLocation(res.store_location);
           }
           if (res.server_id && res.server_id[0]) {
-            await this.getServersInfo({ server_id: res.server_id, setError });
+            await this.getServersInfo({ servers_id: res.server_id, setError });
           }
           if (res.cameras && res.cameras.length) {
             await this.getStoreCameraStatus(id, setError);
@@ -131,9 +131,9 @@ class StoresStore {
     }
   };
 
-  getServersInfo = async ({ server_id, setError }) => {
+  getServersInfo = async ({ servers_id, setError }) => {
     const servers = await Promise.all(
-      server_id.map((id) => this.getStoreServer({ id, setError }))
+      servers_id.map((server_id) => this.getStoreServer({ server_id, setError }))
     ).catch((e) => setError(e));
 
     this.storeInfo = {
@@ -209,7 +209,6 @@ class StoresStore {
       // if (resp.status === 200) {
       const res = await resp.json();
 
-      console.log(res);
       const newRes = res.map((camera) => {
         camera = { ...camera, ...camera.detail };
         delete camera.detail;
@@ -245,10 +244,10 @@ class StoresStore {
     }
   };
 
-  getStoreServer = async ({ id, setError }) => {
+  getStoreServer = async ({ server_id, setError }) => {
     try {
       const resp = await fetch(
-        `https://staptest.mcd-cctv.com/api/server/${id}/`,
+        `https://staptest.mcd-cctv.com/api/server/${server_id}/`,
         {
           method: "GET",
           headers: {

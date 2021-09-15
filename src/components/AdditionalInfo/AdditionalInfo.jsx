@@ -1,5 +1,5 @@
 import styles from "./additional-info.module.scss";
-import { ArrowDownIcon, SpeedIcon, TempIcon } from "icons";
+import { ArrowDownIcon } from "icons";
 import cn from "classnames";
 import SliderCheckbox from "components/SliderCheckbox";
 import StoresStore from "../../store/StoresStore";
@@ -22,132 +22,6 @@ const AdditionalInfo = observer(({ leftTitle, rightTitle }) => {
   ];
 
   const { storeInfo } = StoresStore;
-
-  const createServersInfo = (servers) => {
-
-    if (servers) {
-      let serverIndex = -1
-
-      return servers.map((server) => {
-        serverIndex++
-        return {
-          visibleName: server.name,
-          serverIndex,
-          items: [
-            {
-              visibleName: "GPU",
-              items: [
-                {
-                  keyName: "gpu_temp",
-                  icon: <TempIcon />,
-                },
-                {
-                  icon: <SpeedIcon />,
-                  keyName: "gpu_util",
-                },
-                {
-                  visibleName: "Nvidia driver",
-                  keyName: "nvidia_driver_version",
-                },
-                {
-                  visibleName: "Device ID",
-                  keyName: "gpu_device_id",
-                },
-                {
-                  visibleName: "GPU memory size",
-                  keyName: "gpu_memory_size",
-                },
-                {
-                  visibleName: "Model",
-                  keyName: "gpu_model",
-                },
-              ],
-            },
-            {
-              visibleName: "CPU",
-              items: [
-                {
-                  icon: <SpeedIcon />,
-                  keyName: "cpu_util",
-                },
-                {
-                  visibleName: "Name",
-                  keyName: "cpu_name",
-                },
-                {
-                  visibleName: 'Max frequency',
-                  keyName: 'cpu_max_frequency'
-                },
-                {
-                  visibleName: "Number of cores",
-                  keyName: "cpu_core_count",
-                },
-              ],
-            },
-            {
-              visibleName: "System",
-              items: [
-                {
-                  visibleName: "Machine name",
-                  keyName: "machine_name",
-                },
-                {
-                  visibleName: "OS",
-                  keyName: "machine_os",
-                },
-                {
-                  visibleName: "OS Kernel",
-                  keyName: "machine_os_kernel",
-                },
-                {
-                  visibleName: "Server name",
-                  keyName: "name",
-                },
-                {
-                  visibleName: "Docker version",
-                  keyName: "docker_version",
-                },
-                {
-                  visibleName: "Cuda version",
-                  keyName: "cuda_version",
-                },
-                {
-                  visibleName: "Internet speed",
-                  keyName: "internet_speed",
-                },
-                {
-                  visibleName: "Local IP",
-                  keyName: "local_ip",
-                },
-                {
-                  visibleName: "VPN IP",
-                  keyName: "vpn_ip",
-                },
-                {
-                  visibleName: "Teamviewer ID",
-                  keyName: "teamviewer_id",
-                },
-                {
-                  visibleName: "Username",
-                  keyName: "username",
-                },
-                {
-                  visibleName: "Server memory size",
-                  keyName: "memory_size",
-                },
-                {
-                  visibleName: "Active",
-                  keyName: "is_active",
-                },
-              ],
-            },
-          ],
-        };
-      });
-    }
-  };
-
-  const serversInfo = createServersInfo(storeInfo.servers);
 
   return (
     <div className={styles.system}>
@@ -206,8 +80,8 @@ const AdditionalInfo = observer(({ leftTitle, rightTitle }) => {
             : "Check failed"}
         </div>
       </div>
-      {serversInfo && serversInfo.map((field) => (
-          <DropDownFields serverIndex={field.serverIndex} field={field} key={field.visibleName} />
+      {storeInfo.servers && storeInfo.servers.map((server, serverIndex) => (
+          <DropDownFields serverIndex={serverIndex} key={server.name} />
       ))}
     </div>
   );
