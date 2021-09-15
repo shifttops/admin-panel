@@ -7,7 +7,6 @@ import { observer } from "mobx-react";
 import DropDownFields from "../DropDownFields";
 
 const AdditionalInfo = observer(({ leftTitle, rightTitle }) => {
-  console.table(123);
   const items = [
     {
       name: "Cameras",
@@ -24,87 +23,131 @@ const AdditionalInfo = observer(({ leftTitle, rightTitle }) => {
 
   const { storeInfo } = StoresStore;
 
-  const infoFields = [
-    {
-      visibleName: "GPU",
-      items: [
-        {
-          keyName: "gpu_temp",
-          icon: <TempIcon />,
-        },
-        {
-          icon: <SpeedIcon />,
-          keyName: "gpu_util",
-        },
-        {
-          visibleName: "Nvidia driver",
-          keyName: "nvidia_driver_version",
-        },
-      ],
-    },
-    {
-      visibleName: "CPU",
-      items: [
-        {
-          icon: <SpeedIcon />,
-          keyName: "cpu_util",
-        },
-      ],
-    },
-    {
-      visibleName: "System",
-      items: [
-        {
-          visibleName: "OS",
-          keyName: "machine_os",
-        },
-        {
-          visibleName: "OS kernel",
-          keyName: "machine_os_kernel",
-        },
-        {
-          visibleName: "Name",
-          keyName: "name",
-        },
-        {
-          visibleName: "Docker version",
-          keyName: "docker_version",
-        },
-        {
-          visibleName: "Internet speed",
-          keyName: "internet_speed",
-        },
-        {
-          visibleName: "Local IP",
-          keyName: "local_ip",
-        },
-        {
-          visibleName: "Public IP",
-          keyName: "public_ip",
-        },
-        {
-          visibleName: "Password",
-          keyName: "password",
-        },
-        {
-          visibleName: "Teamviewer ID",
-          keyName: "teamviewer_id",
-        },
-        {
-          visibleName: "Teamviewer password",
-          keyName: "teamviewer_password",
-        },
-        {
-          visibleName: "Username",
-          keyName: "username",
-        },
-        {
-          visibleName: "VPN IP",
-          keyName: "vpn_ip",
-        },
-      ],
-    },
-  ];
+  const createServersInfo = (servers) => {
+
+    if (servers) {
+      let serverIndex = -1
+
+      return servers.map((server) => {
+        serverIndex++
+        return {
+          visibleName: server.name,
+          serverIndex,
+          items: [
+            {
+              visibleName: "GPU",
+              items: [
+                {
+                  keyName: "gpu_temp",
+                  icon: <TempIcon />,
+                },
+                {
+                  icon: <SpeedIcon />,
+                  keyName: "gpu_util",
+                },
+                {
+                  visibleName: "Nvidia driver",
+                  keyName: "nvidia_driver_version",
+                },
+                {
+                  visibleName: "Device ID",
+                  keyName: "gpu_device_id",
+                },
+                {
+                  visibleName: "GPU memory size",
+                  keyName: "gpu_memory_size",
+                },
+                {
+                  visibleName: "Model",
+                  keyName: "gpu_model",
+                },
+              ],
+            },
+            {
+              visibleName: "CPU",
+              items: [
+                {
+                  icon: <SpeedIcon />,
+                  keyName: "cpu_util",
+                },
+                {
+                  visibleName: "Name",
+                  keyName: "cpu_name",
+                },
+                {
+                  visibleName: 'Max frequency',
+                  keyName: 'cpu_max_frequency'
+                },
+                {
+                  visibleName: "Number of cores",
+                  keyName: "cpu_core_count",
+                },
+              ],
+            },
+            {
+              visibleName: "System",
+              items: [
+                {
+                  visibleName: "Machine name",
+                  keyName: "machine_name",
+                },
+                {
+                  visibleName: "OS",
+                  keyName: "machine_os",
+                },
+                {
+                  visibleName: "OS Kernel",
+                  keyName: "machine_os_kernel",
+                },
+                {
+                  visibleName: "Server name",
+                  keyName: "name",
+                },
+                {
+                  visibleName: "Docker version",
+                  keyName: "docker_version",
+                },
+                {
+                  visibleName: "Cuda version",
+                  keyName: "cuda_version",
+                },
+                {
+                  visibleName: "Internet speed",
+                  keyName: "internet_speed",
+                },
+                {
+                  visibleName: "Local IP",
+                  keyName: "local_ip",
+                },
+                {
+                  visibleName: "VPN IP",
+                  keyName: "vpn_ip",
+                },
+                {
+                  visibleName: "Teamviewer ID",
+                  keyName: "teamviewer_id",
+                },
+                {
+                  visibleName: "Username",
+                  keyName: "username",
+                },
+                {
+                  visibleName: "Server memory size",
+                  keyName: "memory_size",
+                },
+                {
+                  visibleName: "Active",
+                  keyName: "is_active",
+                },
+              ],
+            },
+          ],
+        };
+      });
+    }
+  };
+
+  const serversInfo = createServersInfo(storeInfo.servers);
 
   return (
     <div className={styles.system}>
@@ -163,55 +206,13 @@ const AdditionalInfo = observer(({ leftTitle, rightTitle }) => {
             : "Check failed"}
         </div>
       </div>
-      {infoFields.map((field) => (
-        <DropDownFields field={field} key={field.visibleName} />
+      {serversInfo && serversInfo.map((field) => (
+          <DropDownFields serverIndex={field.serverIndex} field={field} key={field.visibleName} />
       ))}
-      {/* <div className={styles.item}>
-        <p className={styles.category}>GPU</p>
-        <div className={styles.resultInfo}>
-          <div className={styles.temp}>
-            <TempIcon />
-            <span>68</span>
-          </div>
-          <div className={styles.process}>
-            <SpeedIcon />
-            <span>80%</span>
-          </div>
-        </div>
-      </div>
-      <div className={styles.item}>
-        <p className={styles.category}>CPU</p>
-        <div className={styles.resultInfo}>
-          <div className={styles.temp}>
-            <TempIcon />
-            <span>34</span>
-          </div>
-          <div className={styles.processHigh}>
-            <SpeedIcon />
-            <span>90%</span>
-          </div>
-        </div>
-      </div> */}
-      {/* <div className={styles.item}>
-        <p className={styles.category}>Videocard</p>
-        <span className={styles.result}>NVIDIA RTX2080 SUPER</span>
-      </div>
-      <div className={styles.item}>
-        <p className={styles.category}>Network card</p>
-        <span className={styles.result}>TP-Link AC1300 PCIe</span>
-      </div>
-      <div className={styles.item}>
-        <p className={styles.category}>CPU type</p>
-        <span className={styles.result}>
-          Intel(R) Core(TM) i7-4790 CPU @ 3.60GHz
-        </span>
-      </div>
-      <div className={styles.item}>
-        <p className={styles.category}>OS</p>
-        <span className={styles.result}>Windows 10, version 20H2</span>
-      </div> */}
     </div>
   );
 });
+
+
 
 export default AdditionalInfo;

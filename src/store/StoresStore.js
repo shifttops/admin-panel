@@ -1,11 +1,10 @@
-import { computed, observable, action, makeAutoObservable, toJS, reaction } from "mobx";
+import { makeAutoObservable } from "mobx";
 import { computedFn } from "mobx-utils";
 import moment from "moment";
 import { refreshToken } from "../helpers/AuthHelper";
-import queryString from 'query-string';
+import queryString from "query-string";
 import { filtersRequestMapper } from "../helpers/mappers";
 import { createDateFilters } from "../helpers/dateForFiltersHelper";
-
 
 class StoresStore {
   storeInfo = {};
@@ -13,7 +12,9 @@ class StoresStore {
   storeErrors = [];
   filters = {};
   cameras = [];
-  enabledFilters = { ...queryString.parse(window.location.search, { arrayFormat: 'comma' }) }
+  enabledFilters = {
+    ...queryString.parse(window.location.search, { arrayFormat: "comma" }),
+  };
 
   constructor() {
     makeAutoObservable(
@@ -43,30 +44,33 @@ class StoresStore {
   getStores = async (setError) => {
     try {
       await refreshToken();
-      if(Object.keys(this.enabledFilters).length  && Object.keys(this.enabledFilters).some(key=> this.enabledFilters[key]?.length)){
+      if (
+        Object.keys(this.enabledFilters).length &&
+        Object.keys(this.enabledFilters).some(
+          (key) => this.enabledFilters[key]?.length
+        )
+      ) {
         let filtersForReq = {};
-        Object.keys(this.enabledFilters).forEach(key => {
-          let reqKey = filtersRequestMapper.find((item) => key === item.name)?.reqName
-          if(reqKey){
+        Object.keys(this.enabledFilters).forEach((key) => {
+          let reqKey = filtersRequestMapper.find(
+            (item) => key === item.name
+          )?.reqName;
+          if (reqKey) {
             filtersForReq[reqKey] = this.enabledFilters[key];
           } else {
             filtersForReq[key] = this.enabledFilters[key];
           }
         });
         filtersForReq = createDateFilters(filtersForReq);
-        const resp = await fetch(
-          "https://staptest.mcd-cctv.com/api/filters/",
-          {
-            method: "POST",
-            headers: {
-              Authorization: `Token ${localStorage.getItem("access")}`,
-              "Content-Type": 'application/json',
-            },
-            body: JSON.stringify(filtersForReq),
-          }
-        );
+        const resp = await fetch("https://staptest.mcd-cctv.com/api/filters/", {
+          method: "POST",
+          headers: {
+            Authorization: `Token ${localStorage.getItem("access")}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(filtersForReq),
+        });
         const res = await resp.json();
-        console.log(res);
         this.stores = [...res];
       } else {
         const resp = await fetch(
@@ -77,11 +81,10 @@ class StoresStore {
               Authorization: `Token ${localStorage.getItem("access")}`,
             },
           }
-          );
-          const res = await resp.json();
-          this.stores = [...res.results];
-        }
-      console.log(this.stores);
+        );
+        const res = await resp.json();
+        this.stores = [...res.results];
+      }
       setError("");
     } catch (e) {
       setError(e.message);
@@ -106,17 +109,18 @@ class StoresStore {
         res.rfd = res.date_created
           ? moment(res.date_created).format("DD.MM.YYYY")
           : "N/A";
-        res.dod = res.date_deployment ? moment(res.date_deployment).format("DD.MM.YYYY") : "N/A";
+        res.dod = res.date_deployment
+          ? moment(res.date_deployment).format("DD.MM.YYYY")
+          : "N/A";
         this.storeInfo = { ...res };
         if (res) {
           if (res.store_location) {
             await this.getStoreLocation(res.store_location);
           }
           if (res.server_id && res.server_id[0]) {
-            await this.getHardwareSetup(res.server_id[0], setError);
-            await this.getStoreServer(res.server_id[0], setError);
+            await this.getServersInfo({ server_id: res.server_id, setError });
           }
-          if(res.cameras && res.cameras.length) {
+          if (res.cameras && res.cameras.length) {
             await this.getStoreCameraStatus(id, setError);
           }
           setError("");
@@ -125,6 +129,17 @@ class StoresStore {
     } catch (e) {
       setError(e.message);
     }
+  };
+
+  getServersInfo = async ({ server_id, setError }) => {
+    const servers = await Promise.all(
+      server_id.map((id) => this.getStoreServer({ id, setError }))
+    ).catch((e) => setError(e));
+
+    this.storeInfo = {
+      ...this.storeInfo,
+      servers,
+    };
   };
 
   getStoreHardware = async (id, setError) => {
@@ -142,9 +157,8 @@ class StoresStore {
       );
       if (resp.status === 200) {
         const res = await resp.json();
-        console.log(res);
+
         this.storeInfo = { ...this.storeInfo, ...res };
-        console.log(this.storeInfo);
         setError("");
       }
     } catch (e) {
@@ -167,10 +181,10 @@ class StoresStore {
       );
       if (resp.status === 200) {
         const res = await resp.json();
-        this.storeInfo.cameras = this.storeInfo.cameras.map(camera => {
-          const cameraId = Object.keys(res).find(item => camera.id === +item);
-          return {...res[cameraId], ...camera };
-        })
+        this.storeInfo.cameras = this.storeInfo.cameras.map((camera) => {
+          const cameraId = Object.keys(res).find((item) => camera.id === +item);
+          return { ...res[cameraId], ...camera };
+        });
         this.storeInfo.is_all_lateral_works = res.is_all_lateral_works;
         setError("");
       }
@@ -178,7 +192,6 @@ class StoresStore {
       setError(e.message);
     }
   };
-
 
   getStoreCameraImages = async (store_id, setError) => {
     try {
@@ -194,22 +207,21 @@ class StoresStore {
         }
       );
       // if (resp.status === 200) {
-        const res = await resp.json();
-        
-        console.log(res);
-        const newRes = res.map(camera => {
-          camera = {...camera, ...camera.detail}
-          delete camera.detail;
-          return camera;
-        })
-        this.cameras = newRes;
-        setError("");
+      const res = await resp.json();
+
+      console.log(res);
+      const newRes = res.map((camera) => {
+        camera = { ...camera, ...camera.detail };
+        delete camera.detail;
+        return camera;
+      });
+      this.cameras = newRes;
+      setError("");
       // }
     } catch (e) {
       setError(e.message);
     }
   };
-
 
   getStoreLocation = async (store_location) => {
     const resp_location = await fetch(
@@ -233,10 +245,10 @@ class StoresStore {
     }
   };
 
-  getStoreServer = async (server_id, setError) => {
+  getStoreServer = async ({ id, setError }) => {
     try {
       const resp = await fetch(
-        `https://staptest.mcd-cctv.com/api/server/${server_id}/`,
+        `https://staptest.mcd-cctv.com/api/server/${id}/`,
         {
           method: "GET",
           headers: {
@@ -246,22 +258,21 @@ class StoresStore {
       );
       if (resp.status === 200) {
         const res = await resp.json();
-        console.log(res);
-        this.storeInfo = { ...this.storeInfo, ...res };
-        console.log(this.storeInfo);
         setError("");
+
+        return res;
       }
     } catch (e) {
       setError(e.message);
     }
   };
 
-  getHardwareSetup = async (server_id, setError) => {
+  getHardwareSetup = async ({ id, setError }) => {
     try {
       await refreshToken();
 
       const resp = await fetch(
-        `https://staptest.mcd-cctv.com/api/hardware_setup/${server_id}/`,
+        `https://staptest.mcd-cctv.com/api/hardware_setup/${id}/`,
         {
           method: "GET",
           headers: {
@@ -271,10 +282,9 @@ class StoresStore {
       );
       if (resp.status === 200) {
         const res = await resp.json();
-        console.log(res);
-        this.storeInfo = { ...this.storeInfo, ...res };
-        console.log(this.storeInfo);
         setError("");
+
+        return res;
       }
     } catch (e) {
       setError(e.message);
@@ -333,10 +343,10 @@ class StoresStore {
       const resp = await fetch(`https://staptest.mcd-cctv.com/api/metrics/`, {
         method: "POST",
         headers: {
-            Authorization: `Token ${localStorage.getItem("access")}`,
-            "Content-Type": 'application/json',
-          },
-          body: JSON.stringify({store_id}),
+          Authorization: `Token ${localStorage.getItem("access")}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ store_id }),
       });
       if (resp.status === 200) {
         const res = await resp.json();
