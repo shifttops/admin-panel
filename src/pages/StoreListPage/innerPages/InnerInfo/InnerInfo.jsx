@@ -26,7 +26,7 @@ const InnerInfo = observer(() => {
         <div className={styles.info__header}>Main info</div>
         <div className={styles.info__items}>
           {categoryMapper.map(item => (
-            <div className={styles.info__item}>
+            <div className={styles.info__item} key={item.name}>
               <p className={styles.info__category}>{item.visibleName}</p>
               <span className={styles.info__result}>{storeInfo[item.name]}</span>
             </div>
