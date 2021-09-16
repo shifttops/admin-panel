@@ -1,131 +1,131 @@
 import styles from "./dropdown_fields.module.scss";
-import { ArrowDownIcon, SpeedIcon, TempIcon  } from "icons";
+import { ArrowDownIcon, SpeedIcon, TempIcon } from "icons";
 import cn from "classnames";
 import StoresStore from "../../store/StoresStore";
 import { observer } from "mobx-react";
 import { useState } from "react";
 
-const DropDownFields = observer ( ({field, serverIndex}) => {
-  const {storeInfo} = StoresStore;
-  const [isOpen , setOpen] = useState ( false );
+const DropDownFields = observer(({ field, serverIndex }) => {
+  const { storeInfo } = StoresStore;
+  const [isOpen, setOpen] = useState(false);
 
   const handleClick = (e) => {
-      setOpen((prev) => !prev);
-      e.preventDefault();
-      e.stopPropagation();
-  }
+    setOpen((prev) => !prev);
+    e.preventDefault();
+    e.stopPropagation();
+  };
 
   const serverFieldsMapper = [
-      {
-          visibleName: "GPU",
-          items: [
-              {
-                  keyName: "gpu_temp",
-                  icon: <TempIcon />,
-              },
-              {
-                  icon: <SpeedIcon />,
-                  keyName: "gpu_util",
-              },
-              {
-                  visibleName: "Nvidia driver",
-                  keyName: "nvidia_driver_version",
-              },
-              {
-                  visibleName: "Device ID",
-                  keyName: "gpu_device_id",
-              },
-              {
-                  visibleName: "GPU memory size",
-                  keyName: "gpu_memory_size",
-              },
-              {
-                  visibleName: "Model",
-                  keyName: "gpu_model",
-              },
-          ],
-      },
-      {
-          visibleName: "CPU",
-          items: [
-              {
-                  icon: <SpeedIcon />,
-                  keyName: "cpu_util",
-              },
-              {
-                  visibleName: "Name",
-                  keyName: "cpu_name",
-              },
-              {
-                  visibleName: 'Max frequency',
-                  keyName: 'cpu_max_frequency'
-              },
-              {
-                  visibleName: "Number of cores",
-                  keyName: "cpu_core_count",
-              },
-          ],
-      },
-      {
-          visibleName: "System",
-          items: [
-              {
-                  visibleName: "Machine name",
-                  keyName: "machine_name",
-              },
-              {
-                  visibleName: "OS",
-                  keyName: "machine_os",
-              },
-              {
-                  visibleName: "OS Kernel",
-                  keyName: "machine_os_kernel",
-              },
-              {
-                  visibleName: "Server name",
-                  keyName: "name",
-              },
-              {
-                  visibleName: "Docker version",
-                  keyName: "docker_version",
-              },
-              {
-                  visibleName: "Cuda version",
-                  keyName: "cuda_version",
-              },
-              {
-                  visibleName: "Internet speed",
-                  keyName: "internet_speed",
-              },
-              {
-                  visibleName: "Local IP",
-                  keyName: "local_ip",
-              },
-              {
-                  visibleName: "VPN IP",
-                  keyName: "vpn_ip",
-              },
-              {
-                  visibleName: "Teamviewer ID",
-                  keyName: "teamviewer_id",
-              },
-              {
-                  visibleName: "Username",
-                  keyName: "username",
-              },
-              {
-                  visibleName: "Server memory size",
-                  keyName: "memory_size",
-              },
-              {
-                  visibleName: "Active",
-                  keyName: "is_active",
-              },
-          ],
-      },
-  ]
+    {
+      visibleName: "GPU",
+      items: [
+        {
+          keyName: "gpu_temp",
+          icon: <TempIcon />,
+        },
+        {
+          icon: <SpeedIcon />,
+          keyName: "gpu_util",
+        },
+        {
+          visibleName: "Nvidia driver",
+          keyName: "nvidia_driver_version",
+        },
+        {
+          visibleName: "Device ID",
+          keyName: "gpu_device_id",
+        },
+        {
+          visibleName: "GPU memory size",
+          keyName: "gpu_memory_size",
+        },
+        {
+          visibleName: "Model",
+          keyName: "gpu_model",
+        },
+      ],
+    },
+    {
+      visibleName: "CPU",
+      items: [
+        {
+          icon: <SpeedIcon />,
+          keyName: "cpu_util",
+        },
+        {
+          visibleName: "Name",
+          keyName: "cpu_name",
+        },
+        {
+          visibleName: "Max frequency",
+          keyName: "cpu_max_frequency",
+        },
+        {
+          visibleName: "Number of cores",
+          keyName: "cpu_core_count",
+        },
+      ],
+    },
+    {
+      visibleName: "System",
+      items: [
+        {
+          visibleName: "Machine name",
+          keyName: "machine_name",
+        },
+        {
+          visibleName: "OS",
+          keyName: "machine_os",
+        },
+        {
+          visibleName: "OS Kernel",
+          keyName: "machine_os_kernel",
+        },
+        {
+          visibleName: "Server name",
+          keyName: "name",
+        },
+        {
+          visibleName: "Docker version",
+          keyName: "docker_version",
+        },
+        {
+          visibleName: "Cuda version",
+          keyName: "cuda_version",
+        },
+        {
+          visibleName: "Internet speed",
+          keyName: "internet_speed",
+        },
+        {
+          visibleName: "Local IP",
+          keyName: "local_ip",
+        },
+        {
+          visibleName: "VPN IP",
+          keyName: "vpn_ip",
+        },
+        {
+          visibleName: "Teamviewer ID",
+          keyName: "teamviewer_id",
+        },
+        {
+          visibleName: "Username",
+          keyName: "username",
+        },
+        {
+          visibleName: "Server memory size",
+          keyName: "memory_size",
+        },
+        {
+          visibleName: "Active",
+          keyName: "is_active",
+        },
+      ],
+    },
+  ];
 
-  const items = field ? field.items : serverFieldsMapper
+  const items = field ? field.items : serverFieldsMapper;
 
   return (
     <div className={styles.dropdownHead}>
@@ -163,36 +163,30 @@ const DropDownFields = observer ( ({field, serverIndex}) => {
       </button>
       <div className={styles.dropdown}>
         {isOpen
-          ? items.map((item) => {
-              if (item.items) {
-                return (
-                  <DropDownFields
-                    serverIndex={serverIndex}
-                    field={item}
-                    key={item.visibleNam}
-                  />
-                );
-              } else {
-                if (!item.icon) {
-                  return (
-                    <div key={item.keyName} className={styles.item}>
-                      <p className={styles.category}>{item.visibleName}</p>
-                      <span className={styles.result}>
-                        {storeInfo.servers[serverIndex][item.keyName]
-                          ? storeInfo.servers[serverIndex][
-                              item.keyName
-                            ].toString()
-                          : "N/A"}
-                      </span>
-                    </div>
-                  );
-                }
-              }
-            })
+          ? items.map((item) =>
+              item.items ? (
+                <DropDownFields
+                  serverIndex={serverIndex}
+                  field={item}
+                  key={item.visibleName}
+                />
+              ) : !item.icon ? (
+                <div key={item.keyName} className={styles.item}>
+                  <p className={styles.category}>{item.visibleName}</p>
+                  <span className={styles.result}>
+                    {storeInfo.servers[serverIndex][item.keyName]
+                      ? storeInfo.servers[serverIndex][item.keyName].toString()
+                      : "N/A"}
+                  </span>
+                </div>
+              ) : (
+                ""
+              )
+            )
           : ""}
       </div>
     </div>
   );
-} );
+});
 
 export default DropDownFields;
