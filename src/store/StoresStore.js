@@ -9,7 +9,6 @@ import { ToastsStore } from "react-toasts";
 
 class StoresStore {
   isLoading = 0
-
   storeInfo = {};
   stores = [];
   tempStores = [];
@@ -103,9 +102,7 @@ class StoresStore {
 
   getStoresPart = async ({ search, setError, field=null, type='none', limit, offset=this.tempStores.length, signal}) => {
     try {
-
-
-      this.isLoading += 1
+      this.isLoading++
       await refreshToken();
 
       const resp = await fetch(
@@ -121,18 +118,13 @@ class StoresStore {
 
       const res = await resp.json()
 
-      if(offset){
-        this.tempStores = [ ...this.tempStores, ...res.results ]
-      }
-      else{
-        this.tempStores = [ ...res.results ]
-      }
+      this.tempStores = offset ? this.tempStores = [ ...this.tempStores, ...res.results ] : this.tempStores = [ ...res.results ]
 
-      this.isLoading -= 1
+      this.isLoading--
       setError('')
 
     } catch (e) {
-      this.isLoading -= 1
+      this.isLoading--
 
       console.log(e.message)
       setError(e.message)

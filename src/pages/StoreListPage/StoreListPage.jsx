@@ -85,7 +85,6 @@ const StoreListPage = observer(() => {
 
     if (refStores.current) {
       setIsSearchOrSort(true);
-
       getStoresPart({ search, setError, field, type, limit: 30, offset: 0, signal: abortRef.current.signal });
     }
   }, [search, sort]);
