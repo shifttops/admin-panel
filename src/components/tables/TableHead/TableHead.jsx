@@ -63,7 +63,6 @@ export default function TableHead({
     <thead className={styles.tableHead}>
       <tr>
         <th>
-          {console.log(1, allStoresCount , selectedStoresCount)}
           <Checkbox checked={allStoresCount === selectedStoresCount} onChange={selectAllStores}/>
         </th>
         {items.map((item) => (
