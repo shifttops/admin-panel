@@ -8,8 +8,11 @@ import { createDateFilters } from "../helpers/dateForFiltersHelper";
 import { ToastsStore } from "react-toasts";
 
 class StoresStore {
+  isLoading = 0
+
   storeInfo = {};
   stores = [];
+  tempStores = [];
   storeErrors = [];
   filters = {};
   cameras = [];
@@ -95,6 +98,44 @@ class StoresStore {
       setError("");
     } catch (e) {
       setError(e.message);
+    }
+  };
+
+  getStoresPart = async ({ search, setError, field=null, type='none', limit, offset=this.tempStores.length, signal}) => {
+    try {
+
+
+      this.isLoading += 1
+      await refreshToken();
+
+      const resp = await fetch(
+        `https://staptest.mcd-cctv.com/api/store/?limit=${limit}&offset=${offset}&search=${search}&filtered_by=${field}&type=${type}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Token ${localStorage.getItem("access")}`,
+          },
+          signal
+        }
+      );
+
+      const res = await resp.json()
+
+      if(offset){
+        this.tempStores = [ ...this.tempStores, ...res.results ]
+      }
+      else{
+        this.tempStores = [ ...res.results ]
+      }
+
+      this.isLoading -= 1
+      setError('')
+
+    } catch (e) {
+      this.isLoading -= 1
+
+      console.log(e.message)
+      setError(e.message)
     }
   };
 

@@ -1,17 +1,14 @@
-import { Route, Switch, BrowserRouter } from "react-router-dom";
 import styles from "./store-list-page.module.scss";
 import routes from "constants/routes";
 import TableHead from "components/tables/TableHead";
 import TableRow from "components/tables/TableRow";
 import DashboardHead from "components/header/DashboardHead";
-import { ConfigIcon } from "icons";
-import statusButtonTypes from "types/statusButtonTypes";
-import { useEffect, useState } from "react";
-import { useCookies } from "react-cookie";
-import { refreshToken } from "../../helpers/AuthHelper";
+import { useEffect, useRef, useState } from "react";
 import StoresStore from "../../store/StoresStore";
 import { observer } from "mobx-react";
 import moment from "moment";
+import { useInView } from "react-intersection-observer";
+import Loader from "../../components/Loader";
 import { observe, reaction, toJS } from "mobx";
 import queryString from "query-string";
 import { useHistory, useLocation } from "react-router";
@@ -25,12 +22,29 @@ const StoreListPage = observer(() => {
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState({ type: "none" });
+  const [isSearchOrSort, setIsSearchOrSort] = useState(false);
   const history = useHistory();
   const location = useLocation();
   const [checkedStores, setCheckedStores] = useState([]);
-  const { getStores, stores, searchStores, getFilters } = StoresStore;
 
-  let { enabledFilters } = StoresStore;
+  let controller = new AbortController()
+
+  const {
+    getStores,
+    stores,
+    searchStores,
+    getFilters,
+    tempStores,
+    getStoresPart,
+  } = StoresStore;
+
+  let { isLoading, enabledFilters } = StoresStore;
+
+  const { ref, inView, entry } = useInView({
+    /* Optional options */
+    threshold: 0,
+  });
+
 
   const selectAllStores = (e) => {
     if (checkedStores.length < stores.length) {
@@ -43,51 +57,57 @@ const StoreListPage = observer(() => {
   const sortFunc = (stores, sort) => {
     const { type, field } = sort;
     if (type !== "none" && field) {
-      const newStores = [...stores].sort((a, b) => {
-        console.log(a[field], "  --- ", b[field]);
+      return [...stores].sort((a, b) => {
         if (type === "desc") {
           return a[field] > b[field] ? 1 : a[field] < b[field] ? -1 : 0;
         } else {
           return b[field] > a[field] ? 1 : b[field] < a[field] ? -1 : 0;
         }
       });
-      return newStores;
     } else return stores;
   };
 
+  const refStores = useRef(false);
+
   useEffect(() => {
-    // console.log(toJS(enabledFilters));
-    if (Object.keys(enabledFilters).some((key) => key && key.length)) {
+    if (!stores.length) {
       getStores(setError);
       // getErrors(setError);
     }
-  }, [enabledFilters]);
+  }, [stores.length, enabledFilters]);
 
   useEffect(() => {
-    Object.entries(
-      queryString.parse(window.location.search, { arrayFormat: "comma" })
-    ).forEach((entry) => {
-      if (!entry[1]) {
-        delete enabledFilters[entry[0]];
-      } else {
-        enabledFilters[entry[0]] = entry[1];
-      }
-    });
-    return () => {
-      console.log("removed");
-      Object.keys(enabledFilters).forEach((key) => {
-        delete enabledFilters[key];
-      });
-    };
+    if (isLoading){
+      controller.abort()
+    }
+
+    const { type, field } = sort;
+
+    if (refStores.current) {
+      setIsSearchOrSort(true);
+
+      getStoresPart({ search, setError, field, type, limit: 30, offset: 0, signal: controller.signal });
+    }
+  }, [search, sort]);
+
+  useEffect(() => {
+    if (!tempStores.length && refStores.current) {
+      getStoresPart({ search, setError, limit: 30 });
+    }
+  }, [tempStores.length]);
+
+  useEffect(() => {
+    refStores.current = true;
   }, []);
 
   useEffect(() => {
-    console.log(toJS(enabledFilters));
-    // if (!stores.length) {
-    getStores(setError);
-    // getErrors(setError);
-    // }
-  }, []);
+    const { type, field } = sort;
+
+    if (inView) {
+      setIsSearchOrSort(false);
+      getStoresPart({ search, setError, field, type, limit: 30 });
+    }
+  }, [inView]);
 
   return (
     <div className={styles.dashboard__wrapper}>
@@ -101,7 +121,8 @@ const StoreListPage = observer(() => {
           selectedStoresCount={checkedStores.length}
         />
         <tbody>
-          {sortFunc(searchStores(search), sort).map((restaurant) => (
+        { /*tempStores.map((restaurant) => (*/
+          sortFunc(searchStores(search), sort).map((restaurant) => (
             <TableRow
               key={restaurant.store_id}
               id={restaurant.store_id}
@@ -122,9 +143,23 @@ const StoreListPage = observer(() => {
               setCheckedStores={setCheckedStores}
               checkedStores={checkedStores}
             />
-          ))}
+          ))
+        }
         </tbody>
+        {
+          (isLoading && isSearchOrSort) ? <div className={styles.storesLoader + ' ' + styles.storesLoader__search}>
+            <Loader/>
+          </div> : ''
+              }
       </table>
+      {
+        (isLoading && !isSearchOrSort) ? <div className={styles.storesLoader}>
+          <Loader/>
+        </div> : ''
+      }
+      {
+        !isLoading ? <div ref={ ref }/> : ''
+      }
       <ToastsContainer
         store={ToastsStore}
         position={ToastsContainerPosition.BOTTOM_RIGHT}
