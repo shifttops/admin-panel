@@ -16,8 +16,6 @@ const StoreListPage = observer(() => {
   const [isSearchOrSort, setIsSearchOrSort] = useState(false);
   const [checkedStores, setCheckedStores] = useState([]);
 
-  let controller = new AbortController()
-
   const {
     getStores,
     stores,
@@ -57,6 +55,7 @@ const StoreListPage = observer(() => {
   };
 
   const refStores = useRef(false);
+  const abortRef = useRef(false);
 
   useEffect(() => {
     if (!stores.length) {
@@ -66,16 +65,17 @@ const StoreListPage = observer(() => {
   }, [stores.length, enabledFilters]);
 
   useEffect(() => {
-    if (isLoading){
-      controller.abort()
+    if (abortRef.current && isLoading){
+      abortRef.current.abort()
     }
+      abortRef.current = new AbortController()
 
     const { type, field } = sort;
 
     if (refStores.current) {
       setIsSearchOrSort(true);
 
-      getStoresPart({ search, setError, field, type, limit: 30, offset: 0, signal: controller.signal });
+      getStoresPart({ search, setError, field, type, limit: 30, offset: 0, signal: abortRef.current.signal });
     }
   }, [search, sort]);
 
@@ -111,7 +111,8 @@ const StoreListPage = observer(() => {
           selectedStoresCount={checkedStores.length}
         />
         <tbody>
-        { /*tempStores.map((restaurant) => (*/
+        { 
+        // tempStores.map((restaurant) => (
           sortFunc(searchStores(search), sort).map((restaurant) => (
             <TableRow
               key={restaurant.store_id}
