@@ -1,3 +1,5 @@
+import { filtersRequestMapper } from "./mappers";
+
 export const createDateFilters = (filters) => {
     Object.keys(filters).forEach((filterKey) => {
       if(filterKey === 'date_deployment__range' || filterKey === "date_created__range"){
@@ -42,4 +44,21 @@ export const createDateFilters = (filters) => {
         //   }
       });
       return filters;
+}
+
+export const configureFilters = (enabledFilters) => {
+  let filtersForReq = {};
+
+  Object.keys(enabledFilters).forEach((key) => {
+    let reqKey = filtersRequestMapper.find(
+        (item) => key === item.name
+    )?.reqName;
+    if (reqKey) {
+      filtersForReq[reqKey] = enabledFilters[key];
+    } else {
+      filtersForReq[key] = enabledFilters[key];
+    }
+  });
+
+  return createDateFilters(filtersForReq);
 }

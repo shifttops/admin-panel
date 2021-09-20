@@ -96,6 +96,10 @@ const StoreListPage = observer(() => {
   }, [tempStores.length]);
 
   useEffect(() => {
+    getStoresPart({ search, setError, limit: 30, offset: 0 });
+  }, [enabledFilters])
+
+  useEffect(() => {
     refStores.current = true;
   }, []);
 

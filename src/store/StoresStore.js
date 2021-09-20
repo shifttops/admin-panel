@@ -100,21 +100,28 @@ class StoresStore {
     }
   };
 
-  getStoresPart = async ({ search, setError, field=null, type='none', limit, offset=this.tempStores.length, signal}) => {
-    try {
-      this.isLoading++
-      await refreshToken();
+    getStoresPart = async ({ search, setError, field=null, type='none', limit, offset=this.tempStores.length, signal}) => {
+        try {
+            await refreshToken();
 
-      const resp = await fetch(
-        `https://staptest.mcd-cctv.com/api/store/?limit=${limit}&offset=${offset}&search=${search}&filtered_by=${field}&type=${type}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Token ${localStorage.getItem("access")}`,
-          },
-          signal
-        }
-      );
+            let url = `https://staptest.mcd-cctv.com/api/store/?limit=${limit}&offset=${offset}&search=${search}&filtered_by=${field}&type=${type}`;
+            this.isLoading++
+
+            if(Object.keys(this.enabledFilters).length &&
+                Object.keys(this.enabledFilters).some(key => this.enabledFilters[key]?.length)
+            ) {
+                let filtersForReq = configureFilters(this.enabledFilters)
+
+                Object.keys(filtersForReq).map((key) => url += `&${key}=${filtersForReq[key]}`);
+            }
+
+            const resp = await fetch(url, {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Token ${localStorage.getItem("access")}`,
+                    },
+                    signal
+                });
 
       const res = await resp.json()
 
@@ -126,10 +133,9 @@ class StoresStore {
     } catch (e) {
       this.isLoading--
 
-      console.log(e.message)
-      setError(e.message)
-    }
-  };
+            setError(e.message)
+        }
+    };
 
   getStoreInfo = async (id, setError) => {
     try {
