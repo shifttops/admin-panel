@@ -4,399 +4,406 @@ import moment from "moment";
 import { refreshToken } from "../helpers/AuthHelper";
 import queryString from "query-string";
 import { filtersRequestMapper } from "../helpers/mappers";
-import { configureFilters , createDateFilters } from "../helpers/filters";
+import { configureFilters, createDateFilters } from "../helpers/filters";
 
 class StoresStore {
-    isLoading = 0
-    storeInfo = {};
-    stores = [];
-    tempStores = [];
-    storeErrors = [];
-    filters = {};
-    cameras = [];
-    enabledFilters = {
-        ...queryString.parse(window.location.search, { arrayFormat: "comma" }),
-    };
+  isLoading = 0;
+  storeInfo = {};
+  stores = [];
+  tempStores = [];
+  storeErrors = [];
+  filters = {};
+  cameras = [];
+  enabledFilters = {
+    ...queryString.parse(window.location.search, { arrayFormat: "comma" }),
+  };
 
-    constructor() {
-        makeAutoObservable(
-            this
-            //   , {
-            //   storeInfo: observable,
-            //   stores: observable,
-            //   searchStores: computed,
-            //   getStores: action,
-            //   getStoreInfo: action,
-            //   getStoreHardware: action,
-            //   getStoreServer: action,
-            // }
+  constructor() {
+    makeAutoObservable(
+      this
+      //   , {
+      //   storeInfo: observable,
+      //   stores: observable,
+      //   searchStores: computed,
+      //   getStores: action,
+      //   getStoreInfo: action,
+      //   getStoreHardware: action,
+      //   getStoreServer: action,
+      // }
+    );
+  }
+
+  searchStores = computedFn((search) => {
+    if (!search) return this.stores;
+    return this.stores.filter((store) =>
+      Object.values(store).some(
+        (value) =>
+          value && value.toString().toLowerCase().includes(search.toLowerCase())
+      )
+    );
+  });
+
+  getStores = async (setError) => {
+    try {
+      await refreshToken();
+      if (
+        Object.keys(this.enabledFilters).length &&
+        Object.keys(this.enabledFilters).some(
+          (key) => this.enabledFilters[key]?.length
+        )
+      ) {
+        let filtersForReq = {};
+        Object.keys(this.enabledFilters).forEach((key) => {
+          let reqKey = filtersRequestMapper.find(
+            (item) => key === item.name
+          )?.reqName;
+          if (reqKey) {
+            filtersForReq[reqKey] = this.enabledFilters[key];
+          } else {
+            filtersForReq[key] = this.enabledFilters[key];
+          }
+        });
+        filtersForReq = createDateFilters(filtersForReq);
+        const resp = await fetch("https://staptest.mcd-cctv.com/api/filters/", {
+          method: "POST",
+          headers: {
+            Authorization: `Token ${localStorage.getItem("access")}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(filtersForReq),
+        });
+        const res = await resp.json();
+        this.stores = [...res];
+      } else {
+        const resp = await fetch(
+          "https://staptest.mcd-cctv.com/api/store/?limit=9999&offset=0",
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Token ${localStorage.getItem("access")}`,
+            },
+          }
         );
+        const res = await resp.json();
+        this.stores = [...res.results];
+      }
+      setError("");
+    } catch (e) {
+      setError(e.message);
     }
+  };
 
-    searchStores = computedFn((search) => {
-        if (!search) return this.stores;
-        return this.stores.filter((store) =>
-            Object.values(store).some(
-                (value) =>
-                    value && value.toString().toLowerCase().includes(search.toLowerCase())
-            )
+  getStoresPart = async ({search, setError, field = null, type = "none", limit, offset = this.tempStores.length, signal}) => {
+    try {
+      await refreshToken();
+
+      let url = `https://staptest.mcd-cctv.com/api/store/?limit=${limit}&offset=${offset}&search=${search}&filtered_by=${field}&type=${type}`;
+      this.isLoading++;
+
+      if (
+        Object.keys(this.enabledFilters).length &&
+        Object.keys(this.enabledFilters).some(
+          (key) => this.enabledFilters[key]?.length
+        )
+      ) {
+        let filtersForReq = configureFilters(this.enabledFilters);
+
+        Object.keys(filtersForReq).map(
+          (key) => (url += `&${key}=${filtersForReq[key]}`)
         );
-    });
+      }
 
-    getStores = async (setError) => {
-        try {
-            await refreshToken();
-            if (
-                Object.keys(this.enabledFilters).length &&
-                Object.keys(this.enabledFilters).some(
-                    (key) => this.enabledFilters[key]?.length
-                )
-            ) {
-                let filtersForReq = {};
-                Object.keys(this.enabledFilters).forEach((key) => {
-                    let reqKey = filtersRequestMapper.find(
-                        (item) => key === item.name
-                    )?.reqName;
-                    if (reqKey) {
-                        filtersForReq[reqKey] = this.enabledFilters[key];
-                    } else {
-                        filtersForReq[key] = this.enabledFilters[key];
-                    }
-                });
-                filtersForReq = createDateFilters(filtersForReq);
-                const resp = await fetch("https://staptest.mcd-cctv.com/api/filters/", {
-                    method: "POST",
-                    headers: {
-                        Authorization: `Token ${localStorage.getItem("access")}`,
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(filtersForReq),
-                });
-                const res = await resp.json();
-                this.stores = [...res];
-            } else {
-                const resp = await fetch(
-                    "https://staptest.mcd-cctv.com/api/store/?limit=9999&offset=0",
-                    {
-                        method: "GET",
-                        headers: {
-                            Authorization: `Token ${localStorage.getItem("access")}`,
-                        },
-                    }
-                );
-                const res = await resp.json();
-                this.stores = [...res.results];
-            }
-            setError("");
-        } catch (e) {
-            setError(e.message);
+      const resp = await fetch(url, {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${localStorage.getItem("access")}`,
+        },
+        signal,
+      });
+
+      const res = await resp.json();
+
+      this.tempStores = offset
+        ? (this.tempStores = [...this.tempStores, ...res.results])
+        : (this.tempStores = [...res.results]);
+
+      this.isLoading--;
+
+      setError("");
+    } catch (e) {
+      this.isLoading--;
+
+      setError(e.message);
+    }
+  };
+
+  getStoreInfo = async (id, setError) => {
+    try {
+      await refreshToken();
+
+      const resp = await fetch(
+        `https://staptest.mcd-cctv.com/api/store/${id}/`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Token ${localStorage.getItem("access")}`,
+          },
         }
-    };
-
-    getStoresPart = async ({ search, setError, field=null, type='none', limit, offset=this.tempStores.length, signal}) => {
-        try {
-            await refreshToken();
-
-            let url = `https://staptest.mcd-cctv.com/api/store/?limit=${limit}&offset=${offset}&search=${search}&filtered_by=${field}&type=${type}`;
-            this.isLoading++
-
-            if(Object.keys(this.enabledFilters).length &&
-                Object.keys(this.enabledFilters).some(key => this.enabledFilters[key]?.length)
-            ) {
-                let filtersForReq = configureFilters(this.enabledFilters)
-
-                Object.keys(filtersForReq).map((key) => url += `&${key}=${filtersForReq[key]}`);
-            }
-
-            const resp = await fetch(url, {
-                    method: "GET",
-                    headers: {
-                        Authorization: `Token ${localStorage.getItem("access")}`,
-                    },
-                    signal
-                });
-
-            const res = await resp.json()
-
-            this.tempStores = offset ? this.tempStores = [ ...this.tempStores, ...res.results ] : this.tempStores = [ ...res.results ]
-
-            this.isLoading--
-
-            setError('')
-        } catch (e) {
-            this.isLoading--
-
-            setError(e.message)
+      );
+      if (resp.status === 200) {
+        const res = await resp.json();
+        res.rfd = res.date_created
+          ? moment(res.date_created).format("DD.MM.YYYY")
+          : "N/A";
+        res.dod = res.date_deployment
+          ? moment(res.date_deployment).format("DD.MM.YYYY")
+          : "N/A";
+        this.storeInfo = { ...res };
+        if (res) {
+          if (res.store_location) {
+            await this.getStoreLocation(res.store_location);
+          }
+          if (res.server_id && res.server_id[0]) {
+            await this.getServersInfo({ servers_id: res.server_id, setError });
+          }
+          if (res.cameras && res.cameras.length) {
+            await this.getStoreCameraStatus(id, setError);
+          }
+          setError("");
         }
+      }
+    } catch (e) {
+      setError(e.message);
+    }
+  };
+
+  getServersInfo = async ({ servers_id, setError }) => {
+    const servers = await Promise.all(
+      servers_id.map((server_id) =>
+        this.getStoreServer({ server_id, setError })
+      )
+    ).catch((e) => setError(e));
+
+    this.storeInfo = {
+      ...this.storeInfo,
+      servers,
     };
+  };
 
-    getStoreInfo = async (id, setError) => {
-        try {
-            await refreshToken();
+  getStoreHardware = async (id, setError) => {
+    try {
+      await refreshToken();
 
-            const resp = await fetch(
-                `https://staptest.mcd-cctv.com/api/store/${id}/`,
-                {
-                    method: "GET",
-                    headers: {
-                        Authorization: `Token ${localStorage.getItem("access")}`,
-                    },
-                }
-            );
-            if (resp.status === 200) {
-                const res = await resp.json();
-                res.rfd = res.date_created
-                    ? moment(res.date_created).format("DD.MM.YYYY")
-                    : "N/A";
-                res.dod = res.date_deployment
-                    ? moment(res.date_deployment).format("DD.MM.YYYY")
-                    : "N/A";
-                this.storeInfo = { ...res };
-                if (res) {
-                    if (res.store_location) {
-                        await this.getStoreLocation(res.store_location);
-                    }
-                    if (res.server_id && res.server_id[0]) {
-                        await this.getServersInfo({ servers_id: res.server_id, setError });
-                    }
-                    if (res.cameras && res.cameras.length) {
-                        await this.getStoreCameraStatus(id, setError);
-                    }
-                    setError("");
-                }
-            }
-        } catch (e) {
-            setError(e.message);
+      const resp = await fetch(
+        `https://staptest.mcd-cctv.com/api/hardware_status/${id}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Token ${localStorage.getItem("access")}`,
+          },
         }
-    };
+      );
+      if (resp.status === 200) {
+        const res = await resp.json();
 
-    getServersInfo = async ({ servers_id, setError }) => {
-        const servers = await Promise.all(
-            servers_id.map((server_id) =>
-                this.getStoreServer({ server_id, setError })
-            )
-        ).catch((e) => setError(e));
+        this.storeInfo = { ...this.storeInfo, ...res };
+        setError("");
+      }
+    } catch (e) {
+      setError(e.message);
+    }
+  };
 
-        this.storeInfo = {
-            ...this.storeInfo,
-            servers,
-        };
-    };
+  getStoreCameraStatus = async (store_id, setError) => {
+    try {
+      await refreshToken();
 
-    getStoreHardware = async (id, setError) => {
-        try {
-            await refreshToken();
-
-            const resp = await fetch(
-                `https://staptest.mcd-cctv.com/api/hardware_status/${id}`,
-                {
-                    method: "GET",
-                    headers: {
-                        Authorization: `Token ${localStorage.getItem("access")}`,
-                    },
-                }
-            );
-            if (resp.status === 200) {
-                const res = await resp.json();
-
-                this.storeInfo = { ...this.storeInfo, ...res };
-                setError("");
-            }
-        } catch (e) {
-            setError(e.message);
+      const resp = await fetch(
+        `https://staptest.mcd-cctv.com/api/cameras/status/${store_id}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Token ${localStorage.getItem("access")}`,
+          },
         }
-    };
+      );
+      if (resp.status === 200) {
+        const res = await resp.json();
+        this.storeInfo.cameras = this.storeInfo.cameras.map((camera) => {
+          const cameraId = Object.keys(res).find((item) => camera.id === +item);
+          return { ...res[cameraId], ...camera };
+        });
+        this.storeInfo.is_all_lateral_works = res.is_all_lateral_works;
+        setError("");
+      }
+    } catch (e) {
+      setError(e.message);
+    }
+  };
 
-    getStoreCameraStatus = async (store_id, setError) => {
-        try {
-            await refreshToken();
+  getStoreCameraImages = async (store_id, setError) => {
+    try {
+      await refreshToken();
 
-            const resp = await fetch(
-                `https://staptest.mcd-cctv.com/api/cameras/status/${store_id}`,
-                {
-                    method: "GET",
-                    headers: {
-                        Authorization: `Token ${localStorage.getItem("access")}`,
-                    },
-                }
-            );
-            if (resp.status === 200) {
-                const res = await resp.json();
-                this.storeInfo.cameras = this.storeInfo.cameras.map((camera) => {
-                    const cameraId = Object.keys(res).find((item) => camera.id === +item);
-                    return { ...res[cameraId], ...camera };
-                });
-                this.storeInfo.is_all_lateral_works = res.is_all_lateral_works;
-                setError("");
-            }
-        } catch (e) {
-            setError(e.message);
+      const resp = await fetch(
+        `https://staptest.mcd-cctv.com/api/cameras/status/detail/${store_id}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Token ${localStorage.getItem("access")}`,
+          },
         }
-    };
+      );
+      // if (resp.status === 200) {
+      const res = await resp.json();
 
-    getStoreCameraImages = async (store_id, setError) => {
-        try {
-            await refreshToken();
+      const newRes = res.map((camera) => {
+        camera = { ...camera, ...camera.detail };
+        delete camera.detail;
+        return camera;
+      });
+      this.cameras = newRes;
+      setError("");
+      // }
+    } catch (e) {
+      setError(e.message);
+    }
+  };
 
-            const resp = await fetch(
-                `https://staptest.mcd-cctv.com/api/cameras/status/detail/${store_id}`,
-                {
-                    method: "GET",
-                    headers: {
-                        Authorization: `Token ${localStorage.getItem("access")}`,
-                    },
-                }
-            );
-            // if (resp.status === 200) {
-            const res = await resp.json();
+  getStoreLocation = async (store_location) => {
+    const resp_location = await fetch(
+      `https://staptest.mcd-cctv.com/api/location/${store_location}/`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${localStorage.getItem("access")}`,
+        },
+      }
+    );
+    if (resp_location.status === 200) {
+      const res_location = await resp_location.json();
+      res_location.fourDigitRestaurantID = parseInt(
+        this.storeInfo.store_id.toString().slice(1)
+      );
+      res_location.threeDigitRestaurantID = parseInt(
+        this.storeInfo.store_id.toString().slice(2)
+      );
+      this.storeInfo = { ...this.storeInfo, ...res_location };
+    }
+  };
 
-            const newRes = res.map((camera) => {
-                camera = { ...camera, ...camera.detail };
-                delete camera.detail;
-                return camera;
-            });
-            this.cameras = newRes;
-            setError("");
-            // }
-        } catch (e) {
-            setError(e.message);
+  getStoreServer = async ({ server_id, setError }) => {
+    try {
+      const resp = await fetch(
+        `https://staptest.mcd-cctv.com/api/server/${server_id}/`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Token ${localStorage.getItem("access")}`,
+          },
         }
-    };
+      );
+      if (resp.status === 200) {
+        const res = await resp.json();
+        setError("");
 
-    getStoreLocation = async (store_location) => {
-        const resp_location = await fetch(
-            `https://staptest.mcd-cctv.com/api/location/${store_location}/`,
-            {
-                method: "GET",
-                headers: {
-                    Authorization: `Token ${localStorage.getItem("access")}`,
-                },
-            }
-        );
-        if (resp_location.status === 200) {
-            const res_location = await resp_location.json();
-            res_location.fourDigitRestaurantID = parseInt(
-                this.storeInfo.store_id.toString().slice(1)
-            );
-            res_location.threeDigitRestaurantID = parseInt(
-                this.storeInfo.store_id.toString().slice(2)
-            );
-            this.storeInfo = { ...this.storeInfo, ...res_location };
+        return res;
+      }
+    } catch (e) {
+      setError(e.message);
+    }
+  };
+
+  getHardwareSetup = async ({ id, setError }) => {
+    try {
+      await refreshToken();
+
+      const resp = await fetch(
+        `https://staptest.mcd-cctv.com/api/hardware_setup/${id}/`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Token ${localStorage.getItem("access")}`,
+          },
         }
-    };
+      );
+      if (resp.status === 200) {
+        const res = await resp.json();
+        setError("");
 
-    getStoreServer = async ({ server_id, setError }) => {
-        try {
-            const resp = await fetch(
-                `https://staptest.mcd-cctv.com/api/server/${server_id}/`,
-                {
-                    method: "GET",
-                    headers: {
-                        Authorization: `Token ${localStorage.getItem("access")}`,
-                    },
-                }
-            );
-            if (resp.status === 200) {
-                const res = await resp.json();
-                setError("");
+        return res;
+      }
+    } catch (e) {
+      setError(e.message);
+    }
+  };
 
-                return res;
-            }
-        } catch (e) {
-            setError(e.message);
+  getStoreErrorLogs = async (store_id, setError) => {
+    try {
+      await refreshToken();
+
+      const resp = await fetch(
+        `https://staptest.mcd-cctv.com/api/fault_logs/${store_id}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Token ${localStorage.getItem("access")}`,
+          },
         }
-    };
+      );
+      if (resp.status === 200) {
+        const res = await resp.json();
+        console.log(res);
+        this.storeErrors = res;
+        console.log(this.storeErrors);
+        setError("");
+      }
+    } catch (e) {
+      setError(e.message);
+    }
+  };
 
-    getHardwareSetup = async ({ id, setError }) => {
-        try {
-            await refreshToken();
+  getFilters = async (setError) => {
+    try {
+      await refreshToken();
 
-            const resp = await fetch(
-                `https://staptest.mcd-cctv.com/api/hardware_setup/${id}/`,
-                {
-                    method: "GET",
-                    headers: {
-                        Authorization: `Token ${localStorage.getItem("access")}`,
-                    },
-                }
-            );
-            if (resp.status === 200) {
-                const res = await resp.json();
-                setError("");
+      const resp = await fetch(`https://staptest.mcd-cctv.com/api/filters/`, {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${localStorage.getItem("access")}`,
+        },
+      });
+      if (resp.status === 200) {
+        const res = await resp.json();
+        this.filters = { ...res };
+        setError("");
+      }
+    } catch (e) {
+      setError(e.message);
+    }
+  };
 
-                return res;
-            }
-        } catch (e) {
-            setError(e.message);
-        }
-    };
+  getMetrics = async (store_id, setError) => {
+    try {
+      await refreshToken();
 
-    getStoreErrorLogs = async (store_id, setError) => {
-        try {
-            await refreshToken();
-
-            const resp = await fetch(
-                `https://staptest.mcd-cctv.com/api/fault_logs/${store_id}`,
-                {
-                    method: "GET",
-                    headers: {
-                        Authorization: `Token ${localStorage.getItem("access")}`,
-                    },
-                }
-            );
-            if (resp.status === 200) {
-                const res = await resp.json();
-                console.log(res);
-                this.storeErrors = res;
-                console.log(this.storeErrors);
-                setError("");
-            }
-        } catch (e) {
-            setError(e.message);
-        }
-    };
-
-    getFilters = async (setError) => {
-        try {
-            await refreshToken();
-
-            const resp = await fetch(`https://staptest.mcd-cctv.com/api/filters/`, {
-                method: "GET",
-                headers: {
-                    Authorization: `Token ${localStorage.getItem("access")}`,
-                },
-            });
-            if (resp.status === 200) {
-                const res = await resp.json();
-                this.filters = { ...res };
-                setError("");
-            }
-        } catch (e) {
-            setError(e.message);
-        }
-    };
-
-    getMetrics = async (store_id, setError) => {
-        try {
-            await refreshToken();
-
-            const resp = await fetch(`https://staptest.mcd-cctv.com/api/metrics/`, {
-                method: "POST",
-                headers: {
-                    Authorization: `Token ${localStorage.getItem("access")}`,
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ store_id }),
-            });
-            if (resp.status === 200) {
-                const res = await resp.json();
-                this.storeInfo = { ...this.storeInfo, ...res };
-                setError("");
-            }
-        } catch (e) {
-            setError(e.message);
-        }
-    };
+      const resp = await fetch(`https://staptest.mcd-cctv.com/api/metrics/`, {
+        method: "POST",
+        headers: {
+          Authorization: `Token ${localStorage.getItem("access")}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ store_id }),
+      });
+      if (resp.status === 200) {
+        const res = await resp.json();
+        this.storeInfo = { ...this.storeInfo, ...res };
+        setError("");
+      }
+    } catch (e) {
+      setError(e.message);
+    }
+  };
 }
 
 export default new StoresStore();
