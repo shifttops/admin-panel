@@ -6,21 +6,26 @@ import { DateIcon, MoreIcon, SortIcon } from "icons";
 import Button from "components/buttons/Button";
 import Checkbox from "components/Checkbox";
 import ActivityLogsStore from "../../store/ActivityLogsStore";
-import { useEffect, useState } from "react";
+import { useEffect , useRef , useState } from "react";
 import moment from "moment";
 import { observer } from "mobx-react";
+import { useInView } from "react-intersection-observer";
+import Loader from "../../components/Loader";
 
 const ActivityLogsPage = observer(() => {
-  const { jira_logs, logs, searchLogs, fault_logs, getJiraLogs, getFaultLogs } =
+  const { jira_logs, logs, searchLogs, fault_logs, getJiraLogs, getFaultLogs, getFaultPart, getJiraPart, isLoading } =
     ActivityLogsStore;
   const [error, setError] = useState("");
+  const [isSearchOrSort, setIsSearchOrSort] = useState(false);
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState({ type: "none" });
 
-  useEffect(() => {
-    getJiraLogs(setError);
-    getFaultLogs(setError);
-  }, []);
+  const refLogs = useRef(false);
+  const abortRef = useRef(false);
+
+  const { ref, inView, entry } = useInView({
+    threshold: 0,
+  });
 
   const sortFunc = (logs, sort) => {
     const { type, field } = sort;
@@ -62,6 +67,47 @@ const ActivityLogsPage = observer(() => {
       setSort({ field, type: sortTypes[1] });
     }
   };
+
+  useEffect(() => {
+    getJiraLogs(setError);
+    getFaultLogs(setError);
+  }, []);
+
+  useEffect(() => {
+    if (abortRef.current && isLoading) {
+      abortRef.current.abort();
+    }
+    abortRef.current = new AbortController();
+
+    const { type, field } = sort;
+
+    if (refLogs.current) {
+      setIsSearchOrSort(true);
+      getFaultPart({search, setError, field, type, limit: 50, offset: 0, signal: abortRef.current.signal});
+      getJiraPart({search, setError, field, type, limit: 50, offset: 0, signal: abortRef.current.signal});
+    }
+  }, [search, sort]);
+
+  useEffect(() => {
+    refLogs.current = true;
+  }, []);
+
+  useEffect(() => {
+    if(!logs.length && refLogs.current){
+      getFaultPart({ search, setError, limit: 50 })
+      getJiraPart({ search, setError, limit: 50 })
+    }
+  }, [logs.length])
+
+  useEffect(() => {
+    const { type, field } = sort;
+
+    if (inView) {
+      setIsSearchOrSort(false);
+      getFaultPart({ search, setError, field, type, limit: 50 });
+      getJiraPart({ search, setError, field, type, limit: 50 });
+    }
+  }, [inView]);
 
   return (
     <div className="page">
@@ -106,7 +152,8 @@ const ActivityLogsPage = observer(() => {
           </tr>
         </thead>
         <tbody>
-          {sortFunc(searchLogs(search), sort).map((log) => (
+          {   //logs.map((log) => (
+              sortFunc(searchLogs(search), sort).map((log) => (
             <tr key={`${log.error_time ? "Error " : ""}${log.id}`}>
               <td className={styles.name}>
                 <Checkbox
@@ -135,7 +182,24 @@ const ActivityLogsPage = observer(() => {
             </tr>
           ))}
         </tbody>
+        {isLoading && isSearchOrSort ? (
+            <div
+                className={styles.logsLoader + " " + styles.logsLoader__search}
+            >
+              <Loader />
+            </div>
+        ) : (
+            ""
+        )}
       </table>
+      {isLoading && !isSearchOrSort ? (
+          <div className={styles.logsLoader}>
+            <Loader />
+          </div>
+      ) : (
+          ""
+      )}
+      {!isLoading ? <div ref={ref} /> : ""}
     </div>
   );
 });
