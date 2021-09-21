@@ -1,4 +1,4 @@
-import { computed, observable, action, makeAutoObservable, toJS } from "mobx";
+import { makeAutoObservable } from "mobx";
 import { refreshToken } from "../helpers/AuthHelper";
 import { computedFn } from "mobx-utils";
 
@@ -12,16 +12,16 @@ class ActivityLogsStore {
 
   get logs() {
     return [...this.jira_logs, ...this.fault_logs].sort(
-        (a, b) =>
-            new Date(b.error_time ? b.error_time : b.changed_on) -
-            new Date(a.error_time ? a.error_time : a.changed_on)
+      (a, b) =>
+        new Date(b.error_time ? b.error_time : b.changed_on) -
+        new Date(a.error_time ? a.error_time : a.changed_on)
     );
   }
 
   searchLogs = computedFn((search) => {
     if (!search) return this.logs;
     return this.logs.filter((log) =>
-        log.store.toString().includes(search.toLowerCase())
+      log.store.toString().includes(search.toLowerCase())
     );
   });
 
@@ -30,13 +30,13 @@ class ActivityLogsStore {
       await refreshToken();
 
       const resp = await fetch(
-          "https://staptest.mcd-cctv.com/api/jira_logs/?limit=9999&offset=0",
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Token ${localStorage.getItem("access")}`,
-            },
-          }
+        "https://staptest.mcd-cctv.com/api/jira_logs/?limit=9999&offset=0",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Token ${localStorage.getItem("access")}`,
+          },
+        }
       );
       const res = await resp.json();
       this.jira_logs = [...res.results];
@@ -51,13 +51,13 @@ class ActivityLogsStore {
       await refreshToken();
 
       const resp = await fetch(
-          `https://staptest.mcd-cctv.com/api/fault_logs/?limit=9999&offset=0`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Token ${localStorage.getItem("access")}`,
-            },
-          }
+        `https://staptest.mcd-cctv.com/api/fault_logs/?limit=9999&offset=0`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Token ${localStorage.getItem("access")}`,
+          },
+        }
       );
       const res = await resp.json();
       this.fault_logs = [...res.results];

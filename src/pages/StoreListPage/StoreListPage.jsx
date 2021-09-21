@@ -43,7 +43,6 @@ const StoreListPage = observer(() => {
     threshold: 0,
   });
 
-
   const selectAllStores = (e) => {
     if (checkedStores.length < stores.length) {
       setCheckedStores(stores.map((store) => store.store_id));
@@ -76,16 +75,24 @@ const StoreListPage = observer(() => {
   }, [stores.length, enabledFilters]);
 
   useEffect(() => {
-    if (abortRef.current && isLoading){
-      abortRef.current.abort()
+    if (abortRef.current && isLoading) {
+      abortRef.current.abort();
     }
-      abortRef.current = new AbortController()
+    abortRef.current = new AbortController();
 
     const { type, field } = sort;
 
     if (refStores.current) {
       setIsSearchOrSort(true);
-      getStoresPart({ search, setError, field, type, limit: 30, offset: 0, signal: abortRef.current.signal });
+      getStoresPart({
+        search,
+        setError,
+        field,
+        type,
+        limit: 30,
+        offset: 0,
+        signal: abortRef.current.signal,
+      });
     }
   }, [search, sort]);
 
@@ -97,7 +104,7 @@ const StoreListPage = observer(() => {
 
   useEffect(() => {
     getStoresPart({ search, setError, limit: 30, offset: 0 });
-  }, [enabledFilters])
+  }, [enabledFilters]);
 
   useEffect(() => {
     refStores.current = true;
@@ -124,31 +131,31 @@ const StoreListPage = observer(() => {
           selectedStoresCount={checkedStores.length}
         />
         <tbody>
-        { 
-        // tempStores.map((restaurant) => (
-          sortFunc(searchStores(search), sort).map((restaurant) => (
-            <TableRow
-              key={restaurant.store_id}
-              id={restaurant.store_id}
-              address={restaurant.address}
-              region={restaurant.store_county}
-              type={restaurant.store_type}
-              date_deployed={
-                restaurant.date_deployment
-                  ? moment(restaurant.date_deployment).format("DD.MM.YYYY")
-                  : "N/A"
-              }
-              date_ready_deployed={
-                restaurant.date_created
-                  ? moment(restaurant.date_created).format("DD.MM.YYYY")
-                  : "N/A"
-              }
-              status={restaurant.status}
-              setCheckedStores={setCheckedStores}
-              checkedStores={checkedStores}
-            />
-          ))
-        }
+          {
+            // tempStores.map((restaurant) => (
+            sortFunc(searchStores(search), sort).map((restaurant) => (
+              <TableRow
+                key={restaurant.store_id}
+                id={restaurant.store_id}
+                address={restaurant.address}
+                region={restaurant.store_county}
+                type={restaurant.store_type}
+                date_deployed={
+                  restaurant.date_deployment
+                    ? moment(restaurant.date_deployment).format("DD.MM.YYYY")
+                    : "N/A"
+                }
+                date_ready_deployed={
+                  restaurant.date_created
+                    ? moment(restaurant.date_created).format("DD.MM.YYYY")
+                    : "N/A"
+                }
+                status={restaurant.status}
+                setCheckedStores={setCheckedStores}
+                checkedStores={checkedStores}
+              />
+            ))
+          }
         </tbody>
         {
           (isLoading && isSearchOrSort) ? <div className={styles.storesLoader + ' ' + styles.storesLoader__search}>
@@ -156,14 +163,14 @@ const StoreListPage = observer(() => {
           </div> : ''
               }
       </table>
-      {
-        (isLoading && !isSearchOrSort) ? <div className={styles.storesLoader}>
-          <Loader/>
-        </div> : ''
-      }
-      {
-        !isLoading ? <div ref={ ref }/> : ''
-      }
+      {isLoading && !isSearchOrSort ? (
+        <div className={styles.storesLoader}>
+          <Loader />
+        </div>
+      ) : (
+        ""
+      )}
+      {!isLoading ? <div ref={ref} /> : ""}
       <ToastsContainer
         store={ToastsStore}
         position={ToastsContainerPosition.BOTTOM_RIGHT}

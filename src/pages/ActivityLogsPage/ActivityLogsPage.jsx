@@ -38,13 +38,11 @@ const ActivityLogsPage = observer(() => {
         if (type === "desc") {
           if (field === "description") {
             return a[field] ? 1 : b[field] ? -1 : 0;
-          }
-          else return a[field] > b[field] ? 1 : a[field] < b[field] ? -1 : 0;
+          } else return a[field] > b[field] ? 1 : a[field] < b[field] ? -1 : 0;
         } else {
           if (field === "description") {
             return a[field] ? -1 : b[field] ? 1 : 0;
-          }
-          else return b[field] > a[field] ? 1 : b[field] < a[field] ? -1 : 0;
+          } else return b[field] > a[field] ? 1 : b[field] < a[field] ? -1 : 0;
         }
       });
     } else return logs;

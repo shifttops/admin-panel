@@ -8,7 +8,7 @@ import { createDateFilters } from "../helpers/dateForFiltersHelper";
 import { ToastsStore } from "react-toasts";
 
 class StoresStore {
-  isLoading = 0
+  isLoading = 0;
   storeInfo = {};
   stores = [];
   tempStores = [];
@@ -100,42 +100,49 @@ class StoresStore {
     }
   };
 
-    getStoresPart = async ({ search, setError, field=null, type='none', limit, offset=this.tempStores.length, signal}) => {
-        try {
-            await refreshToken();
+  getStoresPart = async ({search, setError, field = null, type = "none", limit, offset = this.tempStores.length, signal}) => {
+    try {
+      await refreshToken();
 
-            let url = `https://staptest.mcd-cctv.com/api/store/?limit=${limit}&offset=${offset}&search=${search}&filtered_by=${field}&type=${type}`;
-            this.isLoading++
+      let url = `https://staptest.mcd-cctv.com/api/store/?limit=${limit}&offset=${offset}&search=${search}&filtered_by=${field}&type=${type}`;
+      this.isLoading++;
 
-            if(Object.keys(this.enabledFilters).length &&
-                Object.keys(this.enabledFilters).some(key => this.enabledFilters[key]?.length)
-            ) {
-                let filtersForReq = configureFilters(this.enabledFilters)
+      if (
+        Object.keys(this.enabledFilters).length &&
+        Object.keys(this.enabledFilters).some(
+          (key) => this.enabledFilters[key]?.length
+        )
+      ) {
+        let filtersForReq = configureFilters(this.enabledFilters);
 
-                Object.keys(filtersForReq).map((key) => url += `&${key}=${filtersForReq[key]}`);
-            }
+        Object.keys(filtersForReq).map(
+          (key) => (url += `&${key}=${filtersForReq[key]}`)
+        );
+      }
 
-            const resp = await fetch(url, {
-                    method: "GET",
-                    headers: {
-                        Authorization: `Token ${localStorage.getItem("access")}`,
-                    },
-                    signal
-                });
+      const resp = await fetch(url, {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${localStorage.getItem("access")}`,
+        },
+        signal,
+      });
 
-      const res = await resp.json()
+      const res = await resp.json();
 
-      this.tempStores = offset ? this.tempStores = [ ...this.tempStores, ...res.results ] : this.tempStores = [ ...res.results ]
+      this.tempStores = offset
+        ? (this.tempStores = [...this.tempStores, ...res.results])
+        : (this.tempStores = [...res.results]);
 
-      this.isLoading--
-      setError('')
+      this.isLoading--;
 
+      setError("");
     } catch (e) {
-      this.isLoading--
+      this.isLoading--;
 
-            setError(e.message)
-        }
-    };
+      setError(e.message);
+    }
+  };
 
   getStoreInfo = async (id, setError) => {
     try {
