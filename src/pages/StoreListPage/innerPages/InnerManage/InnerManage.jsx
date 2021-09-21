@@ -2,11 +2,6 @@ import styles from "./inner-manage.module.scss";
 import ManageItem from "components/ManageItem";
 import manageItemTypes from "types/manageItemTypes";
 import {
-  BurgerIcon,
-  FilesIcon,
-  ImagesIcon,
-  OpenPathIcon,
-  PathIcon,
   RefreshIcon,
   ScreenIcon,
   VersionIcon,
@@ -16,6 +11,7 @@ import {
 } from "icons";
 import Button from "components/buttons/Button";
 import ButtonIcon from "components/buttons/ButtonIcon";
+import MaintenanceScreen from "../../../../components/MaintenanceScreen";
 
 const ActionButtons = () => {
   return (
@@ -34,6 +30,7 @@ export default function InnerManage() {
   return (
     <div className={styles.wrapper}>
       <h2 className={styles.title}>Manage store</h2>
+      <MaintenanceScreen />
       <ManageItem
         ActionButtons={ActionButtons}
         type={manageItemTypes.yellow}

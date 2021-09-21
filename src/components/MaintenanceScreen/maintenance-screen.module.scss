@@ -1,0 +1,84 @@
+@import "../../scss/variables";
+
+.maintenanceScreen{
+  &__body{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 16px 14px 16px;
+    background: #ffffff;
+    border: 1px solid #f2f2f2;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease 0s;
+  }
+  &__title{
+    font-size: 18px;
+    font-weight: 600;
+    margin-right: 10px;
+  }
+  &__button{}
+  &__content{
+    display: flex;
+    position: relative;
+  }
+}
+
+.currentScreen {
+  &__text{
+    font-size: 16px;
+  }
+  &__icon{
+    margin-left: 5px;
+  }
+  align-items: center;
+}
+
+.dropDown{
+  box-shadow: 0 4px 6px -4px rgba(24, 39, 75, 0.12), 0 8px 8px -4px rgba(24, 39, 75, 0.08);
+  margin-top: 5px;
+
+  display: block;
+  position: absolute;
+  transition: all 0.3s ease 0s;
+  top: 0;
+  right: -1%;
+  &__visible{
+    visibility: visible;
+    opacity: 1;
+    border: 1px solid #f2f2f2;
+    top: 100%;
+    background-color: #fff;
+    font-size: 16px;
+    z-index: 5;
+  }
+  &__hidden{
+    visibility: hidden;
+    opacity: 0;
+  }
+  &__body{
+
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.innerScreen{
+  transition: background-color 0.3s ease 0s, color 0.3s ease 0s;
+  padding: 8px 20px;
+  color: #999999;
+  &:not(:last-child){
+    margin-bottom: 3px;
+  }
+  @media(any-hover: hover){
+      &:hover{
+        background-color: $color-green;
+        color: #f2f2f2;
+      }
+  }
+}
+
+
+
