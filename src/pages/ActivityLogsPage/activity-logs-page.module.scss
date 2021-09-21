@@ -21,6 +21,7 @@
 }
 
 .table {
+  position: relative;
   border-spacing: 0 8px;
   width: 100%;
 }
@@ -150,4 +151,23 @@ td.success {
   color: $color-green;
   font-weight: 700;
   cursor: pointer;
+}
+
+.logsLoader{
+  display: block;
+  text-align: center;
+  &__search {
+    div {
+      position: absolute;
+      top: 100px;
+      left: calc(50% - 40px);
+    }
+    right: 0;
+    top: 0;
+    position: absolute;
+    z-index: 5;
+    background-color: rgba(117, 117, 117, 0.2);
+    width: 100%;
+    height: 100%;
+  }
 }
