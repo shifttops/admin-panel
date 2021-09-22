@@ -6,7 +6,6 @@ class ActivityLogsStore {
   isLoading = 0
   jira_logs = [];
   fault_logs = [];
-
   tempJira = []
   tempFault = []
 
@@ -89,8 +88,8 @@ class ActivityLogsStore {
       const res = await resp.json();
 
       this.tempJira = offset
-          ? (this.tempJira = [...this.tempJira, ...res.results])
-          : (this.tempJira = [...res.results]);
+          ? [...this.tempJira, ...res.results]
+          : [...res.results];
 
       this.isLoading--;
 
@@ -119,8 +118,8 @@ class ActivityLogsStore {
       const res = await resp.json();
 
       this.tempFault = offset
-          ? (this.tempFault = [...this.tempFault, ...res.results])
-          : (this.tempFault = [...res.results]);
+          ? [...this.tempFault, ...res.results]
+          : [...res.results];
 
       this.isLoading--;
 
