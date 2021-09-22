@@ -51,12 +51,20 @@ export const innerNavigationScripts = [
   {
     to: `${routes.scriptsEdit}`,
     name: "Edit",
-    component: <InnerEdit />,
+    Component: InnerEdit,
   },
   {
     to: `${routes.scriptsLaunch}`,
     name: "Launch",
-    component: <InnerLaunch />,
+    Component: InnerLaunch,
+  },
+];
+
+export const presetNavigation = [
+  {
+    to: `${routes.scriptsLaunch}/:preset_id`,
+    name: "Preset",
+    Component: InnerLaunch,
   },
 ]
 

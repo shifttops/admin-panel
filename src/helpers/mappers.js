@@ -7,7 +7,7 @@ export const statusMapper = [
   },
   {
     visibleName: "Go Live",
-    name: "Ready for Deployment",
+    name: "Go Live",
     className: styles.test,
   },
   {
@@ -48,7 +48,7 @@ export const statusMapper = [
   {
     visibleName: "Cameras position issue",
     name: "Cameras position issue",
-    className: styles.maintenance,
+    className: styles.test,
   },
   {
     visibleName: "N/A",

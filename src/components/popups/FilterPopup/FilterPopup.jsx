@@ -22,22 +22,6 @@ const FilterPopup = observer(({ onClose }) => {
   const location = useLocation();
 
   const applyFilters = (e) => {
-    // Object.keys(enabledFilters).forEach((filterKey) => {
-    //   const dateFilterKey = filterKey.split("__lte")[0].split("__gte")[0];
-    //   if (
-    //     enabledFilters[`${dateFilterKey}__lte`] &&
-    //     enabledFilters[`${dateFilterKey}__gte`]
-    //   ) {
-    //     enabledFilters[`${dateFilterKey}__range`] = [
-    //       enabledFilters[`${dateFilterKey}__gte`],
-    //       enabledFilters[`${dateFilterKey}__lte`],
-    //     ];
-    //   } else if (enabledFilters[`${dateFilterKey}__gte`]) {
-    //     enabledFilters[`${dateFilterKey}__lte`] = new Date().toISOString();
-    //   } else if (enabledFilters[`${dateFilterKey}__lte`]) {
-    //     enabledFilters[`${dateFilterKey}__gte`] = new Date().toISOString();
-    //   }
-    // });
     console.log(toJS(enabledFilters));
     history.push({
       pathname: location.pathname,

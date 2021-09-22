@@ -15,7 +15,11 @@ import { innerNavigation } from "constants/inner-navigation";
 import InnerHead from "components/header/InnerHead";
 import InnerSidebar from "components/InnerSidebar";
 import styles from "./styles.module.scss";
-import { innerNavigationScripts } from "../constants/inner-navigation";
+import {
+  innerNavigationScripts,
+  presetNavigation,
+} from "../constants/inner-navigation";
+import ScriptsLogInfo from "./ScriptsLogInfo/ScriptsLogInfo";
 
 export default function CustomRouter() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -67,6 +71,11 @@ export default function CustomRouter() {
                 key={to}
               ></Route>
             ))}
+            <Route
+              path={`${routes.scripts_logs}/:id`}
+              exact
+              component={(props) => <ScriptsLogInfo {...props} />}
+            ></Route>
             {innerNavigation.map(({ to, component }) => (
               <Route
                 path={`${to}/:id`}
@@ -83,19 +92,20 @@ export default function CustomRouter() {
                 )}
               ></Route>
             ))}
-            {innerNavigationScripts.map(({ to, component }) => (
-              <Route
-                path={to}
-                exact
-                key={to}
-                component={(props) => (
-                  <div className={styles.inner}>
-                    <InnerSidebar links={innerNavigationScripts}  {...props}/>
-                    <div className={styles.wrapper}>{component}</div>
-                  </div>
-                )}
-              ></Route>
-            ))}
+            {[...presetNavigation, ...innerNavigationScripts].map(
+              ({ to, Component }) => (
+                <Route
+                  path={to}
+                  key={to}
+                  component={(props) => (
+                    <div className={styles.inner}>
+                      <InnerSidebar links={innerNavigationScripts} {...props} />
+                      <div className={styles.wrapper}><Component {...props}/></div>
+                    </div>
+                  )}
+                ></Route>
+              )
+            )}
           </div>
         </div>
       </Switch>
