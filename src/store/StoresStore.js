@@ -104,7 +104,8 @@ class StoresStore {
     try {
       await refreshToken();
 
-      let url = `https://staptest.mcd-cctv.com/api/store/?limit=${limit}&offset=${offset}&search=${search}&filtered_by=${field}&type=${type}`;
+      let url = `https://staptest.mcd-cctv.com/api/store/?limit=${limit}&offset=${offset}
+                 &search=${search}&filtered_by=${field}&type=${type}`;
       this.isLoading++;
 
       if (
@@ -113,7 +114,7 @@ class StoresStore {
           (key) => this.enabledFilters[key]?.length
         )
       ) {
-        let filtersForReq = configureFilters(this.enabledFilters);
+        let filtersForReq = createDateFilters(this.enabledFilters);
 
         Object.keys(filtersForReq).map(
           (key) => (url += `&${key}=${filtersForReq[key]}`)

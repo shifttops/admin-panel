@@ -2,6 +2,12 @@ import { filtersRequestMapper } from "./mappers";
 
 export const createDateFilters = (filters) => {
   Object.keys(filters).forEach((filterKey) => {
+    const reqKey = filtersRequestMapper.find(
+        (item) => filterKey === item.name
+    )?.reqName;
+
+    const key = reqKey || filterKey
+
     if (
       filterKey === "date_deployment__range" ||
       filterKey === "date_created__range"
@@ -13,53 +19,6 @@ export const createDateFilters = (filters) => {
         filters[filterKey][index] = new Date(0).toISOString();
       }
     }
-    // const dateFilterKey = filterKey.split("__lte")[0].split("__gte")[0];
-    // if (
-    //   filters[`${dateFilterKey}__lte`] &&
-    //   filters[`${dateFilterKey}__gte`]
-    //   ) {
-    //     filters[`${dateFilterKey}__range`] = [
-    //       filters[`${dateFilterKey}__gte`],
-    //     filters[`${dateFilterKey}__lte`],
-    //   ];
-    //   delete filters[`${dateFilterKey}__lte`];
-    //   delete filters[`${dateFilterKey}__gte`];
-
-        // } else if (filters[`${dateFilterKey}__gte`]) {
-        //   filters[`${dateFilterKey}__lte`] = new Date().toISOString();
-        // } else if (filters[`${dateFilterKey}__lte`]) {
-        //   filters[`${dateFilterKey}__gte`] = new Date().toISOString();
-        // }
-
-        // if (
-        //     filters[`${dateFilterKey}__lte`] &&
-        //     filters[`${dateFilterKey}__gte`]
-        //   ) {
-        //     filters[`${dateFilterKey}__range`] = [
-        //       filters[`${dateFilterKey}__gte`],
-        //       filters[`${dateFilterKey}__lte`],
-        //     ];
-        //     delete filters[`${dateFilterKey}__lte`];
-        //     delete filters[`${dateFilterKey}__gte`];
-  
-        //   }
-      });
-      return filters;
-}
-
-export const configureFilters = (enabledFilters) => {
-  const filtersForReq = {};
-
-  Object.keys(enabledFilters).forEach((key) => {
-    let reqKey = filtersRequestMapper.find(
-        (item) => key === item.name
-    )?.reqName;
-    if (reqKey) {
-      filtersForReq[reqKey] = enabledFilters[key];
-    } else {
-      filtersForReq[key] = enabledFilters[key];
-    }
   });
-
-  return createDateFilters(filtersForReq);
+  return filters;
 };

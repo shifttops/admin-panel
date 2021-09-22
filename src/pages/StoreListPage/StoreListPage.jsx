@@ -94,17 +94,13 @@ const StoreListPage = observer(() => {
         signal: abortRef.current.signal,
       });
     }
-  }, [search, sort]);
+  }, [search, sort, enabledFilters]);
 
   useEffect(() => {
     if (!tempStores.length && refStores.current) {
       getStoresPart({ search, setError, limit: 30 });
     }
   }, [tempStores.length]);
-
-  useEffect(() => {
-    getStoresPart({ search, setError, limit: 30, offset: 0 });
-  }, [enabledFilters]);
 
   useEffect(() => {
     refStores.current = true;
