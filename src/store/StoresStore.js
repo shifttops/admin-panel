@@ -107,7 +107,7 @@ class StoresStore {
           (key) => this.enabledFilters[key]?.length
         )
       ) {
-        let filtersForReq = createDateFilters(this.enabledFilters);
+        const filtersForReq = createDateFilters(this.enabledFilters);
 
         Object.keys(filtersForReq).map(
           (key) => (url += `&${key}=${filtersForReq[key]}`)
@@ -125,8 +125,8 @@ class StoresStore {
       const res = await resp.json();
 
       this.tempStores = offset
-        ? (this.tempStores = [...this.tempStores, ...res.results])
-        : (this.tempStores = [...res.results]);
+        ? [...this.tempStores, ...res.results]
+        : [...res.results];
 
       this.isLoading--;
 
