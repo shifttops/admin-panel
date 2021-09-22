@@ -136,8 +136,12 @@ const DropDownFields = observer(({ field, serverIndex }) => {
             <ArrowDownIcon isOpen={isOpen} />
           </p>
           <div className={styles.temp_info}>
+            {console.log(storeInfo.servers[serverIndex].name !== "OEPE")}
             {items
-              .filter((item) => item.icon)
+              .filter(
+                (item) =>
+                  item.icon && storeInfo.servers[serverIndex].name !== "OEPE"
+              )
               .map((item) => (
                 <div key={item.keyName} className={styles.resultInfo}>
                   <div

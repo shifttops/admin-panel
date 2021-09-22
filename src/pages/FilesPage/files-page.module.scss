@@ -46,6 +46,7 @@
 
 .scriptBlock {
   display: flex;
+  position: relative;
   flex-direction: column;
   align-items: flex-start;
   border: 1px solid $color-green;
@@ -53,6 +54,11 @@
   margin-right: 20px;
   margin-bottom: 20px;
   padding: 15px;
+  >.close{
+    position: absolute;
+    top: 5px;
+    right: 10px;
+  }
   > .tags {
     padding: 0;
     margin-bottom: 5px;

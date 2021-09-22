@@ -37,7 +37,7 @@ const ScriptsLogInfo = observer((props) => {
           <Button Icon={DateIcon} text="Last 24 hours" />
         </div>
       </div>
-      <table className={styles.table}>
+      {/* <table className={styles.table}>
         <thead className={styles.tableHead}>
           <tr>
             {Object.keys(logInfo).map((key) => (
@@ -48,41 +48,26 @@ const ScriptsLogInfo = observer((props) => {
         <tbody>
           <tr>
             {Object.keys(logInfo).map((key) => (
-              <td key={key}>{logInfo[key]}</td>
+              <td key={key}>{logInfo[key] && logInfo[key].ansible_output ? logInfo[key].ansible_output : logInfo[key]}</td>
             ))}
           </tr>
-          {/* {logs.map((log) => (
-          ))} */}
-          {/* {sortFunc(searchLogs(search), sort).map((log) => (
-            <tr key={`${log.error_time ? "Error " : ""}${log.id}`}>
-              <td className={styles.name}>
-                <Checkbox
-                  className={styles.checkbox}
-                  label={log.error_time ? "Fault Log" : "Jira Log"}
-                />
-              </td>
-              <td>{log.error_time ? "Store Error" : log.status}</td>
-              <td className={log.error_time ? styles.fail : styles.success}>
-                {log.error_time ? "Error" : "Success"}
-              </td>
-              <td>{log.store}</td>
-              <td>
-                {moment(
-                  log.error_time ? log.error_time : log.changed_on
-                ).format("DD.MM.YYYY")}
-              </td>
-              <td>
-                {moment(
-                  log.error_time ? log.error_time : log.changed_on
-                ).format("HH:mm")}
-              </td>
-              <td>
-                <ButtonIcon Icon={MoreIcon} className={styles.btnMore} />
-              </td>
-            </tr>
-          ))} */}
         </tbody>
-      </table>
+      </table> */}
+      <div className={styles.table}>
+        {Object.keys(logInfo).map((key) => (
+          <div key={key} className={styles.row}>
+            <b>{key.toUpperCase()}</b>
+
+            <span>
+              {logInfo[key] !== null || logInfo[key] !== undefined
+                ? logInfo[key].ansible_output
+                  ? logInfo[key].ansible_output.toString()
+                  : logInfo[key].toString()
+                : "N/A"}
+            </span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 });

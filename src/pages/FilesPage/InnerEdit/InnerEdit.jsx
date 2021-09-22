@@ -10,61 +10,212 @@ import "ace-builds/src-noconflict/theme-github";
 
 import { useState } from "react";
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 import { observer } from "mobx-react";
 import ScriptsStore from "../../../store/ScriptsStore";
+import { autorun, observe, reaction, toJS } from "mobx";
+import routes from "../../../constants/routes";
+import {
+  ToastsContainer,
+  ToastsContainerPosition,
+  ToastsStore,
+} from "react-toasts";
+import Popup from "reactjs-popup";
+import CheckoutsPopup from "../../../components/popups/CheckoutsPopup/CheckoutsPopup";
+import { useRef } from "react";
 
-const InnerEdit = observer(() => {
+const InnerEdit = observer((props) => {
   const [isComparingMode, setIsComparingMode] = useState(false);
   const [error, setError] = useState("");
+  const history = useHistory();
   const location = useLocation();
-  const { scripts, getScripts, updateScript } = ScriptsStore;
-  const scriptId =
-    +location.pathname.split("/")[location.pathname.split("/").length - 2];
+  const {
+    scripts,
+    parentScriptSource,
+    presets,
+    script,
+    getScripts,
+    updateScript,
+    copyScript,
+    getScript,
+    getPresets,
+  } = ScriptsStore;
 
-  const [value, setValue] = useState(["", ""]);
+  const ref = useRef(null);
+
+  // const [script, setScript] = useState({
+  //   ...scripts.find(
+  //     (script) =>
+  //       script.playbook_id ===
+  //       +location.pathname.split("/")[location.pathname.split("/").length - 2]
+  //   ),
+  // });
+
+  const [name, setName] = useState();
 
   const handleChange = (newValue) => {
-    setValue((prev) => (isComparingMode ? newValue : [newValue, prev[1]]));
+    script.current = {
+      ...script.current,
+      source: isComparingMode ? newValue[0] : newValue,
+    };
   };
 
-  const handleSave = () => {
-    updateScript({
-      source: value[0],
-      script: scripts.find((script) => script.playbook_id === scriptId),
-      setError,
-    });
+  const handleSave = async () => {
+    if (script.current.playbook_id) {
+      const initialScript = scripts.find(
+        (initial) => initial.playbook_id === script.current.playbook_id
+      );
+      if (
+        initialScript.source !== script.current.source ||
+        initialScript.name !== script.current.name
+      ) {
+        const newScript = await updateScript({
+          script: script.current,
+          setError,
+        });
+        scripts.splice(
+          0,
+          scripts.findIndex(
+            (findScript) =>
+              findScript.playbook_id === script.current.playbook_id
+          ),
+          newScript
+        );
+        history.push(`${routes.scripts}/${newScript.playbook_id}/mode=edit`);
+      } else {
+        ToastsStore.error("Scripts are equal", 3000, "toast");
+      }
+    } else {
+      if (script.current.name && script.current.source) {
+        const newScript = await updateScript({
+          script: script.current,
+          setError,
+        });
+        if (newScript) {
+          scripts.push(newScript);
+          history.push(`${routes.scripts}/${newScript.playbook_id}/mode=edit`);
+        }
+      } else {
+        ToastsStore.error("Name and source are required", 3000, "toast");
+      }
+    }
+  };
+
+  const handleCopy = async () => {
+    if (script.current.playbook_id) {
+      const newScript = await copyScript({
+        playbook_id: script.current.playbook_id,
+        setError,
+      });
+      if (newScript) {
+        scripts.push(newScript);
+        history.push(`${routes.scripts}/${newScript.playbook_id}/mode=edit`);
+      }
+    } else {
+      ToastsStore.error("There is nothing to copy", 3000, "toast");
+    }
   };
 
   const handleCompare = () => {
     setIsComparingMode((prev) => !prev);
   };
 
-  useEffect(() => {
-    if (!scripts.length) {
-      getScripts(setError);
-    }
-  }, []);
+  const handleNameChange = (newName) => {
+    script.current = {
+      ...script.current,
+      name: newName,
+    };
+  };
 
   useEffect(() => {
-    if (scripts.length && !value[0]) {
-      const temp = scripts.find((script) => script.playbook_id === scriptId);
-      const parentSource = scripts.find(
-        (parent) => temp?.parent_id === parent.playbook_id
-      )?.source;
-      setValue([temp?.source, parentSource ? parentSource : ""]);
+    console.log(scripts);
+    if (!scripts.length) {
+      console.log(123123);
+      getScripts(setError);
     }
-  }, [scripts]);
+  }, [scripts.length]);
+
+  // useEffect(() => {
+  //   console.log(script.current.playbook_id, ref.current);
+  //   if (script.current.playbook_id && ref.current) {
+  //     getPresets(script.current.playbook_id);
+  //   }
+  // }, [script.current.playbook_id]);
+
+  // const autorun1 = autorun(() => getPresets(script.current.playbook_id));
+  // const reaction2 = reaction(
+  //   () => script.current.playbook_id,
+  //   (id, reaction) => {
+  //     console.log(123,id);
+  //     // if()
+  //     getPresets(id);
+  //   }
+  // );
+
+  useEffect(() => {
+    if (scripts && !script.current.playbook_id) {
+      script.current = {
+        ...scripts.find(
+          (script) =>
+            script.playbook_id === +props.match.params.id
+        ),
+      };
+      // setScript({
+      //   ...scripts.find(
+      //     (script) =>
+      //       script.playbook_id ===
+      //       +location.pathname.split("/")[
+      //         location.pathname.split("/").length - 2
+      //       ]
+      //   ),
+      // });
+    }
+  }, [scripts.length]);
+
+  useEffect(() => {
+    if (scripts.length) {
+      // if (!Object.keys(script).length) {
+      //   console.log(123);
+      //   setScript({
+      //     ...scripts.find(
+      //       (script) =>
+      //         script.playbook_id ===
+      //         +location.pathname.split("/")[
+      //           location.pathname.split("/").length - 2
+      //         ]
+      //     ),
+      //   });
+      // }
+      if (script.current?.parent_id) {
+        getScript({ parent_id: script.current?.parent_id, setError });
+      }
+    }
+  }, [script.current]);
+
+  
+  useEffect(() => {
+    
+    // if (script.playbook_id) {
+    //   getPresets(script.playbook_id);
+    // }
+    ref.current = true;
+  }, []);
 
   return (
     <div className={styles.page}>
       {scripts.length ? (
         <>
+          <input
+            type="text"
+            className={styles.dashboardHead__title}
+            value={script.current?.name || ""}
+            onChange={(e) => handleNameChange(e.target.value)}
+          />
           <div className={styles.buttons}>
             {isComparingMode ? (
               <DiffEditor
                 className={styles.editor}
-                value={value}
+                value={[script.current?.source, parentScriptSource]}
                 height="500px"
                 width="100%"
                 setOptions={{
@@ -79,7 +230,7 @@ const InnerEdit = observer(() => {
                 mode="yaml"
                 onChange={handleChange}
                 name="UNIQUE_ID_OF_DIV"
-                value={value[0]}
+                value={script.current?.source}
                 showPrintMargin
                 showGutter={true}
                 highlightActiveLine
@@ -95,12 +246,24 @@ const InnerEdit = observer(() => {
 
           <div className={styles.buttons}>
             <Button text="Save" onClick={handleSave} />
+
+            <Popup modal trigger={<Button text="Checkout" />}>
+              {(close) => (
+                <CheckoutsPopup onClose={close} playbook={script.current} />
+              )}
+            </Popup>
+
+            <Button text="Copy" onClick={handleCopy} />
             <Button
               text={isComparingMode ? "Hide diff" : "Show diff"}
               onClick={handleCompare}
               className="orange"
             />
           </div>
+          <ToastsContainer
+            store={ToastsStore}
+            position={ToastsContainerPosition.BOTTOM_RIGHT}
+          />
         </>
       ) : (
         "Loading..."

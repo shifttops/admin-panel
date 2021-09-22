@@ -40,6 +40,8 @@ export default function ScriptsStoresTable({
     });
   };
 
+  console.log(3456789098765, enabledStores);
+
   return (
     <div className={styles.block}>
       <div className={styles.head}>
@@ -58,10 +60,10 @@ export default function ScriptsStoresTable({
               <div
                 className={styles.list_row}
                 key={host.id}
-                onClick={(e) => handleCheckStore(e, host.id)}
+                onClick={(e) => handleCheckStore(e, host.display)}
               >
                 <Checkbox
-                  checked={enabledStores[mode.toLowerCase()].includes(host.id)}
+                  checked={enabledStores[mode.toLowerCase()].includes(host.display)}
                   label={host.display}
                   onChange={() => undefined}
                 ></Checkbox>

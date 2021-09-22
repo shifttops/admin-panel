@@ -19,14 +19,26 @@ import {
 import { NavLink } from "react-router-dom";
 import routes from "../../../constants/routes";
 
-const InnerLaunch = observer(() => {
+const InnerLaunch = observer((props) => {
   const location = useLocation();
-  const { scripts, hosts, getScripts, getHosts, launchScript } = ScriptsStore;
-  const scriptId =
-    +location.pathname.split("/")[location.pathname.split("/").length - 2];
+  const {
+    scripts,
+    script,
+    preset,
+    hosts,
+    presets,
+    getScripts,
+    getHosts,
+    launchScript,
+    getPresets,
+    createPreset,
+  } = ScriptsStore;
+  const scriptId = +props.match.params.id;
+  const presetId = +props.match.params.preset_id;
 
   const [rows, setRows] = useState([]);
   const [error, setError] = useState("");
+  const [name, setName] = useState("");
   const [log_id, setLogId] = useState("");
 
   const [enabledStores, setEnabledStores] = useState({ hosts: [], groups: [] });
@@ -38,10 +50,34 @@ const InnerLaunch = observer(() => {
     });
   };
 
+  const handleCreatePreset = () => {
+    const launchHosts = {};
+    Object.keys(enabledStores).forEach((key) => {
+      launchHosts[key] = enabledStores[key].map(
+        (name) => hosts[key].find((host) => host.display === name)?.id
+      );
+    });
+    if (name && (enabledStores.hosts.length || enabledStores.groups.length)) {
+      createPreset({
+        name,
+        script_id: scriptId,
+        hosts: launchHosts,
+        variables: rows,
+        setError,
+      });
+    }
+  };
+
   const handleLaunch = async () => {
+    const launchHosts = {};
+    Object.keys(enabledStores).forEach((key) => {
+      launchHosts[key] = enabledStores[key].map(
+        (name) => hosts[key].find((host) => host.display === name)?.id
+      );
+    });
     setLogId(
       await launchScript({
-        hosts: enabledStores,
+        hosts: launchHosts,
         playbook_id: scriptId,
         variables: rows,
         setError,
@@ -57,90 +93,135 @@ const InnerLaunch = observer(() => {
     if (!Object.keys(hosts).length) {
       getHosts(setError);
     }
+    if (!presets.length) {
+      getPresets(scriptId);
+    }
+    return () => {
+      setEnabledStores({ hosts: [], groups: [] });
+      preset.current = {};
+    };
   }, []);
 
   useEffect(() => {
-    if (scripts.length) {
-      const temp = scripts.find((script) => script.playbook_id === scriptId);
-      if (temp) {
-        setRows(
-          temp.variables.reduce((res, item) => {
-            res[item] = "";
-            return res;
-          }, {})
-        );
+    if (presets.length && presetId) {
+      preset.current = presets.find((item) => item.pk === presetId);
+      if (preset.current) {
+        setRows(() => {
+          const temp = {};
+          preset.current.mappings.forEach(
+            (item) => (temp[item.variable] = item.value)
+          );
+          return temp;
+        });
       }
     }
-  }, [scripts]);
+  }, [presets, preset.current]);
 
-  return (
-    <div className={styles.page}>
-      {scripts.length ? (
-        <>
-          <div>
-            <table className={styles.table}>
-              <thead className={styles.head}>
-                <tr>
-                  <th>Variables</th>
-                  <th>Values</th>
+  useEffect(() => {
+    if (hosts.hosts?.length && presets.length && preset.current.pk) {
+      setEnabledStores((prev) => {
+        prev.hosts = preset.current.hosts.map(
+          (host) => hosts.hosts.find((item) => host === item.id)?.display
+        );
+        return { ...prev };
+      });
+    }
+  }, [hosts, presets, preset.current]);
+
+  useEffect(() => {
+    if (scripts.length && !script.current.playbook_id && !presetId) {
+      script.current = scripts.find(
+        (script) => script.playbook_id === scriptId
+      );
+    }
+    if (script.current.playbook_id) {
+      setRows(
+        script.current.variables.reduce((res, item) => {
+          res[item] = "";
+          return res;
+        }, {})
+      );
+    }
+  }, [scripts, script.current]);
+
+  return scripts.length ? (
+    <>
+      <div className={styles.page}>
+        <div>
+          <table className={styles.table}>
+            <thead className={styles.head}>
+              <tr>
+                <th>Variables</th>
+                <th>Values</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Object.keys(rows).map((variable, index) => (
+                <tr key={index} className={styles.table_row}>
+                  <td>{variable}</td>
+                  <td>
+                    <input
+                      type="text"
+                      value={rows[variable]}
+                      placeholder="Value"
+                      onChange={(e) => handleChange(e.target.value, variable)}
+                    />
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {Object.keys(rows).map((variable, index) => (
-                  <tr key={index} className={styles.table_row}>
-                    <td>{variable}</td>
-                    <td>
-                      <input
-                        type="text"
-                        value={rows[variable]}
-                        placeholder="Value"
-                        onChange={(e) => handleChange(e.target.value, variable)}
-                      />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <Popup
-              modal
-              trigger={
-                <Button
-                  text="Launch"
-                  className="launch_btn"
-                  // onClick={handleLaunch}
-                />
-              }
-            >
-              {(close) => (
-                <LaunchPopup
-                  handleLaunch={handleLaunch}
-                  enabledStores={enabledStores}
-                  rows={rows}
-                  onClose={close}
-                ></LaunchPopup>
-              )}
-            </Popup>
-          </div>
+              ))}
+            </tbody>
+          </table>
+          <Popup
+            modal
+            trigger={<Button text="Launch" className="launch_btn" />}
+          >
+            {(close) => (
+              <LaunchPopup
+                handleLaunch={handleLaunch}
+                enabledStores={enabledStores}
+                rows={rows}
+                onClose={close}
+              ></LaunchPopup>
+            )}
+          </Popup>
+        </div>
 
-          <ScriptsStoresTable
-            enabledStores={enabledStores}
-            setEnabledStores={setEnabledStores}
-            hosts={hosts}
-          />
-          <div className={log_id ? styles.popup : styles.closed}>
+        <ScriptsStoresTable
+          enabledStores={enabledStores}
+          setEnabledStores={setEnabledStores}
+          hosts={hosts}
+        />
+        <div className={log_id ? styles.popup : styles.closed}>
+          {log_id ? (
             <NavLink to={`${routes.scripts_logs}/${log_id.task_id}`}>
               Click here to check execution
             </NavLink>
-          </div>
-          <ToastsContainer
-            store={ToastsStore}
-            position={ToastsContainerPosition.BOTTOM_RIGHT}
-          />
-        </>
-      ) : (
-        "Loading..."
-      )}
-    </div>
+          ) : (
+            ""
+          )}
+        </div>
+        <ToastsContainer
+          store={ToastsStore}
+          position={ToastsContainerPosition.BOTTOM_RIGHT}
+        />
+      </div>
+      <div className={styles.set_preset}>
+        <Button
+          text="Save as preset"
+          className="launch_btn"
+          onClick={handleCreatePreset}
+        />
+        <input
+          type="text"
+          value={name}
+          placeholder="Enter preset name"
+          onChange={(e) => setName(e.target.value)}
+        />
+      </div>
+    </>
+  ) : (
+    "Loading..."
   );
+  // </>
 });
 export default InnerLaunch;
