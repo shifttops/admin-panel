@@ -128,23 +128,23 @@ const FilterDropdownButton = observer(
               </div>
             ) : (
               filterValues.map((filter, i) =>
-                (filterKey === "status" ? filter[1] : filter[filterKey]) ? (
+                (filterKey === "status" ? filter : filter[filterKey]) ? (
                   <div className={styles.checkbox_div} key={`${text}${i}`}>
                     <input
                       type="checkbox"
                       checked={enabledFiltersForKey.includes(
-                        filterKey === "status" ? filter[0] : filter[filterKey]
+                        filterKey === "status" ? filter : filter[filterKey]
                       )}
                       onChange={(e) =>
                         handleCheckFilter(
                           e,
-                          filterKey === "status" ? filter[0] : filter[filterKey]
+                          filterKey === "status" ? filter : filter[filterKey]
                         )
                       }
                       id={`${text}${i}`}
                     />
                     <label htmlFor={`${text}${i}`}>
-                      {filterKey === "status" ? filter[1] : filter[filterKey]}
+                      {filterKey === "status" ? filter : filter[filterKey]}
                     </label>
                   </div>
                 ) : null

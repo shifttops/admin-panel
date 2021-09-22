@@ -2,32 +2,57 @@ import styles from '../components/buttons/Button/button.module.scss'
 export const statusMapper = [
   {
     visibleName: "Store Deployed",
-    name: "W",
+    name: "Store Deployed",
     className: styles.deployed,
   },
   {
-    visibleName: "Hardware issues",
-    name: "B",
-    className: styles.maintenance,
+    visibleName: "Go Live",
+    name: "Ready for Deployment",
+    className: styles.test,
   },
   {
-    visibleName: "Configuring",
-    name: "C",
-    className: styles.configuration,
+    visibleName: "Algorithm configuring",
+    name: "Algorithm configuring",
+    className: styles.test,
   },
   {
-    visibleName: "Ready for Deployment",
-    name: "R",
-    className: styles.ready,
+    visibleName: "MCD blocked",
+    name: "MCD blocked",
+    className: styles.test,
   },
   {
-    visibleName: "Store Testing",
-    name: "T",
+    visibleName: "Deployment",
+    name: "Deployment",
+    className: styles.test,
+  },
+  {
+    visibleName: "Epic Backlog",
+    name: "Epic Backlog",
+    className: styles.test,
+  },
+  {
+    visibleName: "Store testing",
+    name: "Store testing",
     className: styles.test,
   },
   {
     visibleName: "Software Issues",
-    name: "M",
+    name: "Software Issues",
+    className: styles.maintenance,
+  },
+  {
+    visibleName: "Hardware issues",
+    name: "Hardware issues",
+    className: styles.maintenance,
+  },
+  {
+    visibleName: "Cameras position issue",
+    name: "Cameras position issue",
+    className: styles.maintenance,
+  },
+  {
+    visibleName: "N/A",
+    name: null,
     className: styles.maintenance,
   },
 ];
