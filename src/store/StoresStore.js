@@ -15,6 +15,7 @@ class StoresStore {
   enabledFilters = {
     ...queryString.parse(window.location.search, { arrayFormat: "comma" }),
   };
+  maintenanceScreens = [];
 
   constructor() {
     makeAutoObservable(
@@ -356,6 +357,56 @@ class StoresStore {
       setError(e.message);
     }
   };
+
+  getMaintenanceScreens = async (setError) => {
+    try {
+      await refreshToken();
+      const resp = await fetch(`https://staptest.mcd-cctv.com/api/status/`, {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${localStorage.getItem("access")}`,
+        },
+      });
+
+      const res = await resp.json();
+      this.maintenanceScreens = [...res.results.find(screen => screen.name === this.storeInfo.status).maintenance_screen];
+
+      setError("");
+    } catch (e) {
+      setError(e.message);
+    }
+  };
+
+  setMaintenanceScreen = async ({ setError, screen}) => {
+    try {
+      await refreshToken();
+
+      const resp = await fetch(
+        `https://staptest.mcd-cctv.com/api/set_store_status/${this.storeInfo.store_id}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Token ${localStorage.getItem("access")}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ status: this.storeInfo.status, title: screen}),
+        }
+      );
+
+      if(resp.status === 200){
+        setError("");
+
+        return !!resp.status
+      }
+    }
+    catch (e) {
+      setError(e.message)
+    }
+  };
+
+  updateJiraStatus = async () => {
+
+  }
 }
 
 export default new StoresStore();
