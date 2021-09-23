@@ -6,6 +6,7 @@ import global from "scss/global.scss";
 import ButtonChoice from "components/buttons/ButtonChoice";
 import Button from "components/buttons/Button";
 import { useState } from "react";
+import { ToastsStore } from "react-toasts";
 import { refreshToken } from "../../../helpers/AuthHelper";
 
 export default function ReportPopup({ onClose, checkedStores }) {
@@ -40,36 +41,43 @@ export default function ReportPopup({ onClose, checkedStores }) {
   };
 
   const handleCreateReport = async () => {
-    try {
-      await refreshToken();
+    if (!checkedStores.length) {
+      ToastsStore.error("Select at least 1 store", 3000, "toast");
+    } else {
+      try {
+        await refreshToken();
 
-      const resp = await fetch("https://staptest.mcd-cctv.com/api/reports/", {
-        method: "POST",
-        headers: {
-          Authorization: `Token ${localStorage.getItem("access")}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          store_ids: checkedStores,
-          report_type: selectedType,
-          period: selectedPeriod,
-        }),
-      });
-      if (resp.status === 200) {
-        const res = await resp.blob();
-        let link = document.createElement("a");
-        document.body.appendChild(link);
+        const resp = await fetch("https://staptest.mcd-cctv.com/api/reports/", {
+          method: "POST",
+          headers: {
+            Authorization: `Token ${localStorage.getItem("access")}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            store_ids: checkedStores,
+            report_type: selectedType,
+            period: selectedPeriod,
+          }),
+        });
+        if (resp.status === 200) {
+          const res = await resp.blob();
+          let link = document.createElement("a");
+          document.body.appendChild(link);
 
-        var url = window.URL.createObjectURL(res);
-        link.href = url;
-        link.download = `download.xlsx`;
-        link.click();
-        window.URL.revokeObjectURL(url);
-        document.body.removeChild(link);
-        setError("");
-      } else setError("No file");
-    } catch (e) {
-      setError(e.message);
+          var url = window.URL.createObjectURL(res);
+          link.href = url;
+          link.download = `download.xlsx`;
+          link.click();
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(link);
+          setError("");
+        } else {
+          const res = await resp.json();
+          ToastsStore.error(res.error, 3000, "toast");
+        }
+      } catch (e) {
+        setError(e.message);
+      }
     }
   };
 

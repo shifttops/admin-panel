@@ -28,9 +28,13 @@ class ScriptsStore {
     makeAutoObservable(this);
     this.disposer = observe(this.script, (change) => {
       if (
+        change.object[change.name].playbook_id &&
         change.oldValue.playbook_id !== change.object[change.name].playbook_id
       ) {
         this.getPresets(change.object[change.name].playbook_id);
+        if (change.object[change.name].parent_id) {
+          this.getScript({ parent_id: change.object[change.name].parent_id});
+        }
       }
     });
   }
@@ -106,7 +110,7 @@ class ScriptsStore {
     }
   };
 
-  getScript = async ({ parent_id, setError }) => {
+  getScript = async ({ parent_id }) => {
     try {
       await refreshToken();
 
@@ -122,9 +126,9 @@ class ScriptsStore {
       const res = await resp.json();
       this.parentScriptSource = res.source;
       console.log(res);
-      setError("");
+      // setError("");
     } catch (e) {
-      setError(e.message);
+      ToastsStore.error(e.error, 3000, "toast");
     }
   };
 
@@ -365,7 +369,7 @@ class ScriptsStore {
       await refreshToken();
 
       const resp = await fetch(
-        `https://staptest.mcd-cctv.com/api/ansible_playbook_logs/?limit=99`,
+        `https://staptest.mcd-cctv.com/api/ansible_playbook_logs/?limit=999`,
         {
           method: "GET",
           headers: {

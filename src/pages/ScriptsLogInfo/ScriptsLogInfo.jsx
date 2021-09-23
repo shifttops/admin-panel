@@ -18,7 +18,6 @@ const ScriptsLogInfo = observer((props) => {
   const [sort, setSort] = useState({ type: "none" });
   const location = useLocation();
   const task_id = props.match.params.id;
-  console.log(props);
 
   useEffect(() => {
     getScriptLogInfo({ task_id, setError });
@@ -59,7 +58,7 @@ const ScriptsLogInfo = observer((props) => {
             <b>{key.toUpperCase()}</b>
 
             <span>
-              {logInfo[key] !== null || logInfo[key] !== undefined
+              {logInfo[key] !== null && logInfo[key] !== undefined
                 ? logInfo[key].ansible_output
                   ? logInfo[key].ansible_output.toString()
                   : logInfo[key].toString()

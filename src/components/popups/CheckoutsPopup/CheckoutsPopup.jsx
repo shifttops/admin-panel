@@ -16,8 +16,8 @@ import ScriptsStore from "../../../store/ScriptsStore";
 import { ToastsStore } from "react-toasts";
 import routes from "../../../constants/routes";
 
-const CheckoutsPopup = observer(({ onClose, playbook }) => {
-  const { checkouts, scripts, checkoutScript, getCheckouts } = ScriptsStore;
+const CheckoutsPopup = observer(({ onClose }) => {
+  const { checkouts, script, scripts, checkoutScript, getCheckouts } = ScriptsStore;
   const [error, setError] = useState(false);
   // const [enabledFilters, setEnabledFilters] = useState(queryString.parse(location.search, { arrayFormat: 'comma' }));
   const history = useHistory();
@@ -31,18 +31,18 @@ const CheckoutsPopup = observer(({ onClose, playbook }) => {
   const handleCheckout = async () => {
     if (checked) {
       const newScript = await checkoutScript({
-        playbook_id: playbook.playbook_id,
+        playbook_id: script.current.playbook_id,
         checkout_id: checked,
         setError,
       });
       scripts.splice(
         scripts.findIndex(
-          (script) => script.playbook_id === playbook.playbook_id
+          (playbook) => playbook.playbook_id === script.current.playbook_id
         ),
         1,
         newScript
       );
-      playbook = { ...newScript };
+      script.current = { ...newScript };
       history.push(`${routes.scripts}/${checked}/mode=edit`);
     } else {
       ToastsStore.error("Select version", 3000, "toast");
@@ -51,13 +51,15 @@ const CheckoutsPopup = observer(({ onClose, playbook }) => {
   };
 
   useEffect(() => {
+    console.log('checkout');
     if (
-      Object.values(checkouts).every((value) => !value.length) &&
-      playbook.playbook_id
+      // Object.values(checkouts).every((value) => !value.length)
+      //  &&
+      script.current.playbook_id
     ) {
-      getCheckouts({ playbook_id: playbook.playbook_id, setError });
+      getCheckouts({ playbook_id: script.current.playbook_id, setError });
     }
-  }, [playbook.playbook_id]);
+  }, [script.current.playbook_id]);
 
   return (
     <div className={styles.popup}>

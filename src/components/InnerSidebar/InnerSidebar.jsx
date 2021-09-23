@@ -71,10 +71,4 @@ const InnerSidebar = observer((props) => {
   );
 });
 
-export default memo(
-  InnerSidebar,
-  (prevProps, nextProps) =>{
-    console.log(99999999,prevProps, nextProps);
-    return true
-  }
-);
+export default InnerSidebar;

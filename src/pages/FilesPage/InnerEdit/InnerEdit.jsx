@@ -31,7 +31,6 @@ const InnerEdit = observer((props) => {
   const location = useLocation();
   const {
     scripts,
-    parentScriptSource,
     presets,
     script,
     getScripts,
@@ -40,6 +39,9 @@ const InnerEdit = observer((props) => {
     getScript,
     getPresets,
   } = ScriptsStore;
+
+  let { parentScriptSource } = ScriptsStore;
+  const [tempScript, setTempScript] = useState(null);
 
   const ref = useRef(null);
 
@@ -54,23 +56,23 @@ const InnerEdit = observer((props) => {
   const [name, setName] = useState();
 
   const handleChange = (newValue) => {
-    script.current = {
-      ...script.current,
+    setTempScript((prev) => ({
+      ...prev,
       source: isComparingMode ? newValue[0] : newValue,
-    };
+    }));
   };
 
   const handleSave = async () => {
     if (script.current.playbook_id) {
-      const initialScript = scripts.find(
-        (initial) => initial.playbook_id === script.current.playbook_id
-      );
+      // const initialScript = scripts.find(
+      //   (initial) => initial.playbook_id === script.current.playbook_id
+      // );
       if (
-        initialScript.source !== script.current.source ||
-        initialScript.name !== script.current.name
+        tempScript.source !== script.current.source ||
+        tempScript.name !== script.current.name
       ) {
         const newScript = await updateScript({
-          script: script.current,
+          script: tempScript,
           setError,
         });
         scripts.splice(
@@ -81,18 +83,20 @@ const InnerEdit = observer((props) => {
           ),
           newScript
         );
+        script.current = { ...newScript };
         history.push(`${routes.scripts}/${newScript.playbook_id}/mode=edit`);
       } else {
         ToastsStore.error("Scripts are equal", 3000, "toast");
       }
     } else {
-      if (script.current.name && script.current.source) {
+      if (tempScript.name && tempScript.source) {
         const newScript = await updateScript({
-          script: script.current,
+          script: tempScript,
           setError,
         });
         if (newScript) {
           scripts.push(newScript);
+          script.current = { ...newScript };
           history.push(`${routes.scripts}/${newScript.playbook_id}/mode=edit`);
         }
       } else {
@@ -109,6 +113,8 @@ const InnerEdit = observer((props) => {
       });
       if (newScript) {
         scripts.push(newScript);
+        script.current = { ...newScript };
+        parentScriptSource = "";
         history.push(`${routes.scripts}/${newScript.playbook_id}/mode=edit`);
       }
     } else {
@@ -121,10 +127,10 @@ const InnerEdit = observer((props) => {
   };
 
   const handleNameChange = (newName) => {
-    script.current = {
-      ...script.current,
+    setTempScript((prev) => ({
+      ...prev,
       name: newName,
-    };
+    }));
   };
 
   useEffect(() => {
@@ -156,8 +162,7 @@ const InnerEdit = observer((props) => {
     if (scripts && !script.current.playbook_id) {
       script.current = {
         ...scripts.find(
-          (script) =>
-            script.playbook_id === +props.match.params.id
+          (script) => script.playbook_id === +props.match.params.id
         ),
       };
       // setScript({
@@ -174,30 +179,14 @@ const InnerEdit = observer((props) => {
 
   useEffect(() => {
     if (scripts.length) {
-      // if (!Object.keys(script).length) {
-      //   console.log(123);
-      //   setScript({
-      //     ...scripts.find(
-      //       (script) =>
-      //         script.playbook_id ===
-      //         +location.pathname.split("/")[
-      //           location.pathname.split("/").length - 2
-      //         ]
-      //     ),
-      //   });
+      setTempScript({ ...script.current });
+      // if (script.current?.parent_id) {
+      //   getScript({ parent_id: script.current?.parent_id, setError });
       // }
-      if (script.current?.parent_id) {
-        getScript({ parent_id: script.current?.parent_id, setError });
-      }
     }
   }, [script.current]);
 
-  
   useEffect(() => {
-    
-    // if (script.playbook_id) {
-    //   getPresets(script.playbook_id);
-    // }
     ref.current = true;
   }, []);
 
@@ -208,14 +197,14 @@ const InnerEdit = observer((props) => {
           <input
             type="text"
             className={styles.dashboardHead__title}
-            value={script.current?.name || ""}
+            value={tempScript?.name || ""}
             onChange={(e) => handleNameChange(e.target.value)}
           />
           <div className={styles.buttons}>
             {isComparingMode ? (
               <DiffEditor
                 className={styles.editor}
-                value={[script.current?.source, parentScriptSource]}
+                value={[tempScript?.source, parentScriptSource]}
                 height="500px"
                 width="100%"
                 setOptions={{
@@ -230,7 +219,7 @@ const InnerEdit = observer((props) => {
                 mode="yaml"
                 onChange={handleChange}
                 name="UNIQUE_ID_OF_DIV"
-                value={script.current?.source}
+                value={tempScript?.source}
                 showPrintMargin
                 showGutter={true}
                 highlightActiveLine
