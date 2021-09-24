@@ -5,6 +5,7 @@ import { refreshToken } from "../helpers/AuthHelper";
 import queryString from "query-string";
 import { filtersRequestMapper } from "../helpers/mappers";
 import { createDateFilters } from "../helpers/dateForFiltersHelper";
+import ToastsStore from "../types/iconButtonTypes";
 
 class StoresStore {
   storeInfo = {};
@@ -369,7 +370,7 @@ class StoresStore {
       });
 
       const res = await resp.json();
-      this.maintenanceScreens = [...res.results.find(screen => screen.name === this.storeInfo.status).maintenance_screen];
+      this.maintenanceScreens = [...res.results.find(screen => screen.name === this.storeInfo.status)?.maintenance_screen];
 
       setError("");
     } catch (e) {
@@ -396,7 +397,10 @@ class StoresStore {
       if(resp.status === 200){
         setError("");
 
-        return !!resp.status
+        this.storeInfo.maintenance_screen = screen
+      }else {
+        const res = await resp.json();
+        ToastsStore.error(res.error, 3000, "toast");
       }
     }
     catch (e) {

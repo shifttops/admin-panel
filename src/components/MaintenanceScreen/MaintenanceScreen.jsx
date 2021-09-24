@@ -1,6 +1,6 @@
 import styles from "./maintenance-screen.module.scss";
 import Button from "../buttons/Button";
-import { useEffect, useState } from "react";
+import {useEffect, useRef, useState} from "react";
 import { ArrowDownIcon } from "../../icons";
 import StoresStore from "../../store/StoresStore";
 import { observer } from "mobx-react";
@@ -9,20 +9,23 @@ const MaintenanceScreen = observer(() => {
   const [isVisible, setIsVisible] = useState(false);
   const [error, setError] = useState("");
 
-  let {maintenanceScreens, getMaintenanceScreens, storeInfo, setMaintenanceScreen, getStoreInfo, updateJiraStatus} = StoresStore;
+  const {maintenanceScreens, getMaintenanceScreens, storeInfo, setMaintenanceScreen, getStoreInfo, updateJiraStatus} = StoresStore;
 
   useEffect(() => {
-    getMaintenanceScreens(setError);
+    if(!maintenanceScreens.length) getMaintenanceScreens(setError);
   }, [maintenanceScreens.length]);
 
-  const handleChoice = async (screen) => {
-    const isDone = await setMaintenanceScreen({ setError, screen });
-
-    if (isDone) {
-      getStoreInfo(storeInfo.store_id, setError);
+  const handleClick = (screen) => {
+    if(screen && screen !== storeInfo.maintenance_screen) {
+      handleChoice(screen)
     }
+  }
+
+  const handleChoice = (screen) => {
+    setMaintenanceScreen({ setError, screen });
     setIsVisible((prevVisibility) => !prevVisibility);
   };
+
 
   return (
     <div className={styles.maintenanceScreen}>
@@ -47,18 +50,20 @@ const MaintenanceScreen = observer(() => {
             <div className={styles.dropDown__body}>
               {maintenanceScreens.map((screen) => (
                 <div
-                  onClick={screen !== storeInfo.maintenance_screen && (() => handleChoice(screen))}
-                  className={styles.innerScreen + " " + (screen === storeInfo.maintenance_screen && styles.innerScreen__current)}
+                  onClick={() => handleClick(screen)}
+                  className={styles.innerScreen + " " + (screen === storeInfo.maintenance_screen ? styles.innerScreen__current : '')}
+                  key={screen}
                 >
                   {screen ? screen : "No messages"}
                 </div>
-              ))}
+              ))
+              }
             </div>
           </div>
         </div>
         <Button
           className={styles.maintenanceScreen__button}
-          onClick={() => updateJiraStatus()}
+          onClick={updateJiraStatus}
           text={"Update JIRA Status"}
         />
       </div>
