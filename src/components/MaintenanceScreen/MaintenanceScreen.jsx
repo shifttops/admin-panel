@@ -12,7 +12,7 @@ const MaintenanceScreen = observer(() => {
   const {maintenanceScreens, updateMaintenanceScreens, getMaintenanceScreens, storeInfo, setMaintenanceScreen, getStoreInfo, updateJiraStatus} = StoresStore;
 
   useEffect(() => {
-    if(!maintenanceScreens.length)getMaintenanceScreens(setError);
+    if(!maintenanceScreens.length) getMaintenanceScreens(setError);
     else updateMaintenanceScreens()
   }, [maintenanceScreens.length]);
 
