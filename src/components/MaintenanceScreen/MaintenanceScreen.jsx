@@ -9,10 +9,11 @@ const MaintenanceScreen = observer(() => {
   const [isVisible, setIsVisible] = useState(false);
   const [error, setError] = useState("");
 
-  const {maintenanceScreens, getMaintenanceScreens, storeInfo, setMaintenanceScreen, getStoreInfo, updateJiraStatus} = StoresStore;
+  const {maintenanceScreens, updateMaintenanceScreens, getMaintenanceScreens, storeInfo, setMaintenanceScreen, getStoreInfo, updateJiraStatus} = StoresStore;
 
   useEffect(() => {
-    if(!maintenanceScreens.length) getMaintenanceScreens(setError);
+    if(!maintenanceScreens.length)getMaintenanceScreens(setError);
+    else updateMaintenanceScreens()
   }, [maintenanceScreens.length]);
 
   const handleClick = (screen) => {
@@ -25,7 +26,6 @@ const MaintenanceScreen = observer(() => {
     setMaintenanceScreen({ setError, screen });
     setIsVisible((prevVisibility) => !prevVisibility);
   };
-
 
   return (
     <div className={styles.maintenanceScreen}>

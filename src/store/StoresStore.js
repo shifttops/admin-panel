@@ -17,6 +17,7 @@ class StoresStore {
     ...queryString.parse(window.location.search, { arrayFormat: "comma" }),
   };
   maintenanceScreens = [];
+  maintenanceScreensData = []
 
   constructor() {
     makeAutoObservable(
@@ -370,13 +371,18 @@ class StoresStore {
       });
 
       const res = await resp.json();
-      this.maintenanceScreens = [...res.results.find(screen => screen.name === this.storeInfo.status)?.maintenance_screen];
+      this.maintenanceScreensData = [...res.results];
+      this.updateMaintenanceScreens()
 
       setError("");
     } catch (e) {
       setError(e.message);
     }
   };
+
+  updateMaintenanceScreens = () => {
+    this.maintenanceScreens = [...this.maintenanceScreensData.find(screen => screen.name === this.storeInfo.status)?.maintenance_screen];
+  }
 
   setMaintenanceScreen = async ({ setError, screen}) => {
     try {
