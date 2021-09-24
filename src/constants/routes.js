@@ -15,6 +15,7 @@ const routes = {
   innerStatistic: "/stores/inner-statistic",
   login: "/login",
   logs: "/logs",
+  scripts_logs: "/scripts-logs",
   manageStore: "/stores/manage-store",
   setting: "/setting",
   storeInfo: "/stores/store-info",

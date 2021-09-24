@@ -64,7 +64,9 @@ class StoresStore {
             filtersForReq[key] = this.enabledFilters[key];
           }
         });
-        filtersForReq = createDateFilters(filtersForReq);
+        filtersForReq = createDateFilters(
+          JSON.parse(JSON.stringify(filtersForReq))
+        );
         const resp = await fetch("https://staptest.mcd-cctv.com/api/filters/", {
           method: "POST",
           headers: {
@@ -136,7 +138,9 @@ class StoresStore {
 
   getServersInfo = async ({ servers_id, setError }) => {
     const servers = await Promise.all(
-      servers_id.map((server_id) => this.getStoreServer({ server_id, setError }))
+      servers_id.map((server_id) =>
+        this.getStoreServer({ server_id, setError })
+      )
     ).catch((e) => setError(e));
 
     this.storeInfo = {

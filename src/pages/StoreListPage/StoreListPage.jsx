@@ -14,11 +14,19 @@ import { observer } from "mobx-react";
 import moment from "moment";
 import { observe, reaction, toJS } from "mobx";
 import queryString from "query-string";
+import { useHistory, useLocation } from "react-router";
+import {
+  ToastsContainer,
+  ToastsContainerPosition,
+  ToastsStore,
+} from "react-toasts";
 
 const StoreListPage = observer(() => {
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState({ type: "none" });
+  const history = useHistory();
+  const location = useLocation();
   const [checkedStores, setCheckedStores] = useState([]);
   const { getStores, stores, searchStores, getFilters, enabledFilters } =
     StoresStore;
@@ -53,6 +61,20 @@ const StoreListPage = observer(() => {
       // getErrors(setError);
     }
   }, [stores.length, enabledFilters]);
+
+  useEffect(() => {
+    if (
+      Object.values(enabledFilters).some((value) => value.length) &&
+      location.search === ""
+    ) {
+      history.replace({
+        pathname: location.pathname,
+        search: queryString.stringify(enabledFilters, {
+          arrayFormat: "comma",
+        }),
+      });
+    }
+  }, []);
 
   return (
     <div className={styles.dashboard__wrapper}>
@@ -90,6 +112,10 @@ const StoreListPage = observer(() => {
           ))}
         </tbody>
       </table>
+      <ToastsContainer
+        store={ToastsStore}
+        position={ToastsContainerPosition.BOTTOM_RIGHT}
+      />
     </div>
   );
 });

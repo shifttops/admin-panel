@@ -5,32 +5,10 @@ import styles from "./scripts_stores_table.module.scss";
 export default function ScriptsStoresTable({
   enabledStores,
   setEnabledStores,
+  hosts,
 }) {
   const [searchValue, setSearchValue] = useState("");
   const [mode, setMode] = useState("Hosts");
-  const allStores = [
-    "123",
-    "456",
-    "777",
-    "444",
-    "12324",
-    "645",
-    "23423",
-    "78345",
-    "38462",
-    "98234",
-    "47283",
-    "12353",
-    "34522",
-    "345221",
-    "43579",
-    "345764",
-    "23467",
-    "11111",
-    "22222",
-    "33333",
-    "44444",
-  ];
 
   const handleSearch = (value) => {
     setSearchValue(value);
@@ -46,14 +24,23 @@ export default function ScriptsStoresTable({
     e.preventDefault();
     e.stopPropagation();
     setEnabledStores((prev) => {
-      if (prev.includes(store)) {
-        prev.splice(prev.indexOf(store), 1);
-        return [...prev];
+      const enabledStoreCurrentKey = Object.keys(prev).find((item) =>
+        prev[item].includes(store)
+      );
+      if (enabledStoreCurrentKey) {
+        prev[enabledStoreCurrentKey].splice(
+          prev[enabledStoreCurrentKey].indexOf(store),
+          1
+        );
+        return {...prev};
       } else {
-        return [...prev, store];
+        prev[mode.toLowerCase()] = [...prev[mode.toLowerCase()], store];
+        return {...prev};
       }
     });
   };
+
+  console.log(3456789098765, enabledStores);
 
   return (
     <div className={styles.block}>
@@ -66,31 +53,36 @@ export default function ScriptsStoresTable({
         />
       </div>
       <div className={styles.stores_list}>
-        {allStores
-          .filter((store) => store.includes(searchValue))
-          .map((store) => (
-            <div
-              className={styles.list_row}
-              key={store}
-              onClick={(e) => handleCheckStore(e, store)}
-            >
-              <Checkbox
-                checked={enabledStores.includes(store)}
-                label={store}
-                onChange={() => undefined}
-              ></Checkbox>
-            </div>
-          ))}
+        {Object.keys(hosts).length &&
+          hosts[mode.toLowerCase()]
+            .filter((host) => host.display.includes(searchValue))
+            .map((host) => (
+              <div
+                className={styles.list_row}
+                key={host.id}
+                onClick={(e) => handleCheckStore(e, host.display)}
+              >
+                <Checkbox
+                  checked={enabledStores[mode.toLowerCase()].includes(host.display)}
+                  label={host.display}
+                  onChange={() => undefined}
+                ></Checkbox>
+              </div>
+            ))}
       </div>
       <div className={styles.footer}>
         <button
-          className={`${styles.button} ${mode === 'Hosts' ? styles.active: ''}`}
+          className={`${styles.button} ${
+            mode === "Hosts" ? styles.active : ""
+          }`}
           onClick={(e) => handleClick(e.target.innerText)}
         >
           Hosts
         </button>
         <button
-          className={`${styles.button} ${mode === 'Groups' ? styles.active: ''}`}
+          className={`${styles.button} ${
+            mode === "Groups" ? styles.active : ""
+          }`}
           onClick={(e) => handleClick(e.target.innerText)}
         >
           Groups
