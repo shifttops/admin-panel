@@ -4,10 +4,13 @@ import {useEffect, useRef, useState} from "react";
 import { ArrowDownIcon } from "../../icons";
 import StoresStore from "../../store/StoresStore";
 import { observer } from "mobx-react";
+import SubmitPopup from "../popups/Submit Popup";
 
 const MaintenanceScreen = observer(() => {
   const [isVisible, setIsVisible] = useState(false);
   const [error, setError] = useState("");
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [chosenScreen, setChosenScreen] = useState('');
 
   const {maintenanceScreens, updateMaintenanceScreens, getMaintenanceScreens, storeInfo, setMaintenanceScreen, getStoreInfo, updateJiraStatus} = StoresStore;
 
@@ -16,16 +19,22 @@ const MaintenanceScreen = observer(() => {
     else updateMaintenanceScreens()
   }, [maintenanceScreens.length]);
 
-  const handleClick = (screen) => {
-    if(screen && screen !== storeInfo.maintenance_screen) {
-      handleChoice(screen)
-    }
-  }
-
-  const handleChoice = (screen) => {
+  const handleChoice = ({ setError, screen }) => {
     setMaintenanceScreen({ setError, screen });
     setIsVisible((prevVisibility) => !prevVisibility);
   };
+
+  const onClose = () => {
+    console.log(1);
+    setIsPopupVisible(false)
+  }
+
+  const handleClick = (screen) => {
+    if(screen && screen !== storeInfo.maintenance_screen) {
+      setChosenScreen(screen);
+      setIsPopupVisible((prevState) => !prevState);
+    }
+  }
 
   return (
     <div className={styles.maintenanceScreen}>
@@ -34,32 +43,46 @@ const MaintenanceScreen = observer(() => {
           <div className={styles.maintenanceScreen__title}>
             Current maintenance screen:
           </div>
-          <div
-            className={styles.currentScreen}
-            onClick={() => setIsVisible((prevVisibility) => !prevVisibility)}
+          <div className={styles.currentScreen} 
+               onClick={() => {
+                 setIsVisible((prevVisibility) => !prevVisibility);
+                 setIsPopupVisible(false);
+            }}
           >
             <span className={styles.currentScreen__text}>
-              {storeInfo.status}
+              {maintenanceScreens.find(
+                (screen) => screen === storeInfo.maintenance_screen
+              ) || "Nothing chosen"}
             </span>
-            <ArrowDownIcon
-              className={styles.currentScreen__icon}
-              isOpen={isVisible}
-            />
+            {maintenanceScreens[0] !== "" && (
+              <ArrowDownIcon
+                className={styles.currentScreen__icon}
+                isOpen={isVisible}
+              />
+            )}
           </div>
-          <div className={styles.dropDown + " " + (isVisible ? styles.dropDown__visible : styles.dropDown__hidden)}>
-            <div className={styles.dropDown__body}>
-              {maintenanceScreens.map((screen) => (
-                <div
-                  onClick={() => handleClick(screen)}
-                  className={styles.innerScreen + " " + (screen === storeInfo.maintenance_screen ? styles.innerScreen__current : '')}
-                  key={screen}
-                >
-                  {screen ? screen : "No messages"}
-                </div>
-              ))
-              }
+          {maintenanceScreens[0] !== "" && (
+            <div className={styles.dropDown + " " + (isVisible ? styles.dropDown__visible : styles.dropDown__hidden)}>
+              <div className={styles.dropDown__body}>
+                {maintenanceScreens.map((screen) => (
+                  <div onClick={() => handleClick(screen)} 
+                       className={styles.innerScreen + " " +
+                       (screen === storeInfo.maintenance_screen ? styles.innerScreen__current : "")} 
+                       key={screen}
+                  >
+                    {screen ? screen : "No screens"}
+                  </div>
+                ))}
+              </div>
+              {isPopupVisible && (
+                <SubmitPopup
+                  screen={chosenScreen}
+                  handleSubmit={handleChoice}
+                  onClose={onClose}
+                />
+              )}
             </div>
-          </div>
+          )}
         </div>
         <Button
           className={styles.maintenanceScreen__button}
