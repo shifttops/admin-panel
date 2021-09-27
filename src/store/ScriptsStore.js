@@ -34,6 +34,8 @@ class ScriptsStore {
         this.getPresets(change.object[change.name].playbook_id);
         if (change.object[change.name].parent_id) {
           this.getScript({ parent_id: change.object[change.name].parent_id});
+        }else{
+          this.parentScriptSource = ""
         }
       }
     });
@@ -114,7 +116,7 @@ class ScriptsStore {
       await refreshToken();
 
       const resp = await fetch(
-        `https://staptest.mcd-cctv.com​/api/ansible_playbook/${parent_id}`,
+        `https://staptest.mcd-cctv.com​/api/ansible_playbook/${parent_id}/`,
         {
           method: "GET",
           headers: {
@@ -124,7 +126,6 @@ class ScriptsStore {
       );
       const res = await resp.json();
       this.parentScriptSource = res.source;
-      console.log(res);
       // setError("");
     } catch (e) {
       ToastsStore.error(e.error, 3000, "toast");
@@ -213,7 +214,6 @@ class ScriptsStore {
       const res = await resp.json();
       if (resp.status === 200) {
         this.checkouts = res;
-        console.log(res);
       } else {
         const res = await resp.json();
         ToastsStore.error(res.error, 3000, "toast");
