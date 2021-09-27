@@ -85,7 +85,9 @@ export default function ReportPopup({ onClose, checkedStores }) {
     <div className={styles.popup}>
       <div className={styles.popupHead}>
         <span className={styles.title}>Report options</span>
-        <CloseIcon onClick={onClose} />
+        <button onClick={onClose}>
+          <CloseIcon />
+        </button>
       </div>
       <form>
         <div className={styles.block}>
@@ -101,9 +103,10 @@ export default function ReportPopup({ onClose, checkedStores }) {
           ))}
         </div>
         <div
-          className={`${styles.block} ${
-            selectedType === "store_report" ? styles.hidden : ""
-          }`}
+          className={styles.block}
+          // ${
+          //   selectedType === "store_report" ? styles.hidden : ""
+          // }`}
         >
           <p className={styles.category}>Period</p>
           <div className={styles.date}>

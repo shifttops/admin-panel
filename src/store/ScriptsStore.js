@@ -329,6 +329,7 @@ class ScriptsStore {
         setError("");
         const res = await resp.json();
         ToastsStore.success(`${name} created successfully`, 3000, "toast");
+        this.getPresets(script_id);
       } else {
         const res = await resp.json();
         ToastsStore.error(res.error, 3000, "toast");

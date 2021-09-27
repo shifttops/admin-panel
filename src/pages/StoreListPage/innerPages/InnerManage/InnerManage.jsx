@@ -12,6 +12,7 @@ import {
 import Button from "components/buttons/Button";
 import ButtonIcon from "components/buttons/ButtonIcon";
 import MaintenanceScreen from "../../../../components/MaintenanceScreen";
+import { ToastsContainer, ToastsContainerPosition, ToastsStore } from "react-toasts";
 
 const ActionButtons = () => {
   return (
@@ -61,6 +62,10 @@ export default function InnerManage() {
         Icon={VideoManageIcon}
         title="Reboot all cameras"
       />
+      <ToastsContainer
+          store={ToastsStore}
+          position={ToastsContainerPosition.BOTTOM_RIGHT}
+        />
     </div>
   );
 }

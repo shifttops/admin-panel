@@ -5,7 +5,7 @@ import { refreshToken } from "../helpers/AuthHelper";
 import queryString from "query-string";
 import { filtersRequestMapper } from "../helpers/mappers";
 import { createDateFilters } from "../helpers/dateForFiltersHelper";
-import ToastsStore from "../types/iconButtonTypes";
+import { ToastsStore } from "react-toasts";
 
 class StoresStore {
   storeInfo = {};
@@ -17,7 +17,8 @@ class StoresStore {
     ...queryString.parse(window.location.search, { arrayFormat: "comma" }),
   };
   maintenanceScreens = [];
-  maintenanceScreensData = []
+  maintenanceScreensData = [];
+  groups = [];
 
   constructor() {
     makeAutoObservable(
@@ -67,6 +68,7 @@ class StoresStore {
         filtersForReq = createDateFilters(
           JSON.parse(JSON.stringify(filtersForReq))
         );
+        console.log(this.enabledFilters, filtersForReq);
         const resp = await fetch("https://staptest.mcd-cctv.com/api/filters/", {
           method: "POST",
           headers: {
@@ -376,7 +378,7 @@ class StoresStore {
 
       const res = await resp.json();
       this.maintenanceScreensData = [...res.results];
-      this.updateMaintenanceScreens()
+      this.updateMaintenanceScreens();
 
       setError("");
     } catch (e) {
@@ -384,11 +386,36 @@ class StoresStore {
     }
   };
 
-  updateMaintenanceScreens = () => {
-    this.maintenanceScreens = [...this.maintenanceScreensData.find(screen => screen.name === this.storeInfo.status)?.maintenance_screen];
-  }
+  getGroups = async (setError) => {
+    try {
+      await refreshToken();
 
-  setMaintenanceScreen = async ({ setError, screen}) => {
+      const resp = await fetch(
+        "https://staptest.mcd-cctv.com/api/store_group/?limit=9999&offset=0",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Token ${localStorage.getItem("access")}`,
+          },
+        }
+      );
+      const res = await resp.json();
+      this.groups = [...res.results];
+      setError("");
+    } catch (e) {
+      setError(e.message);
+    }
+  };
+
+  updateMaintenanceScreens = () => {
+    this.maintenanceScreens = [
+      ...this.maintenanceScreensData.find(
+        (screen) => screen.name === this.storeInfo.status
+      )?.maintenance_screen,
+    ];
+  };
+
+  setMaintenanceScreen = async ({ setError, screen }) => {
     try {
       await refreshToken();
 
@@ -400,27 +427,53 @@ class StoresStore {
             Authorization: `Token ${localStorage.getItem("access")}`,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ status: this.storeInfo.status, title: screen}),
+          body: JSON.stringify({
+            status: this.storeInfo.status,
+            title: screen,
+          }),
         }
       );
 
-      if(resp.status === 200){
+      if (resp.status === 200) {
         setError("");
 
-        this.storeInfo.maintenance_screen = screen
-      }else {
+        this.storeInfo.maintenance_screen = screen;
+      } else {
         const res = await resp.json();
         ToastsStore.error(res.error, 3000, "toast");
       }
-    }
-    catch (e) {
-      setError(e.message)
+    } catch (e) {
+      setError(e.message);
     }
   };
 
-  updateJiraStatus = async () => {
+  updateJiraStatus = async ({ store_id, setError }) => {
+    try {
+      await refreshToken();
 
-  }
+      const resp = await fetch(
+        "https://staptest.mcd-cctv.com/api/status/refresh",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Token ${localStorage.getItem("access")}`,
+          },
+        }
+      );
+      console.log(resp);
+      if (resp.status === 200) {
+        ToastsStore.success("Updated", 3000, "toast");
+        setTimeout(() => {
+          this.getStoreInfo(store_id, setError);
+        }, 5000);
+      } else {
+        const res = await resp.json();
+        ToastsStore.error(res.error, 3000, "toast");
+      }
+    } catch (e) {
+      ToastsStore.error(e.message, 3000, "toast");
+    }
+  };
 }
 
 export default new StoresStore();

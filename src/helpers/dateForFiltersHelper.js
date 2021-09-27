@@ -8,8 +8,8 @@ export const createDateFilters = (filters) => {
           filters[filterKey][index] = new Date(0).toISOString();
         }
       }
-      filters['status__name'] = filters['status'];
-      delete filters['status'];
+      // filters['status__name'] = filters['status'];
+      // delete filters['status'];
         // const dateFilterKey = filterKey.split("__lte")[0].split("__gte")[0];
         // if (
         //   filters[`${dateFilterKey}__lte`] &&

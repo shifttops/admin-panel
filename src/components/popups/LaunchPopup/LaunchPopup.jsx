@@ -25,7 +25,9 @@ const LaunchPopup = observer(
       <div className={styles.popup}>
         <div className={styles.popupHead}>
           <span className={styles.title}>Launch</span>
-          <CloseIcon onClick={onClose} />
+          <button onClick={onClose}>
+            <CloseIcon />
+          </button>
         </div>
         <form>
           <div className={styles.block}>

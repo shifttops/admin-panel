@@ -12,8 +12,26 @@ import {
 } from "icons";
 import Button from "components/buttons/Button";
 import Checkbox from "components/Checkbox";
+import { observer } from "mobx-react";
+import StoresStore from "../../store/StoresStore";
+import { useEffect, useState } from "react";
+import { useHistory } from "react-router";
+import routes from "../../constants/routes";
 
-export default function StoreGroupsPage(params) {
+const StoreGroupsPage = observer(() => {
+  const { groups, enabledFilters, getGroups } = StoresStore;
+  const [error, setError] = useState("");
+  const history = useHistory();
+
+  const handleClick = (id) => {
+    // enabledFilters['group_ids'] = [id];я
+    history.push(`${routes.home}?group_ids=${id}`);
+  };
+
+  useEffect(() => {
+    getGroups(setError);
+  }, []);
+
   return (
     <div className="page">
       <div className={styles.pageHead}>
@@ -32,34 +50,31 @@ export default function StoreGroupsPage(params) {
             <th>
               <Checkbox label="user" />
             </th>
-            <th>Files</th>
-            <th>Last Edited</th>
+            <th>Name</th>
+            <th>Stores</th>
+            <th>Type</th>
             <th />
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td className={styles.name}>
-              <Checkbox className={styles.checkbox} label="McD stores" />
-            </td>
-            <td className={styles.text}>64 restaurants</td>
-            <td className={styles.text}>17 March 2021</td>
-            <td>
-              <ButtonIcon Icon={MoreIcon} />
-            </td>
-          </tr>
-          <tr>
-            <td className={styles.name}>
-              <Checkbox className={styles.checkbox} label="Franchaise" />
-            </td>
-            <td className={styles.text}>64 restaurants</td>
-            <td className={styles.text}>17 March 2021</td>
-            <td>
-              <ButtonIcon Icon={MoreIcon} />
-            </td>
-          </tr>
+          {groups.map((group) => (
+            <tr key={group.id} onClick={() => handleClick(group.id)}>
+              <td className={styles.name}>
+                <Checkbox className={styles.checkbox} label={group.owner ? group.owner: ""} />
+              </td>
+              <td className={styles.text}>{group.name}</td>
+              <td className={styles.text}>{group.count} restaurants</td>
+              <td className={styles.text}>{group.group_type}</td>
+
+              <td>
+                <ButtonIcon Icon={MoreIcon} />
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
   );
-}
+});
+
+export default StoreGroupsPage;

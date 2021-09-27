@@ -57,7 +57,7 @@ const InnerLaunch = observer((props) => {
         (name) => hosts[key].find((host) => host.display === name)?.id
       );
     });
-    if (name && (enabledStores.hosts.length || enabledStores.groups.length)) {
+    if (name) {
       createPreset({
         name,
         script_id: scriptId,

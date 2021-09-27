@@ -28,8 +28,9 @@ const StoreListPage = observer(() => {
   const history = useHistory();
   const location = useLocation();
   const [checkedStores, setCheckedStores] = useState([]);
-  const { getStores, stores, searchStores, getFilters, enabledFilters } =
-    StoresStore;
+  const { getStores, stores, searchStores, getFilters } = StoresStore;
+
+  let { enabledFilters } = StoresStore;
 
   const selectAllStores = (e) => {
     if (checkedStores.length < stores.length) {
@@ -55,25 +56,37 @@ const StoreListPage = observer(() => {
   };
 
   useEffect(() => {
-    console.log(toJS(enabledFilters));
-    if (!stores.length) {
+    // console.log(toJS(enabledFilters));
+    if (Object.keys(enabledFilters).some((key) => key && key.length)) {
       getStores(setError);
       // getErrors(setError);
     }
-  }, [stores.length, enabledFilters]);
+  }, [enabledFilters]);
 
   useEffect(() => {
-    if (
-      Object.values(enabledFilters).some((value) => value.length) &&
-      location.search === ""
-    ) {
-      history.replace({
-        pathname: location.pathname,
-        search: queryString.stringify(enabledFilters, {
-          arrayFormat: "comma",
-        }),
+    Object.entries(
+      queryString.parse(window.location.search, { arrayFormat: "comma" })
+    ).forEach((entry) => {
+      if (!entry[1]) {
+        delete enabledFilters[entry[0]];
+      } else {
+        enabledFilters[entry[0]] = entry[1];
+      }
+    });
+    return () => {
+      console.log("removed");
+      Object.keys(enabledFilters).forEach((key) => {
+        delete enabledFilters[key];
       });
-    }
+    };
+  }, []);
+
+  useEffect(() => {
+    console.log(toJS(enabledFilters));
+    // if (!stores.length) {
+    getStores(setError);
+    // getErrors(setError);
+    // }
   }, []);
 
   return (

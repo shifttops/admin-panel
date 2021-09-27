@@ -13,7 +13,7 @@ import {
 import StoreListPage from "pages/StoreListPage";
 import UsersPage from "pages/UsersPage";
 import SettingsPage from "pages/SettingsPage";
-import FilesPage from "pages/FilesPage";
+import ScriptsPage from "pages/ScriptsPage";
 import ActivityLogsPage from "pages/ActivityLogsPage";
 import StoreGroupsPage from "pages/StoreGroupsPage";
 import PlannerPage from "pages/PlannerPage";
@@ -38,8 +38,8 @@ const mainNavigation = [
   },
   {
     to: routes.scripts,
-    name: "Files",
-    component: <FilesPage />,
+    name: "Scripts",
+    component: <ScriptsPage />,
     icon: <FilesIcon />,
   },
   {

@@ -22,7 +22,9 @@ const DeletePopup = observer(({ onClose, script }) => {
     <div className={styles.popup}>
       <div className={styles.popupHead}>
         <span className={styles.title}>Delete</span>
-        <CloseIcon onClick={onClose} />
+        <button onClick={onClose}>
+          <CloseIcon />
+        </button>
       </div>
       <form>
         <div className={styles.block}>

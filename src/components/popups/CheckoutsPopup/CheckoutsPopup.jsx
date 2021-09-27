@@ -17,7 +17,8 @@ import { ToastsStore } from "react-toasts";
 import routes from "../../../constants/routes";
 
 const CheckoutsPopup = observer(({ onClose }) => {
-  const { checkouts, script, scripts, checkoutScript, getCheckouts } = ScriptsStore;
+  const { checkouts, script, scripts, checkoutScript, getCheckouts } =
+    ScriptsStore;
   const [error, setError] = useState(false);
   // const [enabledFilters, setEnabledFilters] = useState(queryString.parse(location.search, { arrayFormat: 'comma' }));
   const history = useHistory();
@@ -51,7 +52,7 @@ const CheckoutsPopup = observer(({ onClose }) => {
   };
 
   useEffect(() => {
-    console.log('checkout');
+    console.log("checkout");
     if (
       // Object.values(checkouts).every((value) => !value.length)
       //  &&
@@ -65,7 +66,9 @@ const CheckoutsPopup = observer(({ onClose }) => {
     <div className={styles.popup}>
       <div className={styles.popupHead}>
         <span className={styles.title}>Checkout options</span>
-        <CloseIcon onClick={onClose} />
+        <button onClick={onClose}>
+          <CloseIcon />
+        </button>
       </div>
       <form>
         <div className={styles.block}>

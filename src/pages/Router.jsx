@@ -97,6 +97,7 @@ export default function CustomRouter() {
                 <Route
                   path={to}
                   key={to}
+                  exact
                   component={(props) => (
                     <div className={styles.inner}>
                       <InnerSidebar links={innerNavigationScripts} {...props} />

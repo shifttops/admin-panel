@@ -43,13 +43,13 @@ const InnerHead = observer(() => {
               <Button
                 className={
                   statusMapper.find((item) => item.name === storeInfo.status)
-                    ?.className
+                    ?.class
                 }
                 text={
                   statusMapper.find((item) => item.name === storeInfo.status)
                     ?.visibleName
                 }
-                Icon={CheckIcon}
+                // Icon={CheckIcon}
               />
               <Button
                 text="Restart"

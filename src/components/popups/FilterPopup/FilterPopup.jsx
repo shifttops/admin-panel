@@ -31,7 +31,7 @@ const FilterPopup = observer(({ onClose }) => {
         // skipEmptyString: true,
       }),
     });
-    getStores(setError);
+    // getStores(setError);
   };
 
   useEffect(() => {
@@ -44,7 +44,9 @@ const FilterPopup = observer(({ onClose }) => {
     <div className={styles.popup}>
       <div className={styles.popupHead}>
         <span className={styles.title}>Filter options</span>
-        <CloseIcon onClick={onClose} />
+        <button onClick={onClose}>
+          <CloseIcon />
+        </button>
       </div>
       <form>
         <div className={styles.block}>

@@ -1,7 +1,7 @@
 import SearchQuick from "components/search/SearchQuick";
 import ButtonIcon from "components/buttons/ButtonIcon";
 import { MoreIcon, SortIcon, CloseIcon } from "icons";
-import styles from "./files-page.module.scss";
+import styles from "./scripts-page.module.scss";
 import Button from "components/buttons/Button";
 import FilesTableHead from "components/tables/FilesTableHead";
 import FilesFolderRow from "components/tables/FilesFolderRow";
@@ -18,7 +18,7 @@ import { computed, toJS } from "mobx";
 import Popup from "reactjs-popup";
 import DeletePopup from "../../components/popups/DeletePopup";
 
-const FilesPage = observer(() => {
+const ScriptsPage = observer(() => {
   const location = useLocation();
   const history = useHistory();
   const { tags, script, getScripts, getPresets, scriptsByTags } = ScriptsStore;
@@ -140,4 +140,4 @@ const FilesPage = observer(() => {
   );
 });
 
-export default FilesPage;
+export default ScriptsPage;
