@@ -23,7 +23,6 @@ import {
 import Popup from "reactjs-popup";
 import CheckoutsPopup from "../../../components/popups/CheckoutsPopup/CheckoutsPopup";
 import { useRef } from "react";
-import {ButtonForPopup} from "../../../components/buttons/Button/Button";
 
 const InnerEdit = observer((props) => {
   const [isComparingMode, setIsComparingMode] = useState(false);
@@ -39,6 +38,8 @@ const InnerEdit = observer((props) => {
     copyScript,
     getScript,
     getPresets,
+    checkouts,
+    getCheckouts
   } = ScriptsStore;
 
   let { parentScriptSource } = ScriptsStore;
@@ -135,9 +136,7 @@ const InnerEdit = observer((props) => {
   };
 
   useEffect(() => {
-    console.log(scripts);
     if (!scripts.length) {
-      console.log(123123);
       getScripts(setError);
     }
   }, [scripts.length]);
@@ -188,6 +187,10 @@ const InnerEdit = observer((props) => {
   }, [script.current]);
 
   useEffect(() => {
+    if(script.current.playbook_id) getCheckouts({ playbook_id: script.current.playbook_id, setError });
+  }, [script.current.playbook_id])
+
+  useEffect(() => {
     ref.current = true;
   }, []);
 
@@ -233,16 +236,16 @@ const InnerEdit = observer((props) => {
               />
             )}
           </div>
-
           <div className={styles.buttons}>
             <Button text="Save" onClick={handleSave} />
-
-            <Popup modal trigger={<ButtonForPopup text="Checkout"/>}>
-              {(close) => (
-                <CheckoutsPopup onClose={close} playbook={script.current} />
-              )}
-            </Popup>
-
+            {Object.keys(checkouts).length && script.current.playbook_id && (checkouts.rollback.length || checkouts.rollforward.length) ?
+              <Popup modal trigger={<Button text="Checkout" />}>
+                {(close) => (
+                  <CheckoutsPopup onClose={close} playbook={script.current}/>
+                )}
+              </Popup>
+              : <Button text="Checkout" onClick={() => ToastsStore.error("No available checkouts", 3000, "toast")}/>
+            }
             <Button text="Copy" onClick={handleCopy} />
             <Button
               text={isComparingMode ? "Hide diff" : "Show diff"}

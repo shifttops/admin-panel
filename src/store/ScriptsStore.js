@@ -28,7 +28,7 @@ class ScriptsStore {
     makeAutoObservable(this);
     this.disposer = observe(this.script, (change) => {
       if (
-        change.object[change.name].playbook_id &&
+        change.object[change.name]?.playbook_id &&
         change.oldValue.playbook_id !== change.object[change.name].playbook_id
       ) {
         this.getPresets(change.object[change.name].playbook_id);
@@ -77,7 +77,6 @@ class ScriptsStore {
       const res = await resp.json();
       this.createTags(res.results);
       this.scripts = [...res.results];
-      console.log(toJS(this.scripts));
       setError("");
     } catch (e) {
       setError(e.message);
