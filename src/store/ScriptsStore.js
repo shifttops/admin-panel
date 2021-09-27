@@ -34,7 +34,7 @@ class ScriptsStore {
         this.getPresets(change.object[change.name].playbook_id);
         if (change.object[change.name].parent_id) {
           this.getScript({ parent_id: change.object[change.name].parent_id});
-        }else{
+        } else {
           this.parentScriptSource = ""
         }
       }
