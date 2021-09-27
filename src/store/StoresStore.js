@@ -4,7 +4,7 @@ import moment from "moment";
 import { refreshToken } from "../helpers/AuthHelper";
 import queryString from "query-string";
 import { filtersRequestMapper } from "../helpers/mappers";
-import { createDateFilters } from "../helpers/dateForFiltersHelper";
+import { createDateFilters } from "../helpers/filters";
 import { ToastsStore } from "react-toasts";
 
 class StoresStore {

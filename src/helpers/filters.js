@@ -9,14 +9,14 @@ export const createDateFilters = (filters) => {
     const key = reqKey || filterKey
 
     if (
-      filterKey === "date_deployment__range" ||
-      filterKey === "date_created__range"
+        key === "date_deployment__range" ||
+        key === "date_created__range"
     ) {
-      const index = filters[filterKey].findIndex((item) => !item);
+      const index = filters[key].findIndex((item) => !item);
       if (index === 1) {
-        filters[filterKey][index] = new Date().toISOString();
+        filters[key][index] = new Date().toISOString();
       } else {
-        filters[filterKey][index] = new Date(0).toISOString();
+        filters[key][index] = new Date(0).toISOString();
       }
     }
   });

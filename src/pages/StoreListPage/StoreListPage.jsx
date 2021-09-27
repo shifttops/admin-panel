@@ -1,5 +1,4 @@
 import styles from "./store-list-page.module.scss";
-import routes from "constants/routes";
 import TableHead from "components/tables/TableHead";
 import TableRow from "components/tables/TableRow";
 import DashboardHead from "components/header/DashboardHead";
@@ -153,11 +152,15 @@ const StoreListPage = observer(() => {
             ))
           }
         </tbody>
-        {
-          (isLoading && isSearchOrSort) ? <div className={styles.storesLoader + ' ' + styles.storesLoader__search}>
-            <Loader/>
-          </div> : ''
-              }
+        {isLoading && isSearchOrSort ? (
+          <div
+            className={styles.storesLoader + " " + styles.storesLoader__search}
+          >
+            <Loader />
+          </div>
+        ) : (
+          ""
+        )}
       </table>
       {isLoading && !isSearchOrSort ? (
         <div className={styles.storesLoader}>
