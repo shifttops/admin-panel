@@ -129,12 +129,12 @@ const InnerLaunch = observer((props) => {
   }, [hosts, presets, preset.current]);
 
   useEffect(() => {
-    if (scripts.length && !script.current.playbook_id && !presetId) {
+    if (scripts.length && scripts.current && !script.current.playbook_id && !presetId) {
       script.current = scripts.find(
         (script) => script.playbook_id === scriptId
       );
     }
-    if (script.current.playbook_id) {
+    if (script.current && script.current.playbook_id) {
       setRows(
         script.current.variables.reduce((res, item) => {
           res[item] = "";

@@ -51,17 +51,6 @@ const CheckoutsPopup = observer(({ onClose }) => {
     // history.push();
   };
 
-  useEffect(() => {
-    console.log("checkout");
-    if (
-      // Object.values(checkouts).every((value) => !value.length)
-      //  &&
-      script.current.playbook_id
-    ) {
-      getCheckouts({ playbook_id: script.current.playbook_id, setError });
-    }
-  }, [script.current.playbook_id]);
-
   return (
     <div className={styles.popup}>
       <div className={styles.popupHead}>
@@ -73,8 +62,7 @@ const CheckoutsPopup = observer(({ onClose }) => {
       <form>
         <div className={styles.block}>
           <p className={styles.category}>Choose version</p>
-          {Object.keys(checkouts).length &&
-            Object.keys(checkouts).map((key) => (
+          {Object.keys(checkouts).map((key) => (
               <div className={styles.checkouts_block} key={key}>
                 <p>
                   {checkouts[key].length

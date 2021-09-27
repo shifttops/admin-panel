@@ -19,7 +19,7 @@ const SubmitPopup = observer(({ onClose, screen, setIsVisible }) => {
       <div className={styles.popupHead}>
         <span className={styles.title}>Confirm</span>
         <div className={styles.closeButton} onClick={onClose}>
-          <CloseIcon color={"#F9F9F9"} />
+          <CloseIcon />
         </div>
       </div>
       <form>
