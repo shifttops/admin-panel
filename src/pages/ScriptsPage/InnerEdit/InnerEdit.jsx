@@ -248,6 +248,7 @@ const InnerEdit = observer((props) => {
             }
             <Button text="Copy" onClick={handleCopy} />
             <Button
+              disabled={!script.current.playbook_id && script.current}
               text={isComparingMode ? "Hide diff" : "Show diff"}
               onClick={handleCompare}
               className="orange"
