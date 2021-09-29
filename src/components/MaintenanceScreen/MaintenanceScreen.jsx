@@ -25,7 +25,7 @@ const MaintenanceScreen = observer(() => {
 
   useEffect(() => {
     if (!maintenanceScreens.length) getMaintenanceScreens(setError);
-    else updateMaintenanceScreens();
+    // else updateMaintenanceScreens();
   }, [maintenanceScreens.length]);
 
   return (
@@ -97,13 +97,7 @@ const MaintenanceScreen = observer(() => {
                     </Popup>
                   ) : (
                     <div
-                      className={
-                        styles.innerScreen +
-                        " " +
-                        (screen === storeInfo.maintenance_screen
-                          ? styles.innerScreen__current
-                          : "")
-                      }
+                      className={styles.innerScreen + " " + (screen === storeInfo.maintenance_screen ? styles.innerScreen__current : "")}
                       key={screen}
                     >
                       {screen ? screen : "No screens"}

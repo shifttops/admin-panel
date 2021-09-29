@@ -28,12 +28,14 @@ class ScriptsStore {
     makeAutoObservable(this);
     this.disposer = observe(this.script, (change) => {
       if (
-        change.object[change.name].playbook_id &&
+        change.object[change.name]?.playbook_id &&
         change.oldValue.playbook_id !== change.object[change.name].playbook_id
       ) {
         this.getPresets(change.object[change.name].playbook_id);
         if (change.object[change.name].parent_id) {
           this.getScript({ parent_id: change.object[change.name].parent_id});
+        } else {
+          this.parentScriptSource = ""
         }
       }
     });
@@ -77,7 +79,6 @@ class ScriptsStore {
       const res = await resp.json();
       this.createTags(res.results);
       this.scripts = [...res.results];
-      console.log(toJS(this.scripts));
       setError("");
     } catch (e) {
       setError(e.message);
@@ -115,7 +116,7 @@ class ScriptsStore {
       await refreshToken();
 
       const resp = await fetch(
-        `https://staptest.mcd-cctv.com​/api/ansible_playbook/${parent_id}`,
+        `https://staptest.mcd-cctv.com​/api/ansible_playbook/${parent_id}/`,
         {
           method: "GET",
           headers: {
@@ -125,7 +126,6 @@ class ScriptsStore {
       );
       const res = await resp.json();
       this.parentScriptSource = res.source;
-      console.log(res);
       // setError("");
     } catch (e) {
       ToastsStore.error(e.error, 3000, "toast");
@@ -214,7 +214,6 @@ class ScriptsStore {
       const res = await resp.json();
       if (resp.status === 200) {
         this.checkouts = res;
-        console.log(res);
       } else {
         const res = await resp.json();
         ToastsStore.error(res.error, 3000, "toast");

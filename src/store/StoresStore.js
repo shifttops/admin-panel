@@ -1,4 +1,4 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, reaction } from "mobx";
 import { computedFn } from "mobx-utils";
 import moment from "moment";
 import { refreshToken } from "../helpers/AuthHelper";
@@ -32,6 +32,18 @@ class StoresStore {
       //   getStoreHardware: action,
       //   getStoreServer: action,
       // }
+    );
+    reaction(
+      () => this.storeInfo.status,
+      (status, previousValue, reaction) => {
+        if (status) {
+          this.maintenanceScreens = [
+            ...this.maintenanceScreensData.find(
+              (screen) => screen.name === status
+            )?.maintenance_screen,
+          ];
+        }
+      }
     );
   }
 
