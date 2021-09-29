@@ -19,6 +19,7 @@ import {
 } from "react-toasts";
 import Popup from "reactjs-popup";
 import CheckoutsPopup from "../../../components/popups/CheckoutsPopup/CheckoutsPopup";
+import {ButtonForPopup} from "../../../components/buttons/Button/Button";
 
 const InnerEdit = observer((props) => {
   const [isComparingMode, setIsComparingMode] = useState(false);
@@ -238,7 +239,7 @@ const InnerEdit = observer((props) => {
             {Object.keys(checkouts).length &&
             script.current.playbook_id &&
             (checkouts.rollback.length || checkouts.rollforward.length) ? (
-              <Popup modal trigger={<Button text="Checkout" />}>
+              <Popup modal trigger={<ButtonForPopup text="Checkout" />}>
                 {(close) => (
                   <CheckoutsPopup onClose={close} playbook={script.current} />
                 )}
