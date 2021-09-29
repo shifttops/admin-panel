@@ -39,6 +39,7 @@
 .button {
   display: flex;
   align-items: center;
+
   button {
     margin-left: 16px;
   }
@@ -57,34 +58,39 @@
 
   th {
     text-align: left;
-    padding: 13px 0px 10px 0px;
+    padding: 13px 0 10px 0;
     background: rgba(51, 51, 51, 0.07);
     text-transform: uppercase;
     color: rgba(51, 51, 51, 0.5);
     margin-right: 20px;
     font-weight: 400;
-    &:nth-child(2) {
-      text-align: left;
-      width: 190px;
+
+    &:first-child{
+      padding-left: 18px;
+      border-radius: 4px 0 0 0;
+      width: 200px;
     }
-  }
 
-  th:first-child {
-    text-align: left;
-    padding-left: 18px;
-    border-radius: 4px 0px 0px 0px;
-  }
+    &:nth-child(2) {
+      width: 300px;
+    }
 
-  th:last-child {
-    border-right: none;
-    border-radius: 0px 4px 0px 0px;
+    &:nth-child(3), &:nth-child(6), &:nth-child(4), &:nth-child(5){
+      width: 300px;
+    }
+
+    &:last-child{
+      border-right: none;
+      border-radius: 0 4px 0 0;
+      width: 50px;
+    }
   }
 
   td {
     vertical-align: middle;
     line-height: 18px;
     letter-spacing: -0.03em;
-    padding: 11px 0px 8px 0px;
+    padding: 11px 0 8px 0;
     text-align: left;
     border-bottom: 1px solid #f2f2f2;
     background: #fff;
@@ -92,9 +98,9 @@
 
     &:first-child {
       width: 300px;
-      text-align: left;
-      padding-left: 18px;
-      padding: 11px 0px 6px 18px;
+      padding: 11px 0 6px 18px;
+      border-left: 1px solid #f2f2f2;
+      border-right: none;
     }
 
     &:nth-child(2) {
@@ -106,13 +112,9 @@
       border-right: 1px solid #f2f2f2;
     }
   }
+
   .btnMore {
     margin: 0 16px 0 auto;
-  }
-
-  td:first-child {
-    border-left: 1px solid #f2f2f2;
-    border-right: none;
   }
 }
 

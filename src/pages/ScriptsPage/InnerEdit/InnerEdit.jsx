@@ -23,6 +23,7 @@ import {
 import Popup from "reactjs-popup";
 import CheckoutsPopup from "../../../components/popups/CheckoutsPopup/CheckoutsPopup";
 import { useRef } from "react";
+import {ButtonForPopup} from "../../../components/buttons/Button/Button";
 
 const InnerEdit = observer((props) => {
   const [isComparingMode, setIsComparingMode] = useState(false);
@@ -236,7 +237,7 @@ const InnerEdit = observer((props) => {
           <div className={styles.buttons}>
             <Button text="Save" onClick={handleSave} />
 
-            <Popup modal trigger={<Button text="Checkout" />}>
+            <Popup modal trigger={<ButtonForPopup text="Checkout"/>}>
               {(close) => (
                 <CheckoutsPopup onClose={close} playbook={script.current} />
               )}

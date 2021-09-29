@@ -1,5 +1,8 @@
+import React from "react";
 import styles from "./button.module.scss";
 import cn from "classnames";
+
+export const ButtonForPopup = React.forwardRef((props, ref) => <Button {...props}/>)
 
 export default function Button({
   text,

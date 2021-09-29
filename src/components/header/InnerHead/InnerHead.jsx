@@ -12,6 +12,7 @@ import routes from '../../../constants/routes';
 import StoresStore from '../../../store/StoresStore';
 import { statusMapper } from '../../../helpers/mappers';
 import { useRef } from 'react';
+import {ButtonForPopup} from "../../buttons/Button/Button";
 
 const InnerHead = observer(() => {
   const location = useLocation();
@@ -62,7 +63,7 @@ const InnerHead = observer(() => {
             <div className={styles.dashboard__icon}>
               <ButtonIcon Icon={PrintIcon} className={styles.buttonIcon} />
             </div>
-            <Popup nested trigger={<Button text="Report" Icon={ReportIcon} />}>
+            <Popup nested trigger={<ButtonForPopup text="Report" Icon={ReportIcon} />}>
               {(close) => <ReportPopup onClose={close} checkedStores={[storeInfo.store_id]}/>}
             </Popup>
           </div>

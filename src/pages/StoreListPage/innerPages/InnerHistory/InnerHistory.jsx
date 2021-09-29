@@ -54,7 +54,7 @@ const InnerHistory = observer(() => {
         </thead>
         <tbody>
           {storeErrors.map(item => (
-          <tr>
+          <tr key={`${item.store}-${item.id}`}>
             <td>
               <Checkbox label="Error" className={styles.checkbox} />
             </td>

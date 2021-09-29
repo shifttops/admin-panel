@@ -44,7 +44,6 @@ const StoreListPage = observer(() => {
     const { type, field } = sort;
     if (type !== "none" && field) {
       const newStores = [...stores].sort((a, b) => {
-        console.log(a[field], "  --- ", b[field]);
         if (type === "desc") {
           return a[field] > b[field] ? 1 : a[field] < b[field] ? -1 : 0;
         } else {
@@ -74,7 +73,6 @@ const StoreListPage = observer(() => {
       }
     });
     return () => {
-      console.log("removed");
       Object.keys(enabledFilters).forEach((key) => {
         delete enabledFilters[key];
       });
@@ -82,10 +80,8 @@ const StoreListPage = observer(() => {
   }, []);
 
   useEffect(() => {
-    console.log(toJS(enabledFilters));
     // if (!stores.length) {
     getStores(setError);
-    // getErrors(setError);
     // }
   }, []);
 

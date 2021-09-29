@@ -115,7 +115,7 @@ const InnerCameras = observer(() => {
         </thead>
         <tbody>
           {cameras.map((camera) => (
-            <tr key={camera.camera}>
+            <tr key={camera.view_name}>
               {mapperCameras.map((key) => (
                 <td
                   key={key.name}
