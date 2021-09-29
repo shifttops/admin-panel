@@ -22,7 +22,7 @@ export default function TableHead({
     },
     {
       name: "Region",
-      key: "region",
+      key: "store_county",
       centered: false,
     },
     {
@@ -63,7 +63,7 @@ export default function TableHead({
   return (
     <thead className={styles.tableHead}>
       <tr>
-        <th style={{ width: "65px" }}>
+        <th className={styles.table__sort}>
           <Checkbox
             checked={allStoresCount === selectedStoresCount}
             onChange={selectAllStores}

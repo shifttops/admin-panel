@@ -1,18 +1,11 @@
-import { Route, Switch, BrowserRouter } from "react-router-dom";
 import styles from "./store-list-page.module.scss";
-import routes from "constants/routes";
 import TableHead from "components/tables/TableHead";
 import TableRow from "components/tables/TableRow";
 import DashboardHead from "components/header/DashboardHead";
-import { ConfigIcon } from "icons";
-import statusButtonTypes from "types/statusButtonTypes";
 import { useEffect, useState } from "react";
-import { useCookies } from "react-cookie";
-import { refreshToken } from "../../helpers/AuthHelper";
 import StoresStore from "../../store/StoresStore";
 import { observer } from "mobx-react";
 import moment from "moment";
-import { observe, reaction, toJS } from "mobx";
 import queryString from "query-string";
 import { useHistory, useLocation } from "react-router";
 import {
@@ -43,14 +36,13 @@ const StoreListPage = observer(() => {
   const sortFunc = (stores, sort) => {
     const { type, field } = sort;
     if (type !== "none" && field) {
-      const newStores = [...stores].sort((a, b) => {
+      return [...stores].sort((a, b) => {
         if (type === "desc") {
           return a[field] > b[field] ? 1 : a[field] < b[field] ? -1 : 0;
         } else {
           return b[field] > a[field] ? 1 : b[field] < a[field] ? -1 : 0;
         }
       });
-      return newStores;
     } else return stores;
   };
 

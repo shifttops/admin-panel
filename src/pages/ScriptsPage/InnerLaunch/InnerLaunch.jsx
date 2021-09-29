@@ -18,7 +18,6 @@ import {
 } from "react-toasts";
 import { NavLink } from "react-router-dom";
 import routes from "../../../constants/routes";
-import {ButtonForPopup} from "../../../components/buttons/Button/Button";
 
 const InnerLaunch = observer((props) => {
   const location = useLocation();
@@ -174,7 +173,7 @@ const InnerLaunch = observer((props) => {
           </table>
           <Popup
             modal
-            trigger={<ButtonForPopup text="Launch" className="launch_btn"/>}
+            trigger={<Button text="Launch" className="launch_btn"/>}
           >
             {(close) => (
               <LaunchPopup

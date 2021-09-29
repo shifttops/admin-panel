@@ -57,7 +57,8 @@ export default function CustomRouter() {
         <Route exact path={routes.forgotPassword}>
           <ForgotPasswordPage />
         </Route>
-        <Route component={() => (
+        <Route
+          render={() => (
             <div className="wrapper">
               <Sidebar isOpen={isSidebarOpen} isOverlap={isSidebarOverlap} />
               <div className="dashboard">
@@ -116,10 +117,7 @@ export default function CustomRouter() {
           )}
         />
       </Switch>
-      {(!localStorage.getItem("access") ||
-        localStorage.getItem("access") === "undefined") && (
-        <Redirect to={routes.login} />
-      )}
+      {!localStorage.getItem("access") || <Redirect to={routes.login} />}
       {/* ) : (
         <Redirect to={routes.home} />
     )} */}

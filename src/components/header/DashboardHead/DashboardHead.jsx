@@ -4,9 +4,8 @@ import SearchQuick from "components/search/SearchQuick";
 import { ReportIcon, SortIcon } from "icons";
 import Popup from "reactjs-popup";
 import ReportPopup from "components/popups/ReportPopup";
-import Button from "components/buttons/Button";
 import FilterPopup from "../../popups/FilterPopup";
-import {ButtonForPopup} from "../../buttons/Button/Button";
+import Button from "../../buttons/Button/Button";
 
 export default function DashboardHead({ setSearch, checkedStores }) {
   return (
@@ -19,10 +18,10 @@ export default function DashboardHead({ setSearch, checkedStores }) {
         </div>
       </div>
       <div className={styles.dashboardHead__buttons}>
-        <Popup modal trigger={<ButtonForPopup className={styles.dashboardHead__report} text={"Filter"}/>}>
+        <Popup modal trigger={<Button className={styles.dashboardHead__report} text={"Filter"}/>}>
           {(close) => <FilterPopup onClose={close} />}
         </Popup>
-        <Popup modal trigger={<ButtonForPopup className={styles.dashboardHead__report} text={"Filter"} Icon={ReportIcon}/>}>
+        <Popup modal trigger={<Button className={styles.dashboardHead__report} text={"Report"} Icon={ReportIcon}/>}>
           {(close) => (
             <ReportPopup onClose={close} checkedStores={checkedStores} />
           )}
