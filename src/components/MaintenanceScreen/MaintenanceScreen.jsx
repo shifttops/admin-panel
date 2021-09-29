@@ -25,7 +25,7 @@ const MaintenanceScreen = observer(() => {
 
   useEffect(() => {
     if (!maintenanceScreens.length) getMaintenanceScreens(setError);
-    else updateMaintenanceScreens();
+    // else updateMaintenanceScreens();
   }, [maintenanceScreens.length]);
 
   return (
