@@ -12,13 +12,13 @@ const InnerInfo = observer(() => {
   const [error, setError] = useState(false);
   const location = useLocation();
 
-  useEffect(() => {
-    const id = +location.pathname.split('/')[location.pathname.split('/').length - 1];
-    if (storeInfo.store_id === id) {
-      getStoreHardware(id, setError);
-      // getHardwareSetup(id, setError);
-    }
-  }, [storeInfo.store_id])
+  // useEffect(() => {
+  //   const id = +location.pathname.split('/')[location.pathname.split('/').length - 1];
+  //   if (storeInfo.store_id === id) {
+  //     // getStoreHardware(id, setError);
+  //     // getHardwareSetup(id, setError);
+  //   }
+  // }, [storeInfo.store_id])
 
   return (
     <div className={styles.wrapper}>

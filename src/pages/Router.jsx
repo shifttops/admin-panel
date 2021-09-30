@@ -117,7 +117,10 @@ export default function CustomRouter() {
           )}
         />
       </Switch>
-      {!localStorage.getItem("access") || <Redirect to={routes.login} />}
+      {(!localStorage.getItem("access") ||
+        localStorage.getItem("access") === "undefined") && (
+        <Redirect to={routes.login} />
+      )}
       {/* ) : (
         <Redirect to={routes.home} />
     )} */}

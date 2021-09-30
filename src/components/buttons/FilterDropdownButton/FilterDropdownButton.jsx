@@ -75,11 +75,6 @@ const FilterDropdownButton = observer(
           <div className={styles.inside_div}>
             {filterKey === "date_created" || filterKey === "date_deployment" ? (
               <div className={styles.checkbox_div}>
-                {console.log(
-                  allEnabledFilters[filterKey]
-                    ? allEnabledFilters[filterKey][0]
-                    : allEnabledFilters[filterKey]
-                )}
                 <DatePicker
                   selected={
                     enabledFiltersForKey[0]

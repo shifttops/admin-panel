@@ -23,8 +23,6 @@ const InnerHead = observer(() => {
     +location.pathname.split('/')[location.pathname.split('/').length - 1];
     if (storeInfo.store_id !== id) {
       storeInfo.store_id = id;
-      console.table('123123asdasd')
-      getStoreInfo(id, setError);
     }
   }, []);
 
