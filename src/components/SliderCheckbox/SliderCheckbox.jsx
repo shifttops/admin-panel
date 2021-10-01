@@ -1,7 +1,6 @@
 import styles from "./slider-checkbox.module.scss";
 
 export default function SliderCheckbox({ label, className, passed }) {
-  console.log(passed)
   return (
     <div className={styles.wrapperCheckbox + " " + className}>
       <div className={styles.switcher}>

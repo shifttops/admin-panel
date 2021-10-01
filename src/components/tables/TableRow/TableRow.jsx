@@ -1,14 +1,11 @@
-import moment from "moment";
-import { CheckIcon, ConfigIcon, MoreIcon } from "../../../icons/icons";
+import { MoreIcon } from "../../../icons/icons";
 import Checkbox from "../../Checkbox/Checkbox";
 import styles from "./table-row.module.scss";
-import { Link, NavLink, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import routes from "constants/routes";
 import ButtonIcon from "components/buttons/ButtonIcon";
 import statusButtonTypes from "types/statusButtonTypes";
-import iconButtonTypes from "types/iconButtonTypes";
 import cn from "classnames";
-import StoresStore from "../../../store/StoresStore";
 import { useState } from "react";
 import { statusMapper } from "../../../helpers/mappers";
 
@@ -87,9 +84,11 @@ export default function TableRow({
       <td>{date_ready_deployed}</td>
       <td>{date_deployed}</td>
       <td>
-        <button className={styles.store__more} onClick={handleOpenMore}>
-          <ButtonIcon Icon={MoreIcon} />
-        </button>
+        <ButtonIcon
+          className={styles.store__more}
+          onClick={handleOpenMore}
+          Icon={MoreIcon}
+        />
       </td>
     </tr>
   );

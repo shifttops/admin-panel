@@ -8,7 +8,7 @@ import StoresStore from "../../../../store/StoresStore";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
-const InnerStatistic = observer(() => {
+const InnerStatistic = observer((props) => {
   const { storeInfo, getMetrics } = StoresStore;
   const [error, setError] = useState(false);
   const location = useLocation();
@@ -46,8 +46,7 @@ const InnerStatistic = observer(() => {
   ];
 
   useEffect(() => {
-    const id =
-      +location.pathname.split("/")[location.pathname.split("/").length - 1];
+    const id = +props.match.params.id
     if (storeInfo.store_id === id) {
       getMetrics(id, setError);
     }

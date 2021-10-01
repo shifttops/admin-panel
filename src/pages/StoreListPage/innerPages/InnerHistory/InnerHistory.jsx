@@ -15,13 +15,13 @@ import { useLocation } from "react-router-dom";
 import moment from "moment";
 
 
-const InnerHistory = observer(() => {
+const InnerHistory = observer((props) => {
   const { storeInfo, storeErrors, getStoreErrorLogs } = StoresStore;
   const [error, setError] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
-    const id = +location.pathname.split('/')[location.pathname.split('/').length - 1];
+    const id = +props.match.params.id
     if (storeInfo.store_id === id) {
       getStoreErrorLogs(id, setError);
     }
@@ -54,7 +54,7 @@ const InnerHistory = observer(() => {
         </thead>
         <tbody>
           {storeErrors.map(item => (
-          <tr>
+          <tr key={`${item.store}-${item.id}`}>
             <td>
               <Checkbox label="Error" className={styles.checkbox} />
             </td>

@@ -173,7 +173,7 @@ const InnerLaunch = observer((props) => {
           </table>
           <Popup
             modal
-            trigger={<Button text="Launch" className="launch_btn" />}
+            trigger={<Button text="Launch" className="launch_btn"/>}
           >
             {(close) => (
               <LaunchPopup

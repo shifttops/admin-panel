@@ -36,12 +36,21 @@ class StoresStore {
     reaction(
       () => this.storeInfo.status,
       (status, previousValue, reaction) => {
-        if (status) {
+        if (status && this.maintenanceScreensData.length) {
           this.maintenanceScreens = [
             ...this.maintenanceScreensData.find(
               (screen) => screen.name === status
             )?.maintenance_screen,
           ];
+        }
+      }
+    );
+
+    reaction(
+      () => this.storeInfo.store_id,
+      (store_id, previousValue, reaction) => {
+        if (store_id) {
+          this.getStoreInfo(store_id, (msg) => msg && console.log("msg", msg));
         }
       }
     );
@@ -142,6 +151,7 @@ class StoresStore {
           if (res.cameras && res.cameras.length) {
             await this.getStoreCameraStatus(id, setError);
           }
+          await this.getStoreHardware(id, setError);
           setError("");
         }
       }
@@ -155,7 +165,7 @@ class StoresStore {
       servers_id.map((server_id) =>
         this.getStoreServer({ server_id, setError })
       )
-    ).catch((e) => setError(e));
+    ).catch((e) => setError(e.message));
 
     this.storeInfo = {
       ...this.storeInfo,

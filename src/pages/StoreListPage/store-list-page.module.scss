@@ -14,40 +14,6 @@
   padding-left: 36px;
 }
 
-.table thead th {
-  font-weight: 400;
-  cursor: pointer;
-  text-align: left;
-  border: none;
-  padding: 13px 15px 10px 15px;
-  background: #ededed;
-  font-size: 13px;
-  line-height: 16px;
-  text-transform: uppercase;
-  color: rgba(51, 51, 51, 0.5);
-  border-top: 1px solid #f2f2f2;
-  transition: all 0.3s ease 0s;
-
-  @media screen and (max-width: 1140px) {
-    vertical-align: top;
-  }
-
-  &:hover {
-    color: #333;
-    -webkit-text-stroke: 0.7px #333;
-    // text-shadow: 0 0 0.9px $color-black, 0 0 0.9px $color-black, 0 0 0.9px $color-black;
-  }
-
-  &::after {
-    display: block;
-    content: attr(data-text);
-    font-weight: 700;
-    height: 0;
-    overflow: hidden;
-    visibility: hidden;
-  }
-}
-
 .table tr td:last-child {
   width: 65px;
 }

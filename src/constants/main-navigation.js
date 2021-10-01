@@ -20,6 +20,7 @@ import PlannerPage from "pages/PlannerPage";
 import GroupPage from "pages/GroupPage";
 import ChatPage from "pages/ChatPage";
 import ScriptsLogsPage from "pages/ScriptsLogsPage";
+import {ScriptLogIcon} from "../icons";
 
 
 const mainNavigation = [
@@ -52,7 +53,7 @@ const mainNavigation = [
     to: routes.scripts_logs,
     name: "Scripts logs",
     component: <ScriptsLogsPage />,
-    icon: <ActivityIcon />,
+    icon: <ScriptLogIcon />,
   },
   // {
   //   to: routes.storeInfo,

@@ -13,18 +13,15 @@ import StoresStore from '../../../store/StoresStore';
 import { statusMapper } from '../../../helpers/mappers';
 import { useRef } from 'react';
 
-const InnerHead = observer(() => {
+const InnerHead = observer((props) => {
   const location = useLocation();
   const [error, setError] = useState(false);
   const { storeInfo, getStoreInfo } = StoresStore;
   
   useEffect(() => {
-    const id =
-    +location.pathname.split('/')[location.pathname.split('/').length - 1];
+    const id = +props.match.params.id
     if (storeInfo.store_id !== id) {
       storeInfo.store_id = id;
-      console.table('123123asdasd')
-      getStoreInfo(id, setError);
     }
   }, []);
 
