@@ -30,7 +30,7 @@ class ActivityLogsStore {
       await refreshToken();
 
       const resp = await fetch(
-          "https://staptest.mcd-cctv.com/api/jira_logs/?limit=9999&offset=0",
+          `${process.env.REACT_APP_URL}/api/jira_logs/?limit=9999&offset=0`,
           {
             method: "GET",
             headers: {
@@ -51,7 +51,7 @@ class ActivityLogsStore {
       await refreshToken();
 
       const resp = await fetch(
-          `https://staptest.mcd-cctv.com/api/fault_logs/?limit=9999&offset=0`,
+          `${process.env.REACT_APP_URL}/api/fault_logs/?limit=9999&offset=0`,
           {
             method: "GET",
             headers: {

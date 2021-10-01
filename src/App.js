@@ -1,5 +1,6 @@
 import { CookiesProvider } from "react-cookie";
 import CustomRouter from "./pages/Router";
+require('dotenv').config();
 
 function App() {
   return (
