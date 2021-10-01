@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { toJS } from "mobx";
 
-const InnerCameras = observer(() => {
+const InnerCameras = observer((props) => {
   const { storeInfo, cameras, getStoreCameraImages } = StoresStore;
   const [error, setError] = useState("");
   const location = useLocation();
@@ -85,8 +85,7 @@ const InnerCameras = observer(() => {
   };
 
   useEffect(() => {
-    const id =
-      +location.pathname.split("/")[location.pathname.split("/").length - 1];
+    const id = +props.match.params.id
     if (storeInfo.store_id === id) {
       getStoreCameraImages(id, setError);
     }

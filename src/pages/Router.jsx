@@ -76,7 +76,7 @@ export default function CustomRouter() {
                   exact
                   component={(props) => <ScriptsLogInfo {...props} />}
                 />
-                {innerNavigation.map(({ to, component }) => (
+                {innerNavigation.map(({ to, Component }) => (
                   <Route
                     path={`${to}/:id`}
                     exact
@@ -85,8 +85,8 @@ export default function CustomRouter() {
                       <div className={styles.inner}>
                         <InnerSidebar {...props} />
                         <div className={styles.wrapper}>
-                          <InnerHead />
-                          <div>{component}</div>
+                          <InnerHead {...props}/>
+                          <Component {...props}/>
                         </div>
                       </div>
                     )}

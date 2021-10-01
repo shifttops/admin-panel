@@ -12,38 +12,38 @@ import InnerEdit from "../pages/ScriptsPage/InnerEdit/InnerEdit";
 import InnerLaunch from "../pages/ScriptsPage/InnerLaunch/InnerLaunch";
 
 export const innerNavigation = [
-  { to: routes.storeInfo, name: "Store Info", component: <InnerInfo /> },
+  { to: routes.storeInfo, name: "Store Info", Component: InnerInfo },
   {
     to: routes.manageStore,
     name: "Manage Store",
-    component: <InnerManage />,
+    Component: InnerManage,
   },
   {
     to: routes.innerStatistic,
     name: "Statistic",
-    component: <InnerStatistic />,
+    Component: InnerStatistic,
   },
   {
     to: routes.innerHistory,
     name: "History",
-    component: <InnerHistory />,
+    Component: InnerHistory,
   },
-  { to: routes.innerChat, name: "Chat", component: <InnerChat /> },
-  { to: routes.innerFiles, name: "Files", component: <InnerFiles /> },
+  { to: routes.innerChat, name: "Chat", Component: InnerChat },
+  { to: routes.innerFiles, name: "Files", Component: InnerFiles },
   {
     to: routes.innerCameras,
     name: "Cameras",
-    component: <InnerCameras />,
+    Component: InnerCameras,
   },
   {
     to: routes.innerConfiguration,
     name: "Configuration",
-    component: <InnerConfiguration />,
+    Component: InnerConfiguration,
   },
   {
     to: routes.innerPlanner,
     name: "Planner",
-    component: <InnerPlanner />,
+    Component: InnerPlanner,
   },
 ];
 
