@@ -34,15 +34,17 @@ export default function InnerPlanner() {
       </div>
 
       <table className={styles.table}>
-        <tr>
-          <th />
-          <th>Task name</th>
-          <th>Start date</th>
-          <th>Period</th>
-          <th>End date</th>
-          <th />
-          <th />
-        </tr>
+        <thead>
+          <tr>
+            <th />
+            <th>Task name</th>
+            <th>Start date</th>
+            <th>Period</th>
+            <th>End date</th>
+            <th />
+            <th />
+          </tr>
+        </thead>
         <tbody>
           <PlannerItem
             text="Record video from lateral cameras"
