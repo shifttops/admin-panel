@@ -91,7 +91,7 @@ export default function TableHead({
             />
           </th>
         ))}
-        <th />
+        <th className={styles.table__sort}/>
       </tr>
     </thead>
   );
