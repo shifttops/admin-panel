@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^12.1.10",
     "@tippyjs/react": "^4.2.5",
     "ace-builds": "^1.4.12",
+    "antd": "^4.16.13",
     "classnames": "^2.2.6",
     "dotenv": "^10.0.0",
     "mobx": "^6.3.2",
