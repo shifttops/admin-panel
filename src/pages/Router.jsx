@@ -20,6 +20,7 @@ import {
 import ScriptsLogInfo from "./ScriptsLogInfo/ScriptsLogInfo";
 
 export default function CustomRouter() {
+  console.log(process.env);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isSidebarOverlap, setIsSidebarOverlap] = useState(false);
 
