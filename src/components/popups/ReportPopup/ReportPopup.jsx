@@ -47,7 +47,7 @@ export default function ReportPopup({ onClose, checkedStores }) {
       try {
         await refreshToken();
 
-        const resp = await fetch("https://staptest.mcd-cctv.com/api/reports/", {
+        const resp = await fetch(`${process.env.REACT_APP_URL}/api/reports/`, {
           method: "POST",
           headers: {
             Authorization: `Token ${localStorage.getItem("access")}`,

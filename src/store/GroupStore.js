@@ -14,7 +14,7 @@ class GroupsStore {
       await refreshToken();
       
       const resp = await fetch(
-          "https://staptest.mcd-cctv.com/api/store_group",
+          `${process.env.REACT_APP_URL}/api/store_group`,
           {
             method: "GET",
             headers: {

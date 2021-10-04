@@ -22,7 +22,7 @@ export default function LoginPage() {
   const handleLogIn = async (e) => {
     e.preventDefault();
     try {
-      const resp = await fetch('https://staptest.mcd-cctv.com/token/', {
+      const resp = await fetch(`${process.env.REACT_APP_URL}/token/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

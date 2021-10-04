@@ -11,6 +11,9 @@ import ButtonIcon from "components/buttons/ButtonIcon";
 import iconButtonTypes from "types/iconButtonTypes";
 import Button from "components/buttons/Button";
 import PlannerItem from "components/PlannerItem";
+import { CronGuide } from 'reactjs-crontab'
+import 'reactjs-crontab/dist/index.css'
+import React from "react";
 
 export default function InnerPlanner() {
   return (
@@ -34,6 +37,7 @@ export default function InnerPlanner() {
       </div>
 
       <table className={styles.table}>
+        <CronGuide />
         <tr>
           <th />
           <th>Task name</th>
