@@ -31,7 +31,7 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "craco start --mode production NODE-ENV=production",
+    "start": "craco build && serve -l 3000 -s build",
     "dev": "PORT=3006 craco start --mode development",
     "build": "craco build",
     "test": "craco test",
