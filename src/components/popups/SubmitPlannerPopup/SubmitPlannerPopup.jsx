@@ -1,16 +1,15 @@
-import styles from "./submit-popup.module.scss";
+import styles from "./submit-planner-popup.module.scss";
 import { CloseIcon } from "icons";
 import { observer } from "mobx-react";
 import { useState } from "react";
 import StoresStore from "../../../store/StoresStore";
 
-const SubmitPopup = observer(({ onClose, screen, setIsVisible }) => {
+const SubmitPlannerPopup = observer(({ onClose, plannerTask}) => {
   const [error, setError] = useState(false);
-  const { setMaintenanceScreen } = StoresStore;
+  const { addPlannerTask } = StoresStore;
 
-  const handleChoice = ({ setError, screen }) => {
-    setMaintenanceScreen({ setError, screen });
-    setIsVisible(false);
+  const handleChoice = ({ setError, plannerTask}) => {
+    addPlannerTask({ setError, plannerTask});
     onClose();
   };
 
@@ -24,12 +23,15 @@ const SubmitPopup = observer(({ onClose, screen, setIsVisible }) => {
       </div>
       <form>
         <div className={styles.block}>
-          Are you sure you want to select <b>{screen}</b> screen?
+            Are you sure you want to select this:
+          <span>Start date: {plannerTask.startDate.toLocaleString().slice(0, -3)}</span>
+          <span>Period: {plannerTask.period}</span>
+          <span>End date: {plannerTask.endDate.toLocaleString().slice(0, -3)}</span> planner?
         </div>
         <button
           className={styles.applyButton}
           type="button"
-          onClick={(e) => handleChoice({ setError, screen })}
+          onClick={(e) => handleChoice({ setError, plannerTask})}
         >
           Confirm
         </button>
@@ -38,4 +40,4 @@ const SubmitPopup = observer(({ onClose, screen, setIsVisible }) => {
   );
 });
 
-export default SubmitPopup;
+export default SubmitPlannerPopup;

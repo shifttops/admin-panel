@@ -254,7 +254,7 @@ class ScriptsStore {
     }
   };
 
-  launchScript = async ({ hosts, variables, playbook_id, setError }) => {
+  launchScript = async ({ hosts, variables, playbook_id, setError, planner }) => {
     const newVariables = { ...variables };
     Object.keys(newVariables).forEach(
       (key) => !newVariables[key] && delete newVariables[key]
@@ -294,7 +294,7 @@ class ScriptsStore {
     }
   };
 
-  createPreset = async ({ name, script_id, hosts, variables, setError }) => {
+  createPreset = async ({ name, script_id, hosts, variables, setError, planner }) => {
     const newVariables = Object.keys(variables)
       .filter((key) => variables[key])
       .map((key) => ({

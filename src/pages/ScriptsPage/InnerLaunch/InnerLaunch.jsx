@@ -1,23 +1,20 @@
-import ButtonIcon from "components/buttons/ButtonIcon";
-import { MoreIcon, SortIcon } from "icons";
 import styles from "./launch.module.scss";
-import Checkbox from "components/Checkbox";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../../../components/buttons/Button";
 import ScriptsStoresTable from "../../../components/ScriptsStoresTable/ScriptsStoresTable";
 import { observer } from "mobx-react";
 import { useLocation } from "react-router";
 import ScriptsStore from "../../../store/ScriptsStore";
-import { useEffect } from "react";
 import Popup from "reactjs-popup";
 import LaunchPopup from "../../../components/popups/LaunchPopup";
 import {
   ToastsContainer,
-  ToastsStore,
   ToastsContainerPosition,
+  ToastsStore,
 } from "react-toasts";
 import { NavLink } from "react-router-dom";
 import routes from "../../../constants/routes";
+import ScriptsPeriodTable from "../../../components/ScriptsPeriodTable/ScriptsPeriodTable";
 
 const InnerLaunch = observer((props) => {
   const location = useLocation();
@@ -43,6 +40,10 @@ const InnerLaunch = observer((props) => {
 
   const [enabledStores, setEnabledStores] = useState({ hosts: [], groups: [] });
 
+  const [period, setPeriod] = useState("* * * * *");
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+
   const handleChange = (value, key) => {
     setRows((prev) => {
       prev[key] = value;
@@ -63,6 +64,7 @@ const InnerLaunch = observer((props) => {
         script_id: scriptId,
         hosts: launchHosts,
         variables: rows,
+        planner: {startDate, period, endDate},
         setError,
       });
     }
@@ -80,6 +82,7 @@ const InnerLaunch = observer((props) => {
         hosts: launchHosts,
         playbook_id: scriptId,
         variables: rows,
+        planner: {startDate, period, endDate},
         setError,
       })
     );
@@ -129,7 +132,12 @@ const InnerLaunch = observer((props) => {
   }, [hosts, presets, preset.current]);
 
   useEffect(() => {
-    if (scripts.length && scripts.current && !script.current.playbook_id && !presetId) {
+    if (
+      scripts.length &&
+      scripts.current &&
+      !script.current.playbook_id &&
+      !presetId
+    ) {
       script.current = scripts.find(
         (script) => script.playbook_id === scriptId
       );
@@ -173,7 +181,7 @@ const InnerLaunch = observer((props) => {
           </table>
           <Popup
             modal
-            trigger={<Button text="Launch" className="launch_btn"/>}
+            trigger={<Button text="Launch" className="launch_btn" />}
           >
             {(close) => (
               <LaunchPopup
@@ -181,7 +189,8 @@ const InnerLaunch = observer((props) => {
                 enabledStores={enabledStores}
                 rows={rows}
                 onClose={close}
-              ></LaunchPopup>
+                planner={{startDate, period, endDate}}
+              />
             )}
           </Popup>
         </div>
@@ -190,6 +199,14 @@ const InnerLaunch = observer((props) => {
           enabledStores={enabledStores}
           setEnabledStores={setEnabledStores}
           hosts={hosts}
+        />
+        <ScriptsPeriodTable
+          period={period}
+          setPeriod={setPeriod}
+          startDate={startDate}
+          setStartDate={setStartDate}
+          endDate={endDate}
+          setEndDate={setEndDate}
         />
         <div className={log_id ? styles.popup : styles.closed}>
           {log_id ? (

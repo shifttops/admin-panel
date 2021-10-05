@@ -15,7 +15,7 @@ import queryString from "query-string";
 import { toJS } from "mobx";
 
 const LaunchPopup = observer(
-  ({ onClose, handleLaunch, enabledStores, rows }) => {
+  ({ onClose, handleLaunch, enabledStores, rows, planner }) => {
     const { filters, getFilters, enabledFilters, getStores } = StoresStore;
     const [error, setError] = useState(false);
     const history = useHistory();
@@ -33,6 +33,7 @@ const LaunchPopup = observer(
           <div className={styles.block}>
             Are you sure you want to launch the script with
             <span>{JSON.stringify(rows)}</span>
+            <span>{JSON.stringify(planner)}</span>
             on
             <span>{JSON.stringify(enabledStores)}?</span>
           </div>
