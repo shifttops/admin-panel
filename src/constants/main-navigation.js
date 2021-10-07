@@ -72,7 +72,6 @@ const mainNavigation = [
     name: "Planner",
     component: <PlannerPage />,
     icon: <PlannerStrokeIcon />,
-    disabled: true
   },
   {
     to: routes.mcdStores,

@@ -84,6 +84,7 @@ const InnerLaunch = observer((props) => {
         variables: rows,
         planner: {startDate, period, endDate},
         setError,
+        script: scripts.find(script => scriptId === script.playbook_id)
       })
     );
     setTimeout(() => setLogId(""), 5000);

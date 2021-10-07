@@ -10,6 +10,7 @@ import { computedFn } from "mobx-utils";
 import { refreshToken } from "../helpers/AuthHelper";
 import { ToastsStore } from "react-toasts";
 import routes from "../constants/routes";
+import PlannerStore from "./PlannerStore";
 
 class ScriptsStore {
   scripts = [];
@@ -254,7 +255,7 @@ class ScriptsStore {
     }
   };
 
-  launchScript = async ({ hosts, variables, playbook_id, setError, planner }) => {
+  launchScript = async ({ hosts, variables, playbook_id, setError, planner, script }) => {
     const newVariables = { ...variables };
     Object.keys(newVariables).forEach(
       (key) => !newVariables[key] && delete newVariables[key]
@@ -282,6 +283,7 @@ class ScriptsStore {
         }
       );
       if (resp.status === 200) {
+        await PlannerStore.postCrontab({setError, planner, script, variables, hosts})
         return resp.json();
       } else {
         const res = await resp.json();
