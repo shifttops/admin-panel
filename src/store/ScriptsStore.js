@@ -255,12 +255,12 @@ class ScriptsStore {
     }
   };
 
-  launchScript = async ({ hosts, variables, playbook_id, setError, planner, script }) => {
+  launchScript = async ({ hosts, variables, setError, planner, script }) => {
     const newVariables = { ...variables };
     Object.keys(newVariables).forEach(
       (key) => !newVariables[key] && delete newVariables[key]
     );
-    if (!playbook_id) {
+    if (!script.playbook_id) {
       ToastsStore.error("This is an empty script", 3000, "toast");
       return null;
     }
@@ -268,7 +268,7 @@ class ScriptsStore {
       await refreshToken();
 
       const resp = await fetch(
-        `${process.env.REACT_APP_URL}/api/execute_playbook/${playbook_id}`,
+        `${process.env.REACT_APP_URL}/api/execute_playbook/${!script.playbook_id}`,
         {
           method: "POST",
           headers: {
@@ -283,7 +283,7 @@ class ScriptsStore {
         }
       );
       if (resp.status === 200) {
-        await PlannerStore.postCrontab({setError, planner, script, variables, hosts})
+        await PlannerStore.addCrontab({setError, planner, script, variables, hosts})
         return resp.json();
       } else {
         const res = await resp.json();

@@ -496,33 +496,6 @@ class StoresStore {
       ToastsStore.error(e.message, 3000, "toast");
     }
   };
-
-  addPlannerTask = async ({ setError, plannerTask }) => {
-    try{
-      await refreshToken();
-
-      const resp = await fetch(
-        `someUrl`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Token ${localStorage.getItem("access")}`,
-            "Content-Type": "application/json",
-          },
-          body: plannerTask
-        }
-      );
-
-      if (resp.status === 200) {
-
-        setError('')
-      } else {
-
-      }
-    } catch (e) {
-      setError(e.message);
-    }
-  }
 }
 
 export default new StoresStore();

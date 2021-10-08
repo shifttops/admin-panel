@@ -80,7 +80,6 @@ const InnerLaunch = observer((props) => {
     setLogId(
       await launchScript({
         hosts: launchHosts,
-        playbook_id: scriptId,
         variables: rows,
         planner: {startDate, period, endDate},
         setError,

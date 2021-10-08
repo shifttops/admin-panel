@@ -46,7 +46,7 @@ class PlannerStore {
     }
   }
 
-  postCrontab = async ({setError, planner, script, variables, hosts}) => {
+  addCrontab = async ({setError, planner, script, variables, hosts}) => {
     try {
       await refreshToken();
 

@@ -6,10 +6,8 @@ import StoresStore from "../../../store/StoresStore";
 
 const SubmitPlannerPopup = observer(({ onClose, plannerTask}) => {
   const [error, setError] = useState(false);
-  const { addPlannerTask } = StoresStore;
 
   const handleChoice = ({ setError, plannerTask}) => {
-    addPlannerTask({ setError, plannerTask});
     onClose();
   };
 

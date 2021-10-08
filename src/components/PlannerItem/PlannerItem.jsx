@@ -26,8 +26,8 @@ export default function PlannerItem({
 
   useEffect(async () => {
     if(taskData){
-      const crontab = await getCrontab({setError, crontabId: taskData.crontab})
-      setCrontab(crontab)
+      const crontab_schedule = await getCrontab({setError, crontabId: taskData.crontab})
+      setCrontab(crontab_schedule)
     }
   }, [taskData])*/
 
@@ -42,17 +42,17 @@ export default function PlannerItem({
       </td>
       {globalStore && (
         <td className={styles.store}>
-          {taskData &&
+          {taskData ?
             JSON.parse(taskData.kwargs).store_groups.map((store) => (
               <div>{store}</div>
-            ))}
+            )) : ''}
         </td>
       )}
       <td className={styles.plannerItem__text + " " + className}>
-        {taskData && taskData.name}
+        {taskData ? taskData.name : ''}
       </td>
       {globalStore && (
-        <td>{taskData && taskData.enabled ? "Enabled" : "Disabled"}</td>
+        <td>{taskData ? (taskData.enabled ? "Enabled" : "Disabled") : ''}</td>
       )}
       {globalStore && <td>{taskData && taskData.total_run_count}</td>}
       {globalStore && <td>{taskData && new Date(taskData.date_changed).toLocaleString().slice(0, -3)}</td>}
