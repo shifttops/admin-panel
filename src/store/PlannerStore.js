@@ -50,7 +50,7 @@ class PlannerStore {
     try {
       await refreshToken();
 
-      const {period} = planner
+      const {period} = planner.split(' ')
 
       const resp = await fetch(`${process.env.REACT_APP_URL}/api/crontab_schedule/`, {
         method: "POST",
@@ -58,12 +58,12 @@ class PlannerStore {
           Authorization: `Token ${localStorage.getItem("access")}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({minute: period[0], hour: period[2], day_of_week: period[4], day_of_month: period[6], month_of_year: period[8]})
+        body: JSON.stringify({minute: period[0], hour: period[1], day_of_week: period[2], day_of_month: period[3], month_of_year: period[4]})
       });
 
       if( resp.status === 201 ){
         const res = await resp.json()
-        await this.postTask({
+        await this.addPeriodicTask({
           setError,
           taskData: {name: script.name, crontab: res.pk, enabled: false, kwargs: JSON.stringify({playbook_id: script.playbook_id, variables, store_groups: hosts.groups})}
         })
@@ -73,7 +73,7 @@ class PlannerStore {
     }
   }
 
-  postTask = async ({setError, taskData}) => {
+  addPeriodicTask = async ({setError, taskData}) => {
     try {
       await refreshToken();
       const resp = await fetch(`${process.env.REACT_APP_URL}/api/periodic_task/`, {
@@ -87,7 +87,7 @@ class PlannerStore {
 
       const res = await resp.json();
 
-      if(res.resultCode === 200 ){}
+      if(res.resultCode === 201 ){}
     } catch (e) {
       setError(e.message);
     }

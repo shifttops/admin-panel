@@ -40,22 +40,22 @@ export default function PlannerItem({
       <td>
         <ButtonIcon Icon={Icon} type={iconColor} />
       </td>
-      {globalStore && (
+      {globalStore ? (
         <td className={styles.store}>
           {taskData ?
             JSON.parse(taskData.kwargs).store_groups.map((store) => (
               <div>{store}</div>
             )) : ''}
         </td>
-      )}
+      ) : ''}
       <td className={styles.plannerItem__text + " " + className}>
         {taskData ? taskData.name : ''}
       </td>
-      {globalStore && (
+      {globalStore ? (
         <td>{taskData ? (taskData.enabled ? "Enabled" : "Disabled") : ''}</td>
-      )}
-      {globalStore && <td>{taskData && taskData.total_run_count}</td>}
-      {globalStore && <td>{taskData && new Date(taskData.date_changed).toLocaleString().slice(0, -3)}</td>}
+      ) : ''}
+      {globalStore ? <td>{taskData && taskData.total_run_count}</td> : ''}
+      {globalStore ? <td>{taskData && new Date(taskData.date_changed).toLocaleString().slice(0, -3)}</td> : ''}
       <td className={styles.plannerItem__date}>
         <DatePicker
           className={styles.date}

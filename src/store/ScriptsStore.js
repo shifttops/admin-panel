@@ -268,7 +268,7 @@ class ScriptsStore {
       await refreshToken();
 
       const resp = await fetch(
-        `${process.env.REACT_APP_URL}/api/execute_playbook/${!script.playbook_id}`,
+        `${process.env.REACT_APP_URL}/api/execute_playbook/${script.playbook_id}`,
         {
           method: "POST",
           headers: {
