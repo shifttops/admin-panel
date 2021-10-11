@@ -21,19 +21,18 @@ export default function PlannerItem({
   className,
   taskData
 }) {
-  /*const {getCrontab} = PlannerStore
-  const [crontab, setCrontab] = useState({})
-
-  useEffect(async () => {
-    if(taskData){
-      const crontab_schedule = await getCrontab({setError, crontabId: taskData.crontab})
-      setCrontab(crontab_schedule)
-    }
-  }, [taskData])*/
+  const {getCrontab} = PlannerStore
 
   const [period, setPeriod] = useState('* * * * *')
   const [startDate, setStartDate] = useState(new Date())
-  const [endDate, setEndDate] = useState(new Date())
+  const [endDate, setEndDate] = useState(taskData ? new Date(taskData.expires) : new Date())
+
+  useEffect(async () => {
+    if(globalStore && taskData){
+      const crontab_schedule = await getCrontab({setError, crontabId: taskData.crontab})
+      if(crontab_schedule) setPeriod(`${crontab_schedule.minute} ${crontab_schedule.hour} ${crontab_schedule.day_of_week} ${crontab_schedule.day_of_month} ${crontab_schedule.month_of_year}`)
+    }
+  }, [taskData])
 
   return (
     <tr className={cn({ [styles.errorContainer]: hasError })}>
@@ -44,12 +43,16 @@ export default function PlannerItem({
         <td className={styles.store}>
           {taskData ?
             JSON.parse(taskData.kwargs).store_groups.map((store) => (
-              <div>{store}</div>
+              <div key={`${taskData.name}${store}`}>{store}</div>
             )) : ''}
+          {taskData ?
+            (JSON.parse(taskData.kwargs).server_ids ? JSON.parse(taskData.kwargs).server_ids.map((store) => (
+              <div key={`${taskData.name}${store}`}>{store}</div>
+            )) : '') : ''}
         </td>
       ) : ''}
       <td className={styles.plannerItem__text + " " + className}>
-        {taskData ? taskData.name : ''}
+        {taskData ? taskData.name : text}
       </td>
       {globalStore ? (
         <td>{taskData ? (taskData.enabled ? "Enabled" : "Disabled") : ''}</td>

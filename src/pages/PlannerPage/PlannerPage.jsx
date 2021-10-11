@@ -16,6 +16,7 @@ import PlannerItem from "components/PlannerItem";
 import {observer} from "mobx-react";
 import {useEffect, useState} from "react";
 import PlannerStore from "../../store/PlannerStore";
+import {ToastsContainer, ToastsContainerPosition, ToastsStore} from "react-toasts";
 
 const PlannerPage = observer(() => {
   const [error, setError] = useState('')
@@ -60,6 +61,7 @@ const PlannerPage = observer(() => {
         <tbody>
         {plannerTasks.map(task => (
           <PlannerItem
+            key={task.name}
             className={styles.name}
             globalStore
             Icon={PauseIcon}
@@ -69,6 +71,10 @@ const PlannerPage = observer(() => {
         ))}
         </tbody>
       </table>
+      <ToastsContainer
+        store={ToastsStore}
+        position={ToastsContainerPosition.BOTTOM_RIGHT}
+      />
     </div>
   );
 })
