@@ -4,22 +4,18 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowDownIcon } from "../../icons";
 import StoresStore from "../../store/StoresStore";
 import { observer } from "mobx-react";
-import SubmitPopup from "../popups/Submit Popup";
 import Popup from "reactjs-popup";
+import PopupComponent from "../popups/PopupComponent/PopupComponent";
 
 const MaintenanceScreen = observer(() => {
   const [isVisible, setIsVisible] = useState(false);
   const [error, setError] = useState("");
-  const [isPopupVisible, setIsPopupVisible] = useState(false);
-  const [chosenScreen, setChosenScreen] = useState("");
-
   const {
     maintenanceScreens,
     updateMaintenanceScreens,
     getMaintenanceScreens,
     storeInfo,
     setMaintenanceScreen,
-    getStoreInfo,
     updateJiraStatus,
   } = StoresStore;
 
@@ -27,6 +23,12 @@ const MaintenanceScreen = observer(() => {
     if (!maintenanceScreens.length) getMaintenanceScreens(setError);
     // else updateMaintenanceScreens();
   }, [maintenanceScreens.length]);
+
+  const handleClick = ({ e, onClose, screen }) => {
+    setMaintenanceScreen({ setError, screen });
+    setIsVisible(false);
+    onClose();
+  };
 
   return (
     <div className={styles.maintenanceScreen}>
@@ -37,15 +39,9 @@ const MaintenanceScreen = observer(() => {
           </div>
           <div
             className={styles.currentScreen}
-            onClick={() => {
-              setIsVisible((prevVisibility) => !prevVisibility);
-              setIsPopupVisible(false);
-            }}
+            onClick={() => setIsVisible((prevVisibility) => !prevVisibility)}
           >
             <span className={styles.currentScreen__text}>
-              {/* {maintenanceScreens.find(
-                (screen) => screen === storeInfo.maintenance_screen
-              ) || "Nothing chosen"} */}
               {storeInfo.maintenance_screen
                 ? storeInfo.maintenance_screen
                 : "Nothing chosen"}
@@ -59,11 +55,7 @@ const MaintenanceScreen = observer(() => {
           </div>
           {maintenanceScreens[0] !== "" && (
             <div
-              className={
-                styles.dropDown +
-                " " +
-                (isVisible ? styles.dropDown__visible : styles.dropDown__hidden)
-              }
+              className={styles.dropDown + " " + (isVisible ? styles.dropDown__visible : styles.dropDown__hidden)}
             >
               <div className={styles.dropDown__body}>
                 {maintenanceScreens.map((screen) =>
@@ -73,14 +65,7 @@ const MaintenanceScreen = observer(() => {
                       modal
                       trigger={
                         <div
-                          // onClick={() => handleClick(screen)}
-                          className={
-                            styles.innerScreen +
-                            " " +
-                            (screen === storeInfo.maintenance_screen
-                              ? styles.innerScreen__current
-                              : "")
-                          }
+                          className={styles.innerScreen + " " + (screen === storeInfo.maintenance_screen ? styles.innerScreen__current : "")}
                           key={screen}
                         >
                           {screen ? screen : "No screens"}
@@ -88,10 +73,13 @@ const MaintenanceScreen = observer(() => {
                       }
                     >
                       {(close) => (
-                        <SubmitPopup
-                          screen={screen}
+                        <PopupComponent
                           onClose={close}
-                          setIsVisible={setIsVisible}
+                          onClick={(e) => handleClick({e, onClose: close, screen})}
+                          buttonText={'Confirm'}
+                          titleText={'Confirm'}
+                          text={'Are you sure you want to select screen:'}
+                          dedicatedText={screen}
                         />
                       )}
                     </Popup>
@@ -105,13 +93,6 @@ const MaintenanceScreen = observer(() => {
                   )
                 )}
               </div>
-              {/* {isPopupVisible && (
-                <SubmitPopup
-                  screen={chosenScreen}
-                  handleSubmit={handleChoice}
-                  onClose={onClose}
-                />
-              )} */}
             </div>
           )}
         </div>
