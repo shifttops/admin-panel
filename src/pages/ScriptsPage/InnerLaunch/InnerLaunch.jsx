@@ -191,7 +191,7 @@ const InnerLaunch = observer((props) => {
                 dedicatedText={JSON.stringify(rows)}
                 additionalText={'on'}
                 additionalDedicatedText={JSON.stringify(enabledStores)}
-                onClick={() => {handleClick({onClose: close})}}
+                onClick={() => handleClick({onClose: close})}
               />
             )}
           </Popup>

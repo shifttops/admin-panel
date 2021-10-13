@@ -123,7 +123,7 @@ const ScriptsPage = observer(() => {
                     dedicatedText={script.name}
                     titleText={'Delete'}
                     buttonText={'Delete'}
-                    onClick={() => {handleClick({onClose: close, script})}}
+                    onClick={() => handleClick({onClose: close, script})}
                   />
                 }
               </Popup>
