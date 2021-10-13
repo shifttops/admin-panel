@@ -1,18 +1,32 @@
 import styles from "./inner-planner.module.scss";
-import {
-  CheckIcon,
-  ErrorIcon,
-  PauseIcon,
-  PlannerIcon,
-  PlayIcon,
-  ProcessIcon,
-} from "icons";
+import { CheckIcon, PauseIcon, PlannerIcon, PlayIcon } from "icons";
 import ButtonIcon from "components/buttons/ButtonIcon";
 import iconButtonTypes from "types/iconButtonTypes";
 import Button from "components/buttons/Button";
 import PlannerItem from "components/PlannerItem";
+import { observer } from "mobx-react";
+import { useEffect, useRef, useState } from "react";
+import StoresStore from "../../../../store/StoresStore";
+import {
+  ToastsContainer,
+  ToastsContainerPosition,
+  ToastsStore,
+} from "react-toasts";
 
-export default function InnerPlanner() {
+const InnerPlanner = observer(() => {
+  const [error, setError] = useState("");
+  const { storeInfo, getStorePeriodicTasks } = StoresStore;
+
+  const taskRef = useRef(false);
+
+  useEffect(() => {
+    if (!storeInfo.periodicTasks && taskRef) getStorePeriodicTasks(setError);
+  }, [storeInfo.periodicTasks]);
+
+  useEffect(() => {
+    taskRef.current = true;
+  }, []);
+
   return (
     <div className={styles.planner}>
       <div className={styles.planner__head}>
@@ -38,42 +52,34 @@ export default function InnerPlanner() {
           <tr>
             <th />
             <th>Task name</th>
+            <th>Status</th>
+            <th>Total run count</th>
+            <th>Changed date</th>
             <th>Start date</th>
             <th>Period</th>
             <th>End date</th>
             <th />
-            <th />
           </tr>
         </thead>
         <tbody>
-          <PlannerItem
-            text="Record video from lateral cameras"
-            Icon={PauseIcon}
-            iconColor={iconButtonTypes.red}
-          />
-          <PlannerItem
-            text="Recording video from external cameras"
-            Icon={ProcessIcon}
-            iconColor={iconButtonTypes.yellow}
-          />
-          <PlannerItem
-            text="Recording video from external and internal cameras"
-            Icon={PlayIcon}
-            iconColor={iconButtonTypes.green}
-          />
-          <PlannerItem
-            text="Recording video from the monitor"
-            Icon={PlannerIcon}
-            iconColor={iconButtonTypes.blue}
-          />
-          <PlannerItem
-            text="Recording video from the monitor"
-            hasError
-            Icon={ErrorIcon}
-            iconColor={iconButtonTypes.error}
-          />
+          {storeInfo.periodicTasks && storeInfo.periodicTasks.length
+            ? storeInfo.periodicTasks.map((task) => (
+                <PlannerItem
+                  key={`store${storeInfo.store_id}-${task.name}`}
+                  taskData={task}
+                  Icon={PauseIcon}
+                  iconColor={iconButtonTypes.red}
+                />
+              ))
+            : null}
         </tbody>
       </table>
+      <ToastsContainer
+        store={ToastsStore}
+        position={ToastsContainerPosition.BOTTOM_RIGHT}
+      />
     </div>
   );
-}
+});
+
+export default InnerPlanner;

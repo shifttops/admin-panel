@@ -19,6 +19,7 @@ class StoresStore {
   maintenanceScreens = [];
   maintenanceScreensData = [];
   groups = [];
+  periodicTasks = [];
 
   constructor() {
     makeAutoObservable(
@@ -482,7 +483,7 @@ class StoresStore {
           },
         }
       );
-      console.log(resp);
+
       if (resp.status === 200) {
         ToastsStore.success("Updated", 3000, "toast");
         setTimeout(() => {
@@ -494,6 +495,34 @@ class StoresStore {
       }
     } catch (e) {
       ToastsStore.error(e.message, 3000, "toast");
+    }
+  };
+
+  getStorePeriodicTasks = async (setError) => {
+    try {
+      await refreshToken();
+
+      const resp = await fetch(
+        `${process.env.REACT_APP_URL}/api/store/${this.storeInfo.store_id}/periodic_tasks`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Token ${localStorage.getItem("access")}`,
+          },
+        }
+      );
+
+      if (resp.status === 200) {
+        const res = await resp.json();
+        this.storeInfo = { ...this.storeInfo, periodicTasks: res.results };
+        if (!res.results.length)
+          ToastsStore.error("No tasks on this store", 3000, "toast");
+      } else {
+        const res = await resp.json();
+        ToastsStore.error(res.error, 3000, "toast");
+      }
+    } catch (e) {
+      setError(e.message);
     }
   };
 }

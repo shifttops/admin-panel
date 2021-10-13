@@ -118,7 +118,7 @@ class PlannerStore {
 
       if(resp.status !== 201) {
         const res = await resp.json();
-        ToastsStore.error(res.error, 3000, "toast");
+        ToastsStore.error(res.name, 3000, "toast");
       }
     } catch (e) {
       ToastsStore.error(e.message, 3000, "toast");

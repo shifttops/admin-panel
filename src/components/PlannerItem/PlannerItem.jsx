@@ -28,7 +28,7 @@ export default function PlannerItem({
   const [endDate, setEndDate] = useState(taskData ? new Date(taskData.expires) : new Date())
 
   useEffect(async () => {
-    if(globalStore && taskData){
+    if(taskData){
       const crontab_schedule = await getCrontab({setError, crontabId: taskData.crontab})
       if(crontab_schedule) setPeriod(`${crontab_schedule.minute} ${crontab_schedule.hour} ${crontab_schedule.day_of_week} ${crontab_schedule.day_of_month} ${crontab_schedule.month_of_year}`)
     }
@@ -50,15 +50,13 @@ export default function PlannerItem({
               <div key={`${taskData.name}${store}`}>{store}</div>
             )) : '') : ''}
         </td>
-      ) : ''}
+      ) : null}
       <td className={styles.plannerItem__text + " " + className}>
         {taskData ? taskData.name : text}
       </td>
-      {globalStore ? (
-        <td>{taskData ? (taskData.enabled ? "Enabled" : "Disabled") : ''}</td>
-      ) : ''}
-      {globalStore ? <td>{taskData && taskData.total_run_count}</td> : ''}
-      {globalStore ? <td>{taskData && new Date(taskData.date_changed).toLocaleString().slice(0, -3)}</td> : ''}
+      <td>{taskData ? (taskData.enabled ? "Enabled" : "Disabled") : ''}</td>
+      <td>{taskData && taskData.total_run_count}</td>
+      <td>{taskData && new Date(taskData.date_changed).toLocaleString().slice(0, -3)}</td>
       <td className={styles.plannerItem__date}>
         <DatePicker
           className={styles.date}
