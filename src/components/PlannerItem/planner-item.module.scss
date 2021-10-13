@@ -111,6 +111,25 @@ td.plannerItem__text {
     }
   }
 
+  &__disabled {
+    @media(any-hover: hover) {
+      &:hover {
+        border: 1px solid rgba(131, 131, 131, 0.07);
+        cursor: not-allowed;
+      }
+    }
+  }
+
   &__end {
+  }
+}
+
+.confirmIcon{
+  color: $color-green;
+  @media(any-hover: hover){
+      &:hover{
+        background-color: rgba(169, 194, 63, 0.28);
+        color: rgb(135, 154, 50);
+      }
   }
 }

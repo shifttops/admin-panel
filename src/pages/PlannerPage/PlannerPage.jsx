@@ -25,7 +25,11 @@ const PlannerPage = observer(() => {
 
   useEffect(() => {
     if(!plannerTasks.length) getPlannerTasks({setError})
-  }, [plannerTasks.length])
+
+    return () => {
+      PlannerStore.plannerTasks = [...[]]
+    }
+  }, [])
 
   return (
     <div className="page">
