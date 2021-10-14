@@ -27,7 +27,7 @@ const PlannerPage = observer(() => {
     if(!plannerTasks.length) getPlannerTasks({setError})
 
     return () => {
-      PlannerStore.plannerTasks = [...[]]
+      PlannerStore.plannerTasks = []
     }
   }, [])
 

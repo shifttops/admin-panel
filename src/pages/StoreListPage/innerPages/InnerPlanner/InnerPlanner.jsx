@@ -21,7 +21,7 @@ const InnerPlanner = observer(() => {
     if(!storeInfo.periodicTasks || !storeInfo.periodicTasks.length) getStorePeriodicTasks(setError);
 
     return () => {
-      StoresStore.storeInfo.periodicTasks = [...[]]
+      StoresStore.storeInfo.periodicTasks = []
     }
   }, []);
 
