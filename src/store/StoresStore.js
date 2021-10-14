@@ -1,4 +1,4 @@
-import { makeAutoObservable, reaction } from "mobx";
+import {makeAutoObservable, makeObservable, observable, reaction} from "mobx";
 import { computedFn } from "mobx-utils";
 import moment from "moment";
 import { refreshToken } from "../helpers/AuthHelper";
@@ -10,16 +10,14 @@ import { ToastsStore } from "react-toasts";
 class StoresStore {
   storeInfo = {};
   stores = [];
-  storeErrors = [];
   filters = {};
-  cameras = [];
+  cameras = {cameras: []};
   enabledFilters = {
     ...queryString.parse(window.location.search, { arrayFormat: "comma" }),
   };
-  maintenanceScreens = [];
+  maintenanceScreens = {maintenanceScreens: []};
   maintenanceScreensData = [];
   groups = [];
-  periodicTasks = [];
 
   constructor() {
     makeAutoObservable(
@@ -38,7 +36,7 @@ class StoresStore {
       () => this.storeInfo.status,
       (status, previousValue, reaction) => {
         if (status && this.maintenanceScreensData.length) {
-          this.maintenanceScreens = [
+          this.maintenanceScreens.maintenanceScreens = [
             ...this.maintenanceScreensData.find(
               (screen) => screen.name === status
             )?.maintenance_screen,
@@ -54,6 +52,37 @@ class StoresStore {
           this.storeInfo = { store_id: store_id };
           this.getStoreInfo(store_id, (msg) => msg && console.log("msg", msg));
         }
+      }
+    );
+
+    reaction(
+      () => this.storeInfo.storeErrors,
+      (errors, previousValue) => {
+        if (errors &&
+          !errors.length &&
+          JSON.stringify(errors) !== JSON.stringify(previousValue)
+        ) this.getStoreErrorLogs(this.storeInfo.store_id, (msg) => msg && console.log("msg", msg));
+      }
+    );
+
+    reaction(
+      () => this.storeInfo.metrics,
+      metrics => {
+        if (!metrics) this.getMetrics(this.storeInfo.store_id, (msg) => msg && console.log("msg", msg));
+      }
+    );
+
+    reaction(
+      () => this.cameras.cameras,
+      cameras => {
+        if(!cameras) this.getStoreCameraImages(this.storeInfo.store_id, (msg) => msg && console.log("msg", msg))
+      }
+    );
+
+    reaction(
+      () => this.maintenanceScreens.maintenanceScreens,
+      maintenanceScreens => {
+        if(!maintenanceScreens) this.getMaintenanceScreens((msg) => msg && console.log("msg", msg))
       }
     );
 
@@ -263,7 +292,7 @@ class StoresStore {
         delete camera.detail;
         return camera;
       });
-      this.cameras = newRes;
+      this.cameras.cameras = [...newRes];
       setError("");
       // }
     } catch (e) {
@@ -344,7 +373,7 @@ class StoresStore {
       await refreshToken();
 
       const resp = await fetch(
-        `${process.env.REACT_APP_URL}/api/fault_logs/${store_id}`,
+        `${process.env.REACT_APP_URL}/api/fault_logs/${store_id}/`,
         {
           method: "GET",
           headers: {
@@ -354,9 +383,7 @@ class StoresStore {
       );
       if (resp.status === 200) {
         const res = await resp.json();
-        console.log(res);
-        this.storeErrors = res;
-        console.log(this.storeErrors);
+        this.storeInfo = {...this.storeInfo, storeErrors: res}
         setError("");
       }
     } catch (e) {
@@ -398,7 +425,7 @@ class StoresStore {
       });
       if (resp.status === 200) {
         const res = await resp.json();
-        this.storeInfo = { ...this.storeInfo, ...res };
+        this.storeInfo = { ...this.storeInfo, metrics: res };
         setError("");
       }
     } catch (e) {
@@ -448,7 +475,7 @@ class StoresStore {
   };
 
   updateMaintenanceScreens = () => {
-    this.maintenanceScreens = [
+    this.maintenanceScreens.maintenanceScreens = [
       ...this.maintenanceScreensData.find(
         (screen) => screen.name === this.storeInfo.status
       )?.maintenance_screen,

@@ -45,12 +45,13 @@ const InnerStatistic = observer((props) => {
     },
   ];
 
+  const store_id = +props.match.params.id;
+
   useEffect(() => {
-    const id = +props.match.params.id
-    if (storeInfo.store_id === id) {
-      getMetrics(id, setError);
+    if (storeInfo.store_id === store_id) {
+      storeInfo.metrics = null;
     }
-  }, [storeInfo.store_id]);
+  }, []);
 
   return (
     <>
@@ -68,7 +69,7 @@ const InnerStatistic = observer((props) => {
             </tr>
           </thead>
           <tbody>
-            {mapper.map((item) => (
+            {storeInfo.metrics && mapper.map((item) => (
               <tr key={item.visibleName}>
                 <td className={styles.category}>{item.visibleName}</td>
                 <td className={styles.period}>Today</td>
@@ -76,47 +77,17 @@ const InnerStatistic = observer((props) => {
                   className={cn(
                     styles.time,
                     item.visibleName === "OEPE" &&
-                      (storeInfo[item.key] < 120
+                      (storeInfo.metrics[item.key] < 120
                         ? styles.timeGreen
                         : styles.timeRed)
                   )}
                 >
-                  {storeInfo[item.key]
-                    ? `${Math.round(storeInfo[item.key])} s`
+                  {storeInfo.metrics[item.key]
+                    ? `${Math.round(storeInfo.metrics[item.key])} s`
                     : "N/A"}
                 </td>
               </tr>
             ))}
-            {/* <tr>
-              <td className={styles.category}>OEPE</td>
-              <td className={styles.period}>Last 24 hours</td>
-              <td className={cn(styles.time, styles.timeGreen)}>190 s</td>
-            </tr>
-            <tr>
-              <td className={styles.category}>PRESENT</td>
-              <td className={styles.period}>Last 24 hours</td>
-              <td className={cn(styles.time, styles.timeGreen)}>203 s</td>
-            </tr>
-            <tr>
-              <td className={styles.category}>CASH</td>
-              <td className={styles.period}>Last 24 hours</td>
-              <td className={styles.time}>188 s</td>
-            </tr>
-            <tr>
-              <td className={styles.category}>OECB</td>
-              <td className={styles.period}>Last 24 hours</td>
-              <td className={styles.time}>190 s</td>
-            </tr>
-            <tr>
-              <td className={styles.category}>OT</td>
-              <td className={styles.period}>Last 24 hours</td>
-              <td className={styles.time}>217 s</td>
-            </tr>
-            <tr>
-              <td className={styles.category}>TET</td>
-              <td className={styles.period}>Last 24 hours</td>
-              <td className={styles.time}>182 s</td>
-            </tr> */}
           </tbody>
         </table>
         <AdditionalInfo leftTitle="hardware" rightTitle="Last 24 hours" />
