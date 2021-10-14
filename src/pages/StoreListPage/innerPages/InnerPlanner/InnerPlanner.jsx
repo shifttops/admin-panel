@@ -18,7 +18,7 @@ const InnerPlanner = observer(() => {
   const { storeInfo, getStorePeriodicTasks } = StoresStore;
 
   useEffect(() => {
-    if(storeInfo.periodicTasks && !storeInfo.periodicTasks.length) getStorePeriodicTasks(setError);
+    if(!storeInfo.periodicTasks || !storeInfo.periodicTasks.length) getStorePeriodicTasks(setError);
 
     return () => {
       StoresStore.storeInfo.periodicTasks = [...[]]
