@@ -5,7 +5,7 @@ import iconButtonTypes from "types/iconButtonTypes";
 import Button from "components/buttons/Button";
 import PlannerItem from "components/PlannerItem";
 import { observer } from "mobx-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import StoresStore from "../../../../store/StoresStore";
 import {
   ToastsContainer,
@@ -13,15 +13,15 @@ import {
   ToastsStore,
 } from "react-toasts";
 
-const InnerPlanner = observer(() => {
+const InnerPlanner = observer((props) => {
   const [error, setError] = useState("");
   const { storeInfo, getStorePeriodicTasks } = StoresStore;
 
-  useEffect(() => {
-    if(!storeInfo.periodicTasks || !storeInfo.periodicTasks.length) getStorePeriodicTasks(setError);
+  const store_id = +props.match.params.id;
 
-    return () => {
-      StoresStore.storeInfo.periodicTasks = []
+  useEffect(() => {
+    if (storeInfo.store_id === store_id) {
+      storeInfo.periodicTasks = [];
     }
   }, []);
 

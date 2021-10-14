@@ -50,8 +50,25 @@ class StoresStore {
     reaction(
       () => this.storeInfo.store_id,
       (store_id, previousValue, reaction) => {
-        if (store_id) {
+        if (store_id && store_id !== previousValue) {
+          this.storeInfo = { store_id: store_id };
           this.getStoreInfo(store_id, (msg) => msg && console.log("msg", msg));
+        }
+      }
+    );
+
+    reaction(
+      () => this.storeInfo.periodicTasks,
+      (periodicTasks, previousValue, reaction) => {
+        if (
+          periodicTasks &&
+          !periodicTasks.length &&
+          JSON.stringify(periodicTasks) !== JSON.stringify(previousValue)
+        ) {
+          this.getStorePeriodicTasks(
+            this.storeInfo.store_id,
+            (msg) => msg && console.log("msg", msg)
+          );
         }
       }
     );
@@ -141,7 +158,7 @@ class StoresStore {
         res.dod = res.date_deployment
           ? moment(res.date_deployment).format("DD.MM.YYYY")
           : "N/A";
-        this.storeInfo = { ...res };
+        this.storeInfo = { ...this.storeInfo, ...res };
         if (res) {
           if (res.store_location) {
             await this.getStoreLocation(res.store_location);
@@ -498,12 +515,12 @@ class StoresStore {
     }
   };
 
-  getStorePeriodicTasks = async (setError) => {
+  getStorePeriodicTasks = async (store_id, setError) => {
     try {
       await refreshToken();
 
       const resp = await fetch(
-        `${process.env.REACT_APP_URL}/api/store/${this.storeInfo.store_id}/periodic_tasks`,
+        `${process.env.REACT_APP_URL}/api/store/${store_id}/periodic_tasks`,
         {
           method: "GET",
           headers: {
