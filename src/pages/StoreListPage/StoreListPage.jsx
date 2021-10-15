@@ -4,12 +4,11 @@ import TableRow from "components/tables/TableRow";
 import DashboardHead from "components/header/DashboardHead";
 import { useEffect, useRef, useState } from "react";
 import StoresStore from "../../store/StoresStore";
+import queryString from "query-string";
 import { observer } from "mobx-react";
 import moment from "moment";
 import { useInView } from "react-intersection-observer";
 import Loader from "../../components/Loader";
-import { observe, reaction, toJS } from "mobx";
-import queryString from "query-string";
 import { useHistory, useLocation } from "react-router";
 import {
   ToastsContainer,
@@ -22,23 +21,15 @@ const StoreListPage = observer(() => {
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState({ type: "none" });
   const [isSearchOrSort, setIsSearchOrSort] = useState(false);
+  const [isEmptyRes, setIsEmptyRes] = useState(false);
   const history = useHistory();
   const location = useLocation();
   const [checkedStores, setCheckedStores] = useState([]);
 
-  const {
-    getStores,
-    stores,
-    searchStores,
-    getFilters,
-    tempStores,
-    getStoresPart,
-  } = StoresStore;
-
+  const { stores, getStoresPart } = StoresStore;
   let { isLoading, enabledFilters } = StoresStore;
 
   const { ref, inView, entry } = useInView({
-    /* Optional options */
     threshold: 0,
   });
 
@@ -50,28 +41,8 @@ const StoreListPage = observer(() => {
     }
   };
 
-  const sortFunc = (stores, sort) => {
-    const { type, field } = sort;
-    if (type !== "none" && field) {
-      return [...stores].sort((a, b) => {
-        if (type === "desc") {
-          return a[field] > b[field] ? 1 : a[field] < b[field] ? -1 : 0;
-        } else {
-          return b[field] > a[field] ? 1 : b[field] < a[field] ? -1 : 0;
-        }
-      });
-    } else return stores;
-  };
-
   const refStores = useRef(false);
   const abortRef = useRef(false);
-
-  useEffect(() => {
-    if (!stores.length) {
-      getStores(setError);
-      // getErrors(setError);
-    }
-  }, [stores.length, enabledFilters]);
 
   useEffect(() => {
     Object.entries(
@@ -100,6 +71,7 @@ const StoreListPage = observer(() => {
 
     if (refStores.current) {
       setIsSearchOrSort(true);
+      setIsEmptyRes(false)
       getStoresPart({
         search,
         setError,
@@ -108,15 +80,40 @@ const StoreListPage = observer(() => {
         limit: 30,
         offset: 0,
         signal: abortRef.current.signal,
+        setIsEmptyRes
       });
     }
-  }, [search, sort, enabledFilters]);
+  }, [search, sort]);
 
   useEffect(() => {
-    if (!tempStores.length && refStores.current) {
+    if (abortRef.current && isLoading) {
+      abortRef.current.abort();
+    }
+    abortRef.current = new AbortController();
+
+    const { type, field } = sort;
+
+    if (Object.keys(enabledFilters).some((key) => key && key.length) || (!Object.keys(enabledFilters).length && stores.length)) {
+      setIsEmptyRes(false)
+      setIsSearchOrSort(true);
+      getStoresPart({
+        search,
+        setError,
+        field,
+        type,
+        limit: 30,
+        offset: 0,
+        signal: abortRef.current.signal,
+        setIsEmptyRes
+      });
+    }
+  }, [enabledFilters]);
+
+  useEffect(() => {
+    if (!stores.length && !search.length && (!Object.keys(enabledFilters).length)) {
       getStoresPart({ search, setError, limit: 30 });
     }
-  }, [tempStores.length]);
+  }, [stores.length]);
 
   useEffect(() => {
     refStores.current = true;
@@ -125,9 +122,9 @@ const StoreListPage = observer(() => {
   useEffect(() => {
     const { type, field } = sort;
 
-    if (inView) {
+    if (inView && stores.length >= 30 ) {
       setIsSearchOrSort(false);
-      getStoresPart({ search, setError, field, type, limit: 30 });
+      getStoresPart({ search, setError, field, type, limit: 30, setIsEmptyRes });
     }
   }, [inView]);
 
@@ -143,31 +140,28 @@ const StoreListPage = observer(() => {
           selectedStoresCount={checkedStores.length}
         />
         <tbody>
-          {
-            // tempStores.map((restaurant) => (
-            sortFunc(searchStores(search), sort).map((restaurant) => (
-              <TableRow
-                key={restaurant.store_id}
-                id={restaurant.store_id}
-                address={restaurant.address}
-                region={restaurant.store_county}
-                type={restaurant.store_type}
-                date_deployed={
-                  restaurant.date_deployment
-                    ? moment(restaurant.date_deployment).format("DD.MM.YYYY")
-                    : "N/A"
-                }
-                date_ready_deployed={
-                  restaurant.date_created
-                    ? moment(restaurant.date_created).format("DD.MM.YYYY")
-                    : "N/A"
-                }
-                status={restaurant.status}
-                setCheckedStores={setCheckedStores}
-                checkedStores={checkedStores}
-              />
-            ))
-          }
+          {stores.map((restaurant) => (
+            <TableRow
+              key={restaurant.store_id}
+              id={restaurant.store_id}
+              address={restaurant.address}
+              region={restaurant.store_county}
+              type={restaurant.store_type}
+              date_deployed={
+                restaurant.date_deployment
+                  ? moment(restaurant.date_deployment).format("DD.MM.YYYY")
+                  : "N/A"
+              }
+              date_ready_deployed={
+                restaurant.date_created
+                  ? moment(restaurant.date_created).format("DD.MM.YYYY")
+                  : "N/A"
+              }
+              status={restaurant.status}
+              setCheckedStores={setCheckedStores}
+              checkedStores={checkedStores}
+            />
+          ))}
         </tbody>
         {isLoading && isSearchOrSort ? (
           <div
@@ -179,14 +173,14 @@ const StoreListPage = observer(() => {
           ""
         )}
       </table>
-      {isLoading && !isSearchOrSort ? (
+      {!isEmptyRes && isLoading && !isSearchOrSort ? (
         <div className={styles.storesLoader}>
           <Loader />
         </div>
       ) : (
         ""
       )}
-      {!isLoading ? <div ref={ref} /> : ""}
+      {!isEmptyRes && !isLoading ? <div ref={ref} /> : ""}
       <ToastsContainer
         store={ToastsStore}
         position={ToastsContainerPosition.BOTTOM_RIGHT}

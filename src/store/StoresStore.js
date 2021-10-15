@@ -1,4 +1,4 @@
-import { makeAutoObservable, reaction } from "mobx";
+import {makeAutoObservable, reaction, toJS} from "mobx";
 import { computedFn } from "mobx-utils";
 import moment from "moment";
 import { refreshToken } from "../helpers/AuthHelper";
@@ -11,7 +11,6 @@ class StoresStore {
   isLoading = 0;
   storeInfo = {};
   stores = [];
-  tempStores = [];
   storeErrors = [];
   filters = {};
   cameras = [];
@@ -58,75 +57,17 @@ class StoresStore {
     );
   }
 
-  searchStores = computedFn((search) => {
-    if (!search) return this.stores;
-    return this.stores.filter((store) =>
-      Object.values(store).some(
-        (value) =>
-          value && value.toString().toLowerCase().includes(search.toLowerCase())
-      )
-    );
-  });
-
-  getStores = async (setError) => {
+  getStoresPart = async ({search, setError, field = null, type = "none", limit, offset = this.stores.length, signal, setIsEmptyRes=null}) => {
     try {
       await refreshToken();
-      if (
-        Object.keys(this.enabledFilters).length &&
-        Object.keys(this.enabledFilters).some(
-          (key) => this.enabledFilters[key]?.length
-        )
-      ) {
-        let filtersForReq = {};
-        Object.keys(this.enabledFilters).forEach((key) => {
-          let reqKey = filtersRequestMapper.find(
-            (item) => key === item.name
-          )?.reqName;
-          if (reqKey) {
-            filtersForReq[reqKey] = this.enabledFilters[key];
-          } else {
-            filtersForReq[key] = this.enabledFilters[key];
-          }
-        });
-        filtersForReq = createDateFilters(
-          JSON.parse(JSON.stringify(filtersForReq))
-        );
-        console.log(this.enabledFilters, filtersForReq);
-        const resp = await fetch(`${process.env.REACT_APP_URL}/api/filters/`, {
-          method: "POST",
-          headers: {
-            Authorization: `Token ${localStorage.getItem("access")}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(filtersForReq),
-        });
-        const res = await resp.json();
-        this.stores = [...res];
-      } else {
-        const resp = await fetch(
-          `${process.env.REACT_APP_URL}/api/store/?limit=9999&offset=0`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Token ${localStorage.getItem("access")}`,
-            },
-          }
-        );
-        const res = await resp.json();
-        this.stores = [...res.results];
+      let url = `${process.env.REACT_APP_URL}/api/store/?limit=${limit}&offset=${offset}`;
+      if(field && type !== 'none') {
+        url += `&filtered_by=${field}&type=${type}`
       }
-      setError("");
-    } catch (e) {
-      setError(e.message);
-    }
-  };
+      if(search.length){
+        url += `&search=${search}`
+      }
 
-  getStoresPart = async ({search, setError, field = null, type = "none", limit, offset = this.tempStores.length, signal}) => {
-    try {
-      await refreshToken();
-
-      let url = `https://staptest.mcd-cctv.com/api/store/?limit=${limit}&offset=${offset}
-                 &search=${search}&filtered_by=${field}&type=${type}`;
       this.isLoading++;
 
       if (
@@ -138,7 +79,16 @@ class StoresStore {
         const filtersForReq = createDateFilters(this.enabledFilters);
 
         Object.keys(filtersForReq).map(
-          (key) => (url += `&${key}=${filtersForReq[key]}`)
+          (key) => {
+            const reqKey = filtersRequestMapper.find(
+              (item) => key === item.name
+            )?.reqName;
+
+            if(reqKey){
+              url += `&${reqKey}=${filtersForReq[reqKey]}`
+              if(reqKey !== key) delete this.enabledFilters[reqKey]
+            }
+          }
         );
       }
 
@@ -152,13 +102,21 @@ class StoresStore {
 
       const res = await resp.json();
 
-      this.tempStores = offset
-        ? [...this.tempStores, ...res.results]
-        : [...res.results];
+      if(res.results.length) {
+        this.stores = offset
+          ? [...this.stores, ...res.results]
+          : [...res.results];
+      } else {
+        if(!offset){
+          ToastsStore.error('No stores find', 3000, 'toast')
+          this.stores = []
+        } else {
+          ToastsStore.error('No more stores find', 3000, 'toast')
+        }
+        setIsEmptyRes(true)
+      }
 
       this.isLoading--;
-
-      setError("");
     } catch (e) {
       this.isLoading--;
 

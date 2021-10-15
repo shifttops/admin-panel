@@ -19,6 +19,11 @@ export const createDateFilters = (filters) => {
         filters[key][index] = new Date(0).toISOString();
       }
     }
+    else {
+      if(reqKey) {
+        filters[reqKey] = filters[filterKey]
+      }
+    }
   });
   return filters;
 };

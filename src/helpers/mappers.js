@@ -61,6 +61,36 @@ export const statusMapper = [
     class: "test",
   },
   {
+    visibleName: "Under Maintenance",
+    name: "Under Maintenance",
+    className: styles.test,
+    class: "test",
+  },
+  {
+    visibleName: "Blocked",
+    name: "Blocked",
+    className: styles.test,
+    class: "maintenance",
+  },
+  {
+    visibleName: "Additional settings",
+    name: "Additional settings",
+    className: styles.test,
+    class: "test",
+  },
+  {
+    visibleName: "Dashboard deployment",
+    name: "Dashboard deployment",
+    className: styles.test,
+    class: "test",
+  },
+  {
+    visibleName: "Dashboard configuring",
+    name: "Dashboard configuring",
+    className: styles.test,
+    class: "test",
+  },
+  {
     visibleName: "N/A",
     name: null,
     className: styles.maintenance,
@@ -72,6 +102,10 @@ export const filtersRequestMapper = [
   {
     name: "status",
     reqName: "status__name",
+  },
+  {
+    name: "store_type",
+    reqName: "store_type",
   },
   {
     name: "date_created",
@@ -92,14 +126,6 @@ export const filtersRequestMapper = [
   {
     name: "docker_version",
     reqName: "servers__docker_version",
-  },
-  {
-    name: "machine_os",
-    reqName: "servers__machine_os",
-  },
-  {
-    name: "machine_os",
-    reqName: "servers__machine_os",
   },
   {
     name: "nvidia_driver_version",
