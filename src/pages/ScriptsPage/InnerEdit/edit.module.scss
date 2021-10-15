@@ -1,6 +1,5 @@
 @import "../../../scss/variables";
 
-
 .page{
   // padding: 35px;
   width: 100%;
@@ -21,4 +20,21 @@
     position: absolute;
     z-index: 20;
     }
+}
+
+.dashboardHead{
+  &__title{
+    background-color: #fff;
+    border: 1px solid $color-black-05;
+    padding: 4px 8px;
+    color: $color-black-05;
+    border-radius: $border-radius;
+    transition: all 0.3s ease 0s;
+    &:focus, &:hover{
+      background-color: $color-black-007;
+    }
+    &:focus{
+      color: $color-black;
+    }
+  }
 }

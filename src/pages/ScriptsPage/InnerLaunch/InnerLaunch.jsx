@@ -10,7 +10,6 @@ import { useLocation } from "react-router";
 import ScriptsStore from "../../../store/ScriptsStore";
 import { useEffect } from "react";
 import Popup from "reactjs-popup";
-import LaunchPopup from "../../../components/popups/LaunchPopup";
 import {
   ToastsContainer,
   ToastsStore,
@@ -18,6 +17,7 @@ import {
 } from "react-toasts";
 import { NavLink } from "react-router-dom";
 import routes from "../../../constants/routes";
+import PopupComponent from "../../../components/popups/PopupComponent/PopupComponent";
 
 const InnerLaunch = observer((props) => {
   const location = useLocation();
@@ -85,6 +85,13 @@ const InnerLaunch = observer((props) => {
     );
     setTimeout(() => setLogId(""), 5000);
   };
+
+  const handleClick = ({onClose}) => {
+    handleLaunch();
+    setTimeout(() => {
+      onClose();
+    }, 300);
+  }
 
   useEffect(() => {
     if (!scripts.length) {
@@ -176,12 +183,16 @@ const InnerLaunch = observer((props) => {
             trigger={<Button text="Launch" className="launch_btn"/>}
           >
             {(close) => (
-              <LaunchPopup
-                handleLaunch={handleLaunch}
-                enabledStores={enabledStores}
-                rows={rows}
+              <PopupComponent
                 onClose={close}
-              ></LaunchPopup>
+                titleText={'Launch'}
+                buttonText={'Launch'}
+                text={'Are you sure you want to launch the script with'}
+                dedicatedText={JSON.stringify(rows)}
+                additionalText={'on'}
+                additionalDedicatedText={JSON.stringify(enabledStores)}
+                onClick={() => handleClick({onClose: close})}
+              />
             )}
           </Popup>
         </div>
