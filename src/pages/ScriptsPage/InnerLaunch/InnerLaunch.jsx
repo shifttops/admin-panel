@@ -10,7 +10,6 @@ import { useLocation } from "react-router";
 import ScriptsStore from "../../../store/ScriptsStore";
 import { useEffect } from "react";
 import Popup from "reactjs-popup";
-import LaunchPopup from "../../../components/popups/LaunchPopup";
 import {
   ToastsContainer,
   ToastsStore,
@@ -18,6 +17,7 @@ import {
 } from "react-toasts";
 import { NavLink } from "react-router-dom";
 import routes from "../../../constants/routes";
+import PopupComponent from "../../../components/popups/PopupComponent/PopupComponent";
 
 const InnerLaunch = observer((props) => {
   const location = useLocation();
@@ -86,6 +86,13 @@ const InnerLaunch = observer((props) => {
     setTimeout(() => setLogId(""), 5000);
   };
 
+  const handleClick = ({onClose}) => {
+    handleLaunch();
+    setTimeout(() => {
+      onClose();
+    }, 300);
+  }
+
   useEffect(() => {
     if (!scripts.length) {
       getScripts(setError);
@@ -129,12 +136,12 @@ const InnerLaunch = observer((props) => {
   }, [hosts, presets, preset.current]);
 
   useEffect(() => {
-    if (scripts.length && !script.current.playbook_id && !presetId) {
+    if (scripts.length && scripts.current && !script.current.playbook_id && !presetId) {
       script.current = scripts.find(
         (script) => script.playbook_id === scriptId
       );
     }
-    if (script.current.playbook_id) {
+    if (script.current && script.current.playbook_id) {
       setRows(
         script.current.variables.reduce((res, item) => {
           res[item] = "";
@@ -173,15 +180,19 @@ const InnerLaunch = observer((props) => {
           </table>
           <Popup
             modal
-            trigger={<Button text="Launch" className="launch_btn" />}
+            trigger={<Button text="Launch" className="launch_btn"/>}
           >
             {(close) => (
-              <LaunchPopup
-                handleLaunch={handleLaunch}
-                enabledStores={enabledStores}
-                rows={rows}
+              <PopupComponent
                 onClose={close}
-              ></LaunchPopup>
+                titleText={'Launch'}
+                buttonText={'Launch'}
+                text={'Are you sure you want to launch the script with'}
+                dedicatedText={JSON.stringify(rows)}
+                additionalText={'on'}
+                additionalDedicatedText={JSON.stringify(enabledStores)}
+                onClick={() => handleClick({onClose: close})}
+              />
             )}
           </Popup>
         </div>

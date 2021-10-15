@@ -74,6 +74,23 @@ const StoreListPage = observer(() => {
   }, [stores.length, enabledFilters]);
 
   useEffect(() => {
+    Object.entries(
+      queryString.parse(window.location.search, { arrayFormat: "comma" })
+    ).forEach((entry) => {
+      if (!entry[1]) {
+        delete enabledFilters[entry[0]];
+      } else {
+        enabledFilters[entry[0]] = entry[1];
+      }
+    });
+    return () => {
+      Object.keys(enabledFilters).forEach((key) => {
+        delete enabledFilters[key];
+      });
+    };
+  }, []);
+
+  useEffect(() => {
     if (abortRef.current && isLoading) {
       abortRef.current.abort();
     }

@@ -1,4 +1,4 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, reaction } from "mobx";
 import { computedFn } from "mobx-utils";
 import moment from "moment";
 import { refreshToken } from "../helpers/AuthHelper";
@@ -34,6 +34,27 @@ class StoresStore {
       //   getStoreHardware: action,
       //   getStoreServer: action,
       // }
+    );
+    reaction(
+      () => this.storeInfo.status,
+      (status, previousValue, reaction) => {
+        if (status && this.maintenanceScreensData.length) {
+          this.maintenanceScreens = [
+            ...this.maintenanceScreensData.find(
+              (screen) => screen.name === status
+            )?.maintenance_screen,
+          ];
+        }
+      }
+    );
+
+    reaction(
+      () => this.storeInfo.store_id,
+      (store_id, previousValue, reaction) => {
+        if (store_id) {
+          this.getStoreInfo(store_id, (msg) => msg && console.log("msg", msg));
+        }
+      }
     );
   }
 
@@ -71,7 +92,7 @@ class StoresStore {
           JSON.parse(JSON.stringify(filtersForReq))
         );
         console.log(this.enabledFilters, filtersForReq);
-        const resp = await fetch("https://staptest.mcd-cctv.com/api/filters/", {
+        const resp = await fetch(`${process.env.REACT_APP_URL}/api/filters/`, {
           method: "POST",
           headers: {
             Authorization: `Token ${localStorage.getItem("access")}`,
@@ -83,7 +104,7 @@ class StoresStore {
         this.stores = [...res];
       } else {
         const resp = await fetch(
-          "https://staptest.mcd-cctv.com/api/store/?limit=9999&offset=0",
+          `${process.env.REACT_APP_URL}/api/store/?limit=9999&offset=0`,
           {
             method: "GET",
             headers: {
@@ -150,7 +171,7 @@ class StoresStore {
       await refreshToken();
 
       const resp = await fetch(
-        `https://staptest.mcd-cctv.com/api/store/${id}/`,
+        `${process.env.REACT_APP_URL}/api/store/${id}/`,
         {
           method: "GET",
           headers: {
@@ -177,6 +198,7 @@ class StoresStore {
           if (res.cameras && res.cameras.length) {
             await this.getStoreCameraStatus(id, setError);
           }
+          await this.getStoreHardware(id, setError);
           setError("");
         }
       }
@@ -190,7 +212,7 @@ class StoresStore {
       servers_id.map((server_id) =>
         this.getStoreServer({ server_id, setError })
       )
-    ).catch((e) => setError(e));
+    ).catch((e) => setError(e.message));
 
     this.storeInfo = {
       ...this.storeInfo,
@@ -203,7 +225,7 @@ class StoresStore {
       await refreshToken();
 
       const resp = await fetch(
-        `https://staptest.mcd-cctv.com/api/hardware_status/${id}`,
+        `${process.env.REACT_APP_URL}/api/hardware_status/${id}`,
         {
           method: "GET",
           headers: {
@@ -227,7 +249,7 @@ class StoresStore {
       await refreshToken();
 
       const resp = await fetch(
-        `https://staptest.mcd-cctv.com/api/cameras/status/${store_id}`,
+        `${process.env.REACT_APP_URL}/api/cameras/status/${store_id}`,
         {
           method: "GET",
           headers: {
@@ -254,7 +276,7 @@ class StoresStore {
       await refreshToken();
 
       const resp = await fetch(
-        `https://staptest.mcd-cctv.com/api/cameras/status/detail/${store_id}`,
+        `${process.env.REACT_APP_URL}/api/cameras/status/detail/${store_id}`,
         {
           method: "GET",
           headers: {
@@ -280,7 +302,7 @@ class StoresStore {
 
   getStoreLocation = async (store_location) => {
     const resp_location = await fetch(
-      `https://staptest.mcd-cctv.com/api/location/${store_location}/`,
+      `${process.env.REACT_APP_URL}/api/location/${store_location}/`,
       {
         method: "GET",
         headers: {
@@ -303,7 +325,7 @@ class StoresStore {
   getStoreServer = async ({ server_id, setError }) => {
     try {
       const resp = await fetch(
-        `https://staptest.mcd-cctv.com/api/server/${server_id}/`,
+        `${process.env.REACT_APP_URL}/api/server/${server_id}/`,
         {
           method: "GET",
           headers: {
@@ -327,7 +349,7 @@ class StoresStore {
       await refreshToken();
 
       const resp = await fetch(
-        `https://staptest.mcd-cctv.com/api/hardware_setup/${id}/`,
+        `${process.env.REACT_APP_URL}/api/hardware_setup/${id}/`,
         {
           method: "GET",
           headers: {
@@ -351,7 +373,7 @@ class StoresStore {
       await refreshToken();
 
       const resp = await fetch(
-        `https://staptest.mcd-cctv.com/api/fault_logs/${store_id}`,
+        `${process.env.REACT_APP_URL}/api/fault_logs/${store_id}`,
         {
           method: "GET",
           headers: {
@@ -375,7 +397,7 @@ class StoresStore {
     try {
       await refreshToken();
 
-      const resp = await fetch(`https://staptest.mcd-cctv.com/api/filters/`, {
+      const resp = await fetch(`${process.env.REACT_APP_URL}/api/filters/`, {
         method: "GET",
         headers: {
           Authorization: `Token ${localStorage.getItem("access")}`,
@@ -395,7 +417,7 @@ class StoresStore {
     try {
       await refreshToken();
 
-      const resp = await fetch(`https://staptest.mcd-cctv.com/api/metrics/`, {
+      const resp = await fetch(`${process.env.REACT_APP_URL}/api/metrics/`, {
         method: "POST",
         headers: {
           Authorization: `Token ${localStorage.getItem("access")}`,
@@ -416,7 +438,7 @@ class StoresStore {
   getMaintenanceScreens = async (setError) => {
     try {
       await refreshToken();
-      const resp = await fetch(`https://staptest.mcd-cctv.com/api/status/`, {
+      const resp = await fetch(`${process.env.REACT_APP_URL}/api/status/`, {
         method: "GET",
         headers: {
           Authorization: `Token ${localStorage.getItem("access")}`,
@@ -438,7 +460,7 @@ class StoresStore {
       await refreshToken();
 
       const resp = await fetch(
-        "https://staptest.mcd-cctv.com/api/store_group/?limit=9999&offset=0",
+        `${process.env.REACT_APP_URL}/api/store_group/?limit=9999&offset=0`,
         {
           method: "GET",
           headers: {
@@ -467,7 +489,7 @@ class StoresStore {
       await refreshToken();
 
       const resp = await fetch(
-        `https://staptest.mcd-cctv.com/api/set_store_status/${this.storeInfo.store_id}`,
+        `${process.env.REACT_APP_URL}/api/set_store_status/${this.storeInfo.store_id}`,
         {
           method: "POST",
           headers: {
@@ -499,7 +521,7 @@ class StoresStore {
       await refreshToken();
 
       const resp = await fetch(
-        "https://staptest.mcd-cctv.com/api/status/refresh",
+        `${process.env.REACT_APP_URL}/api/status/refresh`,
         {
           method: "GET",
           headers: {

@@ -1,7 +1,5 @@
 import { Redirect, Route, Switch, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useCookies } from "react-cookie";
-import { observer } from "mobx-react";
 
 import HeaderDashboard from "components/header/HeaderDashboard";
 import mainNavigation from "constants/main-navigation";
@@ -22,6 +20,7 @@ import {
 import ScriptsLogInfo from "./ScriptsLogInfo/ScriptsLogInfo";
 
 export default function CustomRouter() {
+  console.log(process.env);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isSidebarOverlap, setIsSidebarOverlap] = useState(false);
 
@@ -59,56 +58,65 @@ export default function CustomRouter() {
         <Route exact path={routes.forgotPassword}>
           <ForgotPasswordPage />
         </Route>
-        <div className="wrapper">
-          <Sidebar isOpen={isSidebarOpen} isOverlap={isSidebarOverlap} />
-          <div className="dashboard">
-            <HeaderDashboard sidebarToggle={sidebarToggle} />
-            {mainNavigation.map(({ to, component }) => (
-              <Route
-                path={to}
-                exact
-                component={() => <>{component}</>}
-                key={to}
-              ></Route>
-            ))}
-            <Route
-              path={`${routes.scripts_logs}/:id`}
-              exact
-              component={(props) => <ScriptsLogInfo {...props} />}
-            ></Route>
-            {innerNavigation.map(({ to, component }) => (
-              <Route
-                path={`${to}/:id`}
-                exact
-                key={to}
-                component={(props) => (
-                  <div className={styles.inner}>
-                    <InnerSidebar {...props} />
-                    <div className={styles.wrapper}>
-                      <InnerHead />
-                      <div>{component}</div>
-                    </div>
-                  </div>
-                )}
-              ></Route>
-            ))}
-            {[...presetNavigation, ...innerNavigationScripts].map(
-              ({ to, Component }) => (
+        <Route
+          render={() => (
+            <div className="wrapper">
+              <Sidebar isOpen={isSidebarOpen} isOverlap={isSidebarOverlap} />
+              <div className="dashboard">
+                <HeaderDashboard sidebarToggle={sidebarToggle} />
+                {mainNavigation.map(({ to, component }) => (
+                  <Route
+                    path={to}
+                    exact
+                    component={() => <>{component}</>}
+                    key={to}
+                  />
+                ))}
                 <Route
-                  path={to}
-                  key={to}
+                  path={`${routes.scripts_logs}/:id`}
                   exact
-                  component={(props) => (
-                    <div className={styles.inner}>
-                      <InnerSidebar links={innerNavigationScripts} {...props} />
-                      <div className={styles.wrapper}><Component {...props}/></div>
-                    </div>
-                  )}
-                ></Route>
-              )
-            )}
-          </div>
-        </div>
+                  component={(props) => <ScriptsLogInfo {...props} />}
+                />
+                {innerNavigation.map(({ to, Component }) => (
+                  <Route
+                    path={`${to}/:id`}
+                    exact
+                    key={to}
+                    component={(props) => (
+                      <div className={styles.inner}>
+                        <InnerSidebar {...props} />
+                        <div className={styles.wrapper}>
+                          <InnerHead {...props}/>
+                          <Component {...props}/>
+                        </div>
+                      </div>
+                    )}
+                  />
+                ))}
+                {[...presetNavigation, ...innerNavigationScripts].map(
+                  ({ to, Component }) => (
+                    <Route
+                      path={to}
+                      key={to}
+                      exact
+                      component={(props) => (
+                        <div className={styles.inner}>
+                          <InnerSidebar
+                            links={innerNavigationScripts}
+                            {...props}
+                          />
+                          <div className={styles.wrapper}>
+                            <Component {...props} />
+                          </div>
+                        </div>
+                      )}
+                    />
+                  )
+                )}
+              </div>
+            </div>
+          )}
+        />
       </Switch>
       {(!localStorage.getItem("access") ||
         localStorage.getItem("access") === "undefined") && (

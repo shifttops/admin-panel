@@ -10,7 +10,7 @@ export const refreshToken = async () => {
         window.location.href = routes.login;
       } else {
         const resp = await fetch(
-          "https://staptest.mcd-cctv.com/token_refresh/",
+          `${process.env.REACT_APP_URL}/token_refresh/`,
           {
             method: "POST",
             headers: {

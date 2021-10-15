@@ -1,4 +1,3 @@
-import { MoreIcon, SortIcon } from "icons";
 import styles from "./edit.module.scss";
 import Button from "../../../components/buttons/Button";
 import AceEditor, { diff as DiffEditor } from "react-ace";
@@ -8,12 +7,10 @@ import "ace-builds/src-min-noconflict/ext-searchbox";
 import "ace-builds/src-min-noconflict/ext-language_tools";
 import "ace-builds/src-noconflict/theme-github";
 
-import { useState } from "react";
-import { useEffect } from "react";
-import { useLocation, useHistory } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { useHistory, useLocation } from "react-router-dom";
 import { observer } from "mobx-react";
 import ScriptsStore from "../../../store/ScriptsStore";
-import { autorun, observe, reaction, toJS } from "mobx";
 import routes from "../../../constants/routes";
 import {
   ToastsContainer,
@@ -22,7 +19,6 @@ import {
 } from "react-toasts";
 import Popup from "reactjs-popup";
 import CheckoutsPopup from "../../../components/popups/CheckoutsPopup/CheckoutsPopup";
-import { useRef } from "react";
 
 const InnerEdit = observer((props) => {
   const [isComparingMode, setIsComparingMode] = useState(false);
@@ -38,6 +34,8 @@ const InnerEdit = observer((props) => {
     copyScript,
     getScript,
     getPresets,
+    checkouts,
+    getCheckouts,
   } = ScriptsStore;
 
   let { parentScriptSource } = ScriptsStore;
@@ -134,9 +132,7 @@ const InnerEdit = observer((props) => {
   };
 
   useEffect(() => {
-    console.log(scripts);
     if (!scripts.length) {
-      console.log(123123);
       getScripts(setError);
     }
   }, [scripts.length]);
@@ -187,6 +183,11 @@ const InnerEdit = observer((props) => {
   }, [script.current]);
 
   useEffect(() => {
+    if (script.current.playbook_id)
+      getCheckouts({ playbook_id: script.current.playbook_id, setError });
+  }, [script.current.playbook_id]);
+
+  useEffect(() => {
     ref.current = true;
   }, []);
 
@@ -232,18 +233,27 @@ const InnerEdit = observer((props) => {
               />
             )}
           </div>
-
           <div className={styles.buttons}>
             <Button text="Save" onClick={handleSave} />
-
-            <Popup modal trigger={<Button text="Checkout" />}>
-              {(close) => (
-                <CheckoutsPopup onClose={close} playbook={script.current} />
-              )}
-            </Popup>
-
+            {Object.keys(checkouts).length &&
+            script.current.playbook_id &&
+            (checkouts.rollback.length || checkouts.rollforward.length) ? (
+              <Popup modal trigger={<Button text="Checkout" />}>
+                {(close) => (
+                  <CheckoutsPopup onClose={close} playbook={script.current} />
+                )}
+              </Popup>
+            ) : (
+              <Button
+                text="Checkout"
+                onClick={() =>
+                  ToastsStore.error("No available checkouts", 3000, "toast")
+                }
+              />
+            )}
             <Button text="Copy" onClick={handleCopy} />
             <Button
+              disabled={!script.current?.playbook_id}
               text={isComparingMode ? "Hide diff" : "Show diff"}
               onClick={handleCompare}
               className="orange"

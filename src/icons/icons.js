@@ -126,6 +126,25 @@ export const ActivityIcon = (props) => (
   </svg>
 );
 
+export const ScriptLogIcon = (props) => (
+  <svg
+    width="20"
+    height="20"
+    viewBox="0 0 74 74"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+  >
+    <path fill="currentColor" d="m62 72h-50a1 1 0 0 1 -1-1v-56a1 1 0 0 1 .29-.71l12-12a1 1 0 0 1 .71-.29h38a1 1 0 0 1 1 1v68a1 1 0 0 1 -1 1zm-49-2h48v-66h-36.59l-11.41 11.41z"/>
+    <path fill="currentColor" d="m24 16h-12v-2h11v-11h2v12a1 1 0 0 1 -1 1z"/>
+    <path fill="currentColor" d="m16 65h42v2h-42z"/>
+    <path fill="currentColor" d="m24 62h-4a1 1 0 0 1 -1-1v-9a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v9a1 1 0 0 1 -1 1zm-3-2h2v-7h-2z"/>
+    <path fill="currentColor" d="m34 62h-4a1 1 0 0 1 -1-1v-21a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v21a1 1 0 0 1 -1 1zm-3-2h2v-19h-2z"/>
+    <path fill="currentColor" d="m44 62h-4a1 1 0 0 1 -1-1v-15a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v15a1 1 0 0 1 -1 1zm-3-2h2v-13h-2z"/>
+    <path fill="currentColor" d="m54 62h-4a1 1 0 0 1 -1-1v-29a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v29a1 1 0 0 1 -1 1zm-3-2h2v-27h-2z"/>
+  </svg>
+);
+
 export const GroupIcon = (props) => (
   <svg
     width="20"

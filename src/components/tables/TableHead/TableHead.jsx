@@ -22,7 +22,7 @@ export default function TableHead({
     },
     {
       name: "Region",
-      key: "region",
+      key: "store_county",
       centered: false,
     },
     {
@@ -59,25 +59,39 @@ export default function TableHead({
       setSort({ field, type: sortTypes[1] });
     }
   };
+
   return (
     <thead className={styles.tableHead}>
       <tr>
-        <th>
-          <Checkbox checked={allStoresCount === selectedStoresCount} onChange={selectAllStores}/>
+        <th className={styles.table__sort}>
+          <Checkbox
+            checked={allStoresCount === selectedStoresCount}
+            onChange={selectAllStores}
+          />
         </th>
         {items.map((item) => (
           <th
             key={item.name}
             className={`${styles.table__sort} ${
               item.centered ? styles.table__center : ""
+            } ${
+              item.key === sort.field && sort.type !== "none"
+                ? styles.selectedSort
+                : ""
             }`}
             onClick={() => handleSort(item.key)}
           >
             {item.name}
-            <SortIcon />
+            <SortIcon
+              className={
+                item.key === sort.field && sort.type === "inc"
+                  ? styles.invertedSvg
+                  : ""
+              }
+            />
           </th>
         ))}
-        <th />
+        <th className={styles.table__sort}/>
       </tr>
     </thead>
   );

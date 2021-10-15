@@ -1,4 +1,4 @@
-import { makeAutoObservable } from "mobx";
+import { computed, observable, action, makeAutoObservable, toJS } from "mobx";
 import { refreshToken } from "../helpers/AuthHelper";
 import { computedFn } from "mobx-utils";
 
@@ -21,7 +21,7 @@ class ActivityLogsStore {
   searchLogs = computedFn((search) => {
     if (!search) return this.logs;
     return this.logs.filter((log) =>
-      log.store.toString().includes(search.toLowerCase())
+        log.store.toString().includes(search.toLowerCase())
     );
   });
 
@@ -30,13 +30,13 @@ class ActivityLogsStore {
       await refreshToken();
 
       const resp = await fetch(
-        "https://staptest.mcd-cctv.com/api/jira_logs/?limit=9999&offset=0",
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Token ${localStorage.getItem("access")}`,
-          },
-        }
+          `${process.env.REACT_APP_URL}/api/jira_logs/?limit=9999&offset=0`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Token ${localStorage.getItem("access")}`,
+            },
+          }
       );
       const res = await resp.json();
       this.jira_logs = [...res.results];
@@ -51,13 +51,13 @@ class ActivityLogsStore {
       await refreshToken();
 
       const resp = await fetch(
-        `https://staptest.mcd-cctv.com/api/fault_logs/?limit=9999&offset=0`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Token ${localStorage.getItem("access")}`,
-          },
-        }
+          `${process.env.REACT_APP_URL}/api/fault_logs/?limit=9999&offset=0`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Token ${localStorage.getItem("access")}`,
+            },
+          }
       );
       const res = await resp.json();
       this.fault_logs = [...res.results];

@@ -17,6 +17,29 @@ const ActivityLogsPage = observer(() => {
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState({ type: "none" });
 
+  const items = [
+    {
+      name: "Event type",
+      key: "status",
+    },
+    {
+      name: "Message",
+      key: "description",
+    },
+    {
+      name: "Store id",
+      key: "store",
+    },
+    {
+      name: "Date",
+      key: "date",
+    },
+    {
+      name: "Time",
+      key: "time",
+    },
+  ];
+
   useEffect(() => {
     getJiraLogs(setError);
     getFaultLogs(setError);
@@ -80,27 +103,29 @@ const ActivityLogsPage = observer(() => {
             <th>
               <Checkbox label="user" />
             </th>
-            <th
-              className={styles.table__sort}
-              onClick={() => handleSort("status")}
-            >
-              Event type <SortIcon />
-            </th>
-            <th
-              className={styles.table__sort}
-              onClick={() => handleSort("description")}
-            >
-              Message <SortIcon />
-            </th>
-            <th
-              className={styles.table__sort}
-              onClick={() => handleSort("store")}
-            >
-              Store id <SortIcon />
-            </th>
-            <th onClick={() => handleSort("date")}>Date</th>
-            <th onClick={() => handleSort("time")}>Time</th>
-            <th></th>
+            {items.map((item) => (
+              <th
+                className={
+                  styles.table__sort +
+                  " " +
+                  (item.key === sort.field && sort.type !== "none"
+                    ? styles.selectedSort
+                    : "")
+                }
+                onClick={() => handleSort(item.key)}
+                key={item.key}
+              >
+                {item.name}
+                <SortIcon
+                  className={
+                    item.key === sort.field && sort.type === "inc"
+                      ? styles.invertedSvg
+                      : ""
+                  }
+                />
+              </th>
+            ))}
+            <th className={styles.table__sort}></th>
           </tr>
         </thead>
         <tbody>

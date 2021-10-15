@@ -28,12 +28,14 @@ class ScriptsStore {
     makeAutoObservable(this);
     this.disposer = observe(this.script, (change) => {
       if (
-        change.object[change.name].playbook_id &&
+        change.object[change.name]?.playbook_id &&
         change.oldValue.playbook_id !== change.object[change.name].playbook_id
       ) {
         this.getPresets(change.object[change.name].playbook_id);
         if (change.object[change.name].parent_id) {
           this.getScript({ parent_id: change.object[change.name].parent_id});
+        } else {
+          this.parentScriptSource = ""
         }
       }
     });
@@ -66,7 +68,7 @@ class ScriptsStore {
       await refreshToken();
 
       const resp = await fetch(
-        "https://staptest.mcd-cctv.com​/api/ansible_playbook/?limit=9999&offset=0",
+        `${process.env.REACT_APP_URL}/api/ansible_playbook/?limit=9999&offset=0`,
         {
           method: "GET",
           headers: {
@@ -77,7 +79,6 @@ class ScriptsStore {
       const res = await resp.json();
       this.createTags(res.results);
       this.scripts = [...res.results];
-      console.log(toJS(this.scripts));
       setError("");
     } catch (e) {
       setError(e.message);
@@ -89,7 +90,7 @@ class ScriptsStore {
       await refreshToken();
 
       const resp = await fetch(
-        `https://staptest.mcd-cctv.com​/api/ansible_playbook/${script_id}/presets`,
+        `${process.env.REACT_APP_URL}/api/ansible_playbook/${script_id}/presets`,
         {
           method: "GET",
           headers: {
@@ -115,7 +116,7 @@ class ScriptsStore {
       await refreshToken();
 
       const resp = await fetch(
-        `https://staptest.mcd-cctv.com​/api/ansible_playbook/${parent_id}`,
+        `${process.env.REACT_APP_URL}/api/ansible_playbook/${parent_id}/`,
         {
           method: "GET",
           headers: {
@@ -125,7 +126,6 @@ class ScriptsStore {
       );
       const res = await resp.json();
       this.parentScriptSource = res.source;
-      console.log(res);
       // setError("");
     } catch (e) {
       ToastsStore.error(e.error, 3000, "toast");
@@ -137,7 +137,7 @@ class ScriptsStore {
       await refreshToken();
 
       const resp = await fetch(
-        `https://staptest.mcd-cctv.com/api/ansible_playbook/${playbook_id}/copy`,
+        `${process.env.REACT_APP_URL}/api/ansible_playbook/${playbook_id}/copy`,
         {
           method: "POST",
           headers: {
@@ -169,7 +169,7 @@ class ScriptsStore {
       await refreshToken();
 
       const resp = await fetch(
-        `https://staptest.mcd-cctv.com/api/ansible_playbook/${
+        `${process.env.REACT_APP_URL}/api/ansible_playbook/${
           script.playbook_id ? script.playbook_id : ""
         }`,
         {
@@ -203,7 +203,7 @@ class ScriptsStore {
       await refreshToken();
 
       const resp = await fetch(
-        `https://staptest.mcd-cctv.com/api/ansible_playbook/${playbook_id}/checkout`,
+        `${process.env.REACT_APP_URL}/api/ansible_playbook/${playbook_id}/checkout`,
         {
           method: "GET",
           headers: {
@@ -214,7 +214,6 @@ class ScriptsStore {
       const res = await resp.json();
       if (resp.status === 200) {
         this.checkouts = res;
-        console.log(res);
       } else {
         const res = await resp.json();
         ToastsStore.error(res.error, 3000, "toast");
@@ -231,7 +230,7 @@ class ScriptsStore {
       await refreshToken();
 
       const resp = await fetch(
-        `https://staptest.mcd-cctv.com/api/ansible_playbook/${playbook_id}/checkout/${checkout_id}`,
+        `${process.env.REACT_APP_URL}/api/ansible_playbook/${playbook_id}/checkout/${checkout_id}`,
         {
           method: "POST",
           headers: {
@@ -268,7 +267,7 @@ class ScriptsStore {
       await refreshToken();
 
       const resp = await fetch(
-        `https://staptest.mcd-cctv.com/api/execute_playbook/${playbook_id}`,
+        `${process.env.REACT_APP_URL}/api/execute_playbook/${playbook_id}`,
         {
           method: "POST",
           headers: {
@@ -309,7 +308,7 @@ class ScriptsStore {
     try {
       await refreshToken();
       const resp = await fetch(
-        `https://staptest.mcd-cctv.com​/api/ansible_playbook_preset/`,
+        `${process.env.REACT_APP_URL}/ansible_playbook_preset/`,
         {
           method: "POST",
           headers: {
@@ -346,7 +345,7 @@ class ScriptsStore {
       await refreshToken();
 
       const resp = await fetch(
-        `https://staptest.mcd-cctv.com/api/available_hosts`,
+        `${process.env.REACT_APP_URL}/api/available_hosts`,
         {
           method: "GET",
           headers: {
@@ -370,7 +369,7 @@ class ScriptsStore {
       await refreshToken();
 
       const resp = await fetch(
-        `https://staptest.mcd-cctv.com/api/ansible_playbook_logs/?limit=999`,
+        `${process.env.REACT_APP_URL}/api/ansible_playbook_logs/?limit=999`,
         {
           method: "GET",
           headers: {
@@ -394,7 +393,7 @@ class ScriptsStore {
       await refreshToken();
 
       const resp = await fetch(
-        `https://staptest.mcd-cctv.com/api/ansible_playbook/${playbook_id}/`,
+        `${process.env.REACT_APP_URL}/api/ansible_playbook/${playbook_id}/`,
         {
           method: "DELETE",
           headers: {
@@ -416,7 +415,7 @@ class ScriptsStore {
       await refreshToken();
 
       const resp = await fetch(
-        `https://staptest.mcd-cctv.com/api/running_playbooks/`,
+        `${process.env.REACT_APP_URL}/api/running_playbooks/`,
         {
           method: "GET",
           headers: {
@@ -440,7 +439,7 @@ class ScriptsStore {
       await refreshToken();
 
       const resp = await fetch(
-        `https://staptest.mcd-cctv.com/api/${
+        `${process.env.REACT_APP_URL}/api/${
           +task_id == task_id ? "ansible_playbook_logs/" : "execution_status/"
         }${task_id}`,
         {

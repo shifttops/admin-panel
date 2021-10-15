@@ -7,18 +7,18 @@ import moment from "moment";
 import { useLocation } from "react-router";
 import { categoryMapper } from "../../../../helpers/mappers";
 
-const InnerInfo = observer(() => {
+const InnerInfo = observer((props) => {
   const { storeInfo, getStoreInfo, getStoreHardware, getHardwareSetup, getStoreCameraImages } = StoresStore;
   const [error, setError] = useState(false);
   const location = useLocation();
 
-  useEffect(() => {
-    const id = +location.pathname.split('/')[location.pathname.split('/').length - 1];
-    if (storeInfo.store_id === id) {
-      getStoreHardware(id, setError);
-      // getHardwareSetup(id, setError);
-    }
-  }, [storeInfo.store_id])
+  // useEffect(() => {
+  //   const id = +props.match.params.id
+  //   if (storeInfo.store_id === id) {
+  //     // getStoreHardware(id, setError);
+  //     // getHardwareSetup(id, setError);
+  //   }
+  // }, [storeInfo.store_id])
 
   return (
     <div className={styles.wrapper}>
