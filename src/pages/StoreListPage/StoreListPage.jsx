@@ -21,12 +21,13 @@ const StoreListPage = observer(() => {
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState({ type: "none" });
   const [isSearchOrSort, setIsSearchOrSort] = useState(false);
-  const [isEmptyRes, setIsEmptyRes] = useState(false);
+  const [limit, setLimit] = useState(30)
+  const [resCount, setResCount] = useState(0)
   const history = useHistory();
   const location = useLocation();
   const [checkedStores, setCheckedStores] = useState([]);
 
-  const { stores, getStoresPart } = StoresStore;
+  const { stores, getStores } = StoresStore;
   let { isLoading, enabledFilters } = StoresStore;
 
   const { ref, inView, entry } = useInView({
@@ -71,16 +72,15 @@ const StoreListPage = observer(() => {
 
     if (refStores.current) {
       setIsSearchOrSort(true);
-      setIsEmptyRes(false)
-      getStoresPart({
+      getStores({
         search,
         setError,
         field,
         type,
-        limit: 30,
+        limit,
         offset: 0,
         signal: abortRef.current.signal,
-        setIsEmptyRes
+        setResCount
       });
     }
   }, [search, sort]);
@@ -94,24 +94,23 @@ const StoreListPage = observer(() => {
     const { type, field } = sort;
 
     if (Object.keys(enabledFilters).some((key) => key && key.length) || (!Object.keys(enabledFilters).length && stores.length)) {
-      setIsEmptyRes(false)
       setIsSearchOrSort(true);
-      getStoresPart({
+      getStores({
         search,
         setError,
         field,
         type,
-        limit: 30,
+        limit,
         offset: 0,
         signal: abortRef.current.signal,
-        setIsEmptyRes
+        setResCount
       });
     }
   }, [enabledFilters]);
 
   useEffect(() => {
     if (!stores.length && !search.length && (!Object.keys(enabledFilters).length)) {
-      getStoresPart({ search, setError, limit: 30 });
+      getStores({ search, setError, limit, setResCount });
     }
   }, [stores.length]);
 
@@ -121,10 +120,9 @@ const StoreListPage = observer(() => {
 
   useEffect(() => {
     const { type, field } = sort;
-
-    if (inView && stores.length >= 30 ) {
+    if (inView) {
       setIsSearchOrSort(false);
-      getStoresPart({ search, setError, field, type, limit: 30, setIsEmptyRes });
+      getStores({ search, setError, field, type, limit, setResCount });
     }
   }, [inView]);
 
@@ -140,7 +138,7 @@ const StoreListPage = observer(() => {
           selectedStoresCount={checkedStores.length}
         />
         <tbody>
-          {stores.map((restaurant) => (
+          {stores.length ? stores.map((restaurant) => (
             <TableRow
               key={restaurant.store_id}
               id={restaurant.store_id}
@@ -161,26 +159,22 @@ const StoreListPage = observer(() => {
               setCheckedStores={setCheckedStores}
               checkedStores={checkedStores}
             />
-          ))}
+          )) : null}
         </tbody>
         {isLoading && isSearchOrSort ? (
           <div
             className={styles.storesLoader + " " + styles.storesLoader__search}
           >
-            <Loader />
+            <Loader/>
           </div>
-        ) : (
-          ""
-        )}
+        ) : null}
       </table>
-      {!isEmptyRes && isLoading && !isSearchOrSort ? (
+      {isLoading && !isSearchOrSort ? (
         <div className={styles.storesLoader}>
-          <Loader />
+          <Loader/>
         </div>
-      ) : (
-        ""
-      )}
-      {!isEmptyRes && !isLoading ? <div ref={ref} /> : ""}
+      ) : null}
+      {(resCount && stores.length !== resCount && !isLoading) ? <div ref={ref} /> : null}
       <ToastsContainer
         store={ToastsStore}
         position={ToastsContainerPosition.BOTTOM_RIGHT}

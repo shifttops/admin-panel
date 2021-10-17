@@ -1,7 +1,9 @@
 import { filtersRequestMapper } from "./mappers";
 
 export const createDateFilters = (filters) => {
-  Object.keys(filters).forEach((filterKey) => {
+  let tempFilters = Object.assign([], filters);
+
+  Object.keys(tempFilters).forEach((filterKey) => {
     const reqKey = filtersRequestMapper.find(
         (item) => filterKey === item.name
     )?.reqName;
@@ -14,16 +16,17 @@ export const createDateFilters = (filters) => {
     ) {
       const index = filters[key].findIndex((item) => !item);
       if (index === 1) {
-        filters[key][index] = new Date().toISOString();
+        tempFilters[key][index] = new Date().toISOString();
       } else {
-        filters[key][index] = new Date(0).toISOString();
+        tempFilters[key][index] = new Date(0).toISOString();
       }
     }
     else {
       if(reqKey) {
-        filters[reqKey] = filters[filterKey]
+        tempFilters[reqKey] = tempFilters[filterKey]
+        if(reqKey !== filterKey) delete tempFilters[filterKey]
       }
     }
   });
-  return filters;
+  return tempFilters;
 };

@@ -1,5 +1,4 @@
-import {makeAutoObservable, reaction, toJS} from "mobx";
-import { computedFn } from "mobx-utils";
+import {makeAutoObservable, observable, reaction} from "mobx";
 import moment from "moment";
 import { refreshToken } from "../helpers/AuthHelper";
 import queryString from "query-string";
@@ -57,15 +56,23 @@ class StoresStore {
     );
   }
 
-  getStoresPart = async ({search, setError, field = null, type = "none", limit, offset = this.stores.length, signal, setIsEmptyRes=null}) => {
+  getStores = async ({
+    search,
+    setError,
+    field = null,
+    type = "none",
+    limit,
+    offset = this.stores.length,
+    signal, setResCount
+  }) => {
     try {
       await refreshToken();
       let url = `${process.env.REACT_APP_URL}/api/store/?limit=${limit}&offset=${offset}`;
-      if(field && type !== 'none') {
-        url += `&filtered_by=${field}&type=${type}`
+      if (field && type !== "none") {
+        url += `&filtered_by=${field}&type=${type}`;
       }
-      if(search.length){
-        url += `&search=${search}`
+      if (search.length) {
+        url += `&search=${search}`;
       }
 
       this.isLoading++;
@@ -78,18 +85,9 @@ class StoresStore {
       ) {
         const filtersForReq = createDateFilters(this.enabledFilters);
 
-        Object.keys(filtersForReq).map(
-          (key) => {
-            const reqKey = filtersRequestMapper.find(
-              (item) => key === item.name
-            )?.reqName;
-
-            if(reqKey){
-              url += `&${reqKey}=${filtersForReq[reqKey]}`
-              if(reqKey !== key) delete this.enabledFilters[reqKey]
-            }
-          }
-        );
+        Object.keys(filtersForReq).map((key) => {
+            url += `&${key}=${filtersForReq[key]}`;
+        });
       }
 
       const resp = await fetch(url, {
@@ -100,20 +98,18 @@ class StoresStore {
         signal,
       });
 
-      const res = await resp.json();
+      if(resp.status === 200) {
+        const res = await resp.json();
 
-      if(res.results.length) {
         this.stores = offset
           ? [...this.stores, ...res.results]
           : [...res.results];
-      } else {
-        if(!offset){
-          ToastsStore.error('No stores find', 3000, 'toast')
-          this.stores = []
-        } else {
-          ToastsStore.error('No more stores find', 3000, 'toast')
+
+        setResCount(res.count)
+
+        if (!res.count) {
+          ToastsStore.error("No stores find", 3000, "toast");
         }
-        setIsEmptyRes(true)
       }
 
       this.isLoading--;
