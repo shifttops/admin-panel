@@ -9,7 +9,7 @@ import { ToastsStore } from "react-toasts";
 class StoresStore {
   isLoading = 0;
   storeInfo = {};
-  stores = {stores: []};
+  stores = observable.array([]);
   storeErrors = [];
   filters = {};
   cameras = [];
@@ -57,12 +57,12 @@ class StoresStore {
   }
 
   getStores = async ({
-    search,
+    search = '',
     setError,
     field = null,
     type = "none",
     limit,
-    offset = this.stores.stores.length,
+    offset = this.stores.length,
     signal, setResCount
   }) => {
     try {
@@ -101,8 +101,8 @@ class StoresStore {
       if(resp.status === 200) {
         const res = await resp.json();
 
-        this.stores.stores = offset
-          ? [...this.stores.stores, ...res.results]
+        this.stores = offset
+          ? [...this.stores, ...res.results]
           : [...res.results];
 
         setResCount(res.count)
@@ -110,6 +110,10 @@ class StoresStore {
         if (!res.count) {
           ToastsStore.error("No stores find", 3000, "toast");
         }
+      }else {
+        const res = await resp.json();
+
+        ToastsStore.error(res.error, 3000, 'toast')
       }
 
       this.isLoading--;

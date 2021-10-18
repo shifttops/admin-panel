@@ -21,8 +21,8 @@ const StoreListPage = observer(() => {
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState({ type: "none" });
   const [isSearchOrSort, setIsSearchOrSort] = useState(false);
-  const [limit, setLimit] = useState(30)
-  const [resCount, setResCount] = useState(0)
+  const [limit, setLimit] = useState(30);
+  const [resCount, setResCount] = useState(0);
   const history = useHistory();
   const location = useLocation();
   const [checkedStores, setCheckedStores] = useState([]);
@@ -35,8 +35,8 @@ const StoreListPage = observer(() => {
   });
 
   const selectAllStores = (e) => {
-    if (checkedStores.length < stores.stores.length) {
-      setCheckedStores(stores.stores.map((store) => store.store_id));
+    if (checkedStores.length < stores.length) {
+      setCheckedStores(stores.map((store) => store.store_id));
     } else {
       setCheckedStores([]);
     }
@@ -80,39 +80,43 @@ const StoreListPage = observer(() => {
         limit,
         offset: 0,
         signal: abortRef.current.signal,
-        setResCount
+        setResCount,
       });
     }
+
+    return () => StoresStore.stores.clear();
   }, [search, sort]);
 
   useEffect(() => {
     if (abortRef.current && isLoading) {
       abortRef.current.abort();
     }
+
     abortRef.current = new AbortController();
 
-    const { type, field } = sort;
-
-    if (Object.keys(enabledFilters).some((key) => key && key.length) || (!Object.keys(enabledFilters).length && stores.stores.length)) {
+    if (Object.keys(enabledFilters).some((key) => key && key.length)) {
       setIsSearchOrSort(true);
       getStores({
-        search,
         setError,
-        field,
-        type,
         limit,
         offset: 0,
         signal: abortRef.current.signal,
-        setResCount
+        setResCount,
       });
     }
   }, [enabledFilters]);
 
   useEffect(() => {
-    if (!stores.stores.length && !search.length && (!Object.keys(enabledFilters).length)) {
-      getStores({ search, setError, limit, setResCount });
+    if (
+      !stores.length &&
+      !search.length &&
+      !Object.keys(enabledFilters).length &&
+      !sort.field &&
+      !refStores.current
+    ) {
+      getStores({ setError, limit, setResCount });
     }
-  }, [stores.stores.length]);
+  }, [stores.length]);
 
   useEffect(() => {
     refStores.current = true;
@@ -134,11 +138,11 @@ const StoreListPage = observer(() => {
           setSort={setSort}
           sort={sort}
           selectAllStores={selectAllStores}
-          allStoresCount={stores.stores.length}
+          allStoresCount={stores.length}
           selectedStoresCount={checkedStores.length}
         />
         <tbody>
-          {stores.stores.length ? stores.stores.map((restaurant) => (
+          {stores.map((restaurant) => (
             <TableRow
               key={restaurant.store_id}
               id={restaurant.store_id}
@@ -159,22 +163,24 @@ const StoreListPage = observer(() => {
               setCheckedStores={setCheckedStores}
               checkedStores={checkedStores}
             />
-          )) : null}
+          ))}
         </tbody>
         {isLoading && isSearchOrSort ? (
           <div
             className={styles.storesLoader + " " + styles.storesLoader__search}
           >
-            <Loader/>
+            <Loader />
           </div>
         ) : null}
       </table>
       {isLoading && !isSearchOrSort ? (
         <div className={styles.storesLoader}>
-          <Loader/>
+          <Loader />
         </div>
       ) : null}
-      {(resCount && stores.stores.length !== resCount && !isLoading) ? <div className={styles.emptyBlock} ref={ref} /> : null}
+      {stores.length && stores.length !== resCount && !isLoading ? (
+        <div className={styles.emptyBlock} ref={ref} />
+      ) : null}
       <ToastsContainer
         store={ToastsStore}
         position={ToastsContainerPosition.BOTTOM_RIGHT}
