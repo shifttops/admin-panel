@@ -35,8 +35,8 @@ const StoreListPage = observer(() => {
   });
 
   const selectAllStores = (e) => {
-    if (checkedStores.length < stores.length) {
-      setCheckedStores(stores.map((store) => store.store_id));
+    if (checkedStores.length < stores.stores.length) {
+      setCheckedStores(stores.stores.map((store) => store.store_id));
     } else {
       setCheckedStores([]);
     }
@@ -93,7 +93,7 @@ const StoreListPage = observer(() => {
 
     const { type, field } = sort;
 
-    if (Object.keys(enabledFilters).some((key) => key && key.length) || (!Object.keys(enabledFilters).length && stores.length)) {
+    if (Object.keys(enabledFilters).some((key) => key && key.length) || (!Object.keys(enabledFilters).length && stores.stores.length)) {
       setIsSearchOrSort(true);
       getStores({
         search,
@@ -109,10 +109,10 @@ const StoreListPage = observer(() => {
   }, [enabledFilters]);
 
   useEffect(() => {
-    if (!stores.length && !search.length && (!Object.keys(enabledFilters).length)) {
+    if (!stores.stores.length && !search.length && (!Object.keys(enabledFilters).length)) {
       getStores({ search, setError, limit, setResCount });
     }
-  }, [stores.length]);
+  }, [stores.stores.length]);
 
   useEffect(() => {
     refStores.current = true;
@@ -134,11 +134,11 @@ const StoreListPage = observer(() => {
           setSort={setSort}
           sort={sort}
           selectAllStores={selectAllStores}
-          allStoresCount={stores.length}
+          allStoresCount={stores.stores.length}
           selectedStoresCount={checkedStores.length}
         />
         <tbody>
-          {stores.length ? stores.map((restaurant) => (
+          {stores.stores.length ? stores.stores.map((restaurant) => (
             <TableRow
               key={restaurant.store_id}
               id={restaurant.store_id}
@@ -174,7 +174,7 @@ const StoreListPage = observer(() => {
           <Loader/>
         </div>
       ) : null}
-      {(resCount && stores.length !== resCount && !isLoading) ? <div ref={ref} /> : null}
+      {(resCount && stores.stores.length !== resCount && !isLoading) ? <div className={styles.emptyBlock} ref={ref} /> : null}
       <ToastsContainer
         store={ToastsStore}
         position={ToastsContainerPosition.BOTTOM_RIGHT}

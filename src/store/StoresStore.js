@@ -9,7 +9,7 @@ import { ToastsStore } from "react-toasts";
 class StoresStore {
   isLoading = 0;
   storeInfo = {};
-  stores = [];
+  stores = {stores: []};
   storeErrors = [];
   filters = {};
   cameras = [];
@@ -62,7 +62,7 @@ class StoresStore {
     field = null,
     type = "none",
     limit,
-    offset = this.stores.length,
+    offset = this.stores.stores.length,
     signal, setResCount
   }) => {
     try {
@@ -101,8 +101,8 @@ class StoresStore {
       if(resp.status === 200) {
         const res = await resp.json();
 
-        this.stores = offset
-          ? [...this.stores, ...res.results]
+        this.stores.stores = offset
+          ? [...this.stores.stores, ...res.results]
           : [...res.results];
 
         setResCount(res.count)
