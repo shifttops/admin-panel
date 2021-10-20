@@ -4,10 +4,11 @@ import { observer } from "mobx-react";
 import { useState } from "react";
 import StoresStore from "../../../store/StoresStore";
 
-const SubmitPlannerPopup = observer(({ onClose, plannerTask}) => {
+const SubmitPlannerPopup = observer(({ onClose, onClick, plannerTask, task}) => {
   const [error, setError] = useState(false);
 
   const handleChoice = ({ setError, plannerTask}) => {
+    onClick();
     onClose();
   };
 

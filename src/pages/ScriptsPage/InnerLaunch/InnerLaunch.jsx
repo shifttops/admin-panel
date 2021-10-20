@@ -43,6 +43,8 @@ const InnerLaunch = observer((props) => {
   const [period, setPeriod] = useState("* * * * *");
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
+  const [isPeriodic, setPeriodic] = useState(false);
+  const [task_name, setTaskName] = useState("");
 
   const handleChange = (value, key) => {
     setRows((prev) => {
@@ -64,7 +66,7 @@ const InnerLaunch = observer((props) => {
         script_id: scriptId,
         hosts: launchHosts,
         variables: rows,
-        planner: {startDate, period, endDate},
+        planner: { startDate, period, endDate },
         setError,
       });
     }
@@ -81,9 +83,10 @@ const InnerLaunch = observer((props) => {
       await launchScript({
         hosts: launchHosts,
         variables: rows,
-        planner: {startDate, period, endDate},
+        planner: isPeriodic ? { startDate, period, endDate } : null,
+        task_name,
         setError,
-        script: scripts.find(script => scriptId === script.playbook_id)
+        script: scripts.find((script) => scriptId === script.playbook_id),
       })
     );
     setTimeout(() => setLogId(""), 5000);
@@ -189,7 +192,7 @@ const InnerLaunch = observer((props) => {
                 enabledStores={enabledStores}
                 rows={rows}
                 onClose={close}
-                planner={{startDate, period, endDate}}
+                planner={{ startDate, period, endDate }}
               />
             )}
           </Popup>
@@ -200,14 +203,33 @@ const InnerLaunch = observer((props) => {
           setEnabledStores={setEnabledStores}
           hosts={hosts}
         />
-        <ScriptsPeriodTable
-          period={period}
-          setPeriod={setPeriod}
-          startDate={startDate}
-          setStartDate={setStartDate}
-          endDate={endDate}
-          setEndDate={setEndDate}
-        />
+        <div className={styles.periodic}>
+          <button onClick={() => setPeriodic((prev) => !prev)}>
+            {isPeriodic ? "Close" : "Add period"}
+          </button>
+          {isPeriodic ? (
+            <ScriptsPeriodTable
+              period={period}
+              setPeriod={setPeriod}
+              startDate={startDate}
+              setStartDate={setStartDate}
+              endDate={endDate}
+              setEndDate={setEndDate}
+            />
+          ) : (
+            ""
+          )}
+          {isPeriodic ? (
+            <input
+              type="text"
+              value={task_name}
+              onChange={(e) => setTaskName(e.target.value)}
+              placeholder='Enter task name'
+            />
+          ) : (
+            ""
+          )}
+        </div>
         <div className={log_id ? styles.popup : styles.closed}>
           {log_id ? (
             <NavLink to={`${routes.scripts_logs}/${log_id.task_id}`}>

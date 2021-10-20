@@ -34,9 +34,9 @@ class ScriptsStore {
       ) {
         this.getPresets(change.object[change.name].playbook_id);
         if (change.object[change.name].parent_id) {
-          this.getScript({ parent_id: change.object[change.name].parent_id});
+          this.getScript({ parent_id: change.object[change.name].parent_id });
         } else {
-          this.parentScriptSource = ""
+          this.parentScriptSource = "";
         }
       }
     });
@@ -255,7 +255,14 @@ class ScriptsStore {
     }
   };
 
-  launchScript = async ({ hosts, variables, setError, planner, script }) => {
+  launchScript = async ({
+    hosts,
+    variables,
+    setError,
+    planner,
+    script,
+    task_name,
+  }) => {
     const newVariables = { ...variables };
     Object.keys(newVariables).forEach(
       (key) => !newVariables[key] && delete newVariables[key]
@@ -266,29 +273,38 @@ class ScriptsStore {
     }
     try {
       await refreshToken();
-
-      const resp = await fetch(
-        `${process.env.REACT_APP_URL}/api/execute_playbook/${script.playbook_id}`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Token ${localStorage.getItem("access")}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            servers: hosts.hosts,
-            groups: hosts.groups,
-            variables: newVariables,
-          }),
+      if (!planner) {
+        const resp = await fetch(
+          `${process.env.REACT_APP_URL}/api/execute_playbook/${script.playbook_id}`,
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Token ${localStorage.getItem("access")}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              servers: hosts.hosts,
+              groups: hosts.groups,
+              variables: newVariables,
+            }),
+          }
+        );
+        if (resp.status === 200) {
+          return resp.json();
+        } else {
+          const res = await resp.json();
+          ToastsStore.error(res.error, 3000, "toast");
+          return null;
         }
-      );
-      if (resp.status === 200) {
-        await PlannerStore.addCrontab({setError, planner, script, variables, hosts})
-        return resp.json();
       } else {
-        const res = await resp.json();
-        ToastsStore.error(res.error, 3000, "toast");
-        return null;
+        await PlannerStore.addCrontab({
+          setError,
+          planner,
+          script,
+          variables: newVariables,
+          hosts,
+          task_name,
+        });
       }
     } catch (e) {
       // setError(e.message);
@@ -296,7 +312,14 @@ class ScriptsStore {
     }
   };
 
-  createPreset = async ({ name, script_id, hosts, variables, setError, planner }) => {
+  createPreset = async ({
+    name,
+    script_id,
+    hosts,
+    variables,
+    setError,
+    planner,
+  }) => {
     const newVariables = Object.keys(variables)
       .filter((key) => variables[key])
       .map((key) => ({
