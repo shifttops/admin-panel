@@ -22,7 +22,7 @@ export default function TableHead({
     },
     {
       name: "Region",
-      key: "store_county",
+      key: "store_location__county",
       centered: false,
     },
     {

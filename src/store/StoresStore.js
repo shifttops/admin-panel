@@ -1,15 +1,15 @@
-import { makeAutoObservable, reaction } from "mobx";
-import { computedFn } from "mobx-utils";
+import {makeAutoObservable, observable, reaction} from "mobx";
 import moment from "moment";
 import { refreshToken } from "../helpers/AuthHelper";
 import queryString from "query-string";
 import { filtersRequestMapper } from "../helpers/mappers";
-import { createDateFilters } from "../helpers/dateForFiltersHelper";
+import { createDateFilters } from "../helpers/filters";
 import { ToastsStore } from "react-toasts";
 
 class StoresStore {
+  isLoading = 0;
   storeInfo = {};
-  stores = [];
+  stores = observable.array([]);
   storeErrors = [];
   filters = {};
   cameras = [];
@@ -56,65 +56,70 @@ class StoresStore {
     );
   }
 
-  searchStores = computedFn((search) => {
-    if (!search) return this.stores;
-    return this.stores.filter((store) =>
-      Object.values(store).some(
-        (value) =>
-          value && value.toString().toLowerCase().includes(search.toLowerCase())
-      )
-    );
-  });
-
-  getStores = async (setError) => {
+  getStores = async ({
+    search = '',
+    setError,
+    field = null,
+    type = "none",
+    limit,
+    offset = this.stores.length,
+    signal, setResCount
+  }) => {
     try {
       await refreshToken();
+      let url = `${process.env.REACT_APP_URL}/api/store/?limit=${limit}&offset=${offset}`;
+      if (field && type !== "none") {
+        url += `&filtered_by=${field}&type=${type}`;
+      }
+      if (search.length) {
+        url += `&search=${search}`;
+      }
+
+      this.isLoading++;
+
       if (
         Object.keys(this.enabledFilters).length &&
         Object.keys(this.enabledFilters).some(
           (key) => this.enabledFilters[key]?.length
         )
       ) {
-        let filtersForReq = {};
-        Object.keys(this.enabledFilters).forEach((key) => {
-          let reqKey = filtersRequestMapper.find(
-            (item) => key === item.name
-          )?.reqName;
-          if (reqKey) {
-            filtersForReq[reqKey] = this.enabledFilters[key];
-          } else {
-            filtersForReq[key] = this.enabledFilters[key];
-          }
+        const filtersForReq = createDateFilters(this.enabledFilters);
+
+        Object.keys(filtersForReq).map((key) => {
+            url += `&${key}=${filtersForReq[key]}`;
         });
-        filtersForReq = createDateFilters(
-          JSON.parse(JSON.stringify(filtersForReq))
-        );
-        console.log(this.enabledFilters, filtersForReq);
-        const resp = await fetch(`${process.env.REACT_APP_URL}/api/filters/`, {
-          method: "POST",
-          headers: {
-            Authorization: `Token ${localStorage.getItem("access")}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(filtersForReq),
-        });
-        const res = await resp.json();
-        this.stores = [...res];
-      } else {
-        const resp = await fetch(
-          `${process.env.REACT_APP_URL}/api/store/?limit=9999&offset=0`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Token ${localStorage.getItem("access")}`,
-            },
-          }
-        );
-        const res = await resp.json();
-        this.stores = [...res.results];
       }
-      setError("");
+
+      const resp = await fetch(url, {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${localStorage.getItem("access")}`,
+        },
+        signal,
+      });
+
+      if(resp.status === 200) {
+        const res = await resp.json();
+
+        this.stores = offset
+          ? [...this.stores, ...res.results]
+          : [...res.results];
+
+        setResCount(res.count)
+
+        if (!res.count) {
+          ToastsStore.error("No stores find", 3000, "toast");
+        }
+      }else {
+        const res = await resp.json();
+
+        ToastsStore.error(res.error, 3000, 'toast')
+      }
+
+      this.isLoading--;
     } catch (e) {
+      this.isLoading--;
+
       setError(e.message);
     }
   };
