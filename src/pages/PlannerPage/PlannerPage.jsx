@@ -13,8 +13,24 @@ import {
 import Button from "components/buttons/Button";
 import iconButtonTypes from "types/iconButtonTypes";
 import PlannerItem from "components/PlannerItem";
+import {observer} from "mobx-react";
+import {useEffect, useState} from "react";
+import PlannerStore from "../../store/PlannerStore";
+import {ToastsContainer, ToastsContainerPosition, ToastsStore} from "react-toasts";
 
-export default function PlannerPage() {
+const PlannerPage = observer(() => {
+  const [error, setError] = useState('')
+
+  const {getPlannerTasks, plannerTasks} = PlannerStore
+
+  useEffect(() => {
+    if(!plannerTasks.length) getPlannerTasks({setError})
+
+    return () => {
+      PlannerStore.plannerTasks = []
+    }
+  }, [])
+
   return (
     <div className="page">
       <div className={styles.pageHead}>
@@ -33,33 +49,38 @@ export default function PlannerPage() {
       </div>
       <table className={styles.table}>
         <thead className={styles.head}>
-          <tr>
-            <th />
-            <th>Store</th>
-            <th>Task name</th>
-            <th>START DATE</th>
-            <th>Period</th>
-            <th>END DATE</th>
-            <th />
-          </tr>
+        <tr>
+          {/* <th /> */}
+          <th>Store</th>
+          <th>Task name</th>
+          <th>Status</th>
+          {/* <th>Total run count</th> */}
+          {/* <th>Changed date</th> */}
+          <th>Start date</th>
+          <th>Period</th>
+          <th>End date</th>
+          <th />
+        </tr>
         </thead>
         <tbody>
+        {plannerTasks.map(task => (
           <PlannerItem
+            key={task.name}
             className={styles.name}
             globalStore
-            text="Record video from lateral cameras"
             Icon={PauseIcon}
             iconColor={iconButtonTypes.red}
+            taskData={task}
           />
-          <PlannerItem
-            className={styles.name}
-            globalStore
-            text="Record video from lateral cameras"
-            Icon={ErrorIcon}
-            iconColor={iconButtonTypes.error}
-          />
+        ))}
         </tbody>
       </table>
+      <ToastsContainer
+        store={ToastsStore}
+        position={ToastsContainerPosition.BOTTOM_RIGHT}
+      />
     </div>
   );
-}
+})
+
+export default PlannerPage;

@@ -49,15 +49,28 @@
   position: relative;
   flex-direction: column;
   align-items: flex-start;
-  border: 1px solid $color-green;
+  border: 1px solid rgba(106, 105, 105, 0.5);
+  box-shadow: 1px 1px 0px 0px rgba(106, 105, 105, 0.3);
+  border-radius: 10px;
   width: 30%;
+  max-width: 350px;
+  min-width: 250px;
   margin-right: 20px;
   margin-bottom: 20px;
   padding: 15px;
+  cursor: pointer;
+  &:hover{
+  // border: 1px solid $color-yellow;
+      box-shadow: 1px 1px 2px 2px rgba(106, 105, 105, 0.3);
+      // color: rgba(41, 202, 9, 0.5);
+  }
   >.close{
     position: absolute;
     top: 5px;
     right: 10px;
+    &:hover{
+      color: $color-red;
+    }
   }
   > .tags {
     padding: 0;
@@ -70,6 +83,10 @@
   }
   > span {
     margin-bottom: 15px;
+  }
+  .name{
+    margin: 0 auto 15px auto;
+    font-size: 16px;
   }
 }
 

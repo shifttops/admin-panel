@@ -1,30 +1,26 @@
 import { filtersRequestMapper } from "./mappers";
 
 export const createDateFilters = (filters) => {
-  let tempFilters = Object.assign([], filters);
+  let tempFilters = Object.assign({}, filters);
 
   Object.keys(tempFilters).forEach((filterKey) => {
     const reqKey = filtersRequestMapper.find(
-        (item) => filterKey === item.name
+      (item) => filterKey === item.name
     )?.reqName;
 
-    const key = reqKey || filterKey
+    const key = reqKey || filterKey;
 
-    if (
-        key === "date_deployment__range" ||
-        key === "date_created__range"
-    ) {
-      const index = filters[key].findIndex((item) => !item);
+    if (key === "date_deployment__range" || key === "date_created__range") {
+      const index = filters[filterKey].findIndex((item) => !item);
       if (index === 1) {
         tempFilters[key][index] = new Date().toISOString();
-      } else {
+      } else if (index === 0) {
         tempFilters[key][index] = new Date(0).toISOString();
       }
-    }
-    else {
-      if(reqKey) {
-        tempFilters[reqKey] = tempFilters[filterKey]
-        if(reqKey !== filterKey) delete tempFilters[filterKey]
+    } else {
+      if (reqKey) {
+        tempFilters[reqKey] = tempFilters[filterKey];
+        if (reqKey !== filterKey) delete tempFilters[filterKey];
       }
     }
   });

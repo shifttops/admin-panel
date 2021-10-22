@@ -40,8 +40,6 @@ export default function ScriptsStoresTable({
     });
   };
 
-  console.log(3456789098765, enabledStores);
-
   return (
     <div className={styles.block}>
       <div className={styles.head}>

@@ -107,7 +107,7 @@ const ScriptsPage = observer(() => {
               key={script.playbook_id}
               onClick={() => handleScriptClick(script.playbook_id)}
             >
-              <span className={styles.name}>Name: {script.name}</span>
+              <span className={styles.name}>{script.name}</span>
               <Popup
                 modal
                 trigger={

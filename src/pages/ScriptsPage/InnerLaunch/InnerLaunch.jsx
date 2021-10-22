@@ -1,22 +1,19 @@
-import ButtonIcon from "components/buttons/ButtonIcon";
-import { MoreIcon, SortIcon } from "icons";
 import styles from "./launch.module.scss";
-import Checkbox from "components/Checkbox";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../../../components/buttons/Button";
 import ScriptsStoresTable from "../../../components/ScriptsStoresTable/ScriptsStoresTable";
 import { observer } from "mobx-react";
 import { useLocation } from "react-router";
 import ScriptsStore from "../../../store/ScriptsStore";
-import { useEffect } from "react";
 import Popup from "reactjs-popup";
 import {
   ToastsContainer,
-  ToastsStore,
   ToastsContainerPosition,
+  ToastsStore,
 } from "react-toasts";
 import { NavLink } from "react-router-dom";
 import routes from "../../../constants/routes";
+import ScriptsPeriodTable from "../../../components/ScriptsPeriodTable/ScriptsPeriodTable";
 import PopupComponent from "../../../components/popups/PopupComponent/PopupComponent";
 
 const InnerLaunch = observer((props) => {
@@ -43,6 +40,12 @@ const InnerLaunch = observer((props) => {
 
   const [enabledStores, setEnabledStores] = useState({ hosts: [], groups: [] });
 
+  const [period, setPeriod] = useState("* * * * *");
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [isPeriodic, setPeriodic] = useState(false);
+  const [task_name, setTaskName] = useState("");
+
   const handleChange = (value, key) => {
     setRows((prev) => {
       prev[key] = value;
@@ -63,6 +66,7 @@ const InnerLaunch = observer((props) => {
         script_id: scriptId,
         hosts: launchHosts,
         variables: rows,
+        planner: { startDate, period, endDate },
         setError,
       });
     }
@@ -78,20 +82,22 @@ const InnerLaunch = observer((props) => {
     setLogId(
       await launchScript({
         hosts: launchHosts,
-        playbook_id: scriptId,
         variables: rows,
+        planner: isPeriodic ? { startDate, period, endDate } : null,
+        task_name,
         setError,
+        script: scripts.find((script) => scriptId === script.playbook_id),
       })
     );
     setTimeout(() => setLogId(""), 5000);
   };
 
-  const handleClick = ({onClose}) => {
+  const handleClick = ({ onClose }) => {
     handleLaunch();
     setTimeout(() => {
       onClose();
     }, 300);
-  }
+  };
 
   useEffect(() => {
     if (!scripts.length) {
@@ -136,7 +142,12 @@ const InnerLaunch = observer((props) => {
   }, [hosts, presets, preset.current]);
 
   useEffect(() => {
-    if (scripts.length && scripts.current && !script.current.playbook_id && !presetId) {
+    if (
+      scripts.length &&
+      scripts.current &&
+      !script.current.playbook_id &&
+      !presetId
+    ) {
       script.current = scripts.find(
         (script) => script.playbook_id === scriptId
       );
@@ -154,7 +165,7 @@ const InnerLaunch = observer((props) => {
   return scripts.length ? (
     <>
       <div className={styles.page}>
-        <div>
+        <div className={styles.launch_block}>
           <table className={styles.table}>
             <thead className={styles.head}>
               <tr>
@@ -171,6 +182,7 @@ const InnerLaunch = observer((props) => {
                       type="text"
                       value={rows[variable]}
                       placeholder="Value"
+                      className={styles.variable_input}
                       onChange={(e) => handleChange(e.target.value, variable)}
                     />
                   </td>
@@ -178,30 +190,79 @@ const InnerLaunch = observer((props) => {
               ))}
             </tbody>
           </table>
-          <Popup
-            modal
-            trigger={<Button text="Launch" className="launch_btn"/>}
-          >
-            {(close) => (
-              <PopupComponent
-                onClose={close}
-                titleText={'Launch'}
-                buttonText={'Launch'}
-                text={'Are you sure you want to launch the script with'}
-                dedicatedText={JSON.stringify(rows)}
-                additionalText={'on'}
-                additionalDedicatedText={JSON.stringify(enabledStores)}
-                onClick={() => handleClick({onClose: close})}
-              />
-            )}
-          </Popup>
-        </div>
 
-        <ScriptsStoresTable
-          enabledStores={enabledStores}
-          setEnabledStores={setEnabledStores}
-          hosts={hosts}
-        />
+          <ScriptsStoresTable
+            enabledStores={enabledStores}
+            setEnabledStores={setEnabledStores}
+            hosts={hosts}
+          />
+          <div className={styles.set_preset}>
+            <input
+              type="text"
+              value={name}
+              placeholder="Enter preset name"
+              className={styles.input_name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <Button
+              text="Save as preset"
+              // className="launch_btn"
+              onClick={handleCreatePreset}
+            />
+          </div>
+        </div>
+        <div className={styles.periodic_block}>
+          {/* </button> */}
+          {isPeriodic ? (
+            <div className={styles.periodic}>
+             {/* <input
+              type="text"
+              value={task_name}
+              onChange={(e) => setTaskName(e.target.value)}
+              placeholder="Enter task name"
+              className={styles.task_name_input}
+            /> */}
+            <ScriptsPeriodTable
+              period={period}
+              setPeriod={setPeriod}
+              startDate={startDate}
+              setStartDate={setStartDate}
+              endDate={endDate}
+              setEndDate={setEndDate}
+              task_name={task_name}
+              onChangeTaskName={(value) => setTaskName(value)}
+            />
+            </div>
+          ) : (
+            ""
+          )}
+          <Button
+            text={isPeriodic ? "Close" : "Add period"}
+            // className="launch_btn"
+            onClick={() => setPeriodic((prev) => !prev)}
+          />
+        </div>
+        <Popup modal trigger={<Button text="Launch"  />}>
+          {(close) => (
+            <PopupComponent
+              onClose={close}
+              planner={{ startDate, period, endDate }}
+              titleText={"Launch"}
+              buttonText={"Launch"}
+              text={"Are you sure you want to launch the script with"}
+              dedicatedText={JSON.stringify(rows)}
+              additionalText={"on"}
+              additionalDedicatedText={JSON.stringify(enabledStores)}
+              additionalText2={isPeriodic ? "at" : null}
+              additionalDedicatedText2={
+                isPeriodic
+                  ? JSON.stringify({ startDate, period, endDate })
+                  : null
+              }
+              onClick={() => handleClick({ onClose: close })}
+            />
+          )}
+        </Popup>
         <div className={log_id ? styles.popup : styles.closed}>
           {log_id ? (
             <NavLink to={`${routes.scripts_logs}/${log_id.task_id}`}>
@@ -214,19 +275,6 @@ const InnerLaunch = observer((props) => {
         <ToastsContainer
           store={ToastsStore}
           position={ToastsContainerPosition.BOTTOM_RIGHT}
-        />
-      </div>
-      <div className={styles.set_preset}>
-        <Button
-          text="Save as preset"
-          className="launch_btn"
-          onClick={handleCreatePreset}
-        />
-        <input
-          type="text"
-          value={name}
-          placeholder="Enter preset name"
-          onChange={(e) => setName(e.target.value)}
         />
       </div>
     </>

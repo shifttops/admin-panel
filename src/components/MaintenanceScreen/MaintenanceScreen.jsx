@@ -7,7 +7,7 @@ import { observer } from "mobx-react";
 import Popup from "reactjs-popup";
 import PopupComponent from "../popups/PopupComponent/PopupComponent";
 
-const MaintenanceScreen = observer(() => {
+const MaintenanceScreen = observer((props) => {
   const [isVisible, setIsVisible] = useState(false);
   const [error, setError] = useState("");
   const {
@@ -19,10 +19,13 @@ const MaintenanceScreen = observer(() => {
     updateJiraStatus,
   } = StoresStore;
 
+  const store_id = +props.match.params.id;
+
   useEffect(() => {
-    if (!maintenanceScreens.length) getMaintenanceScreens(setError);
-    // else updateMaintenanceScreens();
-  }, [maintenanceScreens.length]);
+    if (storeInfo.store_id === store_id) {
+      maintenanceScreens.maintenanceScreens = null
+    }
+  }, []);
 
   const handleClick = ({ e, onClose, screen }) => {
     setMaintenanceScreen({ setError, screen });
@@ -46,19 +49,19 @@ const MaintenanceScreen = observer(() => {
                 ? storeInfo.maintenance_screen
                 : "Nothing chosen"}
             </span>
-            {maintenanceScreens[0] !== "" && (
+            {maintenanceScreens.maintenanceScreens && maintenanceScreens.maintenanceScreens[0] !== "" && (
               <ArrowDownIcon
                 className={styles.currentScreen__icon}
                 isOpen={isVisible}
               />
             )}
           </div>
-          {maintenanceScreens[0] !== "" && (
+          {maintenanceScreens.maintenanceScreens && maintenanceScreens.maintenanceScreens[0] !== "" && (
             <div
               className={styles.dropDown + " " + (isVisible ? styles.dropDown__visible : styles.dropDown__hidden)}
             >
               <div className={styles.dropDown__body}>
-                {maintenanceScreens.map((screen) =>
+                {maintenanceScreens.maintenanceScreens && maintenanceScreens.maintenanceScreens.map((screen) =>
                   screen && screen !== storeInfo.maintenance_screen ? (
                     <Popup
                       key={screen}

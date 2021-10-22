@@ -1,3 +1,4 @@
+import React from "react";
 import styles from "./button-icon.module.scss";
 import cn from "classnames";
 import iconButtonTypes from "types/iconButtonTypes";
@@ -12,16 +13,7 @@ const iconButtonClassNameTypeMap = {
   [iconButtonTypes.grey]: styles.greyButton,
 };
 
-export default function ButtonIcon({
-  Icon = () => null,
-  onClick,
-  onBlur,
-  type,
-  className,
-  style,
-  disabled,
-}) {
-  return (
+const ButtonIcon = React.forwardRef(({ Icon = () => null, onClick, onBlur, type, className, style, disabled }, ref) => (
     <button
       style={style}
       onClick={onClick}
@@ -35,5 +27,7 @@ export default function ButtonIcon({
     >
       <Icon />
     </button>
-  );
-}
+  )
+);
+
+export default ButtonIcon;

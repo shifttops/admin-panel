@@ -20,9 +20,9 @@ export default function Sidebar({ isOpen, isOverlap }) {
         <img className={styles.sidebar__logo} src={isOpen ? logo : minLogo} />
         <div className={styles.sidebar__items}>
           <p className={styles.sidebar__title}>menu</p>
-          {mainNavigation.map(({ to, name, icon }) => (
+          {mainNavigation.map(({ to, name, icon}) => (
             <NavLink
-              // exact
+              //exact
               className={styles.sidebar__item}
               to={to}
               key={to}

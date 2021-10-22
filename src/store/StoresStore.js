@@ -1,4 +1,5 @@
-import {makeAutoObservable, observable, reaction} from "mobx";
+import {makeAutoObservable, makeObservable, observable, reaction} from "mobx";
+import { computedFn } from "mobx-utils";
 import moment from "moment";
 import { refreshToken } from "../helpers/AuthHelper";
 import queryString from "query-string";
@@ -12,11 +13,11 @@ class StoresStore {
   stores = observable.array([]);
   storeErrors = [];
   filters = {};
-  cameras = [];
+  cameras = {cameras: []};
   enabledFilters = {
     ...queryString.parse(window.location.search, { arrayFormat: "comma" }),
   };
-  maintenanceScreens = [];
+  maintenanceScreens = {maintenanceScreens: []};
   maintenanceScreensData = [];
   groups = [];
 
@@ -37,7 +38,7 @@ class StoresStore {
       () => this.storeInfo.status,
       (status, previousValue, reaction) => {
         if (status && this.maintenanceScreensData.length) {
-          this.maintenanceScreens = [
+          this.maintenanceScreens.maintenanceScreens = [
             ...this.maintenanceScreensData.find(
               (screen) => screen.name === status
             )?.maintenance_screen,
@@ -49,8 +50,56 @@ class StoresStore {
     reaction(
       () => this.storeInfo.store_id,
       (store_id, previousValue, reaction) => {
-        if (store_id) {
+        if (store_id && store_id !== previousValue) {
+          this.storeInfo = { store_id: store_id };
           this.getStoreInfo(store_id, (msg) => msg && console.log("msg", msg));
+        }
+      }
+    );
+
+    reaction(
+      () => this.storeInfo.storeErrors,
+      (errors, previousValue) => {
+        if (errors &&
+          !errors.length &&
+          JSON.stringify(errors) !== JSON.stringify(previousValue)
+        ) this.getStoreErrorLogs(this.storeInfo.store_id, (msg) => msg && console.log("msg", msg));
+      }
+    );
+
+    reaction(
+      () => this.storeInfo.metrics,
+      metrics => {
+        if (!metrics) this.getMetrics(this.storeInfo.store_id, (msg) => msg && console.log("msg", msg));
+      }
+    );
+
+    reaction(
+      () => this.cameras.cameras,
+      cameras => {
+        if(!cameras) this.getStoreCameraImages(this.storeInfo.store_id, (msg) => msg && console.log("msg", msg))
+      }
+    );
+
+    reaction(
+      () => this.maintenanceScreens.maintenanceScreens,
+      maintenanceScreens => {
+        if(!maintenanceScreens) this.getMaintenanceScreens((msg) => msg && console.log("msg", msg))
+      }
+    );
+
+    reaction(
+      () => this.storeInfo.periodicTasks,
+      (periodicTasks, previousValue, reaction) => {
+        if (
+          periodicTasks &&
+          !periodicTasks.length &&
+          JSON.stringify(periodicTasks) !== JSON.stringify(previousValue)
+        ) {
+          this.getStorePeriodicTasks(
+            this.storeInfo.store_id,
+            (msg) => msg && console.log("msg", msg)
+          );
         }
       }
     );
@@ -74,21 +123,22 @@ class StoresStore {
       if (search.length) {
         url += `&search=${search}`;
       }
-
+      
       this.isLoading++;
-
+      
       if (
         Object.keys(this.enabledFilters).length &&
         Object.keys(this.enabledFilters).some(
           (key) => this.enabledFilters[key]?.length
-        )
-      ) {
-        const filtersForReq = createDateFilters(this.enabledFilters);
-
-        Object.keys(filtersForReq).map((key) => {
-            url += `&${key}=${filtersForReq[key]}`;
-        });
-      }
+          )
+          ) {
+            const filtersForReq = createDateFilters(this.enabledFilters);
+            // console.log(123123123123123123);
+            
+            Object.keys(filtersForReq).map((key) => {
+              url += `&${key}=${filtersForReq[key]}`;
+            });
+          }
 
       const resp = await fetch(url, {
         method: "GET",
@@ -145,7 +195,7 @@ class StoresStore {
         res.dod = res.date_deployment
           ? moment(res.date_deployment).format("DD.MM.YYYY")
           : "N/A";
-        this.storeInfo = { ...res };
+        this.storeInfo = { ...this.storeInfo, ...res };
         if (res) {
           if (res.store_location) {
             await this.getStoreLocation(res.store_location);
@@ -250,7 +300,7 @@ class StoresStore {
         delete camera.detail;
         return camera;
       });
-      this.cameras = newRes;
+      this.cameras.cameras = [...newRes];
       setError("");
       // }
     } catch (e) {
@@ -331,7 +381,7 @@ class StoresStore {
       await refreshToken();
 
       const resp = await fetch(
-        `${process.env.REACT_APP_URL}/api/fault_logs/${store_id}`,
+        `${process.env.REACT_APP_URL}/api/fault_logs/${store_id}/`,
         {
           method: "GET",
           headers: {
@@ -341,9 +391,7 @@ class StoresStore {
       );
       if (resp.status === 200) {
         const res = await resp.json();
-        console.log(res);
-        this.storeErrors = res;
-        console.log(this.storeErrors);
+        this.storeInfo = {...this.storeInfo, storeErrors: res}
         setError("");
       }
     } catch (e) {
@@ -385,7 +433,7 @@ class StoresStore {
       });
       if (resp.status === 200) {
         const res = await resp.json();
-        this.storeInfo = { ...this.storeInfo, ...res };
+        this.storeInfo = { ...this.storeInfo, metrics: res };
         setError("");
       }
     } catch (e) {
@@ -435,7 +483,7 @@ class StoresStore {
   };
 
   updateMaintenanceScreens = () => {
-    this.maintenanceScreens = [
+    this.maintenanceScreens.maintenanceScreens = [
       ...this.maintenanceScreensData.find(
         (screen) => screen.name === this.storeInfo.status
       )?.maintenance_screen,
@@ -487,7 +535,7 @@ class StoresStore {
           },
         }
       );
-      console.log(resp);
+
       if (resp.status === 200) {
         ToastsStore.success("Updated", 3000, "toast");
         setTimeout(() => {
@@ -499,6 +547,34 @@ class StoresStore {
       }
     } catch (e) {
       ToastsStore.error(e.message, 3000, "toast");
+    }
+  };
+
+  getStorePeriodicTasks = async (store_id, setError) => {
+    try {
+      await refreshToken();
+
+      const resp = await fetch(
+        `${process.env.REACT_APP_URL}/api/store/${store_id}/periodic_tasks`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Token ${localStorage.getItem("access")}`,
+          },
+        }
+      );
+
+      if (resp.status === 200) {
+        const res = await resp.json();
+        this.storeInfo = { ...this.storeInfo, periodicTasks: res.results };
+        if (!res.results.length)
+          ToastsStore.error("No tasks on this store", 3000, "toast");
+      } else {
+        const res = await resp.json();
+        ToastsStore.error(res.error, 3000, "toast");
+      }
+    } catch (e) {
+      setError(e.message);
     }
   };
 }

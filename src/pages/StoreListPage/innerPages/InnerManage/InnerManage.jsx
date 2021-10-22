@@ -27,11 +27,11 @@ const ActionButtons = () => {
   );
 };
 
-export default function InnerManage() {
+export default function InnerManage(props) {
   return (
     <div className={styles.wrapper}>
       <h2 className={styles.title}>Manage store</h2>
-      <MaintenanceScreen />
+      <MaintenanceScreen {...props}/>
       <ManageItem
         ActionButtons={ActionButtons}
         type={manageItemTypes.yellow}

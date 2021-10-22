@@ -1,0 +1,68 @@
+@import "../../scss/variables";
+
+.periodTable {
+  border-spacing: 0;
+  &__head {
+    cursor: pointer;
+    text-align: left;
+    border: none;
+    background: #fff;
+    font-size: 13px;
+    line-height: 16px;
+    text-transform: uppercase;
+    color: rgba(51, 51, 51, 0.5);
+    transition: all 0.3s ease 0s;
+    height: 100%;
+  }
+  .task_name_input {
+    background-color: #fff;
+    border: 1px solid $color-black-05;
+    padding: 4px 8px;
+    color: $color-black-05;
+    border-radius: $border-radius;
+    transition: all 0.3s ease 0s;
+    &:focus,
+    &:hover {
+      background-color: $color-black-007;
+    }
+    &:focus {
+      color: $color-black;
+    }
+  }
+  &__body {
+    tr {
+      td {
+        &:first-child {
+          border-left: 1px solid #f2f2f2;
+        }
+        &:nth-child(2) {
+          div {
+            div {
+              margin-bottom: 0;
+            }
+          }
+        }
+        &:last-child {
+          border-right: 1px solid #f2f2f2;
+        }
+      }
+    }
+  }
+}
+
+.date {
+  border-radius: $border-radius;
+  outline: none;
+  border: 1px solid $color-black-007;
+  padding: 3px 5px;
+  color: rgba(51, 51, 51, 1);
+  transition: all 0.3s ease 0s;
+  @media (any-hover: hover) {
+    &:hover {
+      border: 1px solid $color-green;
+    }
+  }
+
+  &__end {
+  }
+}

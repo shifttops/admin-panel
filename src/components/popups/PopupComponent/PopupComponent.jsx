@@ -1,7 +1,18 @@
 import styles from "./popup-component.module.scss";
 import { CloseIcon } from "icons";
 
-const PopupComponent = ({ onClose, onClick, buttonText, titleText, text, dedicatedText, additionalText=null, additionalDedicatedText=null }) => {
+const PopupComponent = ({
+  onClose,
+  onClick,
+  buttonText,
+  titleText,
+  text,
+  dedicatedText,
+  additionalText = null,
+  additionalDedicatedText = null,
+  additionalText2 = null,
+  additionalDedicatedText2 = null,
+}) => {
   return (
     <div className={styles.popup}>
       <div className={styles.popupHead}>
@@ -16,17 +27,15 @@ const PopupComponent = ({ onClose, onClick, buttonText, titleText, text, dedicat
           <span>{dedicatedText}</span>
           {additionalText}
           <span>{additionalDedicatedText}</span>
+          {additionalText2}
+          <span>{additionalDedicatedText2}</span>
         </div>
-        <button
-          className={styles.applyButton}
-          type="button"
-          onClick={onClick}
-        >
+        <button className={styles.applyButton} type="button" onClick={onClick}>
           {buttonText}
         </button>
       </form>
     </div>
   );
-}
+};
 
 export default PopupComponent;

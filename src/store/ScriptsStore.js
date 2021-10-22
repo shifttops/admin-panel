@@ -10,6 +10,7 @@ import { computedFn } from "mobx-utils";
 import { refreshToken } from "../helpers/AuthHelper";
 import { ToastsStore } from "react-toasts";
 import routes from "../constants/routes";
+import PlannerStore from "./PlannerStore";
 
 class ScriptsStore {
   scripts = [];
@@ -33,9 +34,9 @@ class ScriptsStore {
       ) {
         this.getPresets(change.object[change.name].playbook_id);
         if (change.object[change.name].parent_id) {
-          this.getScript({ parent_id: change.object[change.name].parent_id});
+          this.getScript({ parent_id: change.object[change.name].parent_id });
         } else {
-          this.parentScriptSource = ""
+          this.parentScriptSource = "";
         }
       }
     });
@@ -254,39 +255,56 @@ class ScriptsStore {
     }
   };
 
-  launchScript = async ({ hosts, variables, playbook_id, setError }) => {
+  launchScript = async ({
+    hosts,
+    variables,
+    setError,
+    planner,
+    script,
+    task_name,
+  }) => {
     const newVariables = { ...variables };
     Object.keys(newVariables).forEach(
       (key) => !newVariables[key] && delete newVariables[key]
     );
-    if (!playbook_id) {
+    if (!script.playbook_id) {
       ToastsStore.error("This is an empty script", 3000, "toast");
       return null;
     }
     try {
       await refreshToken();
-
-      const resp = await fetch(
-        `${process.env.REACT_APP_URL}/api/execute_playbook/${playbook_id}`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Token ${localStorage.getItem("access")}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            servers: hosts.hosts,
-            groups: hosts.groups,
-            variables: newVariables,
-          }),
+      if (!planner) {
+        const resp = await fetch(
+          `${process.env.REACT_APP_URL}/api/execute_playbook/${script.playbook_id}`,
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Token ${localStorage.getItem("access")}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              servers: hosts.hosts,
+              groups: hosts.groups,
+              variables: newVariables,
+            }),
+          }
+        );
+        if (resp.status === 200) {
+          return resp.json();
+        } else {
+          const res = await resp.json();
+          ToastsStore.error(res.error, 3000, "toast");
+          return null;
         }
-      );
-      if (resp.status === 200) {
-        return resp.json();
       } else {
-        const res = await resp.json();
-        ToastsStore.error(res.error, 3000, "toast");
-        return null;
+        await PlannerStore.addCrontab({
+          setError,
+          planner,
+          script,
+          variables: newVariables,
+          hosts,
+          task_name,
+        });
       }
     } catch (e) {
       // setError(e.message);
@@ -294,7 +312,14 @@ class ScriptsStore {
     }
   };
 
-  createPreset = async ({ name, script_id, hosts, variables, setError }) => {
+  createPreset = async ({
+    name,
+    script_id,
+    hosts,
+    variables,
+    setError,
+    planner,
+  }) => {
     const newVariables = Object.keys(variables)
       .filter((key) => variables[key])
       .map((key) => ({

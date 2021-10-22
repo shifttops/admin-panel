@@ -84,10 +84,11 @@ const InnerCameras = observer((props) => {
     } else return styles.text;
   };
 
+  const store_id = +props.match.params.id;
+
   useEffect(() => {
-    const id = +props.match.params.id
-    if (storeInfo.store_id === id) {
-      getStoreCameraImages(id, setError);
+    if (storeInfo.store_id === store_id) {
+      cameras.cameras = null;
     }
   }, []);
 
@@ -113,7 +114,7 @@ const InnerCameras = observer((props) => {
           </tr>
         </thead>
         <tbody>
-          {cameras.map((camera) => (
+          {cameras.cameras && cameras.cameras.map((camera) => (
             <tr key={camera.view_name}>
               {mapperCameras.map((key) => (
                 <td
@@ -139,7 +140,7 @@ const InnerCameras = observer((props) => {
       </table>
 
       <div className={styles.cards}>
-        {cameras.map((camera) => (
+        {cameras.cameras && cameras.cameras.map((camera) => (
           <FileCard key={camera.id} camera={camera} />
         ))}
         {/* <FileCard screen={cameraScreen} />

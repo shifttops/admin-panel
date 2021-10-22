@@ -7,11 +7,43 @@
   font-weight: 700;
 }
 
+.moreButton {
+  background-color: $color-green;
+  border-radius: 5px;
+  color: #fff;
+  padding: 5px;
+  // white-space: nowrap;
+}
+
+.input_name {
+  font-weight: 400;
+  width: 100%;
+  margin-right: 7px;
+  height: 37px;
+  background-color: #fff;
+  border: 1px solid $color-black-05;
+  font-size: 13px;
+  padding: 4px 8px;
+  color: $color-black-05;
+  border-radius: $border-radius;
+  transition: all 0.3s ease 0s;
+  &:focus,
+  &:hover {
+    background-color: $color-black-007;
+  }
+  &:focus {
+    color: $color-black;
+  }
+}
+
+.green{
+  color: $color-green;
+}
+
 .plannerItem {
   display: flex;
   align-items: center;
   background: #ffffff;
-  border: 1px solid #f2f2f2;
   border-radius: 4px;
   margin-bottom: 8px;
   padding: 11px 16px 8px 16px;
@@ -25,12 +57,18 @@
     line-height: 18px;
     letter-spacing: -0.03em;
     color: rgba(51, 51, 51, 0.5);
-    width: 10%;
     margin-right: 85px;
     min-width: 150px;
+    width: 200px;
   }
 
   &__period {
+    div {
+      div {
+        margin-bottom: 0;
+      }
+    }
+
     font-size: 14px;
     line-height: 18px;
     letter-spacing: -0.03em;
@@ -43,6 +81,7 @@
     line-height: 18px;
     letter-spacing: -0.03em;
     color: rgba(51, 51, 51, 0.5);
+    width: 200px;
   }
 }
 
@@ -72,7 +111,6 @@ td.plannerItem__text {
   line-height: 20px;
   letter-spacing: -0.01em;
   color: $color-black;
-  width: 44%;
   flex: 1 1 auto;
   padding-left: 16px;
 }
@@ -81,13 +119,50 @@ td.plannerItem__text {
   max-width: 100px;
 }
 
-.buttonsWrap{
+.buttonsWrap {
   display: flex;
   justify-content: flex-end;
   margin-left: auto;
   padding-right: 8px;
   width: 100%;
-  button{
+
+  button {
     margin: 0 8px 0 0;
+  }
+}
+
+.date {
+  border-radius: $border-radius;
+  outline: none;
+  border: 1px solid $color-black-007;
+  padding: 3px 5px;
+  color: rgba(51, 51, 51, 1);
+  transition: all 0.3s ease 0s;
+  @media (any-hover: hover) {
+    &:hover {
+      border: 1px solid $color-green;
+    }
+  }
+
+  &__disabled {
+    @media (any-hover: hover) {
+      &:hover {
+        border: 1px solid rgba(131, 131, 131, 0.07);
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  &__end {
+  }
+}
+
+.confirmIcon {
+  color: $color-green;
+  @media (any-hover: hover) {
+    &:hover {
+      background-color: rgba(169, 194, 63, 0.28);
+      color: rgb(135, 154, 50);
+    }
   }
 }
