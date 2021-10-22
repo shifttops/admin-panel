@@ -215,23 +215,23 @@ const InnerLaunch = observer((props) => {
           {/* </button> */}
           {isPeriodic ? (
             <div className={styles.periodic}>
-             {/* <input
+              {/* <input
               type="text"
               value={task_name}
               onChange={(e) => setTaskName(e.target.value)}
               placeholder="Enter task name"
               className={styles.task_name_input}
             /> */}
-            <ScriptsPeriodTable
-              period={period}
-              setPeriod={setPeriod}
-              startDate={startDate}
-              setStartDate={setStartDate}
-              endDate={endDate}
-              setEndDate={setEndDate}
-              task_name={task_name}
-              onChangeTaskName={(value) => setTaskName(value)}
-            />
+              <ScriptsPeriodTable
+                period={period}
+                setPeriod={setPeriod}
+                startDate={startDate}
+                setStartDate={setStartDate}
+                endDate={endDate}
+                setEndDate={setEndDate}
+                task_name={task_name}
+                onChangeTaskName={(value) => setTaskName(value)}
+              />
             </div>
           ) : (
             ""
@@ -242,43 +242,49 @@ const InnerLaunch = observer((props) => {
             onClick={() => setPeriodic((prev) => !prev)}
           />
         </div>
-          <Popup
-            modal
-            trigger={<Button text="Launch" className="launch_btn"/>}
-          >
-            {(close) => {
-              let dedicatedText = ''
-              let additionalDedicatedText = ""
+        <Popup modal trigger={<Button text="Launch" />}>
+          {(close) => {
+            let dedicatedText = "";
+            let additionalDedicatedText = "";
+            let additionalDedicatedText2 = "";
 
-              Object.keys(rows).map(row => {
-                dedicatedText +=  `${row}: ${rows[row] ? rows[row] : '""'},`
-              })
+            Object.keys(rows).map((key) => {
+              dedicatedText += `${key}: ${rows[key] ? rows[key] : '""'}\n`;
+            });
 
-              Object.keys(enabledStores).map(key => {
-                additionalDedicatedText +=  `${key}: ${enabledStores[key] && enabledStores[key].length ? enabledStores[key].map(value => value) : '""'},`
-              })
+            Object.keys(enabledStores).map((key) => {
+              additionalDedicatedText += `${key}: ${
+                enabledStores[key] ? enabledStores[key] : '""'
+              },\n`;
+            });
 
-              return (
-                <PopupComponent
-                  onClose={close}
-                  titleText={'Launch'}
-                  buttonText={'Launch'}
-                  text={'Are you sure you want to launch the script with'}
-                  dedicatedText={dedicatedText.length ? dedicatedText : 'no variables'}
-                  additionalText={'on'}
-                  additionalDedicatedText={"\n" + additionalDedicatedText}
-                  onClick={() => handleClick({onClose: close})}
-                />
-              )
-            }}
-          </Popup>
-        </div>
+            if (isPeriodic) {
+              const tempObject = { startDate, period, endDate };
 
-        <ScriptsStoresTable
-          enabledStores={enabledStores}
-          setEnabledStores={setEnabledStores}
-          hosts={hosts}
-        />
+              Object.keys(tempObject).map((key) => {
+                additionalDedicatedText2 += `${key}: ${
+                  tempObject[key] ? tempObject[key] : '""'
+                }\n`;
+              });
+            }
+
+            return (
+              <PopupComponent
+                onClose={close}
+                planner={{ startDate, period, endDate }}
+                titleText={"Launch"}
+                buttonText={"Launch"}
+                text={"Are you sure you want to launch the script with"}
+                dedicatedText={dedicatedText}
+                additionalText={"on"}
+                additionalDedicatedText={additionalDedicatedText}
+                additionalText2={isPeriodic ? "at" : null}
+                additionalDedicatedText2={additionalDedicatedText2}
+                onClick={() => handleClick({ onClose: close })}
+              />
+            );
+          }}
+        </Popup>
         <div className={log_id ? styles.popup : styles.closed}>
           {log_id ? (
             <NavLink to={`${routes.scripts_logs}/${log_id.task_id}`}>
@@ -292,6 +298,7 @@ const InnerLaunch = observer((props) => {
           store={ToastsStore}
           position={ToastsContainerPosition.BOTTOM_RIGHT}
         />
+      </div>
     </>
   ) : (
     "Loading..."

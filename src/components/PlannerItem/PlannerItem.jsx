@@ -12,7 +12,7 @@ import Popup from "reactjs-popup";
 import PlannerStore from "../../store/PlannerStore";
 import moment from "moment";
 import PopupComponent from "../popups/PopupComponent/PopupComponent";
-import { DeclineIcon } from "../../icons/icons";
+import { DeclineIcon } from "../../icons";
 
 export default function PlannerItem({
   text,
@@ -102,14 +102,6 @@ export default function PlannerItem({
 
   const ref = useRef();
 
-  // useEffect(() => {
-  //   if (task.crontab?.pk) {
-  //     setPeriod(
-  //       `${task.crontab.minute} ${task.crontab.hour} ${task.crontab.day_of_month} ${task.crontab.month_of_year} ${task.crontab.day_of_week}`
-  //     );
-  //   }
-  // }, [task]);
-
   return (
     <tr className={cn({ [styles.errorContainer]: hasError })}>
       {/* <td>
@@ -117,18 +109,6 @@ export default function PlannerItem({
       </td> */}
       {globalStore ? (
         <td className={styles.store}>
-          {/* {task
-            ? JSON.parse(task.kwargs).store_groups.map((store) => (
-                <div key={`${task.name}${store}`}>{store}</div>
-              ))
-            : ""}
-          {task
-            ? JSON.parse(task.kwargs).server_ids
-              ? JSON.parse(task.kwargs).server_ids.map((store) => (
-                  <div key={`${task.name}${store}`}>{store}</div>
-                ))
-              : ""
-            : ""} */}
           {isAllHostsOpened ? (
             <button
               className={styles.moreButton}
@@ -163,7 +143,6 @@ export default function PlannerItem({
           onChange={(e) => handleChangeName(e.target.value)}
           className={styles.input_name}
         />
-        {/* {task ? task.name : text} */}
       </td>
       <td onClick={handleEnabledChange}>
         {task ? (
@@ -195,7 +174,6 @@ export default function PlannerItem({
       </td>
       <td className={styles.plannerItem__period}>
         <Cron
-          // disabled={globalStore}
           clearButton={false}
           value={period}
           setValue={setPeriod}
@@ -206,44 +184,42 @@ export default function PlannerItem({
           className={cn(
             styles.date,
             styles.date__end
-            // {[styles.date__disabled]: globalStore,}
           )}
           selected={endDate}
           onChange={(date) => setEndDate(date)}
           dateFormat="dd.MM.yyyy HH:mm"
           showTimeInput
-          // disabled={globalStore}
         />
       </td>
       <td className={styles.buttons}>
         <div className={styles.buttonsWrap}>
-          {/* {!globalStore ? ( */}
           <Popup
             modal
             trigger={
-              // <ButtonIcon className={styles.confirmIcon} Icon={CheckIcon} />
               <Button className={styles.confirmIcon} text={"Save"} />
             }
           >
-            {(close) => (
-              <PopupComponent
-                onClose={close}
-                onClick={() => handleSaveTask({ task, onClose: close })}
-                plannerTask={{ startDate, period, endDate }}
-                buttonText="Save"
-                titleText="Save"
-                text={`Are you sure you want to change ${task.name}?`}
-                dedicatedText={JSON.stringify({
-                  startDate,
-                  period,
-                  endDate,
-                  enabled: task.enabled,
-                })}
-                // additionalDedicatedText={period}
-              />
-            )}
+            {(close) => {
+              let dedicatedText = ''
+              const printObject = {startDate, period, endDate, enabled: task.enabled}
+
+              Object.keys(printObject).map(key => {
+                dedicatedText += `${key}: ${printObject[key]}\n`
+              })
+
+              return (
+                <PopupComponent
+                  onClose={close}
+                  onClick={() => handleSaveTask({ task, onClose: close })}
+                  plannerTask={{ startDate, period, endDate }}
+                  buttonText="Save"
+                  titleText="Save"
+                  text={`Are you sure you want to change ${task.name}?`}
+                  dedicatedText={dedicatedText}
+                />
+              )
+            }}
           </Popup>
-          {/* ) : null} */}
           <ButtonIcon Icon={DeleteIcon} onClick={() => deleteTask(task.pk)} />
         </div>
       </td>
