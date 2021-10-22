@@ -169,6 +169,7 @@ export default function PlannerItem({
           onChange={(date) => setStartDate(date)}
           dateFormat="dd.MM.yyyy HH:mm"
           showTimeInput
+          popperClassName={styles.calendar}
           // disabled={globalStore}
         />
       </td>
@@ -180,6 +181,7 @@ export default function PlannerItem({
           className={cn(styles.date, styles.date__end)}
           selected={endDate}
           onChange={(date) => setEndDate(date)}
+          popperClassName={styles.calendar}
           dateFormat="dd.MM.yyyy HH:mm"
           showTimeInput
         />
