@@ -5,7 +5,7 @@ import Button from "../buttons/Button";
 
 import cn from "classnames";
 import { CheckIcon, DeleteIcon } from "icons";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Cron from "react-js-cron";
 import DatePicker from "react-datepicker";
 import Popup from "reactjs-popup";
@@ -173,18 +173,11 @@ export default function PlannerItem({
         />
       </td>
       <td className={styles.plannerItem__period}>
-        <Cron
-          clearButton={false}
-          value={period}
-          setValue={setPeriod}
-        />
+        <Cron clearButton={false} value={period} setValue={setPeriod} />
       </td>
       <td className={styles.plannerItem__end}>
         <DatePicker
-          className={cn(
-            styles.date,
-            styles.date__end
-          )}
+          className={cn(styles.date, styles.date__end)}
           selected={endDate}
           onChange={(date) => setEndDate(date)}
           dateFormat="dd.MM.yyyy HH:mm"
@@ -195,32 +188,48 @@ export default function PlannerItem({
         <div className={styles.buttonsWrap}>
           <Popup
             modal
-            trigger={
-              <Button className={styles.confirmIcon} text={"Save"} />
-            }
+            trigger={<Button className={styles.confirmIcon} text={"Save"} />}
           >
             {(close) => {
-              let dedicatedText = ''
-              const printObject = {startDate, period, endDate, enabled: task.enabled}
+              let dedicatedText = "";
+              const printObject = {
+                startDate,
+                period,
+                endDate,
+                enabled: task.enabled,
+              };
 
-              Object.keys(printObject).map(key => {
-                dedicatedText += `${key}: ${printObject[key]}\n`
-              })
+              Object.keys(printObject).map((key) => {
+                dedicatedText += `${key}: ${printObject[key]}\n`;
+              });
 
               return (
                 <PopupComponent
                   onClose={close}
                   onClick={() => handleSaveTask({ task, onClose: close })}
-                  plannerTask={{ startDate, period, endDate }}
                   buttonText="Save"
                   titleText="Save"
                   text={`Are you sure you want to change ${task.name}?`}
                   dedicatedText={dedicatedText}
                 />
-              )
+              );
             }}
           </Popup>
-          <ButtonIcon Icon={DeleteIcon} onClick={() => deleteTask(task.pk)} />
+          <Popup
+            modal
+            trigger={<ButtonIcon Icon={DeleteIcon}/>}
+          >
+            {(close) => (
+              <PopupComponent
+                onClose={close}
+                onClick={() => deleteTask(task.pk)}
+                buttonText="Delete"
+                titleText="Delete"
+                text={`Are you sure you want to delete: `}
+                dedicatedText={task.name}
+              />
+            )}
+          </Popup>
         </div>
       </td>
     </tr>

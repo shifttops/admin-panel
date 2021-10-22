@@ -1,4 +1,4 @@
-import { makeAutoObservable, reaction } from "mobx";
+import { makeAutoObservable } from "mobx";
 import { refreshToken } from "../helpers/AuthHelper";
 import { ToastsStore } from "react-toasts";
 
@@ -178,31 +178,29 @@ class PlannerStore {
   };
 
   deleteTask = async (pk) => {
-    if (window.confirm(`Delete task ${pk}?`)) {
-      try {
-        await refreshToken();
+    try {
+      await refreshToken();
 
-        const resp = await fetch(
-          `${process.env.REACT_APP_URL}/api/periodic_task/${pk}/`,
-          {
-            method: "DELETE",
-            headers: {
-              Authorization: `Token ${localStorage.getItem("access")}`,
-            },
-          }
-        );
-        if (resp.status === 204) {
-          this.plannerTasks.splice(
-            this.plannerTasks.findIndex((item) => item.pk === pk),
-            1
-          );
-        } else {
-          const res = await resp.json();
-          ToastsStore.error(res.detail, 3000, "toast");
+      const resp = await fetch(
+        `${process.env.REACT_APP_URL}/api/periodic_task/${pk}/`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Token ${localStorage.getItem("access")}`,
+          },
         }
-      } catch (e) {
-        ToastsStore.error(e.message, 3000, "toast");
+      );
+      if (resp.status === 204) {
+        this.plannerTasks.splice(
+          this.plannerTasks.findIndex((item) => item.pk === pk),
+          1
+        );
+      } else {
+        const res = await resp.json();
+        ToastsStore.error(res.detail, 3000, "toast");
       }
+    } catch (e) {
+      ToastsStore.error(e.message, 3000, "toast");
     }
   };
 }
