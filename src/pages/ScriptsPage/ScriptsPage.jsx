@@ -16,12 +16,12 @@ import { observer } from "mobx-react";
 import ScriptsStore from "../../store/ScriptsStore";
 import { computed, toJS } from "mobx";
 import Popup from "reactjs-popup";
-import DeletePopup from "../../components/popups/DeletePopup";
+import PopupComponent from "../../components/popups/PopupComponent/PopupComponent";
 
 const ScriptsPage = observer(() => {
   const location = useLocation();
   const history = useHistory();
-  const { tags, script, getScripts, getPresets, scriptsByTags } = ScriptsStore;
+  const { tags, script, getScripts, getPresets, scriptsByTags, handleRemove} = ScriptsStore;
   const [error, setError] = useState("");
   const [enabledTags, setEnabledTags] = useState([]);
 
@@ -65,6 +65,13 @@ const ScriptsPage = observer(() => {
     // ]);
   }, []);
 
+  const handleClick = ({onClose, script}) => {
+    handleRemove({ playbook_id: script.playbook_id, setError});
+    setTimeout(() => {
+      onClose();
+    }, 300);
+  }
+
   return (
     <div className={styles.wrapper}>
       {/* <InnerSidebar links={links} /> */}
@@ -100,7 +107,7 @@ const ScriptsPage = observer(() => {
               key={script.playbook_id}
               onClick={() => handleScriptClick(script.playbook_id)}
             >
-              <span className={styles.name}>Name: {script.name}</span>
+              <span className={styles.name}>{script.name}</span>
               <Popup
                 modal
                 trigger={
@@ -109,7 +116,16 @@ const ScriptsPage = observer(() => {
                   </div>
                 }
               >
-                {(close) => <DeletePopup onClose={close} script={script} />}
+                {(close) =>
+                  <PopupComponent
+                    onClose={close}
+                    text={'Are you sure you want to delete the script:'}
+                    dedicatedText={script.name}
+                    titleText={'Delete'}
+                    buttonText={'Delete'}
+                    onClick={() => handleClick({onClose: close, script})}
+                  />
+                }
               </Popup>
 
               <div className={styles.tags}>

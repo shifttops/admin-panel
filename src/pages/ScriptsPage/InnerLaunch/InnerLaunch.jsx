@@ -6,7 +6,6 @@ import { observer } from "mobx-react";
 import { useLocation } from "react-router";
 import ScriptsStore from "../../../store/ScriptsStore";
 import Popup from "reactjs-popup";
-import LaunchPopup from "../../../components/popups/LaunchPopup";
 import {
   ToastsContainer,
   ToastsContainerPosition,
@@ -15,6 +14,7 @@ import {
 import { NavLink } from "react-router-dom";
 import routes from "../../../constants/routes";
 import ScriptsPeriodTable from "../../../components/ScriptsPeriodTable/ScriptsPeriodTable";
+import PopupComponent from "../../../components/popups/PopupComponent/PopupComponent";
 
 const InnerLaunch = observer((props) => {
   const location = useLocation();
@@ -92,6 +92,13 @@ const InnerLaunch = observer((props) => {
     setTimeout(() => setLogId(""), 5000);
   };
 
+  const handleClick = ({ onClose }) => {
+    handleLaunch();
+    setTimeout(() => {
+      onClose();
+    }, 300);
+  };
+
   useEffect(() => {
     if (!scripts.length) {
       getScripts(setError);
@@ -158,7 +165,7 @@ const InnerLaunch = observer((props) => {
   return scripts.length ? (
     <>
       <div className={styles.page}>
-        <div>
+        <div className={styles.launch_block}>
           <table className={styles.table}>
             <thead className={styles.head}>
               <tr>
@@ -175,6 +182,7 @@ const InnerLaunch = observer((props) => {
                       type="text"
                       value={rows[variable]}
                       placeholder="Value"
+                      className={styles.variable_input}
                       onChange={(e) => handleChange(e.target.value, variable)}
                     />
                   </td>
@@ -182,32 +190,38 @@ const InnerLaunch = observer((props) => {
               ))}
             </tbody>
           </table>
-          <Popup
-            modal
-            trigger={<Button text="Launch" className="launch_btn" />}
-          >
-            {(close) => (
-              <LaunchPopup
-                handleLaunch={handleLaunch}
-                enabledStores={enabledStores}
-                rows={rows}
-                onClose={close}
-                planner={{ startDate, period, endDate }}
-              />
-            )}
-          </Popup>
-        </div>
 
-        <ScriptsStoresTable
-          enabledStores={enabledStores}
-          setEnabledStores={setEnabledStores}
-          hosts={hosts}
-        />
-        <div className={styles.periodic}>
-          <button onClick={() => setPeriodic((prev) => !prev)}>
-            {isPeriodic ? "Close" : "Add period"}
-          </button>
+          <ScriptsStoresTable
+            enabledStores={enabledStores}
+            setEnabledStores={setEnabledStores}
+            hosts={hosts}
+          />
+          <div className={styles.set_preset}>
+            <input
+              type="text"
+              value={name}
+              placeholder="Enter preset name"
+              className={styles.input_name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <Button
+              text="Save as preset"
+              // className="launch_btn"
+              onClick={handleCreatePreset}
+            />
+          </div>
+        </div>
+        <div className={styles.periodic_block}>
+          {/* </button> */}
           {isPeriodic ? (
+            <div className={styles.periodic}>
+             {/* <input
+              type="text"
+              value={task_name}
+              onChange={(e) => setTaskName(e.target.value)}
+              placeholder="Enter task name"
+              className={styles.task_name_input}
+            /> */}
             <ScriptsPeriodTable
               period={period}
               setPeriod={setPeriod}
@@ -215,21 +229,40 @@ const InnerLaunch = observer((props) => {
               setStartDate={setStartDate}
               endDate={endDate}
               setEndDate={setEndDate}
+              task_name={task_name}
+              onChangeTaskName={(value) => setTaskName(value)}
             />
+            </div>
           ) : (
             ""
           )}
-          {isPeriodic ? (
-            <input
-              type="text"
-              value={task_name}
-              onChange={(e) => setTaskName(e.target.value)}
-              placeholder='Enter task name'
-            />
-          ) : (
-            ""
-          )}
+          <Button
+            text={isPeriodic ? "Close" : "Add period"}
+            // className="launch_btn"
+            onClick={() => setPeriodic((prev) => !prev)}
+          />
         </div>
+        <Popup modal trigger={<Button text="Launch"  />}>
+          {(close) => (
+            <PopupComponent
+              onClose={close}
+              planner={{ startDate, period, endDate }}
+              titleText={"Launch"}
+              buttonText={"Launch"}
+              text={"Are you sure you want to launch the script with"}
+              dedicatedText={JSON.stringify(rows)}
+              additionalText={"on"}
+              additionalDedicatedText={JSON.stringify(enabledStores)}
+              additionalText2={isPeriodic ? "at" : null}
+              additionalDedicatedText2={
+                isPeriodic
+                  ? JSON.stringify({ startDate, period, endDate })
+                  : null
+              }
+              onClick={() => handleClick({ onClose: close })}
+            />
+          )}
+        </Popup>
         <div className={log_id ? styles.popup : styles.closed}>
           {log_id ? (
             <NavLink to={`${routes.scripts_logs}/${log_id.task_id}`}>
@@ -242,19 +275,6 @@ const InnerLaunch = observer((props) => {
         <ToastsContainer
           store={ToastsStore}
           position={ToastsContainerPosition.BOTTOM_RIGHT}
-        />
-      </div>
-      <div className={styles.set_preset}>
-        <Button
-          text="Save as preset"
-          className="launch_btn"
-          onClick={handleCreatePreset}
-        />
-        <input
-          type="text"
-          value={name}
-          placeholder="Enter preset name"
-          onChange={(e) => setName(e.target.value)}
         />
       </div>
     </>

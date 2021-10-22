@@ -154,6 +154,8 @@ class PlannerStore {
       const body = { ...task };
       if (period.minute) {
         body.crontab = period;
+      } else {
+        body.crontab = {};
       }
       const resp = await fetch(
         `${process.env.REACT_APP_URL}/api/periodic_task/${task.pk}/`,

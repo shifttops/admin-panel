@@ -7,12 +7,37 @@
   font-weight: 700;
 }
 
-.moreButton{
+.moreButton {
   background-color: $color-green;
   border-radius: 5px;
   color: #fff;
   padding: 5px;
   // white-space: nowrap;
+}
+
+.input_name {
+  font-weight: 400;
+  width: 100%;
+  margin-right: 7px;
+  height: 37px;
+  background-color: #fff;
+  border: 1px solid $color-black-05;
+  font-size: 13px;
+  padding: 4px 8px;
+  color: $color-black-05;
+  border-radius: $border-radius;
+  transition: all 0.3s ease 0s;
+  &:focus,
+  &:hover {
+    background-color: $color-black-007;
+  }
+  &:focus {
+    color: $color-black;
+  }
+}
+
+.green{
+  color: $color-green;
 }
 
 .plannerItem {
@@ -26,8 +51,6 @@
   &.error {
     border: 1px solid #ffb1b4;
   }
-
-  
 
   &__date {
     font-size: 14px;
@@ -115,14 +138,14 @@ td.plannerItem__text {
   padding: 3px 5px;
   color: rgba(51, 51, 51, 1);
   transition: all 0.3s ease 0s;
-  @media(any-hover: hover) {
+  @media (any-hover: hover) {
     &:hover {
       border: 1px solid $color-green;
     }
   }
 
   &__disabled {
-    @media(any-hover: hover) {
+    @media (any-hover: hover) {
       &:hover {
         border: 1px solid rgba(131, 131, 131, 0.07);
         cursor: not-allowed;
@@ -134,12 +157,12 @@ td.plannerItem__text {
   }
 }
 
-.confirmIcon{
+.confirmIcon {
   color: $color-green;
-  @media(any-hover: hover){
-      &:hover{
-        background-color: rgba(169, 194, 63, 0.28);
-        color: rgb(135, 154, 50);
-      }
+  @media (any-hover: hover) {
+    &:hover {
+      background-color: rgba(169, 194, 63, 0.28);
+      color: rgb(135, 154, 50);
+    }
   }
 }

@@ -48,11 +48,11 @@ const InnerPlanner = observer((props) => {
       <table className={styles.table}>
         <thead>
           <tr>
-            <th />
+            {/* <th /> */}
             <th>Task name</th>
             <th>Status</th>
-            <th>Total run count</th>
-            <th>Changed date</th>
+            {/* <th>Total run count</th> */}
+            {/* <th>Changed date</th> */}
             <th>Start date</th>
             <th>Period</th>
             <th>End date</th>
@@ -67,6 +67,7 @@ const InnerPlanner = observer((props) => {
                   taskData={task}
                   Icon={PauseIcon}
                   iconColor={iconButtonTypes.red}
+                  className={styles.name}
                 />
               ))
             : null}

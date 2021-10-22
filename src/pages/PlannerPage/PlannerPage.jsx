@@ -54,7 +54,7 @@ const PlannerPage = observer(() => {
           <th>Store</th>
           <th>Task name</th>
           <th>Status</th>
-          <th>Total run count</th>
+          {/* <th>Total run count</th> */}
           {/* <th>Changed date</th> */}
           <th>Start date</th>
           <th>Period</th>

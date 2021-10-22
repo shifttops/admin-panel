@@ -91,14 +91,15 @@
   }
 
   th:first-child {
-    text-align: left;
+    text-align: center;
+    padding: 13px 24px 10px 16px;
     border-radius: 4px 0px 0px 4px;
   }
 
   th:nth-child(2) {
     text-align: left;
     border-radius: 4px 0px 0px 4px;
-    padding-left: 24px;
+    // padding-left: 24px;
   }
 
   th:last-child {
@@ -134,8 +135,10 @@
   }
 
   td:nth-child(2) {
-    text-align: left;
-    padding-left: 24px;
+    // text-align: left;
+    // text-align: center;
+    padding-left: 10px;
+    cursor: pointer;
   }
 
   tbody tr{

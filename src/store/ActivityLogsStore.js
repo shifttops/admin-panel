@@ -12,9 +12,9 @@ class ActivityLogsStore {
 
   get logs() {
     return [...this.jira_logs, ...this.fault_logs].sort(
-        (a, b) =>
-            new Date(b.error_time ? b.error_time : b.changed_on) -
-            new Date(a.error_time ? a.error_time : a.changed_on)
+      (a, b) =>
+        new Date(b.error_time ? b.error_time : b.changed_on) -
+        new Date(a.error_time ? a.error_time : a.changed_on)
     );
   }
 

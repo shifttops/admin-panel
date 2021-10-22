@@ -1,6 +1,7 @@
 import styles from "./planner-item.module.scss";
 import "./cron.scss";
 import ButtonIcon from "../buttons/ButtonIcon/ButtonIcon";
+import Button from "../buttons/Button";
 
 import cn from "classnames";
 import { CheckIcon, DeleteIcon } from "icons";
@@ -8,8 +9,10 @@ import { useEffect, useRef, useState } from "react";
 import Cron from "react-js-cron";
 import DatePicker from "react-datepicker";
 import Popup from "reactjs-popup";
-import SubmitPlannerPopup from "../popups/SubmitPlannerPopup";
 import PlannerStore from "../../store/PlannerStore";
+import moment from "moment";
+import PopupComponent from "../popups/PopupComponent/PopupComponent";
+import { DeclineIcon } from "../../icons/icons";
 
 export default function PlannerItem({
   text,
@@ -54,9 +57,7 @@ export default function PlannerItem({
     }
   };
 
-  const handleDateChange = ({ date, isStartDate }) => {};
-
-  const handleSaveTask = ({ task }) => {
+  const handleSaveTask = ({ task, onClose }) => {
     const tempTask = {};
     Object.keys(task).forEach((key) => {
       if (
@@ -68,10 +69,12 @@ export default function PlannerItem({
     });
     tempTask.pk = task.pk;
     if (endDate !== task.expires) {
-      tempTask.expires = endDate;
+      tempTask.expires = moment(endDate).format("YYYY-MM-DD[T]HH:mm:ss.SSS");
     }
     if (startDate !== task.startTime) {
-      tempTask.startTime = startDate;
+      tempTask.startTime = moment(startDate).format(
+        "YYYY-MM-DD[T]HH:mm:ss.SSS"
+      );
     }
     let tempPeriod = period.split(" ");
     if (
@@ -92,6 +95,9 @@ export default function PlannerItem({
       };
     }
     handleChangeTask({ task: tempTask, period: tempPeriod });
+    setTimeout(() => {
+      onClose();
+    }, 300);
   };
 
   const ref = useRef();
@@ -138,12 +144,12 @@ export default function PlannerItem({
               ? task.stores.join(", ")
               : task.stores.slice(0, 3).join(", ")
             : text}
-          {task?.stores?.length > 3 && !isAllHostsOpened ? (
+          {task?.stores?.length > 3 ? (
             <button
               className={styles.moreButton}
               onClick={() => setIsAllHostsOpen((prev) => !prev)}
             >
-              See more
+              {isAllHostsOpened ? "Close" : "See more"}
             </button>
           ) : (
             ""
@@ -155,13 +161,22 @@ export default function PlannerItem({
           type="text"
           value={task ? task.name : text}
           onChange={(e) => handleChangeName(e.target.value)}
+          className={styles.input_name}
         />
         {/* {task ? task.name : text} */}
       </td>
       <td onClick={handleEnabledChange}>
-        {task ? (task.enabled ? "Enabled" : "Disabled") : ""}
+        {task ? (
+          task.enabled ? (
+            <CheckIcon className={styles.green} />
+          ) : (
+            <DeclineIcon />
+          )
+        ) : (
+          ""
+        )}
       </td>
-      <td>{task && task.total_run_count}</td>
+      {/* <td>{task && task.total_run_count}</td> */}
       {/* <td>
         {task && new Date(task.date_changed).toLocaleString().slice(0, -3)}
       </td> */}
@@ -206,14 +221,25 @@ export default function PlannerItem({
           <Popup
             modal
             trigger={
-              <ButtonIcon className={styles.confirmIcon} Icon={CheckIcon} />
+              // <ButtonIcon className={styles.confirmIcon} Icon={CheckIcon} />
+              <Button className={styles.confirmIcon} text={"Save"} />
             }
           >
             {(close) => (
-              <SubmitPlannerPopup
+              <PopupComponent
                 onClose={close}
-                onClick={() => handleSaveTask({ task })}
+                onClick={() => handleSaveTask({ task, onClose: close })}
                 plannerTask={{ startDate, period, endDate }}
+                buttonText="Save"
+                titleText="Save"
+                text={`Are you sure you want to change ${task.name}?`}
+                dedicatedText={JSON.stringify({
+                  startDate,
+                  period,
+                  endDate,
+                  enabled: task.enabled,
+                })}
+                // additionalDedicatedText={period}
               />
             )}
           </Popup>
