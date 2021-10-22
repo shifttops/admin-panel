@@ -242,27 +242,43 @@ const InnerLaunch = observer((props) => {
             onClick={() => setPeriodic((prev) => !prev)}
           />
         </div>
-        <Popup modal trigger={<Button text="Launch"  />}>
-          {(close) => (
-            <PopupComponent
-              onClose={close}
-              planner={{ startDate, period, endDate }}
-              titleText={"Launch"}
-              buttonText={"Launch"}
-              text={"Are you sure you want to launch the script with"}
-              dedicatedText={JSON.stringify(rows)}
-              additionalText={"on"}
-              additionalDedicatedText={JSON.stringify(enabledStores)}
-              additionalText2={isPeriodic ? "at" : null}
-              additionalDedicatedText2={
-                isPeriodic
-                  ? JSON.stringify({ startDate, period, endDate })
-                  : null
-              }
-              onClick={() => handleClick({ onClose: close })}
-            />
-          )}
-        </Popup>
+          <Popup
+            modal
+            trigger={<Button text="Launch" className="launch_btn"/>}
+          >
+            {(close) => {
+              let dedicatedText = ''
+              let additionalDedicatedText = ""
+
+              Object.keys(rows).map(row => {
+                dedicatedText +=  `${row}: ${rows[row] ? rows[row] : '""'},`
+              })
+
+              Object.keys(enabledStores).map(key => {
+                additionalDedicatedText +=  `${key}: ${enabledStores[key] && enabledStores[key].length ? enabledStores[key].map(value => value) : '""'},`
+              })
+
+              return (
+                <PopupComponent
+                  onClose={close}
+                  titleText={'Launch'}
+                  buttonText={'Launch'}
+                  text={'Are you sure you want to launch the script with'}
+                  dedicatedText={dedicatedText.length ? dedicatedText : 'no variables'}
+                  additionalText={'on'}
+                  additionalDedicatedText={"\n" + additionalDedicatedText}
+                  onClick={() => handleClick({onClose: close})}
+                />
+              )
+            }}
+          </Popup>
+        </div>
+
+        <ScriptsStoresTable
+          enabledStores={enabledStores}
+          setEnabledStores={setEnabledStores}
+          hosts={hosts}
+        />
         <div className={log_id ? styles.popup : styles.closed}>
           {log_id ? (
             <NavLink to={`${routes.scripts_logs}/${log_id.task_id}`}>
@@ -276,11 +292,9 @@ const InnerLaunch = observer((props) => {
           store={ToastsStore}
           position={ToastsContainerPosition.BOTTOM_RIGHT}
         />
-      </div>
     </>
   ) : (
     "Loading..."
   );
-  // </>
 });
 export default InnerLaunch;

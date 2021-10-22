@@ -97,6 +97,9 @@
 
 .title {
   margin-right: 34px;
+  @media(min-width: 2120px){
+    font-size: 28px;
+  }
 }
 
 .table {

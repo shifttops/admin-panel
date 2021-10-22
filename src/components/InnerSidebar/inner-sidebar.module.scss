@@ -8,20 +8,30 @@
   min-width: 185px;
   background-color: #fff;
   min-height: calc(100vh - 87px);
+  font-size: 15px;
+  @media(min-width: 2120px){
+    font-size: 22px;
+  }
 
   &__title {
-    font-size: 13px;
+    font-size: 0.8em;
     line-height: 16px;
     text-transform: uppercase;
     color: $color-yellow;
     margin-bottom: 20px;
+    @media(min-width: 2120px){
+      margin-bottom: 25px;
+    }
   }
 
   &__link {
-    font-size: 15px;
+    font-size: 0.9em;
     line-height: 19px;
     color: rgba(51, 51, 51, 0.7);
     margin-bottom: 20px;
+    @media(min-width: 2120px){
+      margin-bottom: 25px;
+    }
 
     &.active {
       color: #333333;

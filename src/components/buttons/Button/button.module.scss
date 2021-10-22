@@ -12,6 +12,10 @@
   border: none;
   color: $color-grey;
   text-align: center;
+  @media(min-width: 2120px){
+    font-size: 16px;
+    padding: 13px 35px 9px 35px;
+  }
 
   &[disabled] {
     border: 1px solid rgba(51, 51, 51, 0.3);

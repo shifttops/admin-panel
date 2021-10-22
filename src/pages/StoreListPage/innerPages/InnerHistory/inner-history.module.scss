@@ -3,6 +3,10 @@
 .wrapper {
   width: 100%;
   padding-bottom: 100px;
+  font-size: 14px;
+  @media(min-width: 2120px){
+    font-size: 22px;
+  }
 }
 
 .head {
@@ -30,7 +34,7 @@
 }
 
 .title {
-  font-size: 21px;
+  font-size: 1.5em;
   line-height: 27px;
   letter-spacing: -0.01em;
   color: $color-black;
@@ -52,8 +56,11 @@
     text-align: left;
     border: none;
     padding: 13px 15px 10px 15px;
+    @media(min-width: 2120px){
+      padding: 18px 20px 15px 20px;
+    }
     background: #ededed;
-    font-size: 13px;
+    font-size: 0.9em;
     line-height: 16px;
     letter-spacing: 0.04em;
     text-transform: uppercase;
@@ -73,7 +80,7 @@
     }
   }
   td {
-    font-size: 14px;
+    font-size: 1em;
     line-height: 18px;
     letter-spacing: -0.03em;
     vertical-align: initial;

@@ -13,6 +13,11 @@
   z-index: 1;
   transition: 0.3s;
 
+  font-size: 14px;
+  @media(min-width: 2120px){
+    font-size: 22px;
+  }
+
   &__title {
     display: none;
   }
@@ -66,7 +71,7 @@
   }
 
   &__title {
-    font-size: 13px;
+    font-size: 1em;
     line-height: 16px;
     color: #ffc300;
     text-transform: uppercase;
@@ -88,22 +93,23 @@
   }
 
   .sidebar__icon {
-    margin: 0px 10px;
-    margin-bottom: 0px;
-    margin-right: 10px;
+    margin: 0 10px;
   }
 
   .sidebar__item {
     color: $color-grey;
     display: inline-flex;
     align-items: center;
-    font-size: 16px;
+    font-size: 1.2em;
     line-height: 20px;
-    color: $color-grey;
     padding: 15px 0 6px 10px;
     width: 100%;
     transition: 0.3s;
     margin-bottom: 8px;
+    @media(min-width: 2120px){
+      margin-bottom: 12px;
+      padding: 20px 0 8px 12px;
+    }
     border-radius: 4px;
 
     &.active {

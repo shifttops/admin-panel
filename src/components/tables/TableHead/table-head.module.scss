@@ -41,6 +41,10 @@
   padding: 13px 15px 10px 15px;
   background: #ededed;
   font-size: 13px;
+  @media(min-width: 2120px){
+    font-size: 20px;
+    padding: 26px 30px 20px 30px;
+  }
   line-height: 16px;
   text-transform: uppercase;
   color: rgba(51, 51, 51, 0.5);
