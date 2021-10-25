@@ -23,7 +23,7 @@ const MaintenanceScreen = observer((props) => {
 
   useEffect(() => {
     if (storeInfo.store_id === store_id) {
-      maintenanceScreens.maintenanceScreens = null
+      maintenanceScreens.set(null)
     }
   }, []);
 
@@ -52,19 +52,19 @@ const MaintenanceScreen = observer((props) => {
                 ? storeInfo.maintenance_screen
                 : "Nothing chosen"}
             </span>
-            {maintenanceScreens.maintenanceScreens && maintenanceScreens.maintenanceScreens[0] !== "" && (
+            {maintenanceScreens.get() && maintenanceScreens.get()[0] !== "" && (
               <ArrowDownIcon
                 className={styles.currentScreen__icon}
                 isOpen={isVisible}
               />
             )}
           </div>
-          {maintenanceScreens.maintenanceScreens && maintenanceScreens.maintenanceScreens[0] !== "" && (
+          {maintenanceScreens.get() && maintenanceScreens.get()[0] !== "" && (
             <div
               className={styles.dropDown + " " + (isVisible ? styles.dropDown__visible : styles.dropDown__hidden)}
             >
               <div className={styles.dropDown__body}>
-                {maintenanceScreens.maintenanceScreens && maintenanceScreens.maintenanceScreens.map((screen) =>
+                {maintenanceScreens.get() && maintenanceScreens.get().map((screen) =>
                   screen && screen !== storeInfo.maintenance_screen ? (
                     <Popup
                       key={screen}

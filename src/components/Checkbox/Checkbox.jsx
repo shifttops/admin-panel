@@ -7,8 +7,8 @@ export default function Checkbox({
   onChange,
 }) {
   return (
-    <div className={styles.storeList__checkbox + " " + className}>
-      <label className={styles.storeList__checkboxWrap}>
+    <div className={styles.checkbox + " " + className}>
+      <label className={styles.checkbox__wrapper}>
         {checked !== undefined && onChange ? (
           <input
             className={styles.checkbox__input}
@@ -24,7 +24,7 @@ export default function Checkbox({
             name="store-id"
           />
         )}
-        <span className={styles.storeList__label}>{label ? label : null}</span>
+        <span className={styles.checkbox__label}>{label ? label : null}</span>
       </label>
     </div>
   );

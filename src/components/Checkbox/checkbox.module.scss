@@ -1,11 +1,9 @@
 @import "../../scss/variables";
 
-.storeList {
-  &__checkbox {
-    cursor: pointer;
-  }
+.checkbox {
+  cursor: pointer;
 
-  &__checkboxWrap {
+  &__wrapper {
     cursor: pointer;
 
     & > .checkbox__input {
@@ -15,12 +13,12 @@
     }
 
     &
-      > .checkbox__input:not(:disabled):not(:checked)
-      + .store-list__label:hover::before {
+    > .checkbox__input:not(:disabled):not(:checked)
+    + .checkbox__label:hover::before {
       border-color: #e0e0e0;
     }
 
-    & > .checkbox__input:not(:disabled):active + .store-list__label::before {
+    & > .checkbox__input:not(:disabled):active + .checkbox__label::before {
       border-color: #e0e0e0;
     }
 

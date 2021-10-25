@@ -9,15 +9,10 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 const InnerStatistic = observer((props) => {
-  const { storeInfo, getMetrics } = StoresStore;
+  const { storeInfo, metrics, getMetrics } = StoresStore;
   const [error, setError] = useState(false);
   const location = useLocation();
-  // avg_CASH: 35.014722891566265
-  // avg_OECB: 12.630024096385542
-  // avg_OEPE: 109.76281395348838
-  // avg_OT: 37.99091860465116
-  // avg_PRESENT: 40.4615
-  // avg_TET
+
   const mapper = [
     {
       visibleName: "OEPE",
@@ -49,7 +44,7 @@ const InnerStatistic = observer((props) => {
 
   useEffect(() => {
     if (storeInfo.store_id === store_id) {
-      storeInfo.metrics = null;
+      metrics.set(null)
     }
   }, []);
 
@@ -69,7 +64,7 @@ const InnerStatistic = observer((props) => {
             </tr>
           </thead>
           <tbody>
-            {storeInfo.metrics && mapper.map((item) => (
+            {metrics.get() && mapper.map((item) => (
               <tr key={item.visibleName}>
                 <td className={styles.category}>{item.visibleName}</td>
                 <td className={styles.period}>Today</td>
@@ -77,13 +72,13 @@ const InnerStatistic = observer((props) => {
                   className={cn(
                     styles.time,
                     item.visibleName === "OEPE" &&
-                      (storeInfo.metrics[item.key] < 120
+                      (metrics.get()[item.key] < 120
                         ? styles.timeGreen
                         : styles.timeRed)
                   )}
                 >
-                  {storeInfo.metrics[item.key]
-                    ? `${Math.round(storeInfo.metrics[item.key])} s`
+                  {metrics.get()[item.key]
+                    ? `${Math.round(metrics.get()[item.key])} s`
                     : "N/A"}
                 </td>
               </tr>
