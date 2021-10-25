@@ -12,7 +12,6 @@ const AdditionalInfo = observer(({ leftTitle, rightTitle }) => {
       name: "Cameras",
       result: "All cameras are working",
       error: "All cameras are working",
-      canOpen: true,
     },
     {
       name: "Lateral cameras",
@@ -33,7 +32,6 @@ const AdditionalInfo = observer(({ leftTitle, rightTitle }) => {
         <button className={styles.dropdownHead}>
           <p className={cn(styles.category, styles.categoryDropdown)}>
             {items[0].name}
-            {items[0].canOpen ? <ArrowDownIcon /> : ""}
           </p>
         </button>
         <div className={styles.text}>
@@ -53,7 +51,6 @@ const AdditionalInfo = observer(({ leftTitle, rightTitle }) => {
       <div className={styles.item}>
         <p className={cn(styles.category, styles.categoryDropdown)}>
           Lateral cameras
-          <ArrowDownIcon />
         </p>
         <div
           className={`${styles.check} ${

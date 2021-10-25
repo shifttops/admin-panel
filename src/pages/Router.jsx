@@ -1,5 +1,4 @@
-import { Redirect, Route, Switch, useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { Redirect, Route, Switch } from "react-router-dom";
 
 import HeaderDashboard from "components/header/HeaderDashboard";
 import mainNavigation from "constants/main-navigation";
@@ -18,26 +17,10 @@ import {
   presetNavigation,
 } from "../constants/inner-navigation";
 import ScriptsLogInfo from "./ScriptsLogInfo/ScriptsLogInfo";
+import AppStore from "../store/AppStore";
 
 export default function CustomRouter() {
-  console.log(process.env);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [isSidebarOverlap, setIsSidebarOverlap] = useState(false);
-
-  const sidebarToggle = () => {
-    setIsSidebarOpen((prev) => !prev);
-  };
-
-  const location = useLocation();
-
-  useEffect(() => {
-    if (
-      new RegExp(`${routes.home}\/.+`).test(location.pathname) &&
-      isSidebarOpen
-    ) {
-      setIsSidebarOpen(false);
-    }
-  }, [location.pathname]);
+  const {sidebarToggle} = AppStore
 
   return (
     <>
@@ -61,7 +44,7 @@ export default function CustomRouter() {
         <Route
           render={() => (
             <div className="wrapper">
-              <Sidebar isOpen={isSidebarOpen} isOverlap={isSidebarOverlap} />
+              <Sidebar/>
               <div className="dashboard">
                 <HeaderDashboard sidebarToggle={sidebarToggle} />
                 {mainNavigation.map(({ to, component }) => (
