@@ -62,7 +62,7 @@ const AdditionalInfo = observer(({ leftTitle, rightTitle }) => {
             : "Check failed"}
         </div>
       </div>
-      {storeInfo.status && storeInfo.servers ? storeInfo.servers.map((server, serverIndex) => (
+      {storeInfo && storeInfo.status && storeInfo.servers ? storeInfo.servers.map((server, serverIndex) => (
         server ? <DropDownFields serverIndex={serverIndex} key={server.name}/> : null
       )) : null}
     </div>
