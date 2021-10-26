@@ -1,8 +1,9 @@
 import styles from "./loader.module.scss";
+import cn from "classnames";
 
-export default function Loader({ props }) {
+export default function Loader({ props, className }) {
   return (
-    <div className={styles.ldsRing}>
+    <div className={cn(styles.ldsRing, className)}>
       <div></div>
       <div></div>
       <div></div>

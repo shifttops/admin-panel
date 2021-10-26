@@ -19,6 +19,7 @@ import {
 } from "react-toasts";
 import Popup from "reactjs-popup";
 import CheckoutsPopup from "../../../components/popups/CheckoutsPopup/CheckoutsPopup";
+import Loader from "../../../components/Loader";
 
 const InnerEdit = observer((props) => {
   const [isComparingMode, setIsComparingMode] = useState(false);
@@ -265,7 +266,7 @@ const InnerEdit = observer((props) => {
           />
         </>
       ) : (
-        "Loading..."
+        <Loader />
       )}
     </div>
   );
