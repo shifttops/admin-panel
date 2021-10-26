@@ -41,7 +41,7 @@ const MaintenanceScreen = observer((props) => {
             <ScreenIcon/>
           </div>
           <div className={styles.maintenanceScreen__title}>
-            Change screen:
+            Current maintenance screen:
           </div>
           <div
             className={styles.currentScreen}
