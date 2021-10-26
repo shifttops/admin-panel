@@ -24,7 +24,7 @@ const InnerHistory = observer((props) => {
 
   useEffect(() => {
     if (storeInfo.store_id === store_id) {
-      storeInfo.storeErrors = [];
+      storeErrors.set(null);
     }
   }, []);
 
@@ -54,7 +54,7 @@ const InnerHistory = observer((props) => {
           </tr>
         </thead>
         <tbody>
-          {storeInfo.storeErrors && storeInfo.storeErrors.map(item => (
+          {storeErrors.get() && storeErrors.get().map(item => (
           <tr key={`${item.store}-${item.id}`}>
             <td>
               <Checkbox label="Error" className={styles.checkbox} />

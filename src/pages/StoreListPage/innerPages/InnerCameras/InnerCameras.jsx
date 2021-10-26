@@ -88,7 +88,7 @@ const InnerCameras = observer((props) => {
 
   useEffect(() => {
     if (storeInfo.store_id === store_id) {
-      cameras.cameras = null;
+      cameras.set(null);
     }
   }, []);
 
@@ -114,7 +114,7 @@ const InnerCameras = observer((props) => {
           </tr>
         </thead>
         <tbody>
-          {cameras.cameras && cameras.cameras.map((camera) => (
+          {cameras.get() && cameras.get().map((camera) => (
             <tr key={camera.view_name}>
               {mapperCameras.map((key) => (
                 <td
@@ -140,13 +140,9 @@ const InnerCameras = observer((props) => {
       </table>
 
       <div className={styles.cards}>
-        {cameras.cameras && cameras.cameras.map((camera) => (
+        {cameras.get() && cameras.get().map((camera) => (
           <FileCard key={camera.id} camera={camera} />
         ))}
-        {/* <FileCard screen={cameraScreen} />
-        <FileCard screen={cameraScreen2} />
-        <FileCard screen={cameraScreen} />
-        <FileCard screen={cameraScreen2} /> */}
       </div>
     </div>
   );

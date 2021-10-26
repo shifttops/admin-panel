@@ -25,9 +25,11 @@ import viewTypes from "types/viewTypes";
 import iconButtonTypes from "types/iconButtonTypes";
 import minFiles from "images/min-files.jpg";
 import playFile from "images/playFile.svg";
+import StoresStore from "../../../../store/StoresStore";
 
 export default function InnerFiles() {
   const [viewType, setViewType] = useState(viewTypes.grid);
+  const {storeInfo} = StoresStore
 
   const setGridView = () => {
     setViewType(viewTypes.grid);

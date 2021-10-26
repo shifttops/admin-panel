@@ -1,7 +1,7 @@
 import styles from "./maintenance-screen.module.scss";
 import Button from "../buttons/Button";
 import { useEffect, useRef, useState } from "react";
-import { ArrowDownIcon } from "../../icons";
+import {ArrowDownIcon, ScreenIcon} from "../../icons";
 import StoresStore from "../../store/StoresStore";
 import { observer } from "mobx-react";
 import Popup from "reactjs-popup";
@@ -23,7 +23,7 @@ const MaintenanceScreen = observer((props) => {
 
   useEffect(() => {
     if (storeInfo.store_id === store_id) {
-      maintenanceScreens.maintenanceScreens = null
+      maintenanceScreens.set(null)
     }
   }, []);
 
@@ -37,6 +37,9 @@ const MaintenanceScreen = observer((props) => {
     <div className={styles.maintenanceScreen}>
       <div className={styles.maintenanceScreen__body}>
         <div className={styles.maintenanceScreen__content}>
+          <div className={styles.maintenanceScreen__icon}>
+            <ScreenIcon/>
+          </div>
           <div className={styles.maintenanceScreen__title}>
             Current maintenance screen:
           </div>
@@ -49,19 +52,19 @@ const MaintenanceScreen = observer((props) => {
                 ? storeInfo.maintenance_screen
                 : "Nothing chosen"}
             </span>
-            {maintenanceScreens.maintenanceScreens && maintenanceScreens.maintenanceScreens[0] !== "" && (
+            {maintenanceScreens.get() && maintenanceScreens.get()[0] !== "" && (
               <ArrowDownIcon
                 className={styles.currentScreen__icon}
                 isOpen={isVisible}
               />
             )}
           </div>
-          {maintenanceScreens.maintenanceScreens && maintenanceScreens.maintenanceScreens[0] !== "" && (
+          {maintenanceScreens.get() && maintenanceScreens.get()[0] !== "" && (
             <div
               className={styles.dropDown + " " + (isVisible ? styles.dropDown__visible : styles.dropDown__hidden)}
             >
               <div className={styles.dropDown__body}>
-                {maintenanceScreens.maintenanceScreens && maintenanceScreens.maintenanceScreens.map((screen) =>
+                {maintenanceScreens.get() && maintenanceScreens.get().map((screen) =>
                   screen && screen !== storeInfo.maintenance_screen ? (
                     <Popup
                       key={screen}

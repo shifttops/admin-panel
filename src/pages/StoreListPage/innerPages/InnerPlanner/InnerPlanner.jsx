@@ -15,13 +15,13 @@ import {
 
 const InnerPlanner = observer((props) => {
   const [error, setError] = useState("");
-  const { storeInfo, getStorePeriodicTasks } = StoresStore;
+  const { storeInfo, periodicTasks, getStorePeriodicTasks } = StoresStore;
 
   const store_id = +props.match.params.id;
 
   useEffect(() => {
     if (storeInfo.store_id === store_id) {
-      storeInfo.periodicTasks = [];
+      periodicTasks.set(null)
     }
   }, []);
 
@@ -60,8 +60,8 @@ const InnerPlanner = observer((props) => {
           </tr>
         </thead>
         <tbody>
-          {storeInfo.periodicTasks && storeInfo.periodicTasks.length
-            ? storeInfo.periodicTasks.map((task) => (
+          {periodicTasks.get() && periodicTasks.get().length
+            ? periodicTasks.get().map((task) => (
                 <PlannerItem
                   key={`store${storeInfo.store_id}-${task.name}`}
                   taskData={task}

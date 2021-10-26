@@ -6,7 +6,9 @@
 
 .wrapper {
   padding: 30px 25px 100px 36px;
-  //padding: 0px 36px;
+  @media(min-width: 2120px){
+    padding-right: 50px;
+  }
   width: 100%;
 }
 

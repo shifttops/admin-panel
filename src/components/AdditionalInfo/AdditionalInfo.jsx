@@ -12,9 +12,6 @@ const AdditionalInfo = observer(({ leftTitle, rightTitle }) => {
       name: "Cameras",
       result: "All cameras are working",
       error: "All cameras are working",
-      // description: `All cameras working`,
-      // cameras: [53, 54, 55, 56],
-      canOpen: true,
     },
     {
       name: "Lateral cameras",
@@ -35,23 +32,9 @@ const AdditionalInfo = observer(({ leftTitle, rightTitle }) => {
         <button className={styles.dropdownHead}>
           <p className={cn(styles.category, styles.categoryDropdown)}>
             {items[0].name}
-            {items[0].canOpen ? <ArrowDownIcon /> : ""}
           </p>
-          {/* <div className={
-            styles.check
-            // styles.resultError
-          }>{items[0].result}</div> */}
         </button>
         <div className={styles.text}>
-          {/* <div>
-            <span className={
-              // styles.error
-              styles.check
-              }>{items[0].error}</span>
-            <p className={styles.descr}>
-              {items[0].description}
-            </p>
-          </div> */}
           <div>
             {storeInfo.cameras &&
               storeInfo.cameras.map((camera) => (
@@ -68,7 +51,6 @@ const AdditionalInfo = observer(({ leftTitle, rightTitle }) => {
       <div className={styles.item}>
         <p className={cn(styles.category, styles.categoryDropdown)}>
           Lateral cameras
-          <ArrowDownIcon />
         </p>
         <div
           className={`${styles.check} ${
@@ -80,9 +62,9 @@ const AdditionalInfo = observer(({ leftTitle, rightTitle }) => {
             : "Check failed"}
         </div>
       </div>
-      {storeInfo.servers && storeInfo.servers.map((server, serverIndex) => (
-          <DropDownFields serverIndex={serverIndex} key={server.name} />
-      ))}
+      {storeInfo && storeInfo.status && storeInfo.servers ? storeInfo.servers.map((server, serverIndex) => (
+        server ? <DropDownFields serverIndex={serverIndex} key={server.name}/> : null
+      )) : null}
     </div>
   );
 });

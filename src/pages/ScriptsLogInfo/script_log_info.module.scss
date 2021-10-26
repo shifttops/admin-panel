@@ -15,6 +15,9 @@
 
 .title {
   margin-right: 34px;
+  @media(min-width: 2120px){
+    font-size: 28px;
+  }
 }
 
 .table {
@@ -48,6 +51,9 @@
   display: flex;
   width: 100%;
   flex-direction: column;
+  @media(min-width: 2120px){
+    font-size: 22px;
+  }
   .row {
     display: flex;
     width: 100%;

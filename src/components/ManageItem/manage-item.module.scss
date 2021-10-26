@@ -55,6 +55,9 @@
 .title {
   margin-top: 4px;
   font-size: 16px;
+  @media(min-width: 2120px){
+    font-size: 22px;
+  }
   line-height: 20px;
   letter-spacing: -0.01em;
   font-weight: 700;
@@ -69,6 +72,9 @@
 .date {
   margin-top: 4px;
   font-size: 14px;
+  @media(min-width: 2120px){
+    font-size: 20px;
+  }
   line-height: 18px;
   letter-spacing: -0.03em;
   margin-right: 26px;

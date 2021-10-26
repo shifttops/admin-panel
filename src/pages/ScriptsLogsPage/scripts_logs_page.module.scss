@@ -15,6 +15,9 @@
 
 .title {
   margin-right: 34px;
+  @media(min-width: 2120px){
+    font-size: 28px;
+  }
 }
 
 .table {
@@ -64,6 +67,11 @@
     color: rgba(51, 51, 51, 0.5);
     margin-right: 20px;
     font-weight: 400;
+    font-size: 14px;
+    @media(min-width: 2120px){
+      font-size: 22px;
+      padding: 26px 0px 20px 0px;
+    }
     &:nth-child(2) {
       // text-align: left;
       // width: 190px;
@@ -96,7 +104,11 @@
     width: 30%;
     overflow: hidden;
     white-space: nowrap;
-
+    font-size: 14px;
+    @media(min-width: 2120px){
+      font-size: 22px;
+      padding: 22px 0px 16px 0px;
+    }
     &:first-child {
       max-width: 50px;
       text-align: center;
@@ -126,8 +138,11 @@
 .logs_type_name {
   margin: 20px 0px 20px 0px;
   padding-bottom: 5px;
-  font-size: 18px;
   border-bottom: 1px solid rgba(51, 51, 51, 0.3);
+  font-size: 18px;
+  @media(min-width: 2120px){
+    font-size: 26px;
+  }
 }
 
 .checkbox {

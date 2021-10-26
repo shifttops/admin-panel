@@ -52,12 +52,6 @@ export default function InnerManage(props) {
       />
       <ManageItem
         ActionButtons={ActionButtons}
-        type={manageItemTypes.blue}
-        Icon={ScreenIcon}
-        title="Change screen"
-      />
-      <ManageItem
-        ActionButtons={ActionButtons}
         type={manageItemTypes.red}
         Icon={VideoManageIcon}
         title="Reboot all cameras"

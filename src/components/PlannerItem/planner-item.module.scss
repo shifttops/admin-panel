@@ -3,6 +3,9 @@
 .store {
   font-size: 16px;
   line-height: 20px;
+  @media(min-width: 2120px){
+    font-size: 22px;
+  }
   letter-spacing: -0.01em;
   font-weight: 700;
 }
@@ -23,6 +26,10 @@
   background-color: #fff;
   border: 1px solid $color-black-05;
   font-size: 13px;
+  @media(min-width: 2120px){
+    font-size: 22px;
+    padding: 4px 16px;
+  }
   padding: 4px 8px;
   color: $color-black-05;
   border-radius: $border-radius;
@@ -47,6 +54,9 @@
   border-radius: 4px;
   margin-bottom: 8px;
   padding: 11px 16px 8px 16px;
+  @media(min-width: 2120px){
+    padding: 22px 32px 16px 32px;
+  }
 
   &.error {
     border: 1px solid #ffb1b4;
@@ -54,6 +64,9 @@
 
   &__date {
     font-size: 14px;
+    @media(min-width: 2120px){
+      font-size: 22px;
+    }
     line-height: 18px;
     letter-spacing: -0.03em;
     color: rgba(51, 51, 51, 0.5);
@@ -70,6 +83,9 @@
     }
 
     font-size: 14px;
+    @media(min-width: 2120px){
+      font-size: 22px;
+    }
     line-height: 18px;
     letter-spacing: -0.03em;
     color: rgba(51, 51, 51, 0.5);
@@ -78,6 +94,9 @@
 
   &__end {
     font-size: 14px;
+    @media(min-width: 2120px){
+      font-size: 22px;
+    }
     line-height: 18px;
     letter-spacing: -0.03em;
     color: rgba(51, 51, 51, 0.5);
@@ -108,6 +127,9 @@ tr.errorContainer {
 td.plannerItem__text {
   font-weight: 700;
   font-size: 16px;
+  @media(min-width: 2120px){
+    font-size: 22px;
+  }
   line-height: 20px;
   letter-spacing: -0.01em;
   color: $color-black;
@@ -136,6 +158,10 @@ td.plannerItem__text {
   outline: none;
   border: 1px solid $color-black-007;
   padding: 3px 5px;
+  @media(min-width: 2120px){
+    padding: 6px 10px;
+    font-size: 22px;
+  }
   color: rgba(51, 51, 51, 1);
   transition: all 0.3s ease 0s;
   @media (any-hover: hover) {
@@ -165,4 +191,8 @@ td.plannerItem__text {
       color: rgb(135, 154, 50);
     }
   }
+}
+
+.calendar {
+  z-index: 2;
 }

@@ -215,23 +215,23 @@ const InnerLaunch = observer((props) => {
           {/* </button> */}
           {isPeriodic ? (
             <div className={styles.periodic}>
-             {/* <input
+              {/* <input
               type="text"
               value={task_name}
               onChange={(e) => setTaskName(e.target.value)}
               placeholder="Enter task name"
               className={styles.task_name_input}
             /> */}
-            <ScriptsPeriodTable
-              period={period}
-              setPeriod={setPeriod}
-              startDate={startDate}
-              setStartDate={setStartDate}
-              endDate={endDate}
-              setEndDate={setEndDate}
-              task_name={task_name}
-              onChangeTaskName={(value) => setTaskName(value)}
-            />
+              <ScriptsPeriodTable
+                period={period}
+                setPeriod={setPeriod}
+                startDate={startDate}
+                setStartDate={setStartDate}
+                endDate={endDate}
+                setEndDate={setEndDate}
+                task_name={task_name}
+                onChangeTaskName={(value) => setTaskName(value)}
+              />
             </div>
           ) : (
             ""
@@ -242,26 +242,48 @@ const InnerLaunch = observer((props) => {
             onClick={() => setPeriodic((prev) => !prev)}
           />
         </div>
-        <Popup modal trigger={<Button text="Launch"  />}>
-          {(close) => (
-            <PopupComponent
-              onClose={close}
-              planner={{ startDate, period, endDate }}
-              titleText={"Launch"}
-              buttonText={"Launch"}
-              text={"Are you sure you want to launch the script with"}
-              dedicatedText={JSON.stringify(rows)}
-              additionalText={"on"}
-              additionalDedicatedText={JSON.stringify(enabledStores)}
-              additionalText2={isPeriodic ? "at" : null}
-              additionalDedicatedText2={
-                isPeriodic
-                  ? JSON.stringify({ startDate, period, endDate })
-                  : null
-              }
-              onClick={() => handleClick({ onClose: close })}
-            />
-          )}
+        <Popup modal trigger={<Button text="Launch" />}>
+          {(close) => {
+            let dedicatedText = "";
+            let additionalDedicatedText = "";
+            let additionalDedicatedText2 = "";
+
+            Object.keys(rows).map((key) => {
+              dedicatedText += `${key}: ${rows[key] ? rows[key] : '""'}\n`;
+            });
+
+            Object.keys(enabledStores).map((key) => {
+              additionalDedicatedText += `${key}: ${
+                enabledStores[key] ? enabledStores[key] : '""'
+              },\n`;
+            });
+
+            if (isPeriodic) {
+              const tempObject = { startDate, period, endDate };
+
+              Object.keys(tempObject).map((key) => {
+                additionalDedicatedText2 += `${key}: ${
+                  tempObject[key] ? tempObject[key] : '""'
+                }\n`;
+              });
+            }
+
+            return (
+              <PopupComponent
+                onClose={close}
+                planner={{ startDate, period, endDate }}
+                titleText={"Launch"}
+                buttonText={"Launch"}
+                text={"Are you sure you want to launch the script with"}
+                dedicatedText={dedicatedText}
+                additionalText={"on"}
+                additionalDedicatedText={additionalDedicatedText}
+                additionalText2={isPeriodic ? "at" : null}
+                additionalDedicatedText2={additionalDedicatedText2}
+                onClick={() => handleClick({ onClose: close })}
+              />
+            );
+          }}
         </Popup>
         <div className={log_id ? styles.popup : styles.closed}>
           {log_id ? (
@@ -281,6 +303,5 @@ const InnerLaunch = observer((props) => {
   ) : (
     "Loading..."
   );
-  // </>
 });
 export default InnerLaunch;

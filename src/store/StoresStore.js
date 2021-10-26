@@ -1,25 +1,25 @@
-import {makeAutoObservable, makeObservable, observable, reaction} from "mobx";
-import { computedFn } from "mobx-utils";
+import { makeAutoObservable, observable, reaction } from "mobx";
 import moment from "moment";
 import { refreshToken } from "../helpers/AuthHelper";
 import queryString from "query-string";
-import { filtersRequestMapper } from "../helpers/mappers";
 import { createDateFilters } from "../helpers/filters";
 import { ToastsStore } from "react-toasts";
 
 class StoresStore {
   isLoading = 0;
   storeInfo = {};
-  stores = observable.array([]);
-  storeErrors = [];
+  stores = [];
+  storeErrors = observable.box([]);
+  metrics = observable.box({});
   filters = {};
-  cameras = {cameras: []};
+  cameras = observable.box([]);
   enabledFilters = {
     ...queryString.parse(window.location.search, { arrayFormat: "comma" }),
   };
-  maintenanceScreens = {maintenanceScreens: []};
+  maintenanceScreens = observable.box([]);
   maintenanceScreensData = [];
   groups = [];
+  periodicTasks = observable.box([])
 
   constructor() {
     makeAutoObservable(
@@ -38,11 +38,11 @@ class StoresStore {
       () => this.storeInfo.status,
       (status, previousValue, reaction) => {
         if (status && this.maintenanceScreensData.length) {
-          this.maintenanceScreens.maintenanceScreens = [
+          this.maintenanceScreens.set([
             ...this.maintenanceScreensData.find(
               (screen) => screen.name === status
             )?.maintenance_screen,
-          ];
+          ]);
         }
       }
     );
@@ -58,44 +58,50 @@ class StoresStore {
     );
 
     reaction(
-      () => this.storeInfo.storeErrors,
+      () => this.storeErrors.get(),
       (errors, previousValue) => {
-        if (errors &&
-          !errors.length &&
-          JSON.stringify(errors) !== JSON.stringify(previousValue)
-        ) this.getStoreErrorLogs(this.storeInfo.store_id, (msg) => msg && console.log("msg", msg));
+        if (!errors)
+          this.getStoreErrorLogs(
+            this.storeInfo.store_id,
+            (msg) => msg && console.log("msg", msg)
+          );
       }
     );
 
     reaction(
-      () => this.storeInfo.metrics,
-      metrics => {
-        if (!metrics) this.getMetrics(this.storeInfo.store_id, (msg) => msg && console.log("msg", msg));
+      () => this.metrics.get(),
+      (metrics) => {
+        if (!metrics)
+          this.getMetrics(
+            this.storeInfo.store_id,
+            (msg) => msg && console.log("msg", msg)
+          );
       }
     );
 
     reaction(
-      () => this.cameras.cameras,
-      cameras => {
-        if(!cameras) this.getStoreCameraImages(this.storeInfo.store_id, (msg) => msg && console.log("msg", msg))
+      () => this.cameras.get(),
+      (cameras) => {
+        if (!cameras)
+          this.getStoreCameraImages(
+            this.storeInfo.store_id,
+            (msg) => msg && console.log("msg", msg)
+          );
       }
     );
 
     reaction(
-      () => this.maintenanceScreens.maintenanceScreens,
-      maintenanceScreens => {
-        if(!maintenanceScreens) this.getMaintenanceScreens((msg) => msg && console.log("msg", msg))
+      () => this.maintenanceScreens.get(),
+      (maintenanceScreens) => {
+        if (!maintenanceScreens)
+          this.getMaintenanceScreens((msg) => msg && console.log("msg", msg));
       }
     );
 
     reaction(
-      () => this.storeInfo.periodicTasks,
+      () => this.periodicTasks.get(),
       (periodicTasks, previousValue, reaction) => {
-        if (
-          periodicTasks &&
-          !periodicTasks.length &&
-          JSON.stringify(periodicTasks) !== JSON.stringify(previousValue)
-        ) {
+        if (!periodicTasks) {
           this.getStorePeriodicTasks(
             this.storeInfo.store_id,
             (msg) => msg && console.log("msg", msg)
@@ -106,13 +112,14 @@ class StoresStore {
   }
 
   getStores = async ({
-    search = '',
+    search = "",
     setError,
     field = null,
     type = "none",
     limit,
     offset = this.stores.length,
-    signal, setResCount
+    signal,
+    setResCount,
   }) => {
     try {
       await refreshToken();
@@ -123,22 +130,21 @@ class StoresStore {
       if (search.length) {
         url += `&search=${search}`;
       }
-      
+
       this.isLoading++;
-      
+
       if (
         Object.keys(this.enabledFilters).length &&
         Object.keys(this.enabledFilters).some(
           (key) => this.enabledFilters[key]?.length
-          )
-          ) {
-            const filtersForReq = createDateFilters(this.enabledFilters);
-            // console.log(123123123123123123);
-            
-            Object.keys(filtersForReq).map((key) => {
-              url += `&${key}=${filtersForReq[key]}`;
-            });
-          }
+        )
+      ) {
+        const filtersForReq = createDateFilters(this.enabledFilters);
+
+        Object.keys(filtersForReq).map((key) => {
+          url += `&${key}=${filtersForReq[key]}`;
+        });
+      }
 
       const resp = await fetch(url, {
         method: "GET",
@@ -148,22 +154,22 @@ class StoresStore {
         signal,
       });
 
-      if(resp.status === 200) {
+      if (resp.status === 200) {
         const res = await resp.json();
 
         this.stores = offset
           ? [...this.stores, ...res.results]
           : [...res.results];
 
-        setResCount(res.count)
+        setResCount(res.count);
 
         if (!res.count) {
           ToastsStore.error("No stores find", 3000, "toast");
         }
-      }else {
+      } else {
         const res = await resp.json();
 
-        ToastsStore.error(res.error, 3000, 'toast')
+        ToastsStore.error(res.error, 3000, "toast");
       }
 
       this.isLoading--;
@@ -300,7 +306,8 @@ class StoresStore {
         delete camera.detail;
         return camera;
       });
-      this.cameras.cameras = [...newRes];
+
+      this.cameras.set([...newRes]);
       setError("");
       // }
     } catch (e) {
@@ -391,7 +398,7 @@ class StoresStore {
       );
       if (resp.status === 200) {
         const res = await resp.json();
-        this.storeInfo = {...this.storeInfo, storeErrors: res}
+        this.storeErrors.set([...res])
         setError("");
       }
     } catch (e) {
@@ -433,7 +440,7 @@ class StoresStore {
       });
       if (resp.status === 200) {
         const res = await resp.json();
-        this.storeInfo = { ...this.storeInfo, metrics: res };
+        this.metrics.set({...res})
         setError("");
       }
     } catch (e) {
@@ -483,11 +490,11 @@ class StoresStore {
   };
 
   updateMaintenanceScreens = () => {
-    this.maintenanceScreens.maintenanceScreens = [
+    this.maintenanceScreens.set([
       ...this.maintenanceScreensData.find(
         (screen) => screen.name === this.storeInfo.status
       )?.maintenance_screen,
-    ];
+    ]);
   };
 
   setMaintenanceScreen = async ({ setError, screen }) => {
@@ -566,7 +573,7 @@ class StoresStore {
 
       if (resp.status === 200) {
         const res = await resp.json();
-        this.storeInfo = { ...this.storeInfo, periodicTasks: res.results };
+        this.periodicTasks.set([...res.results])
         if (!res.results.length)
           ToastsStore.error("No tasks on this store", 3000, "toast");
       } else {
