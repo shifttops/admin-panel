@@ -52,7 +52,7 @@ const InnerSidebar = observer((props) => {
           <div className={styles.presets}>
             <div className={styles.presets__title}>Presets</div>
             <div className={styles.presets__content}>
-              {presets.length && !isLoading ? (
+              {presets.length && !isLoading && props.match.params.id !== 'new' ? (
                 presets.map((preset, index) => (
                   <div className={styles.presets__preset}>
                     <Popup
@@ -102,7 +102,7 @@ const InnerSidebar = observer((props) => {
                     )}
                   </div>
                 ))
-              ) : isLoading ? (
+              ) : isLoading && props.match.params.id !== 'new' ? (
                 <Loader className={styles.presets__loader} />
               ) : null}
             </div>
