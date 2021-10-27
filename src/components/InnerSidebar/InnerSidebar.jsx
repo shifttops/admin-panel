@@ -52,35 +52,36 @@ const InnerSidebar = observer((props) => {
           <div className={styles.presets}>
             <div className={styles.presets__title}>Presets</div>
             <div className={styles.presets__content}>
-              {presets.length && !isLoading
-                ? presets.map((preset, index) => (
-                    <div className={styles.presets__preset}>
-                      <Popup
-                        modal
-                        trigger={
-                          <ButtonIcon
-                            Icon={DeleteIcon}
-                            className={styles.presets__icon}
-                          />
-                        }
-                      >
-                        {(close) => (
-                          <PopupComponent
-                            onClose={close}
-                            text={"Are you sure you want to delete preset:"}
-                            buttonText={"Delete"}
-                            titleText={"Delete"}
-                            dedicatedText={preset.name}
-                            onClick={(e) =>
-                              handleRemove({
-                                preset_id: preset.pk,
-                                setError,
-                                close,
-                              })
-                            }
-                          />
-                        )}
-                      </Popup>
+              {presets.length && !isLoading ? (
+                presets.map((preset, index) => (
+                  <div className={styles.presets__preset}>
+                    <Popup
+                      modal
+                      trigger={
+                        <ButtonIcon
+                          Icon={DeleteIcon}
+                          className={styles.presets__icon}
+                        />
+                      }
+                    >
+                      {(close) => (
+                        <PopupComponent
+                          onClose={close}
+                          text={"Are you sure you want to delete preset:"}
+                          buttonText={"Delete"}
+                          titleText={"Delete"}
+                          dedicatedText={preset.name}
+                          onClick={(e) =>
+                            handleRemove({
+                              preset_id: preset.pk,
+                              setError,
+                              close,
+                            })
+                          }
+                        />
+                      )}
+                    </Popup>
+                    {+props.match.params.preset_id !== preset.pk ? (
                       <NavLink
                         className={styles.innerMenu__link}
                         activeClassName={styles.active}
@@ -91,9 +92,19 @@ const InnerSidebar = observer((props) => {
                       >
                         <span>{preset.name}</span>
                       </NavLink>
-                    </div>
-                  ))
-                : isLoading ? <Loader className={styles.presets__loader}/> : null}
+                    ) : (
+                      <div
+                        className={styles.innerMenu__link + " " + styles.active + " " + styles.disabled}
+                        key={index}
+                      >
+                        <span>{preset.name}</span>
+                      </div>
+                    )}
+                  </div>
+                ))
+              ) : isLoading ? (
+                <Loader className={styles.presets__loader} />
+              ) : null}
             </div>
           </div>
         </>

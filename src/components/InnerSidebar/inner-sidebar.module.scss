@@ -51,6 +51,10 @@
       background-repeat: no-repeat;
       background-position: top 1px right;
     }
+    &.disabled{
+      margin-bottom: 5px;
+      cursor: pointer;
+    }
   }
 }
 
