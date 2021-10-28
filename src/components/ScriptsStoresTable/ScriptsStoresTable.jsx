@@ -32,10 +32,10 @@ export default function ScriptsStoresTable({
           prev[enabledStoreCurrentKey].indexOf(store),
           1
         );
-        return {...prev};
+        return { ...prev };
       } else {
         prev[mode.toLowerCase()] = [...prev[mode.toLowerCase()], store];
-        return {...prev};
+        return { ...prev };
       }
     });
   };
@@ -51,22 +51,25 @@ export default function ScriptsStoresTable({
         />
       </div>
       <div className={styles.stores_list}>
-        {Object.keys(hosts).length &&
-          hosts[mode.toLowerCase()]
-            .filter((host) => host.display.includes(searchValue))
-            .map((host) => (
-              <div
-                className={styles.list_row}
-                key={host.id}
-                onClick={(e) => handleCheckStore(e, host.display)}
-              >
-                <Checkbox
-                  checked={enabledStores[mode.toLowerCase()].includes(host.display)}
-                  label={host.display}
-                  onChange={() => undefined}
-                ></Checkbox>
-              </div>
-            ))}
+        {Object.keys(hosts).length
+          ? hosts[mode.toLowerCase()]
+              .filter((host) => host.display.includes(searchValue))
+              .map((host) => (
+                <div
+                  className={styles.list_row}
+                  key={host.id}
+                  onClick={(e) => handleCheckStore(e, host.display)}
+                >
+                  <Checkbox
+                    checked={enabledStores[mode.toLowerCase()].includes(
+                      host.display
+                    )}
+                    label={host.display}
+                    onChange={() => undefined}
+                  ></Checkbox>
+                </div>
+              ))
+          : "No available hosts"}
       </div>
       <div className={styles.footer}>
         <button

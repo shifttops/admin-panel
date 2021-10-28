@@ -15,6 +15,7 @@ import { NavLink } from "react-router-dom";
 import routes from "../../../constants/routes";
 import ScriptsPeriodTable from "../../../components/ScriptsPeriodTable/ScriptsPeriodTable";
 import PopupComponent from "../../../components/popups/PopupComponent/PopupComponent";
+import Loader from "../../../components/Loader";
 
 const InnerLaunch = observer((props) => {
   const location = useLocation();
@@ -144,7 +145,7 @@ const InnerLaunch = observer((props) => {
   useEffect(() => {
     if (
       scripts.length &&
-      scripts.current &&
+      script.current &&
       !script.current.playbook_id &&
       !presetId
     ) {
@@ -301,7 +302,7 @@ const InnerLaunch = observer((props) => {
       </div>
     </>
   ) : (
-    "Loading..."
+    <Loader />
   );
 });
 export default InnerLaunch;

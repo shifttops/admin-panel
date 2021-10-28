@@ -13,6 +13,7 @@ import routes from "../constants/routes";
 import PlannerStore from "./PlannerStore";
 
 class ScriptsStore {
+  isLoading = 0;
   scripts = [];
   parentScriptSource = "";
   tags = [];
@@ -90,6 +91,8 @@ class ScriptsStore {
     try {
       await refreshToken();
 
+      this.isLoading += 1;
+
       const resp = await fetch(
         `${process.env.REACT_APP_URL}/api/ansible_playbook/${script_id}/presets`,
         {
@@ -100,12 +103,9 @@ class ScriptsStore {
         }
       );
       const res = await resp.json();
-      // this.createTags(res.results);
-      // this.scripts = [...res.results];
-      // console.log(toJS(this.scripts));
-      console.log(res);
       this.presets = res;
-      // setError("");
+
+      this.isLoading -= 1;
     } catch (e) {
       // setError(e.message);
       console.log(e.message);
@@ -333,7 +333,7 @@ class ScriptsStore {
     try {
       await refreshToken();
       const resp = await fetch(
-        `${process.env.REACT_APP_URL}/ansible_playbook_preset/`,
+        `${process.env.REACT_APP_URL}/api/ansible_playbook_preset/`,
         {
           method: "POST",
           headers: {
@@ -477,13 +477,37 @@ class ScriptsStore {
       if (resp.status === 200) {
         const res = await resp.json();
         this.logInfo = res;
-        console.log(res);
         setError("");
       } else setError("Some error");
     } catch (e) {
       setError(e.message);
     }
   };
+
+  deletePreset = async ({preset_id, setError}) => {
+    try {
+      await refreshToken();
+
+      const resp = await fetch(
+        `${process.env.REACT_APP_URL}/api/ansible_playbook_preset/${preset_id}/`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Token ${localStorage.getItem("access")}`,
+          },
+        }
+      );
+
+      if (resp.status === 204) {
+        ToastsStore.success('Successfully deleted', 3000, "toast")
+        return resp.status
+      } else {
+        ToastsStore.error(resp.error, 3000, "toast");
+      }
+    } catch (e) {
+      setError(e.message);
+    }
+  }
 }
 
 export default new ScriptsStore();
