@@ -145,7 +145,7 @@ const InnerLaunch = observer((props) => {
   useEffect(() => {
     if (
       scripts.length &&
-      scripts.current &&
+      script.current &&
       !script.current.playbook_id &&
       !presetId
     ) {
