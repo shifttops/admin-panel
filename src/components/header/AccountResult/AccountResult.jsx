@@ -9,7 +9,7 @@ export default function AccountResult({ isVisible }) {
     localStorage.removeItem("refresh");
     localStorage.removeItem("date");
     localStorage.removeItem("refresh_date");
-    localStorage.removeItem("login");
+    localStorage.removeItem("userName");
     history.push("/");
   };
 
@@ -20,7 +20,7 @@ export default function AccountResult({ isVisible }) {
       })}
     >
       <p className={styles.headerAccount__InfoName}>
-        {localStorage.getItem("login")}
+        {localStorage.getItem("userName")}
       </p>
       <p className={styles.headerAccount__email}>Ronald_hate_kfc@gmail.com</p>
       <div className={styles.headerAccount__settings}>

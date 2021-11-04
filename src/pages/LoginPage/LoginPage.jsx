@@ -43,7 +43,7 @@ export default function LoginPage() {
           "refresh_date",
           +new Date() + res.refresh_life_time * 1000 - 1000
         );
-        localStorage.setItem("login", login);
+        localStorage.setItem("userName", res.userName);
         history.push(routes.home);
       } else {
         setError(true);
@@ -51,7 +51,7 @@ export default function LoginPage() {
         localStorage.removeItem("refresh");
         localStorage.removeItem("date");
         localStorage.removeItem("refresh_date");
-        localStorage.removeItem("login");
+        localStorage.removeItem("userName");
       }
     } catch (e) {
       console.log(e);
@@ -60,9 +60,10 @@ export default function LoginPage() {
       localStorage.removeItem("refresh");
       localStorage.removeItem("date");
       localStorage.removeItem("refresh_date");
-      localStorage.removeItem("login");
+      localStorage.removeItem("userName");
     }
   };
+
   return (
     <div className={styles.wrapper}>
       <img className={styles.logo} src={logo} />
