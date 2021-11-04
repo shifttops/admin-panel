@@ -26,6 +26,7 @@ const ActivityLogsPage = observer(() => {
   const { ref, inView, entry } = useInView({
     threshold: 0,
   });
+  
   const items = [
     {
       name: "Event type",
