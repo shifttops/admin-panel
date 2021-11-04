@@ -1,8 +1,8 @@
 import styles from "./account.module.scss";
 import accountIcon from "images/accountIcon.svg";
-import { Link } from "react-router-dom";
 import AccountResult from "components/header/AccountResult";
 import { useState } from "react";
+import { ArrowDownIcon } from "../../../icons";
 
 export default function Account({ onClick }) {
   const [isAccountInfo, setIsAccountInfo] = useState(false);
@@ -14,6 +14,7 @@ export default function Account({ onClick }) {
   const isAccountBlurHandler = () => {
     setIsAccountInfo(false);
   };
+
   return (
     <div
       className={styles.headerAccount}
@@ -23,8 +24,13 @@ export default function Account({ onClick }) {
       <div className={styles.headerAccount__icon}>
         <img src={accountIcon} alt="" />
       </div>
-      <p className={styles.headerAccount__name}>Ronald Mcdonald</p>
-      {isAccountInfo && <AccountResult />}
+      <div className={styles.headerAccount__content}>
+        <p className={styles.headerAccount__name}>
+          {localStorage.getItem("login")}
+        </p>
+        <ArrowDownIcon isOpen={isAccountInfo} />
+      </div>
+      <AccountResult isVisible={isAccountInfo} />
     </div>
   );
 }

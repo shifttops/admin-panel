@@ -1,21 +1,27 @@
-import styles from "components/header/Account/account.module.scss";
-import { Link } from "react-router-dom";
+import styles from "../Account/account.module.scss";
 import { useHistory } from "react-router-dom";
-import { useCookies } from 'react-cookie';
+import cn from "classnames";
 
-export default function AccountResult() {
+export default function AccountResult({ isVisible }) {
   const history = useHistory();
   const handleLogOut = () => {
-    localStorage.removeItem('access');
-    localStorage.removeItem('refresh');
-    localStorage.removeItem('date');
-    localStorage.removeItem('refresh_date');
-    history.push('/');
-  }
+    localStorage.removeItem("access");
+    localStorage.removeItem("refresh");
+    localStorage.removeItem("date");
+    localStorage.removeItem("refresh_date");
+    localStorage.removeItem("login");
+    history.push("/");
+  };
 
   return (
-    <div className={styles.headerAccount__info}>
-      <p className={styles.headerAccount__InfoName}>Ronald Mcdonald</p>
+    <div
+      className={cn(styles.headerAccount__info, {
+        [styles.headerAccount__info__visible]: isVisible,
+      })}
+    >
+      <p className={styles.headerAccount__InfoName}>
+        {localStorage.getItem("login")}
+      </p>
       <p className={styles.headerAccount__email}>Ronald_hate_kfc@gmail.com</p>
       <div className={styles.headerAccount__settings}>
         <p className={styles.headerAccount__text}>Account settings</p>
