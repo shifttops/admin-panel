@@ -42,7 +42,7 @@ const ActivityLogsPage = observer(() => {
     },
     {
       name: "Message",
-      key: "description",
+      key: "type",
     },
     {
       name: "Store id",
