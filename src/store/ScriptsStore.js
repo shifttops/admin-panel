@@ -1,15 +1,7 @@
-import {
-  computed,
-  observable,
-  action,
-  makeAutoObservable,
-  toJS,
-  observe,
-} from "mobx";
+import { makeAutoObservable, observable, observe, toJS } from "mobx";
 import { computedFn } from "mobx-utils";
 import { refreshToken } from "../helpers/AuthHelper";
 import { ToastsStore } from "react-toasts";
-import routes from "../constants/routes";
 import PlannerStore from "./PlannerStore";
 
 class ScriptsStore {
@@ -18,7 +10,7 @@ class ScriptsStore {
   parentScriptSource = "";
   tags = [];
   hosts = {};
-  logs = [];
+  logs = observable.box([]);
   running_logs = [];
   logInfo = {};
   checkouts = {};
@@ -389,26 +381,50 @@ class ScriptsStore {
     }
   };
 
-  getScriptsLogs = async (setError) => {
+  getScriptsLogs = async ({
+    limit,
+    offset = this.logs.get().length,
+    search = "",
+    field = null,
+    type = "none",
+    setResCount,
+    signal,
+    setError,
+  }) => {
     try {
       await refreshToken();
 
-      const resp = await fetch(
-        `${process.env.REACT_APP_URL}/api/ansible_playbook_logs/?limit=999`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Token ${localStorage.getItem("access")}`,
-          },
-        }
-      );
+      let url = `${process.env.REACT_APP_URL}/api/ansible_playbook_logs/?limit=${limit}&offset=${offset}`;
+      if (search.length) url += `&search=${search}`;
+      if (field && type !== "none") url += `&filtered_by=${field}&type=${type}`;
+
+      this.isLoading++;
+
+      const resp = await fetch(url, {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${localStorage.getItem("access")}`,
+        },
+        signal
+      });
+
       if (resp.status === 200) {
         const res = await resp.json();
-        this.logs = res.results;
-        console.log(toJS(this.logs));
-        setError("");
-      } else setError("Some error");
+
+        this.logs.set(
+          offset ? [...this.logs.get(), ...res.results] : [...res.results]
+        );
+
+        setResCount(res.count)
+        if(!res.count) ToastsStore.error('No script logs find', 3000, "toast");
+      } else {
+        const res = await resp.json();
+        ToastsStore.error(res.error, 3000, "toast");
+      }
+
+      this.isLoading--;
     } catch (e) {
+      this.isLoading--;
       setError(e.message);
     }
   };
@@ -484,7 +500,7 @@ class ScriptsStore {
     }
   };
 
-  deletePreset = async ({preset_id, setError}) => {
+  deletePreset = async ({ preset_id, setError }) => {
     try {
       await refreshToken();
 
@@ -499,15 +515,15 @@ class ScriptsStore {
       );
 
       if (resp.status === 204) {
-        ToastsStore.success('Successfully deleted', 3000, "toast")
-        return resp.status
+        ToastsStore.success("Successfully deleted", 3000, "toast");
+        return resp.status;
       } else {
         ToastsStore.error(resp.error, 3000, "toast");
       }
     } catch (e) {
       setError(e.message);
     }
-  }
+  };
 }
 
 export default new ScriptsStore();

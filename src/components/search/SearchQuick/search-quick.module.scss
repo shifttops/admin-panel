@@ -1,31 +1,52 @@
 @import "../../../scss/variables";
 
 .search {
+  transition: all 0.5s ease 0s;
   margin-right: 15px;
-  background: #ffffff;
+  background-color: #fff;
   border: 1px solid #e0e0e0;
   border-radius: 4px;
   font-size: 13px;
   @media(min-width: 2120px){
     font-size: 22px;
   }
-  line-height: 18px;
-  letter-spacing: -0.03em;
+  line-height: 15px;
   color: $color-black;
   padding: 12px 11px 8px 34px;
   background-image: url(../../../images/searh.svg);
   background-repeat: no-repeat;
   background-position: center left 13px;
-  max-width: 164px;
+  max-width: 200px;
+  letter-spacing: 0.5px;
 
   &:focus {
     outline: none;
+    background-color: $color-black-007;
+    color: #232323;
+  }
+
+  @media(any-hover: hover){
+      &:hover{
+        color: #232323;
+        background-color: rgba(44, 44, 44, 0.15);
+        &:focus {
+          background-color: $color-black-007;
+        }
+      }
   }
 
   &::placeholder {
-    font-size: 13px;
+    font-size: 14px;
     line-height: 15px;
-    letter-spacing: -0.03em;
     color: rgba(51, 51, 51, 0.7);
   }
+
+  &::-webkit-input-placeholder       {opacity: 1; transition: opacity 0.5s ease;}
+  &::-moz-placeholder                {opacity: 1; transition: opacity 0.5s ease;}
+  &:-moz-placeholder                 {opacity: 1; transition: opacity 0.5s ease;}
+  &:-ms-input-placeholder            {opacity: 1; transition: opacity 0.5s ease;}
+  &:focus::-webkit-input-placeholder {opacity: 0; transition: opacity 0.5s ease;}
+  &:focus::-moz-placeholder          {opacity: 0; transition: opacity 0.5s ease;}
+  &:focus:-moz-placeholder           {opacity: 0; transition: opacity 0.5s ease;}
+  &:focus:-ms-input-placeholder      {opacity: 0; transition: opacity 0.5s ease;}
 }

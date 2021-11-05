@@ -6,70 +6,53 @@ import { DateIcon, MoreIcon, SortIcon } from "icons";
 import Button from "components/buttons/Button";
 import Checkbox from "components/Checkbox";
 import ActivityLogsStore from "../../store/ActivityLogsStore";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import moment from "moment";
 import { observer } from "mobx-react";
+import { useInView } from "react-intersection-observer";
+import Loader from "../../components/Loader";
+import {
+  ToastsContainer,
+  ToastsContainerPosition,
+  ToastsStore,
+} from "react-toasts";
+import Description from "../../components/Description";
 
 const ActivityLogsPage = observer(() => {
-  const { jira_logs, logs, searchLogs, fault_logs, getJiraLogs, getFaultLogs } =
-    ActivityLogsStore;
+  const { logs, getLogs, isLoading } = ActivityLogsStore;
+
   const [error, setError] = useState("");
+  const [isSearchOrSort, setIsSearchOrSort] = useState(false);
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState({ type: "none" });
+  const [limit, setLimit] = useState(50);
+  const [resCount, setResCount] = useState(0);
+
+  const refLogs = useRef(false);
+  const abortRef = useRef(false);
+
+  const { ref, inView, entry } = useInView({
+    threshold: 0,
+  });
 
   const items = [
     {
       name: "Event type",
-      key: "status",
+      key: "event_type",
     },
     {
       name: "Message",
-      key: "description",
+      key: "type",
     },
     {
       name: "Store id",
-      key: "store",
+      key: "store_id",
     },
     {
       name: "Date",
       key: "date",
     },
-    {
-      name: "Time",
-      key: "time",
-    },
   ];
-
-  useEffect(() => {
-    getJiraLogs(setError);
-    getFaultLogs(setError);
-  }, []);
-
-  const sortFunc = (logs, sort) => {
-    const { type, field } = sort;
-    if (type !== "none" && field) {
-      return [...logs].sort((a, b) => {
-        if (field === "status") {
-          if (!b[field]) {
-            b = { ...b, [field]: "Store Error" };
-          }
-          if (!a[field]) {
-            a = { ...a, [field]: "Store Error" };
-          }
-        }
-
-        if (type === "desc") {
-          if (field === "description") {
-            return a[field] ? 1 : b[field] ? -1 : 0;
-          } else return a[field] > b[field] ? 1 : a[field] < b[field] ? -1 : 0;
-        } else {
-          if (field === "description") {
-            return a[field] ? -1 : b[field] ? 1 : 0;
-          } else return b[field] > a[field] ? 1 : b[field] < a[field] ? -1 : 0;
-        }
-      });
-    } else return logs;
-  };
 
   const sortTypes = ["none", "desc", "inc"];
 
@@ -84,13 +67,54 @@ const ActivityLogsPage = observer(() => {
     }
   };
 
+  useEffect(() => {
+    if (abortRef.current && isLoading) {
+      abortRef.current.abort();
+    }
+    abortRef.current = new AbortController();
+
+    const { type, field } = sort;
+
+    if (refLogs.current) {
+      setIsSearchOrSort(true);
+      getLogs({
+        search,
+        setError,
+        field,
+        type,
+        limit,
+        offset: 0,
+        signal: abortRef.current.signal,
+        setResCount,
+      });
+    }
+  }, [search, sort]);
+
+  useEffect(() => {
+    if (!logs.get().length && !refLogs.current)
+      getLogs({ limit, setResCount, setError });
+
+    return () => logs.get().clear();
+  }, []);
+
+  useEffect(() => {
+    refLogs.current = true;
+  }, []);
+
+  useEffect(() => {
+    const { type, field } = sort;
+    if (inView) {
+      setIsSearchOrSort(false);
+      getLogs({ search, setError, field, type, limit });
+    }
+  }, [inView]);
+
   return (
     <div className="page">
       <div className={styles.pageHead}>
         <div className={styles.pageInfo}>
           <h2 className={styles.title}>Activity logs</h2>
-          <SearchQuick setSearch={setSearch} />
-          <ButtonIcon Icon={SortIcon} className={styles.btnIcon} />
+          <SearchQuick setSearch={setSearch} placeholderText={'Search by store id'}/>
         </div>
         <div className={styles.button}>
           <Button className={styles.btnBorder} text="Report" />
@@ -125,11 +149,12 @@ const ActivityLogsPage = observer(() => {
                 />
               </th>
             ))}
-            <th className={styles.table__sort}></th>
+            <th>Time</th>
+            <th className={styles.table__sort} />
           </tr>
         </thead>
         <tbody>
-          {sortFunc(searchLogs(search), sort).map((log) => (
+          {logs.get().map((log) => (
             <tr key={`${log.error_time ? "Error " : ""}${log.id}`}>
               <td className={styles.name}>
                 <Checkbox
@@ -137,11 +162,9 @@ const ActivityLogsPage = observer(() => {
                   label={log.error_time ? "Fault Log" : "Jira Log"}
                 />
               </td>
-              <td>{log.error_time ? "Store Error" : log.status}</td>
-              <td className={log.error_time ? styles.fail : styles.success}>
-                {log.error_time ? "Error" : "Success"}
-              </td>
-              <td>{log.store}</td>
+              <td>{log.event_type}</td>
+              <Description log={log} />
+              <td>{log.store_id}</td>
               <td>
                 {moment(
                   log.error_time ? log.error_time : log.changed_on
@@ -158,7 +181,24 @@ const ActivityLogsPage = observer(() => {
             </tr>
           ))}
         </tbody>
+        {isLoading && isSearchOrSort ? (
+          <div className={styles.logsLoader + " " + styles.logsLoader__search}>
+            <Loader />
+          </div>
+        ) : null}
       </table>
+      {isLoading && !isSearchOrSort ? (
+        <div className={styles.logsLoader}>
+          <Loader />
+        </div>
+      ) : null}
+      {logs.get().length && logs.get().length !== resCount && !isLoading ? (
+        <div ref={ref} />
+      ) : null}
+      <ToastsContainer
+        store={ToastsStore}
+        position={ToastsContainerPosition.BOTTOM_RIGHT}
+      />
     </div>
   );
 });
