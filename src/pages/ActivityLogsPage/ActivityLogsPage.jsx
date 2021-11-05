@@ -16,6 +16,7 @@ import {
   ToastsContainerPosition,
   ToastsStore,
 } from "react-toasts";
+import Description from "../../components/Description";
 
 const ActivityLogsPage = observer(() => {
   const { logs, getLogs, isLoading } = ActivityLogsStore;
@@ -201,32 +202,5 @@ const ActivityLogsPage = observer(() => {
     </div>
   );
 });
-
-const Description = ({ log }) => {
-  const [isDescriptionVisible, setIsDescriptionVisible] = useState(false);
-
-  return (
-    <td
-      className={
-        (log.error_time ? styles.fail : styles.success) +
-        " " +
-        (isDescriptionVisible ? styles.fail__visible : null)
-      }
-    >
-      {log.error_time ? (
-        <>
-          {log.description}
-          <span
-            onClick={() => setIsDescriptionVisible((prevState) => !prevState)}
-          >
-            {!isDescriptionVisible ? "More..." : "Hide"}
-          </span>
-        </>
-      ) : (
-        "Success"
-      )}
-    </td>
-  );
-};
 
 export default ActivityLogsPage;
