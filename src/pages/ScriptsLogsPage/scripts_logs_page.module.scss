@@ -49,6 +49,7 @@
 }
 
 .table {
+  position: relative;
   border-spacing: 0;
   width: 100%;
   letter-spacing: -0.03em;
@@ -72,22 +73,69 @@
       font-size: 22px;
       padding: 26px 0px 20px 0px;
     }
-    &:nth-child(2) {
-      // text-align: left;
-      // width: 190px;
+
+    &:first-child {
+      text-align: center;
+      padding-left: 18px;
+      border-radius: 4px 0px 0px 0px;
+      width: 25px;
+    }
+
+    &:nth-child(2), &:nth-child(5){
+      width: 200px;
+    }
+
+    &:nth-child(3), &:nth-child(4){
+      width: 100px;
+    }
+
+    &:last-child {
+      border-right: none;
+      border-radius: 0px 4px 0px 0px;
+      width: 50px;
+    }
+
+    svg {
+      transition: opacity 0.3s ease 0s, transform 0.15s ease 0s;
+      opacity: 0;
+      margin-left: 2px;
+      color: #333;
+    }
+
+    .invertedSvg {
+      transform: rotate(180deg);
+    }
+
+    @media screen and (max-width: 1140px) {
+      vertical-align: top;
+    }
+
+    &:hover {
+      color: #333;
+      -webkit-text-stroke: 0.7px #333;
+
+      svg {
+        opacity: 1;
+      }
+    }
+
+    &::after {
+      display: block;
+      content: attr(data-text);
+      font-weight: 700;
+      height: 0;
+      overflow: hidden;
+      visibility: hidden;
     }
   }
 
-  th:first-child {
-    text-align: center;
-    padding-left: 18px;
-    border-radius: 4px 0px 0px 0px;
-    max-width: 50px;
-  }
+  .selectedSort {
+    color: #333;
+    -webkit-text-stroke: 0.7px #333;
 
-  th:last-child {
-    border-right: none;
-    border-radius: 0px 4px 0px 0px;
+    svg {
+      opacity: 1;
+    }
   }
 
   td {
@@ -110,15 +158,8 @@
       padding: 22px 0px 16px 0px;
     }
     &:first-child {
-      max-width: 50px;
       text-align: center;
-      padding-left: 18px;
-      // padding: 11px 0px 6px 18px;
-    }
-
-    &:nth-child(2) {
-      // text-align: left;
-      // width: 190px;
+      padding-left: 0;
     }
 
     &:last-child {
@@ -171,4 +212,24 @@ td.success {
   color: $color-green;
   font-weight: 700;
   cursor: pointer;
+}
+
+.scriptLogsLoader {
+  display: block;
+  text-align: center;
+
+  &__search {
+    div {
+      position: absolute;
+      top: 80px;
+      left: calc(50% - 40px);
+    }
+    right: 0;
+    top: 0;
+    position: absolute;
+    z-index: 5;
+    background-color: rgba(117, 117, 117, 0.2);
+    width: 100%;
+    height: 100%;
+  }
 }

@@ -26,7 +26,6 @@ const ActivityLogsPage = observer(() => {
   const [sort, setSort] = useState({ type: "none" });
   const [limit, setLimit] = useState(50);
   const [resCount, setResCount] = useState(0);
-  const [isDescriptionVisible, setIsDescriptionVisible] = useState(false);
 
   const refLogs = useRef(false);
   const abortRef = useRef(false);
@@ -91,11 +90,10 @@ const ActivityLogsPage = observer(() => {
   }, [search, sort]);
 
   useEffect(() => {
-    if (!logs.get().length && !refLogs.current) {
-      getLogs({ search, setError, limit });
-    }
+    if (!logs.get().length && !refLogs.current)
+      getLogs({ limit, setResCount, setError });
 
-    return () => logs.get().clear()
+    return () => logs.get().clear();
   }, []);
 
   useEffect(() => {
@@ -115,7 +113,7 @@ const ActivityLogsPage = observer(() => {
       <div className={styles.pageHead}>
         <div className={styles.pageInfo}>
           <h2 className={styles.title}>Activity logs</h2>
-          <SearchQuick setSearch={setSearch} />
+          <SearchQuick setSearch={setSearch} placeholderText={'Search by store id'}/>
         </div>
         <div className={styles.button}>
           <Button className={styles.btnBorder} text="Report" />
