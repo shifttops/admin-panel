@@ -67,6 +67,35 @@ const DropDownFields = observer(({ field, serverIndex }) => {
       ],
     },
     {
+      visibleName: "Software",
+      items: [
+        {
+          visibleName: "Name",
+          keyName: "name",
+        },
+        {
+          visibleName: "Branch",
+          keyName: "branch",
+        },
+        {
+          visibleName: "Commit",
+          keyName: "commit",
+        },
+        {
+          visibleName: "Image name",
+          keyName: "image_name",
+        },
+        {
+          visibleName: "Image tag",
+          keyName: "image_tag",
+        },
+        {
+          visibleName: "Model configuration",
+          keyName: "model_configuraion",
+        },
+      ],
+    },
+    {
       visibleName: "System",
       items: [
         {
@@ -125,7 +154,7 @@ const DropDownFields = observer(({ field, serverIndex }) => {
     },
   ];
 
-  const items = field ? field.items : serverFieldsMapper;
+  const [items, setItems] = useState(field ? field.items : serverFieldsMapper);
 
   return (
     <div className={styles.dropdownHead}>
@@ -139,7 +168,9 @@ const DropDownFields = observer(({ field, serverIndex }) => {
             {items
               .filter(
                 (item) =>
-                  item.icon && storeInfo.servers[serverIndex].name !== "OEPE"
+                  item.icon &&
+                  storeInfo.servers[serverIndex].name &&
+                  storeInfo.servers[serverIndex].name !== "OEPE"
               )
               .map((item) => (
                 <div key={item.keyName} className={styles.resultInfo}>
@@ -177,16 +208,23 @@ const DropDownFields = observer(({ field, serverIndex }) => {
                 <div key={item.keyName} className={styles.item}>
                   <p className={styles.category}>{item.visibleName}</p>
                   <span className={styles.result}>
-                    {storeInfo.servers[serverIndex][item.keyName]
-                      ? storeInfo.servers[serverIndex][item.keyName].toString()
+                    {items[1].keyName !== "branch"
+                      ? storeInfo.servers[serverIndex][item.keyName]
+                        ? storeInfo.servers[serverIndex][
+                            item.keyName
+                          ].toString()
+                        : "N/A"
+                      : storeInfo.servers[serverIndex].software &&
+                        storeInfo.servers[serverIndex].software[0][item.keyName]
+                      ? storeInfo.servers[serverIndex].software[0][
+                          item.keyName
+                        ].toString()
                       : "N/A"}
                   </span>
                 </div>
-              ) : (
-                ""
-              )
+              ) : null
             )
-          : ""}
+          : null}
       </div>
     </div>
   );

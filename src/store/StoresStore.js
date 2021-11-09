@@ -19,7 +19,7 @@ class StoresStore {
   maintenanceScreens = observable.box([]);
   maintenanceScreensData = [];
   groups = [];
-  periodicTasks = observable.box([])
+  periodicTasks = observable.box([]);
 
   constructor() {
     makeAutoObservable(
@@ -223,9 +223,12 @@ class StoresStore {
 
   getServersInfo = async ({ servers_id, setError }) => {
     const servers = await Promise.all(
-      servers_id.map((server_id) =>
-        this.getStoreServer({ server_id, setError })
-      )
+      servers_id.map(async (server_id) => {
+        return {
+          ...(await this.getStoreServer({ server_id, setError })),
+          software: await this.getServerSoftware({ server_id, setError }),
+        };
+      })
     ).catch((e) => setError(e.message));
 
     this.storeInfo = {
@@ -252,6 +255,32 @@ class StoresStore {
 
         this.storeInfo = { ...this.storeInfo, ...res };
         setError("");
+      }
+    } catch (e) {
+      setError(e.message);
+    }
+  };
+
+  getServerSoftware = async ({ server_id, setError }) => {
+    try {
+      await refreshToken();
+
+      const resp = await fetch(
+        `${process.env.REACT_APP_URL}/api/software/${server_id}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Token ${localStorage.getItem("access")}`,
+          },
+        }
+      );
+
+      if (resp.status === 200) {
+        const res = await resp.json();
+
+        setError("");
+
+        return res;
       }
     } catch (e) {
       setError(e.message);
@@ -398,7 +427,7 @@ class StoresStore {
       );
       if (resp.status === 200) {
         const res = await resp.json();
-        this.storeErrors.set([...res])
+        this.storeErrors.set([...res]);
         setError("");
       }
     } catch (e) {
@@ -440,7 +469,7 @@ class StoresStore {
       });
       if (resp.status === 200) {
         const res = await resp.json();
-        this.metrics.set({...res})
+        this.metrics.set({ ...res });
         setError("");
       }
     } catch (e) {
@@ -573,7 +602,7 @@ class StoresStore {
 
       if (resp.status === 200) {
         const res = await resp.json();
-        this.periodicTasks.set([...res.results])
+        this.periodicTasks.set([...res.results]);
         if (!res.results.length)
           ToastsStore.error("No tasks on this store", 3000, "toast");
       } else {
