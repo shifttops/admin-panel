@@ -224,10 +224,11 @@ class StoresStore {
   getServersInfo = async ({ servers_id, setError }) => {
     const servers = await Promise.all(
       servers_id.map(async (server_id) => {
-        return {
-          ...(await this.getStoreServer({ server_id, setError })),
-          software: await this.getServerSoftware({ server_id, setError }),
-        };
+        const res = await Promise.all([
+          await this.getStoreServer({ server_id, setError }),
+          await this.getServerSoftware({ server_id, setError }),
+        ]);
+        return { ...res[0], software: res[1] };
       })
     ).catch((e) => setError(e.message));
 
@@ -266,7 +267,7 @@ class StoresStore {
       await refreshToken();
 
       const resp = await fetch(
-        `${process.env.REACT_APP_URL}/api/software/${server_id}`,
+        `${process.env.REACT_APP_URL}/api/software/${server_id}/`,
         {
           method: "GET",
           headers: {

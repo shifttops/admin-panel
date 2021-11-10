@@ -216,9 +216,15 @@ const DropDownFields = observer(({ field, serverIndex }) => {
                         : "N/A"
                       : storeInfo.servers[serverIndex].software &&
                         storeInfo.servers[serverIndex].software[0][item.keyName]
-                      ? storeInfo.servers[serverIndex].software[0][
-                          item.keyName
-                        ].toString()
+                      ? item.keyName === "model_configuraion"
+                        ? JSON.stringify(
+                            storeInfo.servers[serverIndex].software[0][
+                              item.keyName
+                            ]
+                          )
+                        : storeInfo.servers[serverIndex].software[0][
+                            item.keyName
+                          ].toString()
                       : "N/A"}
                   </span>
                 </div>
