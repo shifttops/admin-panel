@@ -4,6 +4,25 @@
   margin-right: 16px;
 }
 
+.popup {
+  display: flex;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  transition: 0.5s;
+  background-color: #a9c23f;
+  color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.closed {
+  display: flex;
+  position: absolute;
+  bottom: -50px;
+  right: 20px;
+}
+
 .innerStore {
   font-size: 15px;
   @media(min-width: 2120px){
