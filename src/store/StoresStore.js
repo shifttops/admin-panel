@@ -223,13 +223,10 @@ class StoresStore {
 
   getServersInfo = async ({ servers_id, setError }) => {
     const servers = await Promise.all(
-      servers_id.map(async (server_id) => {
-        const res = await Promise.all([
-          await this.getStoreServer({ server_id, setError }),
-          await this.getServerSoftware({ server_id, setError }),
-        ]);
-        return { ...res[0], software: res[1] };
-      })
+      servers_id.map(async (server_id) => ({
+        ...(await this.getStoreServer({ server_id, setError })),
+        software: await this.getServerSoftware({ server_id, setError }),
+      }))
     ).catch((e) => setError(e.message));
 
     this.storeInfo = {
