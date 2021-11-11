@@ -114,7 +114,10 @@ const ActivityLogsPage = observer(() => {
       <div className={styles.pageHead}>
         <div className={styles.pageInfo}>
           <h2 className={styles.title}>Activity logs</h2>
-          <SearchQuick setSearch={setSearch} placeholderText={'Search by store id'}/>
+          <SearchQuick
+            setSearch={setSearch}
+            placeholderText={"Search by store id"}
+          />
         </div>
         <div className={styles.button}>
           <Button className={styles.btnBorder} text="Report" />

@@ -223,9 +223,10 @@ class StoresStore {
 
   getServersInfo = async ({ servers_id, setError }) => {
     const servers = await Promise.all(
-      servers_id.map((server_id) =>
-        this.getStoreServer({ server_id, setError })
-      )
+      servers_id.map(async (server_id) => ({
+        ...(await this.getStoreServer({ server_id, setError })),
+        software: await this.getServerSoftware({ server_id, setError }),
+      }))
     ).catch((e) => setError(e.message));
 
     this.storeInfo = {
@@ -252,6 +253,32 @@ class StoresStore {
 
         this.storeInfo = { ...this.storeInfo, ...res };
         setError("");
+      }
+    } catch (e) {
+      setError(e.message);
+    }
+  };
+
+  getServerSoftware = async ({ server_id, setError }) => {
+    try {
+      await refreshToken();
+
+      const resp = await fetch(
+        `${process.env.REACT_APP_URL}/api/software/${server_id}/`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Token ${localStorage.getItem("access")}`,
+          },
+        }
+      );
+
+      if (resp.status === 200) {
+        const res = await resp.json();
+
+        setError("");
+
+        return res;
       }
     } catch (e) {
       setError(e.message);
