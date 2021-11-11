@@ -1,25 +1,29 @@
-import styles from './inner-head.module.scss';
-import { Link, useLocation } from 'react-router-dom';
-import { observer } from 'mobx-react';
-import Button from 'components/buttons/Button';
-import { CheckIcon, PrintIcon, ReportIcon, RestartIcon } from 'icons';
-import ButtonIcon from 'components/buttons/ButtonIcon';
-import Popup from 'reactjs-popup';
-import ReportPopup from 'components/popups/ReportPopup';
-import { useEffect, useState } from 'react';
-import { useCookies } from 'react-cookie';
-import routes from '../../../constants/routes';
-import StoresStore from '../../../store/StoresStore';
-import { statusMapper } from '../../../helpers/mappers';
-import { useRef } from 'react';
+import styles from "./inner-head.module.scss";
+import { Link, NavLink, useLocation } from "react-router-dom";
+import { observer } from "mobx-react";
+import Button from "components/buttons/Button";
+import { CheckIcon, PrintIcon, ReportIcon, RestartIcon } from "icons";
+import ButtonIcon from "components/buttons/ButtonIcon";
+import Popup from "reactjs-popup";
+import ReportPopup from "components/popups/ReportPopup";
+import { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
+import routes from "../../../constants/routes";
+import StoresStore from "../../../store/StoresStore";
+import { statusMapper } from "../../../helpers/mappers";
 
 const InnerHead = observer((props) => {
   const location = useLocation();
   const [error, setError] = useState(false);
-  const { storeInfo, getStoreInfo } = StoresStore;
-  
+  const { storeInfo, manageStore, getStoreInfo } = StoresStore;
+  const [log_id, setLogId] = useState("");
+
+  const handleClick = async () => {
+    manageStore("/refresh");
+  };
+
   useEffect(() => {
-    const id = +props.match.params.id
+    const id = +props.match.params.id;
     if (storeInfo.store_id !== id) {
       storeInfo.store_id = id;
     }
@@ -52,6 +56,7 @@ const InnerHead = observer((props) => {
                 text="Restart"
                 Icon={RestartIcon}
                 className={styles.yellowBorder}
+                onClick={handleClick}
               />
             </div>
           </div>
@@ -60,20 +65,25 @@ const InnerHead = observer((props) => {
               <ButtonIcon Icon={PrintIcon} className={styles.buttonIcon} />
             </div>
             <Popup nested trigger={<Button text="Report" Icon={ReportIcon} />}>
-              {(close) => <ReportPopup onClose={close} checkedStores={[storeInfo.store_id]}/>}
+              {(close) => (
+                <ReportPopup
+                  onClose={close}
+                  checkedStores={[storeInfo.store_id]}
+                />
+              )}
             </Popup>
           </div>
         </div>
         <div className={styles.innerStore__info}>
           <p className={styles.innerStore__region}>
-            Region:<span>{storeInfo.county ? storeInfo.county : ''}</span>
+            Region:<span>{storeInfo.county ? storeInfo.county : ""}</span>
           </p>
           <p className={styles.innerStore__region}>
-            Location:<span>{storeInfo.address ? storeInfo.address : ''}</span>
+            Location:<span>{storeInfo.address ? storeInfo.address : ""}</span>
           </p>
           <p className={styles.innerStore__region}>
             Store type:
-            <span>{storeInfo.store_type ? storeInfo.store_type : ''}</span>
+            <span>{storeInfo.store_type ? storeInfo.store_type : ""}</span>
           </p>
         </div>
       </div>

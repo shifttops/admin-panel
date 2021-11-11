@@ -19,7 +19,7 @@ class StoresStore {
   maintenanceScreens = observable.box([]);
   maintenanceScreensData = [];
   groups = [];
-  periodicTasks = observable.box([])
+  periodicTasks = observable.box([]);
 
   constructor() {
     makeAutoObservable(
@@ -398,7 +398,7 @@ class StoresStore {
       );
       if (resp.status === 200) {
         const res = await resp.json();
-        this.storeErrors.set([...res])
+        this.storeErrors.set([...res]);
         setError("");
       }
     } catch (e) {
@@ -440,7 +440,7 @@ class StoresStore {
       });
       if (resp.status === 200) {
         const res = await resp.json();
-        this.metrics.set({...res})
+        this.metrics.set({ ...res });
         setError("");
       }
     } catch (e) {
@@ -573,7 +573,7 @@ class StoresStore {
 
       if (resp.status === 200) {
         const res = await resp.json();
-        this.periodicTasks.set([...res.results])
+        this.periodicTasks.set([...res.results]);
         if (!res.results.length)
           ToastsStore.error("No tasks on this store", 3000, "toast");
       } else {
@@ -582,6 +582,36 @@ class StoresStore {
       }
     } catch (e) {
       setError(e.message);
+    }
+  };
+
+  manageStore = async (url) => {
+    try {
+      await refreshToken();
+
+      const resp = await fetch(
+        `${process.env.REACT_APP_URL}/api/store/${this.storeInfo.store_id}${url}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Token ${localStorage.getItem("access")}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (resp.status === 200) {
+        if (url === "/refresh") {
+          ToastsStore.success("Tasks created", 3000, "toast");
+        } else {
+          return resp.json();
+        }
+      } else {
+        const res = await resp.json();
+        ToastsStore.error(res.error, 3000, "toast");
+      }
+    } catch (e) {
+      ToastsStore.error("Something went wrong", 3000, "toast");
     }
   };
 }
