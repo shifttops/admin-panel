@@ -1,26 +1,53 @@
 import { Link } from "react-router-dom";
 import styles from "./notifications.module.scss";
-import notificationsIcon from "images/chat-notification.svg";
+import AppStore from "../../../store/AppStore";
+import {observer} from "mobx-react";
+import React, {useEffect, useRef, useState} from "react";
+import {useInView} from "react-intersection-observer";
+import NotificationItem from "../../NotificationItem";
 
-export default function NotificationResult() {
+const NotificationResult = observer(() => {
+  const {notificationsData, unreadNotificationCount, readNotification} = AppStore;
+
+  const {ref, inView, entry} = useInView({
+    threshold: 0,
+  });
+
+  const [isAllRead, setIsAllRead] = useState(!unreadNotificationCount)
+
+  const handleAllRead = () => {
+    if(unreadNotificationCount) readNotification()
+  };
+
+  useEffect(() => {
+    if(!unreadNotificationCount) setIsAllRead(true)
+  }, [unreadNotificationCount])
+
+  useEffect(() => {
+    if(inView && unreadNotificationCount) readNotification()
+  }, [inView])
+
   return (
     <div className={styles.notifications}>
-      <p className={styles.notifications__title}>Notification</p>
+      <div className={styles.notifications__head}>
+        <p className={styles.notifications__title}>Notifications</p>
+        <p className={styles.notifications__actions} onClick={handleAllRead}>Read all</p>
+      </div>
       <div className={styles.notifications__item}>
         <div className={styles.notifications__info}>
-          <p className={styles.notifications__msg}>
-            <span className={styles.notifications__store}>Store ID: 20209</span>{" "}
-            Sent you a new message
-          </p>
-          <p className={styles.notifications__text}>Sat, 13 March</p>
-          <Link className={styles.notifications__text} to="#">
-            View message
-          </Link>
+          {notificationsData.get().length ? notificationsData.get().map(item => (
+            <NotificationItem
+              item={item}
+              isRead={isAllRead}
+            />)) : <div className={styles.notifications__info__empty}>No notifications</div>}
         </div>
-        <div className={styles.notifications__icon}>
+        {/*<div className={styles.notifications__icon}>
           <img src={notificationsIcon} alt="" />
-        </div>
+        </div>*/}
+        <div ref={ref}/>
       </div>
     </div>
   );
-}
+})
+
+export default NotificationResult;

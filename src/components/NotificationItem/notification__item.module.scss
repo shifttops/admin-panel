@@ -1,0 +1,48 @@
+@import "../../scss/variables";
+
+.notification {
+  display: block;
+  padding: 12px 20px;
+  border-bottom: 1px solid #f2f2f2;
+  transition: all 0.3s ease 0s;
+
+  &:hover {
+    background-color: $color-black-007;
+  }
+
+  &__label {
+    display: inline-grid;
+    font-size: 16px;
+    color: $color-black;
+    grid-template-columns: 32% 1fr 1fr;
+    column-gap: 10px;
+  }
+
+  &__store {
+    font-weight: 700;
+    color: $color-black;
+  }
+  &__name {
+  }
+  &__time {
+    color: $color-black-05;
+    text-align: right;
+  }
+
+  &__error {
+    color: $color-red;
+  }
+
+  &__errorDescription {
+    color: $color-red;
+    font-style: italic;
+  }
+
+  &__read {
+    color: $color-black-05;
+
+    .notification__store {
+      color: $color-black-05;
+    }
+  }
+}

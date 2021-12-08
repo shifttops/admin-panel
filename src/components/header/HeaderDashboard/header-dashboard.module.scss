@@ -106,11 +106,21 @@
 }
 
 .indicator {
-  width: 8px;
-  height: 8px;
+  p {
+    padding: 0px 3px;
+    text-align: center;
+    margin: 0 auto;
+    font-size: 10px;
+    font-weight: 700;
+    color: #fff;
+  }
+  text-align: center;
+  align-items: center;
+  min-width: 15px;
+  height: 15px;
   border-radius: 50%;
   background-color: $color-red;
   position: absolute;
-  right: 20px;
-  top: 9px;
+  right: 10px;
+  top: 2px;
 }

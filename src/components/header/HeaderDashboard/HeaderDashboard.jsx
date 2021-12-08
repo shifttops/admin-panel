@@ -6,10 +6,13 @@ import { ChatIcon, BellIcon, BurgerIcon } from "icons";
 import SearchResult from "components/header/SearchResult";
 import NotificationResult from "components/header/NotificationResult";
 import Account from "components/header/Account";
+import AppStore from "../../../store/AppStore";
+import {observer} from "mobx-react";
 
-function HeaderDashboard({ sidebarToggle }) {
+const HeaderDashboard = observer(({ sidebarToggle }) => {
   const [searchValue, setSearchValue] = useState("");
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const { unreadNotificationCount } = AppStore
 
   const searchChangeHandler = (e) => {
     setSearchValue(e.target.value);
@@ -54,16 +57,15 @@ function HeaderDashboard({ sidebarToggle }) {
             <ButtonIcon
               Icon={BellIcon}
               onClick={notificationClickHandler}
-              onBlur={notificationBlurHandler}
             />
-            <span className={styles.indicator} />
-            {isNotificationOpen && <NotificationResult />}
+            {unreadNotificationCount ? <span className={styles.indicator}><p>{unreadNotificationCount < 99 ? unreadNotificationCount : '99+'}</p></span> : null}
+            {isNotificationOpen && <NotificationResult onBlur={notificationBlurHandler}/>}
           </div>
         </div>
         <Account />
       </div>
     </header>
   );
-}
+})
 
 export default HeaderDashboard;
