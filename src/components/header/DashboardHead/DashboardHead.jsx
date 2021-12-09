@@ -5,6 +5,7 @@ import Popup from "reactjs-popup";
 import ReportPopup from "components/popups/ReportPopup";
 import FilterPopup from "../../popups/FilterPopup";
 import Button from "../../buttons/Button/Button";
+import MapPopup from "../../popups/MapPopup";
 
 export default function DashboardHead({ setSearch, checkedStores }) {
   return (
@@ -17,6 +18,14 @@ export default function DashboardHead({ setSearch, checkedStores }) {
         </div>*/}
       </div>
       <div className={styles.dashboardHead__buttons}>
+        <Popup
+          modal
+          trigger={
+            <Button className={styles.dashboardHead__report} text={"Map"} />
+          }
+        >
+          {(close) => <MapPopup onClose={close} titleText={"Map"}/>}
+        </Popup>
         <Popup
           modal
           trigger={
