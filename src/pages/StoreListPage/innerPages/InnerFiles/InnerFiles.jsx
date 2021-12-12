@@ -20,16 +20,18 @@ import FilesFolderRow from "components/tables/FilesFolderRow";
 import FilesTableHead from "components/tables/FilesTableHead";
 import FilesRow from "components/tables/FilesRow";
 import cn from "classnames";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import viewTypes from "types/viewTypes";
 import iconButtonTypes from "types/iconButtonTypes";
 import minFiles from "images/min-files.jpg";
 import playFile from "images/playFile.svg";
 import StoresStore from "../../../../store/StoresStore";
+import { refreshToken } from "../../../../helpers/AuthHelper";
 
 export default function InnerFiles() {
   const [viewType, setViewType] = useState(viewTypes.grid);
-  const {storeInfo} = StoresStore
+  const { storeInfo } = StoresStore;
+  const [files, setFiles] = useState([]);
 
   const setGridView = () => {
     setViewType(viewTypes.grid);
@@ -38,6 +40,38 @@ export default function InnerFiles() {
   const setListView = () => {
     setViewType(viewTypes.lines);
   };
+
+  useEffect(() => {
+    const getFiles = async () => {
+      try {
+        await refreshToken();
+
+        const resp = await fetch(
+          `${process.env.REACT_APP_URL}/api/display_store_files/${storeInfo.store_id}/`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Token ${localStorage.getItem("access")}`,
+            },
+          }
+        );
+        if (resp.status === 200) {
+          const res = await resp.json();
+          const files = Object.keys(res)
+            .sort((a, b) => new Date(b) - new Date(a))
+            .map((key) => ({ files: res[key], date: key }));
+          setFiles(files);
+          // this.metrics.set({ ...res });
+          // setError("");
+        }
+      } catch (e) {
+        // setError(e.message);
+        console.log(e.message);
+      }
+    };
+
+    getFiles();
+  }, []);
 
   return (
     <div className={styles.wrapper}>
@@ -89,13 +123,20 @@ export default function InnerFiles() {
                 <ButtonIcon Icon={VideoIcon} />
               </div>
             </div>
-            <Checkbox label="Sat, 13  March" className={styles.checkbox} />
-            <div className={styles.cards}>
-              <ImageCard />
-              <ImageCard />
-              <ImageCard />
-              <ImageCard />
-            </div>
+            {files.map((file) => (
+              <React.Fragment key={file.date}>
+                <Checkbox label={file.date} className={styles.checkbox} />
+                <div className={styles.cards}>
+                  {file.files.map((file) => (
+                    <ImageCard key={file} file={file} />
+                  ))}
+                  {/* <ImageCard />
+                  <ImageCard />
+                  <ImageCard /> */}
+                </div>
+              </React.Fragment>
+            ))}
+            {/* : ""} */}
           </div>
           <div className={styles.inner}>
             <Checkbox label="Fri, 12  March" className={styles.checkbox} />
@@ -119,21 +160,17 @@ export default function InnerFiles() {
           <table className={cn(styles.table, styles.tableFiles)}>
             <FilesTableHead thText="File size" />
             <tbody>
-              <Checkbox
-                label="Sat, 13  March"
-                className={styles.checkboxTable}
-              />
-              <FilesRow img={minFiles} />
-              <FilesRow img={minFiles} />
-              <FilesRow img={minFiles} />
-              <FilesRow img={minFiles} />
-              <Checkbox
-                label="Fri, 12  March"
-                className={styles.checkboxTable}
-              />
-              <FilesRow img={minFiles} />
-              <FilesRow img={minFiles} />
-              <FilesRow img={minFiles} />
+              {files.map((file) => (
+                <React.Fragment key={file.date}>
+                  <Checkbox
+                    label={file.date}
+                    className={styles.checkboxTable}
+                  />
+                  {file.files.map((file) => (
+                    <FilesRow file={file} key={file} />
+                  ))}
+                </React.Fragment>
+              ))}
             </tbody>
           </table>
         </div>
