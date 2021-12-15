@@ -5,10 +5,12 @@ import { ArrowDownIcon, DeclineIcon, MoreIcon, SortIcon } from "icons";
 import Button from "components/buttons/Button";
 import Checkbox from "components/Checkbox";
 import AccessButton from "components/buttons/AccessButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { refreshToken } from "../../helpers/AuthHelper";
 
 export default function UsersPage(params) {
   const [isRoleSelect, setIsRoleSelect] = useState(false);
+  const [users, setUsers] = useState([]);
 
   const isRoleSelectClickHandler = () => {
     setIsRoleSelect((prevState) => !prevState);
@@ -17,6 +19,56 @@ export default function UsersPage(params) {
   const isRoleSelectBlurHandler = () => {
     setIsRoleSelect(false);
   };
+
+  useEffect(() => {
+    const getUsers = async () => {
+      try {
+        await refreshToken();
+
+        const resp = await fetch(
+          `${process.env.REACT_APP_URL}/api/get_users`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Token ${localStorage.getItem("access")}`,
+            },
+          }
+        );
+        const res = await resp.json();
+        console.log(res.filter(item => item.user_permissions?.length))
+
+        setUsers(res);
+
+      } catch (e) {
+        console.log(e.message);
+      }
+    };
+
+    const getPermissions = async () => {
+      try {
+        await refreshToken();
+
+        const resp = await fetch(
+          `${process.env.REACT_APP_URL}/api/get_set_permissions`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Token ${localStorage.getItem("access")}`,
+            },
+          }
+        );
+        const res = await resp.json();
+        
+
+      } catch (e) {
+        console.log(e.message);
+      }
+    };
+
+
+    getUsers();
+    getPermissions();
+  }, [])
 
   return (
     <div className="page">
@@ -44,9 +96,10 @@ export default function UsersPage(params) {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td className={styles.name}>
-              <Checkbox className={styles.checkbox} label="Wade Warren" />
+          {users.map(user => (
+            <tr className={styles.name} key={user.username}>
+              <td className={styles.name}>
+              <Checkbox className={styles.checkbox} label={user.username} />
             </td>
             <td
               className={styles.dropdown}
@@ -80,7 +133,9 @@ export default function UsersPage(params) {
             <td>
               <ButtonIcon Icon={MoreIcon} className={styles.btnMore} />
             </td>
-          </tr>
+            </tr>
+          ))}
+         
         </tbody>
       </table>
     </div>
