@@ -38,13 +38,10 @@
 }
 
 .applyButton {
-  border-radius: $border-radius;
-  display: flex;
-  margin-left: auto;
-  margin-right: 24px;
-  border: 1px solid $color-green;
-  background-color: $color-green;
-  color: #fff;
-  padding: 5px 15px;
-  margin-bottom: 20px;
+  button {
+    margin-left: auto;
+    margin-right: 24px;
+    margin-bottom: 15px;
+    align-self: flex-end;
+  }
 }

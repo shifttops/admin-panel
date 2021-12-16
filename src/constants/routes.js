@@ -4,7 +4,7 @@ const routes = {
   scriptsEdit: "/scripts/:id/mode=edit",
   scriptsLaunch: "/scripts/:id/mode=launch",
   groups: "/groups",
-  chat: "/chat",
+  chat: "/chat/:id",
   planner: "/planner",
   innerCameras: "/stores/inner-cameras",
   innerChat: "/stores/inner-chat",

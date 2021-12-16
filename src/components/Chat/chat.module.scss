@@ -1,0 +1,217 @@
+@import "../../scss/variables";
+
+.chatWrapper {
+  display: flex;
+  width: 100%;
+  padding: 0 30px;
+}
+
+.chat {
+  width: 100%;
+  height: 100%;
+  position: sticky;
+  top: 0;
+  left: 0;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.title {
+  color: $color-black;
+  font-weight: bold;
+  font-size: 21px;
+  line-height: 27px;
+  letter-spacing: -0.01em;
+}
+
+.icons {
+  display: flex;
+  align-items: center;
+}
+
+.files {
+  min-width: 400px;
+  max-width: 400px;
+  border-radius: $border-radius;
+  align-self: flex-start;
+  margin-left: 40px;
+  position: sticky;
+  top: 120px;
+}
+
+.messages {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  min-height: 50vh;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
+  }
+
+  &__date {
+    width: 100%;
+    height: 1px;
+    background: #e0e0e0;
+    margin: 25px 0px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    span {
+      position: absolute;
+      left: auto;
+      top: -12px;
+      font-weight: 700;
+      font-size: 11px;
+      line-height: 14px;
+      text-align: center;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      color: rgba(51, 51, 51, 0.3);
+      padding: 8px 16px 5px 16px;
+      background: #eeeeee;
+      border-radius: 4px;
+      margin: 0 auto;
+    }
+
+    &__favorite {
+      background-color: $color-yellow;
+
+      span {
+        color: $color-grey;
+        background-color: $color-yellow;
+      }
+    }
+  }
+}
+
+.noMessages {
+  text-align: center;
+  padding-top: 10%;
+  width: 100%;
+  height: 100%;
+  font-size: 20px;
+}
+
+.search {
+  margin-right: 10px;
+
+  &__input {
+    height: 37px;
+    padding: 10px 16px 5px 35px;
+    width: 100%;
+    max-width: 250px;
+    border: 1px solid $color-black-007;
+    border-radius: 4px;
+    font-size: 16px;
+    line-height: 19px;
+    letter-spacing: 0.01em;
+    background-color: $color-grey;
+    cursor: pointer;
+    color: $color-black-05;
+    background-image: url(../../images/searh.svg);
+    background-size: 16px 16px;
+    background-position: center left 10px;
+    background-repeat: no-repeat;
+    transition: all 0.3s ease 0s;
+
+    &::placeholder {
+      transition: color 0.3s ease;
+      font-size: 15px;
+      color: rgba(51, 51, 51, 0.4);
+      letter-spacing: 0.01em;
+    }
+
+    &:focus {
+      background-color: #ffffff;
+      border: 1px solid #e0e0e0;
+      cursor: auto;
+      font-size: 16px;
+      color: $color-black;
+      outline: none;
+    }
+
+    &::-webkit-input-placeholder {
+      text-indent: 0;
+      transition: text-indent 0.5s ease;
+    }
+
+    &::-moz-placeholder {
+      text-indent: 0;
+      transition: text-indent 0.5s ease;
+    }
+
+    &:-moz-placeholder {
+      text-indent: 0;
+      transition: text-indent 0.5s ease;
+    }
+
+    &:-ms-input-placeholder {
+      text-indent: 0;
+      transition: text-indent 0.5s ease;
+    }
+
+    &:focus::-webkit-input-placeholder {
+      text-indent: 500px;
+      transition: text-indent 0.5s ease;
+    }
+
+    &:focus::-moz-placeholder {
+      text-indent: 500px;
+      transition: text-indent 0.5s ease;
+    }
+
+    &:focus:-moz-placeholder {
+      text-indent: 500px;
+      transition: text-indent 0.5s ease;
+    }
+
+    &:focus:-ms-input-placeholder {
+      text-indent: 500px;
+      transition: text-indent 0.5s ease;
+    }
+  }
+}
+
+.datePicker {
+  width: 240px;
+  position: absolute;
+  top: 50px;
+  right: 25px;
+  z-index: 5;
+
+  &__info {
+    display: flex;
+    align-items: center;
+    padding: 6px 15px 6px 12px;
+    border: 1px solid $color-black-007;
+    border-radius: $border-radius;
+    margin-right: 10px;
+    height: 37px;
+  }
+
+  &__close {
+    border-radius: 50%;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    margin-left: 15px;
+  }
+
+  &__date {
+    color: $color-black-05;
+    font-size: 16px;
+    margin-top: 6px;
+  }
+}
