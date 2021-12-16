@@ -37,7 +37,7 @@
     line-height: 20px;
     letter-spacing: -0.02em;
   }
-  
+
   &__actions {
     color: $color-black-05;
     text-decoration: underline;
@@ -50,8 +50,8 @@
   }
 
   &__info {
-    &__empty{
-      padding: 12px 20px;
+    &__empty {
+      padding: 12px 20px 12px 24px;
       font-size: 16px;
     }
   }

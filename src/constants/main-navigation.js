@@ -20,39 +20,43 @@ import PlannerPage from "pages/PlannerPage";
 import GroupPage from "pages/GroupPage";
 import ChatPage from "pages/ChatPage";
 import ScriptsLogsPage from "pages/ScriptsLogsPage";
-import {ScriptLogIcon} from "../icons";
-
+import { ScriptLogIcon } from "../icons";
 
 const mainNavigation = [
   {
     to: routes.home,
     name: "Store list",
-    component: <StoreListPage />,
+    Component: StoreListPage,
     icon: <HomeIcon />,
   },
-  { to: routes.users, name: "Users", component: <UsersPage />, icon: <UserIcon /> },
+  {
+    to: routes.users,
+    name: "Users",
+    Component: UsersPage,
+    icon: <UserIcon />,
+  },
   {
     to: routes.setting,
     name: "Settings",
-    component: <SettingsPage />,
+    Component: SettingsPage,
     icon: <SettingsIcon />,
   },
   {
     to: routes.scripts,
     name: "Scripts",
-    component: <ScriptsPage />,
+    Component: ScriptsPage,
     icon: <FilesIcon />,
   },
   {
     to: routes.logs,
     name: "Activity logs",
-    component: <ActivityLogsPage />,
+    Component: ActivityLogsPage,
     icon: <ActivityIcon />,
   },
   {
     to: routes.scripts_logs,
     name: "Scripts logs",
-    component: <ScriptsLogsPage />,
+    Component: ScriptsLogsPage,
     icon: <ScriptLogIcon />,
   },
   // {
@@ -64,25 +68,25 @@ const mainNavigation = [
   {
     to: routes.groups,
     name: "Store groups",
-    component: <StoreGroupsPage />,
+    Component: StoreGroupsPage,
     icon: <GroupIcon />,
   },
   {
     to: routes.planner,
     name: "Planner",
-    component: <PlannerPage />,
+    Component: PlannerPage,
     icon: <PlannerStrokeIcon />,
   },
   {
     to: routes.mcdStores,
     name: "Group",
-    component: <GroupPage />,
+    Component: GroupPage,
     icon: <GroupIcon />,
   },
   {
     to: routes.chat,
     name: "Chat",
-    component: <ChatPage />,
+    Component: ChatPage,
     icon: <ChatMenuIcon />,
   },
 ];

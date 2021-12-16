@@ -20,7 +20,7 @@ import ScriptsLogInfo from "./ScriptsLogInfo/ScriptsLogInfo";
 import AppStore from "../store/AppStore";
 
 export default function CustomRouter() {
-  const {sidebarToggle} = AppStore
+  const { sidebarToggle } = AppStore;
 
   return (
     <>
@@ -44,14 +44,14 @@ export default function CustomRouter() {
         <Route
           render={() => (
             <div className="wrapper">
-              <Sidebar/>
+              <Sidebar />
               <div className="dashboard">
                 <HeaderDashboard sidebarToggle={sidebarToggle} />
-                {mainNavigation.map(({ to, component }) => (
+                {mainNavigation.map(({ to, Component }) => (
                   <Route
                     path={to}
                     exact
-                    component={() => <>{component}</>}
+                    component={(props) => <Component {...props} />}
                     key={to}
                   />
                 ))}
@@ -69,8 +69,8 @@ export default function CustomRouter() {
                       <div className={styles.inner}>
                         <InnerSidebar {...props} />
                         <div className={styles.wrapper}>
-                          <InnerHead {...props}/>
-                          <Component {...props}/>
+                          <InnerHead {...props} />
+                          <Component {...props} />
                         </div>
                       </div>
                     )}
