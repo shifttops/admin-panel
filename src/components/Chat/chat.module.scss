@@ -9,16 +9,25 @@
 .chat {
   width: 100%;
   height: 100%;
-  position: sticky;
-  top: 0;
-  left: 0;
 }
 
 .head {
+  position: -webkit-sticky;
+  position: sticky;
+  z-index: 10;
   display: flex;
   align-items: center;
+  background-color: $color-grey;
   justify-content: space-between;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
+  transition: padding 1s ease, border-bottom 0.2s ease;
+
+  &__scrolled {
+    position: sticky;
+    top: 85px;
+    border-bottom: 1px solid #F2F2F2;
+    padding: 18px 30px;
+  }
 }
 
 .title {
@@ -35,8 +44,8 @@
 }
 
 .files {
-  min-width: 400px;
-  max-width: 400px;
+  min-width: 380px;
+  max-width: 380px;
   border-radius: $border-radius;
   align-self: flex-start;
   margin-left: 40px;
@@ -49,13 +58,6 @@
   height: 100%;
   max-width: 100%;
   min-height: 50vh;
-  overflow-y: scroll;
-  -ms-overflow-style: none;
-
-  &::-webkit-scrollbar {
-    width: 0;
-    background: transparent;
-  }
 
   &__date {
     width: 100%;
@@ -190,6 +192,10 @@
   top: 50px;
   right: 25px;
   z-index: 5;
+
+  &__scrolled {
+    top: 60px;
+  }
 
   &__info {
     display: flex;
