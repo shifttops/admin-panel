@@ -8,8 +8,6 @@ import { DeleteIcon, EditIcon } from "../../icons";
 import Popup from "reactjs-popup";
 import PopupComponent from "../popups/PopupComponent/PopupComponent";
 import MessageItemFile from "./MessageItemFile";
-import { getFileName } from "../../helpers/functions";
-import { saveAs } from "file-saver";
 
 const MessageItem = ({
   Icon = () => null,
@@ -48,13 +46,6 @@ const MessageItem = ({
     deleteMessage({ store_id, id: message.id });
     close();
     setIsActionsVisible(false);
-  };
-
-  const handleFileSave = (file) => {
-    saveAs(
-      `${process.env.REACT_APP_URL}${file.file_url}`,
-      getFileName(file.file, "/")
-    );
   };
 
   return (
@@ -156,7 +147,7 @@ const MessageItem = ({
       {message.files.length ? (
         <div className={styles.message__files}>
           {Array.from(message.files).map((file) => (
-            <MessageItemFile file={file} handleFileSave={handleFileSave} />
+            <MessageItemFile file={file} />
           ))}
         </div>
       ) : null}
@@ -177,7 +168,7 @@ const MessageItem = ({
           {repliedMessage.files.length ? (
             <div className={styles.message__files}>
               {Array.from(repliedMessage.files).map((file) => (
-                <MessageItemFile file={file} handleFileSave={handleFileSave} />
+                <MessageItemFile file={file} />
               ))}
             </div>
           ) : null}

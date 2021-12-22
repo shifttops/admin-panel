@@ -785,7 +785,33 @@ class StoresStore {
     }
   };
 
-  editStoreChatFile = async ({ message_id, file, id, store_id }) => {};
+  editStoreChatFile = async ({ file, newName, store_id }) => {
+    try {
+      await refreshToken();
+
+      const data = new FormData();
+      data.set("pk", file.pk);
+      data.set("store_message", file.store_message);
+      data.set("file_url", file.file_url);
+      data.set("file", newName);
+
+      const resp = await fetch(
+        `${process.env.REACT_APP_URL}/api/store_chat_file/${file.pk}/`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Token ${localStorage.getItem("access")}`,
+          },
+          body: data,
+        }
+      );
+
+      if (resp.status === 200) this.getNewStoreChatData({ store_id });
+      else ToastsStore.error("Server error", 3000, "toast");
+    } catch (e) {
+      ToastsStore.error(e.message, 3000, "toast");
+    }
+  };
 
   deleteStoreChatFile = async ({ id, store_id }) => {
     try {

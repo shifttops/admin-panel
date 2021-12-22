@@ -96,8 +96,6 @@ const Chat = ({
     }
   };
 
-  console.log(document.getElementsByTagName("iframe"));
-
   return (
     <div className={styles.chatWrapper}>
       <div className={styles.chat}>

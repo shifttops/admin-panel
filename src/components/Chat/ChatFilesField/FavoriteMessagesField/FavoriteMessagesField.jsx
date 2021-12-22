@@ -9,6 +9,7 @@ import {
   getIconForFile,
   getTypeIconForFile,
 } from "../../../../helpers/functions";
+import MessageItemFile from "../../../MessageItem/MessageItemFile";
 
 const FavoriteMessagesField = ({ items, handleFavoriteAdd }) => (
   <div className={cn(styles.dropdown__item, styles.dropdown__item__column)}>
@@ -46,15 +47,7 @@ const FavoriteMessagesField = ({ items, handleFavoriteAdd }) => (
             {item.files.length
               ? Array.from(item.files).map((file) => (
                   <div className={styles.message__files__file}>
-                    <ButtonIcon
-                      Icon={getIconForFile(
-                        getFileFormat(getFileName(file.file, "/"))
-                      )}
-                      type={getTypeIconForFile(
-                        getFileFormat(getFileName(file.file, "/"))
-                      )}
-                    />
-                    {getFileName(file.file, "/")}
+                    <MessageItemFile file={file} />
                   </div>
                 ))
               : null}
