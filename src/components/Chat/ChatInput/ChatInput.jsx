@@ -1,16 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./chat_input.module.scss";
 import ButtonIcon from "../../buttons/ButtonIcon";
-import {
-  CloseIcon,
-  DocIcon,
-  EmojiIcon,
-  ImagesIcon,
-  PhotoIcon,
-  PinFileIcon,
-  PptIcon,
-  XlsIcon,
-} from "../../../icons";
+import { CloseIcon, EmojiIcon, PinFileIcon } from "../../../icons";
 import Button from "../../buttons/Button";
 import StoresStore from "../../../store/StoresStore";
 import {
@@ -21,6 +12,9 @@ import {
 } from "../../../helpers/functions";
 import cn from "classnames";
 import moment from "moment";
+import Picker from "emoji-picker-react";
+import { FileDrop } from "react-file-drop";
+import "./file-drop.scss";
 
 const ChatInput = ({
   store_id,
@@ -35,6 +29,9 @@ const ChatInput = ({
 
   const [message, setMessage] = useState("");
   const [files, setFiles] = useState([]);
+  const [emoji, setEmoji] = useState(null);
+  const [isEmojiPickerVisible, setIsEmojiPickerVisible] = useState(false);
+  const [isFileDropVisible, setIsFileDropVisible] = useState(false);
 
   const handleRemoveFile = (file) => {
     const newFiles = [...files];
@@ -47,8 +44,12 @@ const ChatInput = ({
     setFiles(newFiles);
   };
 
-  const handleChooseFiles = (e) => {
+  const handleChooseFiles = (e) =>
     setFiles([...files, ...Array.from(e.target.files)]);
+
+  const handleDragFiles = (e) => {
+    setFiles([...files, ...Array.from(e)]);
+    setIsFileDropVisible(false);
   };
 
   const validateEditing = () => {
@@ -115,6 +116,7 @@ const ChatInput = ({
         store_id,
         id: editingMessage.id,
         is_message_pinned: editingMessage.is_message_pinned,
+        files,
       });
 
       setFiles([]);
@@ -122,6 +124,12 @@ const ChatInput = ({
       setMessage("");
     }
   };
+
+  useEffect(() => {
+    if (emoji && Object.keys(emoji).length) {
+      setMessage((prev) => `${prev}${emoji.emoji}`);
+    }
+  }, [emoji]);
 
   useEffect(() => {
     if (isEditMode && Object.keys(editingMessage).length) {
@@ -134,11 +142,20 @@ const ChatInput = ({
   }, [isEditMode, editingMessage]);
 
   useEffect(() => {
-    if (!isReplyMode) setMessage("");
+    if (!isReplyMode && !isEditMode) setMessage("");
   }, [isReplyMode]);
 
   return (
     <form className={styles.chatForm}>
+      <FileDrop
+        className={cn("file-drop", { ["visible"]: isFileDropVisible })}
+        onFrameDragEnter={() => setIsFileDropVisible(true)}
+        onFrameDragLeave={() => setIsFileDropVisible(false)}
+        onFrameDrop={() => setIsFileDropVisible(false)}
+        onDrop={(e) => handleDragFiles(e)}
+      >
+        Drop files here!
+      </FileDrop>
       {/*<form className={styles.chatForm} onKeyUp={handleSend}>*/}
       {isReplyMode && Object.keys(replyingMessage).length ? (
         <div className={styles.reply}>
@@ -237,7 +254,23 @@ const ChatInput = ({
               </div>
             </label>
           </form>
-          <ButtonIcon disabled Icon={EmojiIcon} />
+          <div
+            className={styles.emoji__button}
+            onClick={() => setIsEmojiPickerVisible((prev) => !prev)}
+          >
+            <ButtonIcon Icon={EmojiIcon} disabled />
+          </div>
+          {isEmojiPickerVisible ? (
+            <div className={styles.emoji__picker}>
+              <Picker
+                onEmojiClick={(event, emoji) => setEmoji(emoji)}
+                disableSkinTonePicker
+                native
+                disableAutoFocus
+                disableSearchBar
+              />
+            </div>
+          ) : null}
         </div>
         {isEditMode ? (
           <div className={styles.chatForm__actions}>

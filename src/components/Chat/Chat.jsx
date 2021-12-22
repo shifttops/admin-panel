@@ -34,6 +34,14 @@ const Chat = ({
   const [isReplyMode, setIsReplyMode] = useState(false);
   const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
   const [findDate, setFindDate] = useState(null);
+  const [scroll, setScroll] = useState(null);
+
+  const handleScroll = () => setScroll(window.scrollY);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const handleFavoriteAdd = (message) => {
     const newMessage = {
@@ -91,52 +99,60 @@ const Chat = ({
   return (
     <div className={styles.chatWrapper}>
       <div className={styles.chat}>
-        <div className={styles.head}>
-          <h2 className={styles.title}>
-            {store_id ? `Store ID: ${store_id}` : "Chat"}
-          </h2>
-          <div className={styles.icons}>
-            <div className={styles.search}>
-              <input
-                className={styles.search__input}
-                type="text"
-                placeholder={"Search messages..."}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </div>
-            {findDate ? (
-              <div className={styles.datePicker__info}>
-                <div className={styles.datePicker__date}>
-                  {moment(findDate).format("DD MMMM YYYY")}
-                </div>
-                <div
-                  onClick={() => {
-                    setIsDatePickerVisible(false);
-                    setFindDate(null);
-                  }}
-                  className={styles.datePicker__close}
-                >
-                  <CloseIcon />
-                </div>
-              </div>
-            ) : null}
-            <ButtonIcon
-              Icon={DateIcon}
-              onClick={() => setIsDatePickerVisible((prev) => !prev)}
-            />
-            {isDatePickerVisible ? (
-              <div className={styles.datePicker}>
-                <DatePicker
-                  className={styles.datePicker}
-                  inline
-                  onChange={(date) => setFindDate(date)}
+        <div className={styles.chatWrap}>
+          <div
+            className={cn(styles.head, {
+              [styles.head__scrolled]: scroll > 185,
+            })}
+          >
+            <h2 className={styles.title}>
+              {store_id ? `Store ID: ${store_id}` : "Chat"}
+            </h2>
+            <div className={styles.icons}>
+              <div className={styles.search}>
+                <input
+                  className={styles.search__input}
+                  type="text"
+                  placeholder={"Search messages..."}
+                  onChange={(e) => setSearch(e.target.value)}
                 />
               </div>
-            ) : null}
-            <ButtonIcon Icon={MoreIcon} />
+              {findDate ? (
+                <div className={styles.datePicker__info}>
+                  <div className={styles.datePicker__date}>
+                    {moment(findDate).format("DD MMMM YYYY")}
+                  </div>
+                  <div
+                    onClick={() => {
+                      setIsDatePickerVisible(false);
+                      setFindDate(null);
+                    }}
+                    className={styles.datePicker__close}
+                  >
+                    <CloseIcon />
+                  </div>
+                </div>
+              ) : null}
+              <ButtonIcon
+                Icon={DateIcon}
+                onClick={() => setIsDatePickerVisible((prev) => !prev)}
+              />
+              {isDatePickerVisible ? (
+                <div
+                  className={cn(styles.datePicker, {
+                    [styles.datePicker__scrolled]: scroll > 185,
+                  })}
+                >
+                  <DatePicker
+                    className={styles.datePicker}
+                    inline
+                    onChange={(date) => setFindDate(date)}
+                  />
+                </div>
+              ) : null}
+              <ButtonIcon Icon={MoreIcon} />
+            </div>
           </div>
-        </div>
-        <div className={styles.chatWrap}>
           <div className={styles.messages}>
             {chatData.length ? (
               <>

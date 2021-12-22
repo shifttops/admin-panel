@@ -1,18 +1,13 @@
 import cn from "classnames";
-import { ChatCheckIcon, FavoriteStrokeIcon, MoreIcon } from "icons";
+import { ChatCheckIcon, MoreIcon } from "icons";
 import ButtonIcon from "components/buttons/ButtonIcon";
 import styles from "./message-item.module.scss";
 import moment from "moment";
-import {
-  getFileFormat,
-  getFileName,
-  getIconForFile,
-  getTypeIconForFile,
-} from "../../helpers/functions";
 import { useEffect, useState } from "react";
 import { DeleteIcon, EditIcon } from "../../icons";
 import Popup from "reactjs-popup";
 import PopupComponent from "../popups/PopupComponent/PopupComponent";
+import MessageItemFile from "./MessageItemFile";
 
 const MessageItem = ({
   Icon = () => null,
@@ -36,7 +31,9 @@ const MessageItem = ({
         chatData.find((chatMessage) => chatMessage.id === message.parent)
       );
     }
-  }, [message]);
+
+    return () => setRepliedMessage({});
+  }, [message.parent]);
 
   const handleEdit = () => {
     setIsEditMode(true);
@@ -150,21 +147,7 @@ const MessageItem = ({
       {message.files.length ? (
         <div className={styles.message__files}>
           {Array.from(message.files).map((file) => (
-            <div className={styles.file}>
-              <span className={styles.file__icon}>
-                <ButtonIcon
-                  Icon={getIconForFile(
-                    getFileFormat(getFileName(file.file, "/"))
-                  )}
-                  type={getTypeIconForFile(
-                    getFileFormat(getFileName(file.file, "/"))
-                  )}
-                />
-              </span>
-              <span className={styles.file__name}>
-                {getFileName(file.file, "/")}
-              </span>
-            </div>
+            <MessageItemFile file={file} />
           ))}
         </div>
       ) : null}
@@ -185,21 +168,7 @@ const MessageItem = ({
           {repliedMessage.files.length ? (
             <div className={styles.message__files}>
               {Array.from(repliedMessage.files).map((file) => (
-                <div className={styles.file}>
-                  <span className={styles.file__icon}>
-                    <ButtonIcon
-                      Icon={getIconForFile(
-                        getFileFormat(getFileName(file.file, "/"))
-                      )}
-                      type={getTypeIconForFile(
-                        getFileFormat(getFileName(file.file, "/"))
-                      )}
-                    />
-                  </span>
-                  <span className={styles.file__name}>
-                    {getFileName(file.file, "/")}
-                  </span>
-                </div>
+                <MessageItemFile file={file} />
               ))}
             </div>
           ) : null}

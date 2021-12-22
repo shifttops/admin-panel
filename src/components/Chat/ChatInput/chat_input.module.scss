@@ -180,3 +180,15 @@
   }
 
 }
+
+.emoji {
+  &__picker {
+    position: absolute;
+    bottom: 60px;
+    left: 0;
+  }
+
+  &__button {
+    position: relative;
+  }
+}
