@@ -13,7 +13,7 @@ const MapPopup = ({ onClose, onClick, buttonText, titleText }) => {
         await refreshToken();
 
         const resp = await fetch(
-          `${process.env.REACT_APP_URL}/api/coordinates/`,
+          `${process.env.REACT_APP_URL}/api/coordinates/?limit=9999&offset=0`,
           {
             method: "GET",
             headers: {
