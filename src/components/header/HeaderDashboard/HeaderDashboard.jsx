@@ -7,12 +7,12 @@ import SearchResult from "components/header/SearchResult";
 import NotificationResult from "components/header/NotificationResult";
 import Account from "components/header/Account";
 import AppStore from "../../../store/AppStore";
-import {observer} from "mobx-react";
+import { observer } from "mobx-react";
 
 const HeaderDashboard = observer(({ sidebarToggle }) => {
   const [searchValue, setSearchValue] = useState("");
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
-  const { unreadNotificationCount } = AppStore
+  const { unreadNotificationCount } = AppStore;
 
   const searchChangeHandler = (e) => {
     setSearchValue(e.target.value);
@@ -54,18 +54,25 @@ const HeaderDashboard = observer(({ sidebarToggle }) => {
         <div className={styles.header__icons}>
           <ButtonIcon Icon={ChatIcon} />
           <div className={styles.header__bellWrapper}>
-            <ButtonIcon
-              Icon={BellIcon}
-              onClick={notificationClickHandler}
-            />
-            {unreadNotificationCount ? <span className={styles.indicator}><p>{unreadNotificationCount < 99 ? unreadNotificationCount : '99+'}</p></span> : null}
-            {isNotificationOpen && <NotificationResult onBlur={notificationBlurHandler}/>}
+            <ButtonIcon Icon={BellIcon} onClick={notificationClickHandler} />
+            {unreadNotificationCount ? (
+              <span className={styles.indicator}>
+                <p>
+                  {unreadNotificationCount < 99
+                    ? unreadNotificationCount
+                    : "99+"}
+                </p>
+              </span>
+            ) : null}
+            {isNotificationOpen && (
+              <NotificationResult onBlur={notificationBlurHandler} />
+            )}
           </div>
         </div>
         <Account />
       </div>
     </header>
   );
-})
+});
 
 export default HeaderDashboard;

@@ -1,0 +1,32 @@
+@import "../../scss/variables";
+
+.react-datepicker__day--keyboard-selected {
+  background-color: $color-green;
+  transition: all 0.3s ease;
+  color: $color-grey;
+
+  &:hover {
+    background-color: #899d33;
+  }
+}
+
+.react-datepicker__header {
+  background-color: $color-grey;
+}
+
+.react-datepicker__current-month {
+  font-size: 15px;
+  color: $color-black-05;
+}
+
+.react-datepicker__day-name {
+  color: $color-black-05;
+}
+
+.react-datepicker__day {
+  transition: all 0.3s ease;
+
+  &:not(.react-datepicker__day--keyboard-selected) {
+    color: $color-black-05;
+  }
+}

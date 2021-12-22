@@ -6,26 +6,31 @@
   border-radius: 4px;
   padding: 8px 8px 24px 24px;
   margin-bottom: 16px;
+
   &__head {
     display: flex;
     justify-content: space-between;
     margin-bottom: 8px;
   }
+
   &__info {
     align-self: flex-end;
+
     svg {
       margin-left: 8px;
     }
   }
+
   &__sender {
     font-size: 16px;
     line-height: 20px;
     letter-spacing: -0.03em;
     font-weight: 700;
-    &--you {
-      color: $color-yellow;
+    &__you {
+      color: $color-green;
     }
   }
+
   &__time {
     padding: 0px 22px 0px 22px;
     color: $color-black-05;
@@ -33,6 +38,7 @@
     line-height: 20px;
     letter-spacing: -0.03em;
     position: relative;
+
     &::before,
     &::after {
       content: "";
@@ -43,30 +49,45 @@
       background: #c4c4c4;
       top: 3px;
     }
+
     &::before {
       left: 8px;
     }
+
     &::after {
       right: 8px;
     }
+
+    &__favorite {
+      &::after {
+        width: 0;
+        height: 0;
+      }
+    }
   }
+
   &__reply {
     cursor: pointer;
     color: $color-black-05;
     text-decoration: underline;
     transition: all 0.3s ease 0s;
+
     &:hover {
       text-decoration: none;
     }
   }
+
   &__buttons {
     display: flex;
     align-items: center;
+    position: relative;
   }
+
   &__replyMessage {
     margin-top: 16px;
     padding-left: 25px;
     position: relative;
+
     &::before {
       content: "";
       position: absolute;
@@ -77,11 +98,104 @@
       background-color: $color-yellow;
     }
   }
+
   &__text {
     font-size: 16px;
     line-height: 150%;
     letter-spacing: -0.03em;
     color: rgba(51, 51, 51, 0.7);
     padding-right: 16px;
+    white-space: pre-wrap;
+  }
+
+  &__files {
+    margin-top: 3px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  &__more {
+  }
+
+  &__actions {
+    z-index: 5;
+    background-color: #fff;
+    width: 250px;
+    border: 1px solid $color-black-05;
+    border-radius: 4px;
+    padding: 15px 20px;
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: 0;
+    visibility: hidden;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    row-gap: 8px;
+    align-items: center;
+    transition: top 0.3s ease, opacity 0.3s ease, visibility 0.1s ease;
+
+    &__visible {
+      top: 120%;
+      opacity: 1;
+      visibility: visible;
+    }
+
+    &__item {
+      font-size: 18px;
+      color: $color-black-05;
+      display: grid;
+      grid-template-columns: 18px 1fr;
+      column-gap: 10px;
+      align-items: center;
+      transition: all 0.3s ease 0s;
+
+      &:hover {
+        cursor: pointer;
+        color: $color-black;
+      }
+    }
+
+    span {
+    }
+  }
+}
+
+.file {
+  display: flex;
+  align-items: center;
+
+  &:not(:first-child) {
+    margin-left: 15px;
+  }
+
+  &__name {
+    margin-left: 3px;
+    color: $color-black-05;
+  }
+
+  &__edit {
+    display: flex;
+    align-items: center;
+    &__input {
+      outline: none;
+      color: $color-black-05;
+      border: 1px solid $color-black-05;
+      border-radius: $border-radius;
+      padding: 5px 8px;
+      height: 20px;
+    }
+
+    span {
+      margin-left: 1px;
+      margin-top: 5px;
+    }
+  }
+}
+
+.delete {
+  &:hover {
+    color: $color-red;
   }
 }
