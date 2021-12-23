@@ -15,7 +15,7 @@ import { statusMapper } from "../../../helpers/mappers";
 const InnerHead = observer((props) => {
   const location = useLocation();
   const [error, setError] = useState(false);
-  const { storeInfo, manageStore, getStoreInfo } = StoresStore;
+  const { storeInfo, manageStore, getStoreInfo, isRefreshing } = StoresStore;
   const [log_id, setLogId] = useState("");
 
   const handleClick = async () => {
@@ -54,6 +54,8 @@ const InnerHead = observer((props) => {
               />
               <Button
                 text="Restart"
+                fetching={isRefreshing}
+                loaderClassName={styles.loaderRefresh}
                 Icon={RestartIcon}
                 className={styles.yellowBorder}
                 onClick={handleClick}

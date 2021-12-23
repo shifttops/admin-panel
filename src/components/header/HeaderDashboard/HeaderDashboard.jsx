@@ -1,7 +1,6 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ButtonIcon from "components/buttons/ButtonIcon";
 import styles from "./header-dashboard.module.scss";
-import burger from "images/burger.svg";
 import { ChatIcon, BellIcon, BurgerIcon } from "icons";
 import SearchResult from "components/header/SearchResult";
 import NotificationResult from "components/header/NotificationResult";
@@ -11,15 +10,23 @@ import { observer } from "mobx-react";
 
 const HeaderDashboard = observer(({ sidebarToggle }) => {
   const [searchValue, setSearchValue] = useState("");
+  const [resCount, setResCount] = useState(0);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
-  const { unreadNotificationCount } = AppStore;
+  const {
+    unreadNotificationCount,
+    getStoresForSearch,
+    searchStores,
+    isLoadingSearch,
+  } = AppStore;
 
   const searchChangeHandler = (e) => {
     setSearchValue(e.target.value);
   };
 
   const searchBlurHandler = () => {
-    setSearchValue("");
+    setTimeout(() => {
+      setSearchValue("");
+    }, 115);
   };
 
   const notificationClickHandler = () => {
@@ -29,6 +36,27 @@ const HeaderDashboard = observer(({ sidebarToggle }) => {
   const notificationBlurHandler = () => {
     setIsNotificationOpen(false);
   };
+
+  const abortRef = useRef(false);
+
+  useEffect(() => {
+    if (abortRef.current && isLoadingSearch) {
+      abortRef.current.abort();
+    }
+    abortRef.current = new AbortController();
+
+    if (/[\dа-яА-Яa-zA-Z]/.test(searchValue)) {
+      getStoresForSearch({
+        search: searchValue,
+        limit: 5,
+        offset: 0,
+        signal: abortRef.current.signal,
+        setResCount,
+      });
+    }
+
+    return () => searchStores.get().clear();
+  }, [searchValue]);
 
   return (
     <header className={styles.header}>
@@ -42,13 +70,24 @@ const HeaderDashboard = observer(({ sidebarToggle }) => {
               <input
                 className={styles.header__searchInput}
                 onChange={searchChangeHandler}
-                value={searchValue}
                 onBlur={searchBlurHandler}
+                value={searchValue}
                 type="text"
-                placeholder="Search..."
+                placeholder="Search store by store id..."
               />
             </div>
-            {!!searchValue.length && <SearchResult />}
+            {(!!searchValue.length && searchStores.get().length) ||
+            isLoadingSearch ? (
+              <SearchResult
+                resCount={resCount}
+                setResCount={setResCount}
+                search={searchValue}
+                setSearchValue={setSearchValue}
+                stores={searchStores.get()}
+                isLoading={isLoadingSearch}
+                getStores={getStoresForSearch}
+              />
+            ) : null}
           </div>
         </div>
         <div className={styles.header__icons}>

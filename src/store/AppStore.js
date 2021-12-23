@@ -1,11 +1,14 @@
 import { makeAutoObservable, observable } from "mobx";
 import { refreshToken } from "../helpers/AuthHelper";
+import { ToastsStore } from "react-toasts";
 
 class AppStore {
   isSidebarOpen = observable.box(true);
   isSidebarOverlap = false;
   notificationsData = observable.box([]);
   unreadNotificationCount = 0;
+  searchStores = observable.box([]);
+  isLoadingSearch = 0;
 
   constructor() {
     makeAutoObservable(this);
@@ -62,6 +65,53 @@ class AppStore {
 
   sidebarToggle = () => {
     this.isSidebarOpen.set(!this.isSidebarOpen.get());
+  };
+
+  getStoresForSearch = async ({
+    search,
+    offset = this.searchStores.get().length,
+    limit,
+    signal,
+    setResCount,
+  }) => {
+    try {
+      await refreshToken();
+      this.isLoadingSearch++;
+
+      const resp = await fetch(
+        `${process.env.REACT_APP_URL}/api/store/?limit=${limit}&offset=${offset}&search=${search}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Token ${localStorage.getItem("access")}`,
+          },
+          signal,
+        }
+      );
+
+      if (resp.status === 200) {
+        const res = await resp.json();
+
+        this.searchStores.set(
+          offset
+            ? [...this.searchStores.get(), ...res.results]
+            : [...res.results]
+        );
+
+        setResCount(res.count);
+
+        if (!res.count) {
+          ToastsStore.error("No stores find", 3000, "toast");
+        }
+      } else {
+        const res = await resp.json();
+        ToastsStore.error(res.detail, 3000, "toast");
+      }
+
+      this.isLoadingSearch--;
+    } catch (e) {
+      this.isLoadingSearch--;
+    }
   };
 }
 
