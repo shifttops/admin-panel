@@ -7,6 +7,7 @@ import NotificationResult from "components/header/NotificationResult";
 import Account from "components/header/Account";
 import AppStore from "../../../store/AppStore";
 import { observer } from "mobx-react";
+import { ToastsContainer } from "react-toasts";
 
 const HeaderDashboard = observer(({ sidebarToggle }) => {
   const [searchValue, setSearchValue] = useState("");
@@ -23,8 +24,10 @@ const HeaderDashboard = observer(({ sidebarToggle }) => {
     setSearchValue(e.target.value);
   };
 
-  const searchBlurHandler = (e) => {
-    setSearchValue("");
+  const searchBlurHandler = () => {
+    setTimeout(() => {
+      setSearchValue("");
+    }, 115);
   };
 
   const notificationClickHandler = () => {
@@ -43,7 +46,7 @@ const HeaderDashboard = observer(({ sidebarToggle }) => {
     }
     abortRef.current = new AbortController();
 
-    if (/\d/.test(searchValue)) {
+    if (/[\dа-яА-Яa-zA-Z]/.test(searchValue)) {
       getStoresForSearch({
         search: searchValue,
         limit: 5,
@@ -68,25 +71,24 @@ const HeaderDashboard = observer(({ sidebarToggle }) => {
               <input
                 className={styles.header__searchInput}
                 onChange={searchChangeHandler}
-                value={searchValue}
                 onBlur={searchBlurHandler}
+                value={searchValue}
                 type="text"
                 placeholder="Search store by store id..."
               />
             </div>
-            <SearchResult
-              isVisible={Boolean(
-                (!!searchValue.length && searchStores.get().length) ||
-                  isLoadingSearch
-              )}
-              resCount={resCount}
-              setResCount={setResCount}
-              search={searchValue}
-              setSearchValue={setSearchValue}
-              stores={searchStores.get()}
-              isLoading={isLoadingSearch}
-              getStores={getStoresForSearch}
-            />
+            {(!!searchValue.length && searchStores.get().length) ||
+            isLoadingSearch ? (
+              <SearchResult
+                resCount={resCount}
+                setResCount={setResCount}
+                search={searchValue}
+                setSearchValue={setSearchValue}
+                stores={searchStores.get()}
+                isLoading={isLoadingSearch}
+                getStores={getStoresForSearch}
+              />
+            ) : null}
           </div>
         </div>
         <div className={styles.header__icons}>

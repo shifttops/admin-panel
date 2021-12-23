@@ -27,19 +27,13 @@ const SearchResult = ({
   };
 
   useEffect(async () => {
-    if (inView && /\d/.test(search)) {
+    if (inView && /[\dа-яА-Яa-zA-Z]/.test(search)) {
       await getStores({ search, limit: 5, setResCount });
     }
   }, [inView]);
 
-  console.log(isVisible);
-
   return (
-    <div
-      className={cn(styles.searchResult, {
-        [styles.searchResult__visible]: isVisible,
-      })}
-    >
+    <div className={styles.searchResult}>
       {stores.map((store) => (
         <div
           className={styles.searchResult__item}
