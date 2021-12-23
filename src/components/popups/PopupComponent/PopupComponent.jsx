@@ -1,5 +1,6 @@
 import styles from "./popup-component.module.scss";
 import { CloseIcon } from "icons";
+import Button from "../../buttons/Button";
 
 const PopupComponent = ({
   onClose,
@@ -30,9 +31,9 @@ const PopupComponent = ({
           {additionalText2}
           <span>{additionalDedicatedText2}</span>
         </div>
-        <button className={styles.applyButton} type="button" onClick={onClick}>
-          {buttonText}
-        </button>
+        <div className={styles.applyButton}>
+          <Button text={buttonText} onClick={onClick} type="button" />
+        </div>
       </form>
     </div>
   );

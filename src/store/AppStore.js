@@ -12,7 +12,6 @@ class AppStore {
 
   constructor() {
     makeAutoObservable(this);
-
     this.connectSocket();
   }
 
@@ -27,6 +26,7 @@ class AppStore {
     this.socket.onopen = () => console.log("socket connected");
 
     this.socket.onclose = () => {
+      console.log("socket disconnected");
       setTimeout(() => {
         this.connectSocket();
       }, 3000);
@@ -35,6 +35,7 @@ class AppStore {
     this.socket.onmessage = (event) => {
       this.notificationsData.set(JSON.parse(event.data));
       this.unreadNotificationCount = this.notificationsData.get().length;
+      console.log(JSON.parse(event.data).length);
     };
   };
 

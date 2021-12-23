@@ -21,6 +21,9 @@ class StoresStore {
   groups = [];
   periodicTasks = observable.box([]);
   isRefreshing = false;
+  messagesData = observable.box([]);
+  chatFilesData = observable.box([]);
+  chatInterval = observable.box(null);
 
   constructor() {
     makeAutoObservable(
@@ -645,6 +648,195 @@ class StoresStore {
     } catch (e) {
       this.isRefreshing = false;
       ToastsStore.error("Something went wrong", 3000, "toast");
+    }
+  };
+
+  getMessages = async ({ store_id }) => {
+    try {
+      await refreshToken();
+
+      const resp = await fetch(
+        `${process.env.REACT_APP_URL}/api/store_chat/${store_id}/`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Token ${localStorage.getItem("access")}`,
+          },
+        }
+      );
+
+      if (resp.status === 200) this.messagesData.set([...(await resp.json())]);
+      else ToastsStore.error(resp.detail, 3000, "toast");
+    } catch (e) {
+      ToastsStore.error(e.message, 3000, "toast");
+    }
+  };
+
+  getStoreChatFiles = async ({ store_id }) => {
+    try {
+      await refreshToken();
+
+      const resp = await fetch(
+        `${process.env.REACT_APP_URL}/api/store_chat_file/${store_id}/`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Token ${localStorage.getItem("access")}`,
+          },
+        }
+      );
+
+      if (resp.status === 200) this.chatFilesData.set([...(await resp.json())]);
+      else ToastsStore.error(resp.detail, 3000, "toast");
+    } catch (e) {
+      ToastsStore.error(e.message, 3000, "toast");
+    }
+  };
+
+  getNewStoreChatData = async ({ store_id }) => {
+    clearInterval(this.chatInterval.get());
+
+    await this.getMessages({ store_id });
+    await this.getStoreChatFiles({ store_id });
+
+    this.chatInterval.set(
+      setInterval(() => {
+        this.getMessages({ store_id });
+        this.getStoreChatFiles({ store_id });
+      }, 20000)
+    );
+  };
+
+  sendMessage = async ({ store_id, message, files, parent_id }) => {
+    try {
+      await refreshToken();
+
+      const formData = new FormData();
+      formData.set("store", store_id);
+      formData.set("message", message);
+      if (files.length) files.map((file) => formData.append("files", file));
+      if (parent_id) formData.set("parent", parent_id);
+
+      const resp = await fetch(`${process.env.REACT_APP_URL}/api/store_chat/`, {
+        method: "POST",
+        headers: {
+          Authorization: `Token ${localStorage.getItem("access")}`,
+        },
+        body: formData,
+      });
+
+      if (resp.status === 201) this.getNewStoreChatData({ store_id });
+      else ToastsStore.error(resp.detail, 3000, "toast");
+    } catch (e) {
+      ToastsStore.error(e.message, 3000, "toast");
+    }
+  };
+
+  editMessage = async ({
+    message,
+    is_message_pinned,
+    store_id,
+    id,
+    files = null,
+  }) => {
+    try {
+      await refreshToken();
+
+      const formData = new FormData();
+      formData.set("store", store_id);
+      formData.set("message", message);
+      formData.set("id", id);
+      formData.set("is_message_pinned", is_message_pinned);
+      if (files && files.length) {
+        files.map((file) => formData.append("files", file));
+        console.log(1);
+      } else formData.set("files", files);
+
+      const resp = await fetch(
+        `${process.env.REACT_APP_URL}/api/store_chat/${id}/`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Token ${localStorage.getItem("access")}`,
+          },
+          body: formData,
+        }
+      );
+
+      if (resp.status === 200) this.getNewStoreChatData({ store_id });
+      else ToastsStore.error(resp.detail, 3000, "toast");
+    } catch (e) {
+      ToastsStore.error(e.message, 3000, "toast");
+    }
+  };
+
+  deleteMessage = async ({ id, store_id }) => {
+    try {
+      await refreshToken();
+
+      const resp = await fetch(
+        `${process.env.REACT_APP_URL}/api/store_chat/${id}/`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Token ${localStorage.getItem("access")}`,
+          },
+        }
+      );
+
+      if (resp.status === 204) this.getNewStoreChatData({ store_id });
+      else ToastsStore.error(resp.detail, 3000, "toast");
+    } catch (e) {
+      ToastsStore.error(e.message, 3000, "toast");
+    }
+  };
+
+  editStoreChatFile = async ({ file, newName, store_id }) => {
+    try {
+      await refreshToken();
+
+      const data = new FormData();
+      data.set("pk", file.pk);
+      data.set("store_message", file.store_message);
+      data.set("file_url", file.file_url);
+      data.set("file", newName);
+
+      const resp = await fetch(
+        `${process.env.REACT_APP_URL}/api/store_chat_file/${file.pk}/`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Token ${localStorage.getItem("access")}`,
+          },
+          body: data,
+        }
+      );
+
+      if (resp.status === 200) this.getNewStoreChatData({ store_id });
+      else ToastsStore.error("Server error", 3000, "toast");
+    } catch (e) {
+      ToastsStore.error(e.message, 3000, "toast");
+    }
+  };
+
+  deleteStoreChatFile = async ({ id, store_id }) => {
+    try {
+      await refreshToken();
+
+      const resp = await fetch(
+        `${process.env.REACT_APP_URL}/api/store_chat_file/${id}/`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Token ${localStorage.getItem("access")}`,
+          },
+        }
+      );
+
+      if (resp.status === 204) this.getNewStoreChatData({ store_id });
+      else ToastsStore.error(resp.detail, 3000, "toast");
+    } catch (e) {
+      ToastsStore.error(e.message, 3000, "toast");
     }
   };
 }

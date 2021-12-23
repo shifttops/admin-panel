@@ -7,7 +7,6 @@ import NotificationResult from "components/header/NotificationResult";
 import Account from "components/header/Account";
 import AppStore from "../../../store/AppStore";
 import { observer } from "mobx-react";
-import { ToastsContainer } from "react-toasts";
 
 const HeaderDashboard = observer(({ sidebarToggle }) => {
   const [searchValue, setSearchValue] = useState("");
