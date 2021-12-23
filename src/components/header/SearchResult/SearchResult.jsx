@@ -54,7 +54,7 @@ const SearchResult = ({
       ))}
       {isLoading ? (
         <div className={styles.loader}>
-          <Loader />
+          <Loader className={styles.loaderStyle} />
         </div>
       ) : null}
       {!isLoading && stores.length !== resCount ? (

@@ -6,7 +6,7 @@
   top: 100%;
   left: 0;
   box-shadow: 0px 6px 14px -6px rgba(24, 39, 75, 0.12),
-    0px 10px 32px -4px rgba(24, 39, 75, 0.1);
+  0px 10px 32px -4px rgba(24, 39, 75, 0.1);
   border-radius: $border-radius;
   border: 1px solid #ddd;
   background: #fff;
@@ -66,3 +66,15 @@
 .loader {
   text-align: center;
 }
+
+.loaderStyle {
+  width: 45px !important;
+  height: 45px !important;
+
+  div {
+    border-width: 5px !important;
+    width: 40px !important;
+    height: 40px !important;
+  }
+}
+
