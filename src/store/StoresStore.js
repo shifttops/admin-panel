@@ -20,6 +20,7 @@ class StoresStore {
   maintenanceScreensData = [];
   groups = [];
   periodicTasks = observable.box([]);
+  isRefreshing = false;
 
   constructor() {
     makeAutoObservable(
@@ -616,6 +617,8 @@ class StoresStore {
     try {
       await refreshToken();
 
+      this.isRefreshing = true;
+
       const resp = await fetch(
         `${process.env.REACT_APP_URL}/api/store/${this.storeInfo.store_id}${url}`,
         {
@@ -637,7 +640,10 @@ class StoresStore {
         const res = await resp.json();
         ToastsStore.error(res.error, 3000, "toast");
       }
+
+      this.isRefreshing = false;
     } catch (e) {
+      this.isRefreshing = false;
       ToastsStore.error("Something went wrong", 3000, "toast");
     }
   };
