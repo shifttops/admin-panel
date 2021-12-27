@@ -13,23 +13,25 @@ import {
 import Button from "components/buttons/Button";
 import iconButtonTypes from "types/iconButtonTypes";
 import PlannerItem from "components/PlannerItem";
-import {observer} from "mobx-react";
-import {useEffect, useState} from "react";
+import { observer } from "mobx-react";
+import { useEffect, useState } from "react";
 import PlannerStore from "../../store/PlannerStore";
-import {ToastsContainer, ToastsContainerPosition, ToastsStore} from "react-toasts";
+import {
+  ToastsContainer,
+  ToastsContainerPosition,
+  ToastsStore,
+} from "react-toasts";
+import { useHistory } from "react-router-dom";
+import Loader from "../../components/Loader";
 
 const PlannerPage = observer(() => {
-  const [error, setError] = useState('')
-
-  const {getPlannerTasks, plannerTasks} = PlannerStore
+  const [error, setError] = useState("");
+  const history = useHistory();
+  const { getPlannerTasks, plannerTasks, isFetching } = PlannerStore;
 
   useEffect(() => {
-    if(!plannerTasks.length) getPlannerTasks({setError})
-
-    return () => {
-      PlannerStore.plannerTasks = []
-    }
-  }, [])
+    getPlannerTasks({ setError });
+  }, []);
 
   return (
     <div className="page">
@@ -39,48 +41,54 @@ const PlannerPage = observer(() => {
           <SearchQuick />
         </div>
         <div className={styles.buttons}>
-          <div className={styles.group}>
+          {/*<div className={styles.group}>
             <ButtonIcon Icon={PlayIcon} type={iconButtonTypes.grey} />
             <ButtonIcon Icon={CheckIcon} />
           </div>
-          <ButtonIcon Icon={PlannerIcon} className={styles.plannerIcon} />
-          <Button text="New task" />
+          <ButtonIcon Icon={PlannerIcon} className={styles.plannerIcon} />*/}
+          <Button onClick={() => history.push("/scripts")} text="New task" />
         </div>
       </div>
-      <table className={styles.table}>
-        <thead className={styles.head}>
-        <tr>
-          {/* <th /> */}
-          <th>Store</th>
-          <th>Task name</th>
-          <th>Status</th>
-          {/* <th>Total run count</th> */}
-          {/* <th>Changed date</th> */}
-          <th>Start date</th>
-          <th>Period</th>
-          <th>End date</th>
-          <th />
-        </tr>
-        </thead>
-        <tbody>
-        {plannerTasks.map(task => (
-          <PlannerItem
-            key={task.name}
-            className={styles.name}
-            globalStore
-            Icon={PauseIcon}
-            iconColor={iconButtonTypes.red}
-            taskData={task}
-          />
-        ))}
-        </tbody>
-      </table>
+      {!isFetching && plannerTasks.length ? (
+        <table className={styles.table}>
+          <thead className={styles.head}>
+            <tr>
+              {/* <th /> */}
+              <th>Store</th>
+              <th>Task name</th>
+              <th>Status</th>
+              {/* <th>Total run count</th> */}
+              {/* <th>Changed date</th> */}
+              <th>Start date</th>
+              <th>Period</th>
+              <th>End date</th>
+              <th />
+            </tr>
+          </thead>
+          <tbody>
+            {plannerTasks.map((task) => (
+              <PlannerItem
+                key={task.name}
+                className={styles.name}
+                globalStore
+                Icon={PauseIcon}
+                iconColor={iconButtonTypes.red}
+                taskData={task}
+              />
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <div className={styles.loader}>
+          {isFetching ? <Loader types={["medium"]} /> : "No planner tasks"}
+        </div>
+      )}
       <ToastsContainer
         store={ToastsStore}
         position={ToastsContainerPosition.BOTTOM_RIGHT}
       />
     </div>
   );
-})
+});
 
 export default PlannerPage;

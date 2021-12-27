@@ -6,6 +6,11 @@ import PlannerStore from "./PlannerStore";
 
 class ScriptsStore {
   isLoading = 0;
+
+  isHostsFetching = false;
+  isScriptsFetching = false;
+  isLaunching = false;
+
   scripts = [];
   parentScriptSource = "";
   tags = [];
@@ -61,6 +66,8 @@ class ScriptsStore {
     try {
       await refreshToken();
 
+      this.isScriptsFetching = true;
+
       const resp = await fetch(
         `${process.env.REACT_APP_URL}/api/ansible_playbook/?limit=9999&offset=0`,
         {
@@ -74,8 +81,10 @@ class ScriptsStore {
       this.createTags(res.results);
       this.scripts = [...res.results];
       setError("");
+      this.isScriptsFetching = false;
     } catch (e) {
       setError(e.message);
+      this.isScriptsFetching = false;
     }
   };
 
@@ -265,6 +274,7 @@ class ScriptsStore {
     }
     try {
       await refreshToken();
+      this.isLaunching = true;
       if (!planner) {
         const resp = await fetch(
           `${process.env.REACT_APP_URL}/api/execute_playbook/${script.playbook_id}`,
@@ -281,6 +291,7 @@ class ScriptsStore {
             }),
           }
         );
+        this.isLaunching = false;
         if (resp.status === 200) {
           return resp.json();
         } else {
@@ -297,8 +308,10 @@ class ScriptsStore {
           hosts,
           task_name,
         });
+        this.isLaunching = false;
       }
     } catch (e) {
+      this.isLaunching = false;
       // setError(e.message);
       ToastsStore.error(e.message, 3000, "toast");
     }
@@ -361,8 +374,10 @@ class ScriptsStore {
     try {
       await refreshToken();
 
+      this.isHostsFetching = true;
+
       const resp = await fetch(
-        `${process.env.REACT_APP_URL}/api/available_hosts`,
+        `${process.env.REACT_APP_URL}/api/available_hosts/`,
         {
           method: "GET",
           headers: {
@@ -376,7 +391,10 @@ class ScriptsStore {
         console.log(res);
         setError("");
       } else setError("Some error");
+
+      this.isHostsFetching = false;
     } catch (e) {
+      this.isHostsFetching = false;
       setError(e.message);
     }
   };
@@ -405,7 +423,7 @@ class ScriptsStore {
         headers: {
           Authorization: `Token ${localStorage.getItem("access")}`,
         },
-        signal
+        signal,
       });
 
       if (resp.status === 200) {
@@ -415,8 +433,8 @@ class ScriptsStore {
           offset ? [...this.logs.get(), ...res.results] : [...res.results]
         );
 
-        setResCount(res.count)
-        if(!res.count) ToastsStore.error('No script logs find', 3000, "toast");
+        setResCount(res.count);
+        if (!res.count) ToastsStore.error("No script logs find", 3000, "toast");
       } else {
         const res = await resp.json();
         ToastsStore.error(res.error, 3000, "toast");

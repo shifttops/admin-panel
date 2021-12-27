@@ -1,11 +1,14 @@
 import { useState } from "react";
 import Checkbox from "../Checkbox";
 import styles from "./scripts_stores_table.module.scss";
+import cn from "classnames";
+import Loader from "../Loader";
 
 export default function ScriptsStoresTable({
   enabledStores,
   setEnabledStores,
   hosts,
+  isFetching,
 }) {
   const [searchValue, setSearchValue] = useState("");
   const [mode, setMode] = useState("Hosts");
@@ -45,31 +48,41 @@ export default function ScriptsStoresTable({
       <div className={styles.head}>
         <input
           type="text"
-          placeholder="Search"
+          placeholder="Search..."
           value={searchValue}
           onChange={(e) => handleSearch(e.target.value)}
         />
       </div>
       <div className={styles.stores_list}>
-        {Object.keys(hosts).length
-          ? hosts[mode.toLowerCase()]
-              .filter((host) => host.display.includes(searchValue))
-              .map((host) => (
-                <div
-                  className={styles.list_row}
-                  key={host.id}
-                  onClick={(e) => handleCheckStore(e, host.display)}
-                >
-                  <Checkbox
-                    checked={enabledStores[mode.toLowerCase()].includes(
-                      host.display
-                    )}
-                    label={host.display}
-                    onChange={() => undefined}
-                  ></Checkbox>
-                </div>
-              ))
-          : "No available hosts"}
+        {!isFetching && Object.keys(hosts).length ? (
+          hosts[mode.toLowerCase()]
+            .filter((host) =>
+              host.display.toLowerCase().includes(searchValue.toLowerCase())
+            )
+            .map((host) => (
+              <div
+                className={cn(styles.list_row, {
+                  [styles.list_row__checked]: enabledStores[
+                    mode.toLowerCase()
+                  ].includes(host.display),
+                })}
+                key={host.id}
+                onClick={(e) => handleCheckStore(e, host.display)}
+              >
+                <Checkbox
+                  checked={enabledStores[mode.toLowerCase()].includes(
+                    host.display
+                  )}
+                  label={host.display}
+                  onChange={() => undefined}
+                />
+              </div>
+            ))
+        ) : (
+          <div className={styles.loader}>
+            {isFetching ? <Loader types={["medium"]} /> : "No available hosts"}
+          </div>
+        )}
       </div>
       <div className={styles.footer}>
         <button

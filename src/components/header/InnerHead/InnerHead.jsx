@@ -15,7 +15,13 @@ import { statusMapper } from "../../../helpers/mappers";
 const InnerHead = observer((props) => {
   const location = useLocation();
   const [error, setError] = useState(false);
-  const { storeInfo, manageStore, getStoreInfo, isRefreshing } = StoresStore;
+  const {
+    storeInfo,
+    manageStore,
+    getStoreInfo,
+    isRefreshing,
+    isStoreInfoFetching,
+  } = StoresStore;
   const [log_id, setLogId] = useState("");
 
   const handleClick = async () => {
@@ -50,12 +56,12 @@ const InnerHead = observer((props) => {
                   statusMapper.find((item) => item.name === storeInfo.status)
                     ?.visibleName
                 }
+                fetching={isStoreInfoFetching}
                 // Icon={CheckIcon}
               />
               <Button
                 text="Restart"
                 fetching={isRefreshing}
-                loaderClassName={styles.loaderRefresh}
                 Icon={RestartIcon}
                 className={styles.yellowBorder}
                 onClick={handleClick}
@@ -77,19 +83,30 @@ const InnerHead = observer((props) => {
           </div>
         </div>
         <div className={styles.innerStore__info}>
-          <p className={styles.innerStore__region}>
-            Region:<span>{storeInfo.county ? storeInfo.county : ""}</span>
-          </p>
-          <p className={styles.innerStore__region}>
-            Location:<span>{storeInfo.address ? storeInfo.address : ""}</span>
-          </p>
-          <p className={styles.innerStore__region}>
-            Store type:
-            <span>{storeInfo.store_type ? storeInfo.store_type : ""}</span>
-          </p>
+          {[
+            { label: "Region", field: "county" },
+            { label: "Location", field: "address" },
+            {
+              label: "Store type",
+              field: "store_type",
+            },
+          ].map((regionItem) => (
+            <p
+              key={`${regionItem.label}${storeInfo.store_id}`}
+              className={styles.innerStore__region}
+            >
+              {regionItem.label}:
+              <span>
+                {storeInfo[regionItem.field]
+                  ? storeInfo[regionItem.field]
+                  : "N/A"}
+              </span>
+            </p>
+          ))}
         </div>
       </div>
     </div>
   );
 });
+
 export default InnerHead;

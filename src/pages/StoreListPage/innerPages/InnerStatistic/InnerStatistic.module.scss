@@ -16,6 +16,7 @@
 }
 
 .metrics {
+  align-self: flex-start;
   max-width: 560px;
   @media(min-width: 2120px){
     max-width: 40%;
@@ -126,4 +127,8 @@
     color: $color-red;
   }
   
+}
+
+.loader {
+  text-align: center;
 }

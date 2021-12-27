@@ -29,6 +29,13 @@
     color: rgba(51, 51, 51, 0.3);
     background: transparent;
 
+    @media(any-hover: hover){
+      &:hover{
+        border: 1px solid rgba(51, 51, 51, 0.3);
+        color: rgba(51, 51, 51, 0.3);
+      }
+    }
+
     path {
       fill: rgba(51, 51, 51, 0.3);
     }

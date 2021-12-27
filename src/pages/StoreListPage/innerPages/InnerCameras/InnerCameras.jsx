@@ -8,13 +8,14 @@ import cameraScreen2 from "images/cameraScreen2.jpg";
 import { observer } from "mobx-react";
 import StoresStore from "../../../../store/StoresStore";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { toJS } from "mobx";
+import Loader from "../../../../components/Loader";
 
 const InnerCameras = observer((props) => {
-  const { storeInfo, cameras, getStoreCameraImages } = StoresStore;
+  const { storeInfo, cameras, isCamerasFetching } = StoresStore;
   const [error, setError] = useState("");
-  const location = useLocation();
+  const history = useHistory();
   const mapperCameras = [
     {
       visibleName: "Name",
@@ -97,53 +98,75 @@ const InnerCameras = observer((props) => {
       <div className={styles.head}>
         <h2 className={styles.title}>Cameras</h2>
         <div className={styles.buttons}>
-          <ButtonIcon Icon={OpenPathIcon} />
+          {/*<ButtonIcon Icon={OpenPathIcon} />
           <ButtonIcon Icon={SaveVideo} />
-          <ButtonIcon Icon={RefreshIcon} />
-          <Button text="Plan video recording" />
+          <ButtonIcon Icon={RefreshIcon} />*/}
+          <Button
+            onClick={() => history.push("/scripts")}
+            text="Plan video recording"
+          />
         </div>
       </div>
-      <table className={styles.table}>
-        <thead>
-          <tr>
-            {mapperCameras.map((key) => (
-              <th className={styles.table_keys} key={key.name}>
-                {key.visibleName}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {cameras.get() && cameras.get().map((camera) => (
-            <tr key={camera.view_name}>
-              {mapperCameras.map((key) => (
-                <td
-                  key={key.name}
-                  className={addStyles(key.name, camera[key.name])}
-                >
-                  {camera[key.name] !== undefined && key.name === "timestamp"
-                    ? `${new Date(
-                        camera[key.name]
-                      ).toLocaleDateString()} ${new Date(
-                        camera[key.name]
-                      ).toLocaleTimeString("en-US", { hour12: false })}`
-                    : key.name === "packet_loss"
-                    ? `${camera[key.name] ? camera[key.name] + "%" : "N/A"}`
-                    : key.name === "ping"
-                    ? `${camera[key.name] ? camera[key.name] + "ms" : "N/A"}`
-                    : camera[key.name]}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {!isCamerasFetching && cameras.get() && cameras.get().length ? (
+        <>
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                {mapperCameras.map((key) => (
+                  <th className={styles.table_keys} key={key.name}>
+                    {key.visibleName}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {cameras.get() &&
+                cameras.get().map((camera) => (
+                  <tr key={camera.view_name}>
+                    {mapperCameras.map((key) => (
+                      <td
+                        key={key.name}
+                        className={addStyles(key.name, camera[key.name])}
+                      >
+                        {camera[key.name] !== undefined &&
+                        key.name === "timestamp"
+                          ? `${new Date(
+                              camera[key.name]
+                            ).toLocaleDateString()} ${new Date(
+                              camera[key.name]
+                            ).toLocaleTimeString("en-US", { hour12: false })}`
+                          : key.name === "packet_loss"
+                          ? `${
+                              camera[key.name] ? camera[key.name] + "%" : "N/A"
+                            }`
+                          : key.name === "ping"
+                          ? `${
+                              camera[key.name] ? camera[key.name] + "ms" : "N/A"
+                            }`
+                          : camera[key.name]}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+            </tbody>
+          </table>
 
-      <div className={styles.cards}>
-        {cameras.get() && cameras.get().map((camera) => (
-          <FileCard key={camera.id} camera={camera} />
-        ))}
-      </div>
+          <div className={styles.cards}>
+            {cameras.get() &&
+              cameras
+                .get()
+                .map((camera) => <FileCard key={camera.id} camera={camera} />)}
+          </div>
+        </>
+      ) : (
+        <div className={styles.loader}>
+          {isCamerasFetching ? (
+            <Loader types={["medium"]} />
+          ) : (
+            "No cameras on this store"
+          )}
+        </div>
+      )}
     </div>
   );
 });

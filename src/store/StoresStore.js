@@ -7,6 +7,23 @@ import { ToastsStore } from "react-toasts";
 
 class StoresStore {
   isLoading = 0;
+
+  isRefreshing = false;
+  isBrowserRefreshing = false;
+  isCamerasRefreshing = false;
+  isJiraRefreshing = false;
+
+  isStoreInfoFetching = false;
+  isMetricsFetching = false;
+  isHistoryFetching = false;
+  isCamerasFetching = false;
+  isCamerasStatusFetching = false;
+  isPlannerFetching = false;
+  isServersFetching = false;
+
+  isChatMessagesFetching = false;
+  isChatFilesFetching = false;
+
   storeInfo = {};
   stores = [];
   storeErrors = observable.box([]);
@@ -20,7 +37,6 @@ class StoresStore {
   maintenanceScreensData = [];
   groups = [];
   periodicTasks = observable.box([]);
-  isRefreshing = false;
   messagesData = observable.box([]);
   chatFilesData = observable.box([]);
   chatInterval = observable.box(null);
@@ -188,6 +204,8 @@ class StoresStore {
     try {
       await refreshToken();
 
+      this.isStoreInfoFetching = true;
+
       const resp = await fetch(
         `${process.env.REACT_APP_URL}/api/store/${id}/`,
         {
@@ -206,8 +224,25 @@ class StoresStore {
           ? moment(res.date_deployment).format("DD.MM.YYYY")
           : "N/A";
         this.storeInfo = { ...this.storeInfo, ...res };
+
+        this.isStoreInfoFetching = false;
         if (res) {
-          if (res.store_location) {
+          await Promise.all([
+            res.store_location
+              ? await this.getStoreLocation(res.store_location)
+              : null,
+            res.server_id && res.server_id[0]
+              ? await this.getServersInfo({
+                  servers_id: res.server_id,
+                  setError,
+                })
+              : null,
+            res.cameras && res.cameras.length
+              ? await this.getStoreCameraStatus(id, setError)
+              : null,
+            await this.getStoreHardware(id, setError),
+          ]);
+          /*if (res.store_location) {
             await this.getStoreLocation(res.store_location);
           }
           if (res.server_id && res.server_id[0]) {
@@ -216,16 +251,19 @@ class StoresStore {
           if (res.cameras && res.cameras.length) {
             await this.getStoreCameraStatus(id, setError);
           }
-          await this.getStoreHardware(id, setError);
+          await this.getStoreHardware(id, setError);*/
           setError("");
         }
       }
     } catch (e) {
+      this.isStoreInfoFetching = false;
       setError(e.message);
     }
   };
 
   getServersInfo = async ({ servers_id, setError }) => {
+    this.isServersFetching = true;
+
     const servers = await Promise.all(
       servers_id.map(async (server_id) => ({
         ...(await this.getStoreServer({ server_id, setError })),
@@ -237,6 +275,8 @@ class StoresStore {
       ...this.storeInfo,
       servers,
     };
+
+    this.isServersFetching = false;
   };
 
   getStoreHardware = async (id, setError) => {
@@ -293,6 +333,8 @@ class StoresStore {
     try {
       await refreshToken();
 
+      this.isCamerasStatusFetching = true;
+
       const resp = await fetch(
         `${process.env.REACT_APP_URL}/api/cameras/status/${store_id}`,
         {
@@ -310,8 +352,10 @@ class StoresStore {
         });
         this.storeInfo.is_all_lateral_works = res.is_all_lateral_works;
         setError("");
+        this.isCamerasStatusFetching = false;
       }
     } catch (e) {
+      this.isCamerasStatusFetching = false;
       setError(e.message);
     }
   };
@@ -319,6 +363,8 @@ class StoresStore {
   getStoreCameraImages = async (store_id, setError) => {
     try {
       await refreshToken();
+
+      this.isCamerasFetching = true;
 
       const resp = await fetch(
         `${process.env.REACT_APP_URL}/api/cameras/status/detail/${store_id}`,
@@ -340,8 +386,10 @@ class StoresStore {
 
       this.cameras.set([...newRes]);
       setError("");
+      this.isCamerasFetching = false;
       // }
     } catch (e) {
+      this.isCamerasFetching = false;
       setError(e.message);
     }
   };
@@ -418,6 +466,8 @@ class StoresStore {
     try {
       await refreshToken();
 
+      this.isHistoryFetching = true;
+
       const resp = await fetch(
         `${process.env.REACT_APP_URL}/api/fault_logs/${store_id}/`,
         {
@@ -432,7 +482,9 @@ class StoresStore {
         this.storeErrors.set([...res]);
         setError("");
       }
+      this.isHistoryFetching = false;
     } catch (e) {
+      this.isHistoryFetching = false;
       setError(e.message);
     }
   };
@@ -461,6 +513,8 @@ class StoresStore {
     try {
       await refreshToken();
 
+      this.isMetricsFetching = true;
+
       const resp = await fetch(`${process.env.REACT_APP_URL}/api/metrics/`, {
         method: "POST",
         headers: {
@@ -473,8 +527,11 @@ class StoresStore {
         const res = await resp.json();
         this.metrics.set({ ...res });
         setError("");
-      }
+      } else this.metrics.set({});
+
+      this.isMetricsFetching = false;
     } catch (e) {
+      this.isMetricsFetching = false;
       setError(e.message);
     }
   };
@@ -564,6 +621,8 @@ class StoresStore {
     try {
       await refreshToken();
 
+      this.isJiraRefreshing = true;
+
       const resp = await fetch(
         `${process.env.REACT_APP_URL}/api/status/refresh`,
         {
@@ -583,7 +642,10 @@ class StoresStore {
         const res = await resp.json();
         ToastsStore.error(res.error, 3000, "toast");
       }
+
+      this.isJiraRefreshing = false;
     } catch (e) {
+      this.isJiraRefreshing = false;
       ToastsStore.error(e.message, 3000, "toast");
     }
   };
@@ -591,6 +653,8 @@ class StoresStore {
   getStorePeriodicTasks = async (store_id, setError) => {
     try {
       await refreshToken();
+
+      this.isPlannerFetching = true;
 
       const resp = await fetch(
         `${process.env.REACT_APP_URL}/api/store/${store_id}/periodic_tasks`,
@@ -611,7 +675,9 @@ class StoresStore {
         const res = await resp.json();
         ToastsStore.error(res.error, 3000, "toast");
       }
+      this.isPlannerFetching = false;
     } catch (e) {
+      this.isPlannerFetching = false;
       setError(e.message);
     }
   };
@@ -620,7 +686,9 @@ class StoresStore {
     try {
       await refreshToken();
 
-      this.isRefreshing = true;
+      if (url === "/refresh") this.isRefreshing = true;
+      if (url === "/refresh_browser") this.isBrowserRefreshing = true;
+      if (url === "/reboot_cameras") this.isCamerasStatusFetching = true;
 
       const resp = await fetch(
         `${process.env.REACT_APP_URL}/api/store/${this.storeInfo.store_id}${url}`,
@@ -645,8 +713,12 @@ class StoresStore {
       }
 
       this.isRefreshing = false;
+      this.isBrowserRefreshing = false;
+      this.isCamerasStatusFetching = false;
     } catch (e) {
       this.isRefreshing = false;
+      this.isBrowserRefreshing = false;
+      this.isCamerasStatusFetching = false;
       ToastsStore.error("Something went wrong", 3000, "toast");
     }
   };
@@ -654,6 +726,8 @@ class StoresStore {
   getMessages = async ({ store_id }) => {
     try {
       await refreshToken();
+
+      this.isChatMessagesFetching = true;
 
       const resp = await fetch(
         `${process.env.REACT_APP_URL}/api/store_chat/${store_id}/`,
@@ -667,7 +741,9 @@ class StoresStore {
 
       if (resp.status === 200) this.messagesData.set([...(await resp.json())]);
       else ToastsStore.error(resp.detail, 3000, "toast");
+      this.isChatMessagesFetching = false;
     } catch (e) {
+      this.isChatMessagesFetching = false;
       ToastsStore.error(e.message, 3000, "toast");
     }
   };
@@ -675,6 +751,8 @@ class StoresStore {
   getStoreChatFiles = async ({ store_id }) => {
     try {
       await refreshToken();
+
+      this.isChatFilesFetching = true;
 
       const resp = await fetch(
         `${process.env.REACT_APP_URL}/api/store_chat_file/${store_id}/`,
@@ -688,7 +766,9 @@ class StoresStore {
 
       if (resp.status === 200) this.chatFilesData.set([...(await resp.json())]);
       else ToastsStore.error(resp.detail, 3000, "toast");
+      this.isChatFilesFetching = false;
     } catch (e) {
+      this.isChatFilesFetching = false;
       ToastsStore.error(e.message, 3000, "toast");
     }
   };

@@ -28,6 +28,7 @@ transform: translate(-30%, -45vh);
 }
 
 .block {
+  position: relative;
   padding: 24px;
   // border-bottom: 1px solid #f2f2f2;
   max-height: 80vh;
@@ -51,4 +52,14 @@ transform: translate(-30%, -45vh);
   color: #fff;
   padding: 5px 15px;
   margin-bottom: 20px;
+}
+
+.loader {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: $color-grey;
 }

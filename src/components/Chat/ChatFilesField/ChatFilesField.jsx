@@ -14,6 +14,8 @@ const ChatFilesField = ({
   deleteStoreChatFile,
   store_id,
   messageSender,
+  isChatFilesFetching,
+  isChatMessagesFetching,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -36,11 +38,13 @@ const ChatFilesField = ({
               deleteStoreChatFile={deleteStoreChatFile}
               store_id={store_id}
               messageSender={messageSender}
+              isChatFilesFetching={isChatFilesFetching}
             />
           ) : title === "info" ? (
             <InfoField items={items} messagesCount={messagesCount} />
           ) : (
             <FavoriteMessagesField
+              isChatMessagesFetching={isChatMessagesFetching}
               items={items}
               handleFavoriteAdd={handleFavoriteAdd}
             />

@@ -5,7 +5,7 @@ import ButtonIcon from "components/buttons/ButtonIcon";
 import { observer } from "mobx-react";
 import StoresStore from "../../store/StoresStore";
 
-const ActionButtons = observer(({ url, setLogId }) => {
+const ActionButtons = observer(({ url, setLogId, isFetching }) => {
   const { manageStore } = StoresStore;
 
   const handleClick = async () => {
@@ -21,7 +21,12 @@ const ActionButtons = observer(({ url, setLogId }) => {
       </div>
       {/* <Button className={styles.borderGreen} text="Old version" />
       <Button className={styles.yellow} text="Add a new" /> */}
-      <Button text="Update" onClick={handleClick} />
+      <Button
+        fetching={isFetching}
+        disabled={!url}
+        text="Update"
+        onClick={handleClick}
+      />
     </div>
   );
 });

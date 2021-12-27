@@ -84,7 +84,7 @@
 .text {
   display: flex;
   justify-content: space-between;
-  padding: 12px 24px 7px 26px;
+  padding: 0 24px 7px 26px;
   @media(min-width: 2120px) {
     padding: 0 48px 14px 48px;
   }
@@ -175,18 +175,6 @@
   background-repeat: no-repeat;
 }
 
-.resultError {
-  color: $color-red;
-  background-image: url(../../images/error-red.svg);
-  background-position: top 2px left;
-  background-size: 15px 13px;
-  background-repeat: no-repeat;
-  font-size: 0.9em;
-  line-height: 19px;
-  letter-spacing: -0.01em;
-  padding-left: 23px;
-}
-
 .error {
   display: inline-block;
   color: $color-red;
@@ -200,6 +188,18 @@
   padding-left: 23px;
   font-weight: 700;
   margin-bottom: 8px;
+}
+
+.resultError {
+  color: $color-red;
+  background-image: url(../../images/error-red.svg);
+  background-position: top 2px left;
+  background-size: 15px 13px;
+  background-repeat: no-repeat;
+  font-size: 0.9em;
+  line-height: 19px;
+  letter-spacing: -0.01em;
+  padding-left: 23px;
 }
 
 .processHigh {
@@ -233,4 +233,10 @@
   border: none;
   background-color: transparent;
   outline: none;
+}
+
+.loader {
+  width: 100%;
+  text-align: center;
+  padding: 10px 0;
 }

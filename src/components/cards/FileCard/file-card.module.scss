@@ -1,7 +1,9 @@
 @import "../../../scss/variables";
 
 .card {
+  position: relative;
   margin-right: 27px;
+  margin-top: 5px;
   width: calc(25% - 27px);
   border: 1px solid #f2f2f2;
   border-radius: 4px;
@@ -52,4 +54,16 @@
 
 .cardMore {
   margin-right: 0px;
+}
+
+.loader {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 78%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background-color: #fff;
 }

@@ -62,6 +62,7 @@
     cursor: pointer;
     transition: width ease 0.7s, background-size ease 0.3s;
     color: transparent;
+    z-index: 9999;
 
     &::placeholder {
       color: transparent;

@@ -10,10 +10,15 @@ import {
   getTypeIconForFile,
 } from "../../../../helpers/functions";
 import MessageItemFile from "../../../MessageItem/MessageItemFile";
+import Loader from "../../../Loader";
 
-const FavoriteMessagesField = ({ items, handleFavoriteAdd }) => (
+const FavoriteMessagesField = ({
+  items,
+  handleFavoriteAdd,
+  isChatMessagesFetching,
+}) => (
   <div className={cn(styles.dropdown__item, styles.dropdown__item__column)}>
-    {items.length ? (
+    {!isChatMessagesFetching && items.length ? (
       items.map((item) => (
         <div className={cn(styles.dropdown__item__field, styles.message)}>
           <div className={styles.message__info}>
@@ -54,6 +59,10 @@ const FavoriteMessagesField = ({ items, handleFavoriteAdd }) => (
           </div>
         </div>
       ))
+    ) : isChatMessagesFetching ? (
+      <div className={styles.loader}>
+        <Loader types={["small"]} />
+      </div>
     ) : (
       <div className={styles.dropdown__item__field}>No favorite messages</div>
     )}

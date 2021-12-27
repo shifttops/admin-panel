@@ -3,25 +3,28 @@ import ButtonIcon from "components/buttons/ButtonIcon";
 import { MoreIcon, SortIcon, CloseIcon } from "icons";
 import styles from "./scripts-page.module.scss";
 import Button from "components/buttons/Button";
-import FilesTableHead from "components/tables/FilesTableHead";
-import FilesFolderRow from "components/tables/FilesFolderRow";
-import InnerSidebar from "../../components/InnerSidebar";
-import Checkbox from "components/Checkbox";
 import routes from "../../constants/routes";
-import InnerEdit from "./InnerEdit/InnerEdit";
-import InnerLaunch from "./InnerLaunch/InnerLaunch";
 import { useHistory, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import ScriptsStore from "../../store/ScriptsStore";
-import { computed, toJS } from "mobx";
 import Popup from "reactjs-popup";
 import PopupComponent from "../../components/popups/PopupComponent/PopupComponent";
+import Loader from "../../components/Loader";
 
 const ScriptsPage = observer(() => {
   const location = useLocation();
   const history = useHistory();
-  const { tags, script, getScripts, getPresets, scriptsByTags, handleRemove} = ScriptsStore;
+  const {
+    scripts,
+    tags,
+    script,
+    getScripts,
+    getPresets,
+    scriptsByTags,
+    handleRemove,
+    isScriptsFetching,
+  } = ScriptsStore;
   const [error, setError] = useState("");
   const [enabledTags, setEnabledTags] = useState([]);
 
@@ -65,12 +68,12 @@ const ScriptsPage = observer(() => {
     // ]);
   }, []);
 
-  const handleClick = ({onClose, script}) => {
-    handleRemove({ playbook_id: script.playbook_id, setError});
+  const handleClick = ({ onClose, script }) => {
+    handleRemove({ playbook_id: script.playbook_id, setError });
     setTimeout(() => {
       onClose();
     }, 300);
-  }
+  };
 
   return (
     <div className={styles.wrapper}>
@@ -86,71 +89,81 @@ const ScriptsPage = observer(() => {
             <Button text="Add script" onClick={handleAddScript} />
           </div>
         </div>
-        <div className={styles.tags}>
-          Tags:{" "}
-          {tags.map((tag) => (
-            <button
-              key={tag}
-              className={`${styles.tag} ${
-                enabledTags.includes(tag) ? styles.enabledTag : ""
-              }`}
-              onClick={() => handleTagClick(tag)}
-            >
-              {tag}
-            </button>
-          ))}
-        </div>
-        <div className={styles.scripts}>
-          {scriptsByTags(enabledTags).map((script) => (
-            <div
-              className={styles.scriptBlock}
-              key={script.playbook_id}
-              onClick={() => handleScriptClick(script.playbook_id)}
-            >
-              <span className={styles.name}>{script.name}</span>
-              <Popup
-                modal
-                trigger={
-                  <div className={styles.close}>
-                    <CloseIcon />
-                  </div>
-                }
-              >
-                {(close) =>
-                  <PopupComponent
-                    onClose={close}
-                    text={'Are you sure you want to delete the script:'}
-                    dedicatedText={script.name}
-                    titleText={'Delete'}
-                    buttonText={'Delete'}
-                    onClick={() => handleClick({onClose: close, script})}
-                  />
-                }
-              </Popup>
-
-              <div className={styles.tags}>
-                {script.tags &&
-                  script.tags.map((tag) => (
-                    <button key={tag} className={styles.tag}>
-                      {tag}
-                    </button>
-                  ))}
-              </div>
-              <span>Number of executions: {script.number_of_executions}</span>
-              <span>
-                Successfull executions: {script.successfull_executions}
-              </span>
-              <span>
-                Last updated:{" "}
-                {`${new Date(
-                  script.date_created
-                ).toLocaleDateString()} ${new Date(
-                  script.date_created
-                ).toLocaleTimeString("en-US", { hour12: false })}`}
-              </span>
+        {!isScriptsFetching ? (
+          <>
+            <div className={styles.tags}>
+              Tags:{" "}
+              {tags.map((tag) => (
+                <button
+                  key={tag}
+                  className={`${styles.tag} ${
+                    enabledTags.includes(tag) ? styles.enabledTag : ""
+                  }`}
+                  onClick={() => handleTagClick(tag)}
+                >
+                  {tag}
+                </button>
+              ))}
             </div>
-          ))}
-        </div>
+            <div className={styles.scripts}>
+              {scriptsByTags(enabledTags).map((script) => (
+                <div
+                  className={styles.scriptBlock}
+                  key={script.playbook_id}
+                  onClick={() => handleScriptClick(script.playbook_id)}
+                >
+                  <span className={styles.name}>{script.name}</span>
+                  <Popup
+                    modal
+                    trigger={
+                      <div className={styles.close}>
+                        <CloseIcon />
+                      </div>
+                    }
+                  >
+                    {(close) => (
+                      <PopupComponent
+                        onClose={close}
+                        text={"Are you sure you want to delete the script:"}
+                        dedicatedText={script.name}
+                        titleText={"Delete"}
+                        buttonText={"Delete"}
+                        onClick={() => handleClick({ onClose: close, script })}
+                      />
+                    )}
+                  </Popup>
+
+                  <div className={styles.tags}>
+                    {script.tags &&
+                      script.tags.map((tag) => (
+                        <button key={tag} className={styles.tag}>
+                          {tag}
+                        </button>
+                      ))}
+                  </div>
+                  <span>
+                    Number of executions: {script.number_of_executions}
+                  </span>
+                  <span>
+                    Successfull executions: {script.successfull_executions}
+                  </span>
+                  <span>
+                    Last updated:{" "}
+                    {`${new Date(
+                      script.date_created
+                    ).toLocaleDateString()} ${new Date(
+                      script.date_created
+                    ).toLocaleTimeString("en-US", { hour12: false })}`}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </>
+        ) : (
+          <div className={styles.loader}>
+            <Loader types={["medium"]} />
+          </div>
+        )}
       </div>
     </div>
   );

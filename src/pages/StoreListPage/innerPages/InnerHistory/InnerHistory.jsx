@@ -13,10 +13,11 @@ import StoresStore from "../../../../store/StoresStore";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import moment from "moment";
-
+import Loader from "../../../../components/Loader";
+import Description from "../../../../components/Description";
 
 const InnerHistory = observer((props) => {
-  const { storeInfo, storeErrors, getStoreErrorLogs } = StoresStore;
+  const { storeInfo, storeErrors, isHistoryFetching } = StoresStore;
   const [error, setError] = useState(false);
   const location = useLocation();
 
@@ -38,44 +39,51 @@ const InnerHistory = observer((props) => {
         </div>
         <div className={styles.buttons}>
           <Button text="Choose period" className={styles.border} />
-          <Button text="Create Report" />
         </div>
       </div>
-      <table className={styles.table}>
-        <thead className={styles.tableHead}>
-          <tr>
-            <th>
-              <Checkbox label="event type" />
-            </th>
-            <th className={styles.iconPadding}>Message</th>
-            <th>DATE</th>
-            <th>Time</th>
-            <th />
-          </tr>
-        </thead>
-        <tbody>
-          {storeErrors.get() && storeErrors.get().map(item => (
-          <tr key={`${item.store}-${item.id}`}>
-            <td>
-              <Checkbox label="Error" className={styles.checkbox} />
-            </td>
-            <td className={styles.error}>
-              {item.description}
-              {/* <span>
-                <ArrowDownIcon />
-              </span> */}
-            </td>
-            <td>{moment(item.error_time).format('DD.MM.YYYY')}</td>
-            <td>{moment(item.error_time).format('HH:mm')}</td>
-            <td>
-              <NavLink to={routes.storeInfo}>
-                <ButtonIcon Icon={MoreIcon} />
-              </NavLink>
-            </td>
-          </tr>
-          ))}
-       </tbody>
-      </table>
+      {!isHistoryFetching && storeErrors.get() && storeErrors.get().length ? (
+        <table className={styles.table}>
+          <thead className={styles.tableHead}>
+            <tr>
+              <th>
+                <Checkbox label="event type" />
+              </th>
+              <th className={styles.iconPadding}>Message</th>
+              <th>Date</th>
+              <th>Time</th>
+              <th />
+            </tr>
+          </thead>
+          <tbody>
+            {storeErrors.get().map((item) => (
+              <tr key={`${item.store}-${item.id}`}>
+                <td>
+                  <Checkbox label="Error" className={styles.checkbox} />
+                </td>
+                <Description
+                  className={styles.error}
+                  message={item.description}
+                />
+                <td>{moment(item.error_time).format("DD.MM.YYYY")}</td>
+                <td>{moment(item.error_time).format("HH:mm")}</td>
+                <td>
+                  <NavLink to={routes.storeInfo}>
+                    <ButtonIcon Icon={MoreIcon} />
+                  </NavLink>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <div className={styles.loader}>
+          {isHistoryFetching ? (
+            <Loader types={["medium"]} />
+          ) : (
+            "No history on this store"
+          )}
+        </div>
+      )}
     </div>
   );
 });

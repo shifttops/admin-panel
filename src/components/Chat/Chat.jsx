@@ -16,6 +16,7 @@ import cn from "classnames";
 import DatePicker from "react-datepicker";
 import Button from "../buttons/Button";
 import "./customDatePicker.scss";
+import Loader from "../Loader";
 
 const Chat = ({
   chatData,
@@ -25,6 +26,8 @@ const Chat = ({
   deleteMessage,
   editStoreChatFile,
   deleteStoreChatFile,
+  isChatFilesFetching,
+  isChatMessagesFetching,
 }) => {
   const [favoriteMessages, setFavoriteMessages] = useState([]);
   const [search, setSearch] = useState("");
@@ -154,7 +157,7 @@ const Chat = ({
             </div>
           </div>
           <div className={styles.messages}>
-            {chatData.length ? (
+            {!isChatMessagesFetching && chatData.length ? (
               <>
                 {favoriteMessages.length ? (
                   <div>
@@ -246,7 +249,13 @@ const Chat = ({
                 ))}
               </>
             ) : (
-              <div className={styles.noMessages}>No messages</div>
+              <div className={styles.noMessages}>
+                {isChatMessagesFetching ? (
+                  <Loader types={["medium"]} />
+                ) : (
+                  "No messages"
+                )}
+              </div>
             )}
           </div>
           <ChatInput
@@ -275,6 +284,8 @@ const Chat = ({
                 : favoriteMessages
             }
             handleFavoriteAdd={handleFavoriteAdd}
+            isChatMessagesFetching={isChatMessagesFetching}
+            isChatFilesFetching={isChatFilesFetching}
             editStoreChatFile={editStoreChatFile}
             deleteStoreChatFile={deleteStoreChatFile}
             store_id={store_id}

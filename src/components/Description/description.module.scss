@@ -1,0 +1,18 @@
+.visible {
+  white-space: normal !important;
+  overflow: visible !important;
+}
+
+.button {
+  display: block;
+  max-width: 50px;
+  text-decoration: underline;
+  color: rgba(0, 0, 0, 0.26);
+  font-weight: 400;
+  transition: all 0.3s ease 0s;
+  @media(any-hover: hover){
+    &:hover{
+      color: rgba(37, 37, 37, 0.64);
+    }
+  }
+}

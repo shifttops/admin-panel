@@ -10,18 +10,23 @@ const manageItemTypeMap = {
   [manageItemTypes.green]: styles.green,
 };
 
-export default function ManageItem({ title, type, Icon = () => null, url, setLogId }) {
+export default function ManageItem({
+  title,
+  type,
+  Icon = () => null,
+  url,
+  setLogId,
+  isFetching,
+}) {
   return (
     <div className={styles.item}>
       <div className={styles.info}>
-        <div className={cn(styles.icon, manageItemTypeMap[type])}>
-          {Icon}
-        </div>
+        <div className={cn(styles.icon, manageItemTypeMap[type])}>{Icon}</div>
         <p className={styles.title}>{title}</p>
       </div>
       <div className={styles.buttons}>
         <p className={styles.date}>Last updated 7 days ago</p>
-        <ActionButtons url={url} setLogId={setLogId}/>
+        <ActionButtons isFetching={isFetching} url={url} setLogId={setLogId} />
       </div>
     </div>
   );
