@@ -154,23 +154,6 @@ td.fail {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  &__visible {
-    white-space: normal;
-    overflow: visible;
-  }
-  span {
-    display: block;
-    max-width: 50px;
-    text-decoration: underline;
-    color: rgba(0, 0, 0, 0.26);
-    font-weight: 400;
-    transition: all 0.3s ease 0s;
-    @media(any-hover: hover){
-        &:hover{
-          color: rgba(37, 37, 37, 0.64);
-        }
-    }
-  }
 }
 
 td.success {
@@ -182,6 +165,7 @@ td.success {
 .logsLoader {
   display: block;
   text-align: center;
+  margin-top: 20px;
 
   &__search {
     div {

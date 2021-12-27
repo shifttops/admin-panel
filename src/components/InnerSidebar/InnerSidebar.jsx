@@ -10,6 +10,7 @@ import ButtonIcon from "../buttons/ButtonIcon";
 import { DeleteIcon } from "../../icons";
 import { useState } from "react";
 import Loader from "../Loader";
+import cn from "classnames";
 
 const InnerSidebar = observer((props) => {
   const location = useLocation();
@@ -49,64 +50,76 @@ const InnerSidebar = observer((props) => {
               {name}
             </NavLink>
           ))}
-          <div className={styles.presets}>
-            <div className={styles.presets__title}>Presets</div>
-            <div className={styles.presets__content}>
-              {presets.length && !isLoading && props.match.params.id !== 'new' ? (
-                presets.map((preset, index) => (
-                  <div className={styles.presets__preset}>
-                    <Popup
-                      modal
-                      trigger={
-                        <ButtonIcon
-                          Icon={DeleteIcon}
-                          className={styles.presets__icon}
-                        />
-                      }
-                    >
-                      {(close) => (
-                        <PopupComponent
-                          onClose={close}
-                          text={"Are you sure you want to delete preset:"}
-                          buttonText={"Delete"}
-                          titleText={"Delete"}
-                          dedicatedText={preset.name}
-                          onClick={(e) =>
-                            handleRemove({
-                              preset_id: preset.pk,
-                              setError,
-                              close,
-                            })
-                          }
-                        />
+          {props.match.params.id !== "new" ? (
+            <div className={styles.presets}>
+              <div className={styles.presets__title}>Presets</div>
+              <div className={styles.presets__content}>
+                {presets.length &&
+                !isLoading &&
+                props.match.params.id !== "new" ? (
+                  presets.map((preset, index) => (
+                    <div className={styles.presets__preset}>
+                      <Popup
+                        modal
+                        trigger={
+                          <ButtonIcon
+                            Icon={DeleteIcon}
+                            className={styles.presets__icon}
+                          />
+                        }
+                      >
+                        {(close) => (
+                          <PopupComponent
+                            onClose={close}
+                            text={"Are you sure you want to delete preset:"}
+                            buttonText={"Delete"}
+                            titleText={"Delete"}
+                            dedicatedText={preset.name}
+                            onClick={(e) =>
+                              handleRemove({
+                                preset_id: preset.pk,
+                                setError,
+                                close,
+                              })
+                            }
+                          />
+                        )}
+                      </Popup>
+                      {+props.match.params.preset_id !== preset.pk ? (
+                        <NavLink
+                          className={styles.innerMenu__link}
+                          activeClassName={styles.active}
+                          key={index}
+                          to={`${routes.scriptsLaunch
+                            .split(":id")
+                            .join(props.match.params.id)}/${preset.pk}`}
+                        >
+                          <span>{preset.name}</span>
+                        </NavLink>
+                      ) : (
+                        <div
+                          className={cn(
+                            styles.innerMenu__link,
+                            styles.active,
+                            styles.disabled
+                          )}
+                          key={index}
+                        >
+                          <span>{preset.name}</span>
+                        </div>
                       )}
-                    </Popup>
-                    {+props.match.params.preset_id !== preset.pk ? (
-                      <NavLink
-                        className={styles.innerMenu__link}
-                        activeClassName={styles.active}
-                        key={index}
-                        to={`${routes.scriptsLaunch
-                          .split(":id")
-                          .join(props.match.params.id)}/${preset.pk}`}
-                      >
-                        <span>{preset.name}</span>
-                      </NavLink>
-                    ) : (
-                      <div
-                        className={styles.innerMenu__link + " " + styles.active + " " + styles.disabled}
-                        key={index}
-                      >
-                        <span>{preset.name}</span>
-                      </div>
-                    )}
+                    </div>
+                  ))
+                ) : isLoading ? (
+                  <Loader types={["small"]} />
+                ) : !presets.length ? (
+                  <div className={cn(styles.innerMenu__link, styles.disabled)}>
+                    No presets
                   </div>
-                ))
-              ) : isLoading && props.match.params.id !== 'new' ? (
-                <Loader className={styles.presets__loader} />
-              ) : null}
+                ) : null}
+              </div>
             </div>
-          </div>
+          ) : null}
         </>
       ) : (
         innerNavigation.map(({ to, name }) => (

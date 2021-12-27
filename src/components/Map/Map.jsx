@@ -25,9 +25,9 @@ const Map = withScriptjs(
     const handleClick = (storeId) => {
       return () => {
         history.push(`${routes.storeInfo}/${storeId}`);
-      }
-    }
-    
+      };
+    };
+
     return (
       <GoogleMap defaultZoom={7} defaultCenter={{ lat: 51.697, lng: 10.344 }}>
         {props.coords.map((item) =>
@@ -37,10 +37,11 @@ const Map = withScriptjs(
               position={{ lat: item.latitude, lng: item.longitude }}
               labelAnchor={new window.google.maps.Point(0, 0)}
               labelStyle={{
-                backgroundColor: "#ababab",
-                color: '#fff',
+                backgroundColor: "#333333FF",
+                color: "#F9F9F9FF",
                 fontSize: "14px",
-                padding: "2px",
+                padding: "3px 5px",
+                borderRadius: "4px",
               }}
               onClick={handleClick(item.store)}
             >
@@ -51,9 +52,8 @@ const Map = withScriptjs(
           )
         )}
       </GoogleMap>
-    )
-  }
-  )
+    );
+  })
 );
 
 export default Map;

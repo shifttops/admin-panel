@@ -7,9 +7,10 @@ import { observer } from "mobx-react";
 import StoresStore from "../../../../store/StoresStore";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import Loader from "../../../../components/Loader";
 
 const InnerStatistic = observer((props) => {
-  const { storeInfo, metrics, getMetrics } = StoresStore;
+  const { storeInfo, metrics, isMetricsFetching } = StoresStore;
   const [error, setError] = useState(false);
   const location = useLocation();
 
@@ -44,7 +45,7 @@ const InnerStatistic = observer((props) => {
 
   useEffect(() => {
     if (storeInfo.store_id === store_id) {
-      metrics.set(null)
+      metrics.set(null);
     }
   }, []);
 
@@ -64,25 +65,34 @@ const InnerStatistic = observer((props) => {
             </tr>
           </thead>
           <tbody>
-            {metrics.get() && mapper.map((item) => (
-              <tr key={item.visibleName}>
-                <td className={styles.category}>{item.visibleName}</td>
-                <td className={styles.period}>Today</td>
-                <td
-                  className={cn(
-                    styles.time,
-                    item.visibleName === "OEPE" &&
-                      (metrics.get()[item.key] < 120
-                        ? styles.timeGreen
-                        : styles.timeRed)
-                  )}
-                >
-                  {metrics.get()[item.key]
-                    ? `${Math.round(metrics.get()[item.key])} s`
-                    : "N/A"}
-                </td>
+            {!isMetricsFetching ? (
+              metrics.get() &&
+              mapper.map((item) => (
+                <tr key={item.visibleName}>
+                  <td className={styles.category}>{item.visibleName}</td>
+                  <td className={styles.period}>Today</td>
+                  <td
+                    className={cn(
+                      styles.time,
+                      item.visibleName === "OEPE" &&
+                        (metrics.get()[item.key] < 120
+                          ? styles.timeGreen
+                          : styles.timeRed)
+                    )}
+                  >
+                    {metrics.get()[item.key]
+                      ? `${Math.round(metrics.get()[item.key])} s`
+                      : "N/A"}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr className={styles.loader}>
+                <td />
+                <Loader types={["medium"]} />
+                <td />
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
         <AdditionalInfo leftTitle="hardware" rightTitle="Last 24 hours" />

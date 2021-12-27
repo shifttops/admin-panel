@@ -266,7 +266,9 @@ const InnerEdit = observer((props) => {
           />
         </>
       ) : (
-        <Loader />
+        <div className={styles.loader}>
+          <Loader types={["medium"]} />
+        </div>
       )}
     </div>
   );

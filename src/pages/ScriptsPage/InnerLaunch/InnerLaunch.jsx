@@ -25,6 +25,8 @@ const InnerLaunch = observer((props) => {
     preset,
     hosts,
     presets,
+    isHostsFetching,
+    isLaunching,
     getScripts,
     getHosts,
     launchScript,
@@ -107,7 +109,7 @@ const InnerLaunch = observer((props) => {
     if (!Object.keys(hosts).length) {
       getHosts(setError);
     }
-    if (!presets.length) {
+    if (!presets.length && script.current && script.current.playbook_id) {
       getPresets(scriptId);
     }
     return () => {
@@ -167,35 +169,40 @@ const InnerLaunch = observer((props) => {
     <>
       <div className={styles.page}>
         <div className={styles.launch_block}>
-          <table className={styles.table}>
-            <thead className={styles.head}>
-              <tr>
-                <th>Variables</th>
-                <th>Values</th>
-              </tr>
-            </thead>
-            <tbody>
-              {Object.keys(rows).map((variable, index) => (
-                <tr key={index} className={styles.table_row}>
-                  <td>{variable}</td>
-                  <td>
-                    <input
-                      type="text"
-                      value={rows[variable]}
-                      placeholder="Value"
-                      className={styles.variable_input}
-                      onChange={(e) => handleChange(e.target.value, variable)}
-                    />
-                  </td>
+          {Object.keys(rows).length ? (
+            <table className={styles.table}>
+              <thead className={styles.head}>
+                <tr className={styles.head__row}>
+                  <th>Variables</th>
+                  <th>Values</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {Object.keys(rows).map((variable, index) => (
+                  <tr key={index} className={styles.table_row}>
+                    <td>{variable}</td>
+                    <td>
+                      <input
+                        type="text"
+                        value={rows[variable]}
+                        placeholder="Value"
+                        className={styles.variable_input}
+                        onChange={(e) => handleChange(e.target.value, variable)}
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <div className={styles.noVariables}>No variables</div>
+          )}
 
           <ScriptsStoresTable
             enabledStores={enabledStores}
             setEnabledStores={setEnabledStores}
             hosts={hosts}
+            isFetching={isHostsFetching}
           />
           <div className={styles.set_preset}>
             <input
@@ -234,16 +241,14 @@ const InnerLaunch = observer((props) => {
                 onChangeTaskName={(value) => setTaskName(value)}
               />
             </div>
-          ) : (
-            ""
-          )}
+          ) : null}
           <Button
             text={isPeriodic ? "Close" : "Add period"}
             // className="launch_btn"
             onClick={() => setPeriodic((prev) => !prev)}
           />
         </div>
-        <Popup modal trigger={<Button text="Launch" />}>
+        <Popup modal trigger={<Button fetching={isLaunching} text="Launch" />}>
           {(close) => {
             let dedicatedText = "";
             let additionalDedicatedText = "";
@@ -291,9 +296,7 @@ const InnerLaunch = observer((props) => {
             <NavLink to={`${routes.scripts_logs}/${log_id.task_id}`}>
               Click here to check execution
             </NavLink>
-          ) : (
-            ""
-          )}
+          ) : null}
         </div>
         <ToastsContainer
           store={ToastsStore}
@@ -302,7 +305,9 @@ const InnerLaunch = observer((props) => {
       </div>
     </>
   ) : (
-    <Loader />
+    <div className={styles.loader}>
+      <Loader types={["medium"]} />
+    </div>
   );
 });
 export default InnerLaunch;

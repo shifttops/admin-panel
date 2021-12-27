@@ -18,14 +18,16 @@ import PopupComponent from "../../../popups/PopupComponent/PopupComponent";
 import Popup from "reactjs-popup";
 import MessageItemFile from "../../../MessageItem/MessageItemFile";
 import { useEffect, useState } from "react";
+import Loader from "../../../Loader";
 
 const AttachmentsField = ({
   items,
   editStoreChatFile,
   deleteStoreChatFile,
   store_id,
+  isChatFilesFetching,
 }) => {
-  return items.length ? (
+  return !isChatFilesFetching && items.length ? (
     items.map((file) => (
       <AttachmentsFieldFile
         file={file}
@@ -36,7 +38,15 @@ const AttachmentsField = ({
     ))
   ) : (
     <div className={styles.dropdown__item}>
-      <div className={styles.dropdown__item__field}>No files in this chat</div>
+      {isChatFilesFetching ? (
+        <div className={styles.loader}>
+          <Loader types={["small"]} />
+        </div>
+      ) : (
+        <div className={styles.dropdown__item__field}>
+          No files in this chat
+        </div>
+      )}
     </div>
   );
 };

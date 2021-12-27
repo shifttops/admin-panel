@@ -1,29 +1,25 @@
-import {useState} from "react";
-import styles from "../../pages/ActivityLogsPage/activity-logs-page.module.scss";
+import { useState } from "react";
+import styles from "./description.module.scss";
+import cn from "classnames";
 
-const Description = ({ log }) => {
+const Description = ({ message, className }) => {
   const [isDescriptionVisible, setIsDescriptionVisible] = useState(false);
 
   return (
     <td
-      className={
-        (log.error_time ? styles.fail : styles.success) +
-        " " +
-        (isDescriptionVisible ? styles.fail__visible : null)
-      }
+      className={cn(className, {
+        [styles.visible]: isDescriptionVisible,
+      })}
     >
-      {log.error_time ? (
-        <>
-          {log.description}
-          <span
-            onClick={() => setIsDescriptionVisible((prevState) => !prevState)}
-          >
-            {!isDescriptionVisible ? "More..." : "Hide"}
-          </span>
-        </>
-      ) : (
-        "Success"
-      )}
+      <>
+        {message}
+        <span
+          className={styles.button}
+          onClick={() => setIsDescriptionVisible((prevState) => !prevState)}
+        >
+          {!isDescriptionVisible ? "More..." : "Hide"}
+        </span>
+      </>
     </td>
   );
 };

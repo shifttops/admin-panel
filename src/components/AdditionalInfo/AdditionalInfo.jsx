@@ -5,6 +5,7 @@ import SliderCheckbox from "components/SliderCheckbox";
 import StoresStore from "../../store/StoresStore";
 import { observer } from "mobx-react";
 import DropDownFields from "../DropDownFields";
+import Loader from "../Loader";
 
 const AdditionalInfo = observer(({ leftTitle, rightTitle }) => {
   const items = [
@@ -18,7 +19,12 @@ const AdditionalInfo = observer(({ leftTitle, rightTitle }) => {
     },
   ];
 
-  const { storeInfo } = StoresStore;
+  const {
+    storeInfo,
+    isCamerasStatusFetching,
+    isStoreInfoFetching,
+    isServersFetching,
+  } = StoresStore;
 
   return (
     <div className={styles.system}>
@@ -34,41 +40,75 @@ const AdditionalInfo = observer(({ leftTitle, rightTitle }) => {
             {items[0].name}
           </p>
         </button>
-        <div className={styles.text}>
-          <div>
-            {storeInfo.cameras &&
-              storeInfo.cameras.map((camera) => (
+        {!isCamerasStatusFetching &&
+        !isStoreInfoFetching &&
+        storeInfo.cameras &&
+        storeInfo.cameras.length ? (
+          <div className={styles.text}>
+            <div>
+              {storeInfo.cameras.map((camera) => (
                 <SliderCheckbox
                   key={camera.id}
                   label={camera.view_name}
                   passed={camera.passed}
                 />
               ))}
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className={styles.text}>
+            {isCamerasStatusFetching || isStoreInfoFetching ? (
+              <Loader types={["small"]} />
+            ) : (
+              "No cameras"
+            )}
+          </div>
+        )}
       </div>
 
       <div className={styles.item}>
         <p className={cn(styles.category, styles.categoryDropdown)}>
           Lateral cameras
         </p>
-        <div
-          className={`${styles.check} ${
-            storeInfo.is_all_lateral_works ? "" : styles.error
-          }`}
-        >
-          {storeInfo.is_all_lateral_works
-            ? "All cameras are working"
-            : "Check failed"}
-        </div>
+        {!isCamerasStatusFetching &&
+        !isStoreInfoFetching &&
+        storeInfo.is_all_lateral_works !== undefined ? (
+          <div
+            className={cn(styles.check, {
+              [styles.error]: !storeInfo.is_all_lateral_works,
+            })}
+          >
+            {storeInfo.is_all_lateral_works
+              ? "All cameras are working"
+              : "Check failed"}
+          </div>
+        ) : !isCamerasStatusFetching &&
+          !isStoreInfoFetching &&
+          (!storeInfo.cameras ||
+            !storeInfo.cameras.length ||
+            storeInfo.is_all_lateral_works === undefined) ? (
+          <div className={styles.error}>Check failed</div>
+        ) : (
+          <Loader types={["small"]} />
+        )}
       </div>
-      {storeInfo && storeInfo.status && storeInfo.servers ? storeInfo.servers.map((server, serverIndex) => (
-        server ? <DropDownFields serverIndex={serverIndex} key={server.name}/> : null
-      )) : null}
+      {!isServersFetching &&
+      !isStoreInfoFetching &&
+      storeInfo &&
+      storeInfo.status &&
+      storeInfo.servers ? (
+        storeInfo.servers.map((server, serverIndex) =>
+          server ? (
+            <DropDownFields serverIndex={serverIndex} key={server.name} />
+          ) : null
+        )
+      ) : isServersFetching || isStoreInfoFetching ? (
+        <div className={styles.loader}>
+          <Loader types={["small"]} />
+        </div>
+      ) : null}
     </div>
   );
 });
-
-
 
 export default AdditionalInfo;

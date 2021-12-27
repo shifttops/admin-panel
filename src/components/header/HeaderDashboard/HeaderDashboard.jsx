@@ -73,7 +73,7 @@ const HeaderDashboard = observer(({ sidebarToggle }) => {
                 onBlur={searchBlurHandler}
                 value={searchValue}
                 type="text"
-                placeholder="Search store by store id..."
+                placeholder="Find restaurant..."
               />
             </div>
             {(!!searchValue.length && searchStores.get().length) ||

@@ -41,20 +41,24 @@ const SearchResult = ({
           key={`search${store.store_id}`}
         >
           <p className={styles.searchResult__id}>Store ID: {store.store_id}</p>
-          <p className={styles.searchResult__info}>
-            Region: <span>{store.store_county}</span>
-          </p>
-          <p className={styles.searchResult__info}>
-            Location: <span>{store.address}</span>
-          </p>
-          <p className={styles.searchResult__info}>
-            Store type: <span>{store.store_type}</span>
-          </p>
+          {[
+            { label: "Region", field: "store_county" },
+            { label: "Location", field: "address" },
+            {
+              label: "Store type",
+              field: "store_type",
+            },
+          ].map((item) => (
+            <p className={styles.searchResult__info}>
+              {item.label}:{" "}
+              <span>{store[item.field] ? store[item.field] : "N/A"}</span>
+            </p>
+          ))}
         </div>
       ))}
       {isLoading ? (
         <div className={styles.loader}>
-          <Loader className={styles.loaderStyle} />
+          <Loader types={["medium"]} />
         </div>
       ) : null}
       {!isLoading && stores.length !== resCount ? (

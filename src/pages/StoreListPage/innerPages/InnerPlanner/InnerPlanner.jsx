@@ -12,16 +12,19 @@ import {
   ToastsContainerPosition,
   ToastsStore,
 } from "react-toasts";
+import Loader from "../../../../components/Loader";
+import { useHistory } from "react-router-dom";
 
 const InnerPlanner = observer((props) => {
   const [error, setError] = useState("");
-  const { storeInfo, periodicTasks, getStorePeriodicTasks } = StoresStore;
+  const history = useHistory();
+  const { storeInfo, periodicTasks, isPlannerFetching } = StoresStore;
 
   const store_id = +props.match.params.id;
 
   useEffect(() => {
     if (storeInfo.store_id === store_id) {
-      periodicTasks.set(null)
+      periodicTasks.set(null);
     }
   }, []);
 
@@ -30,7 +33,7 @@ const InnerPlanner = observer((props) => {
       <div className={styles.planner__head}>
         <h2 className="title">Planner</h2>
         <div className={styles.planner__buttons}>
-          <div className={styles.planner__process}>
+          {/*<div className={styles.planner__process}>
             <ButtonIcon
               Icon={PlayIcon}
               type={iconButtonTypes.grey}
@@ -38,41 +41,51 @@ const InnerPlanner = observer((props) => {
             />
             <ButtonIcon Icon={CheckIcon} />
           </div>
-          <ButtonIcon Icon={PlannerIcon} />
+          <ButtonIcon Icon={PlannerIcon} />*/}
           <div className={styles.planner__button}>
-            <Button text="New task" />
+            <Button onClick={() => history.push("/scripts")} text="New task" />
           </div>
         </div>
       </div>
 
-      <table className={styles.table}>
-        <thead>
-          <tr>
-            {/* <th /> */}
-            <th>Task name</th>
-            <th>Status</th>
-            {/* <th>Total run count</th> */}
-            {/* <th>Changed date</th> */}
-            <th>Start date</th>
-            <th>Period</th>
-            <th>End date</th>
-            <th />
-          </tr>
-        </thead>
-        <tbody>
-          {periodicTasks.get() && periodicTasks.get().length
-            ? periodicTasks.get().map((task) => (
-                <PlannerItem
-                  key={`store${storeInfo.store_id}-${task.name}`}
-                  taskData={task}
-                  Icon={PauseIcon}
-                  iconColor={iconButtonTypes.red}
-                  className={styles.name}
-                />
-              ))
-            : null}
-        </tbody>
-      </table>
+      {!isPlannerFetching &&
+      periodicTasks.get() &&
+      periodicTasks.get().length ? (
+        <table className={styles.table}>
+          <thead>
+            <tr>
+              {/* <th /> */}
+              <th>Task name</th>
+              <th>Status</th>
+              {/* <th>Total run count</th> */}
+              {/* <th>Changed date</th> */}
+              <th>Start date</th>
+              <th>Period</th>
+              <th>End date</th>
+              <th />
+            </tr>
+          </thead>
+          <tbody>
+            {periodicTasks.get().map((task) => (
+              <PlannerItem
+                key={`store${storeInfo.store_id}-${task.name}`}
+                taskData={task}
+                Icon={PauseIcon}
+                iconColor={iconButtonTypes.red}
+                className={styles.name}
+              />
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <div className={styles.loader}>
+          {isPlannerFetching ? (
+            <Loader types={["medium"]} />
+          ) : (
+            "No planner tasks on this store"
+          )}
+        </div>
+      )}
       <ToastsContainer
         store={ToastsStore}
         position={ToastsContainerPosition.BOTTOM_RIGHT}

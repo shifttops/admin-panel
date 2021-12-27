@@ -4,6 +4,7 @@ import { ToastsStore } from "react-toasts";
 
 class PlannerStore {
   plannerTasks = [];
+  isFetching = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -12,6 +13,9 @@ class PlannerStore {
   getPlannerTasks = async ({ setError }) => {
     try {
       await refreshToken();
+
+      this.isFetching = true;
+
       const resp = await fetch(
         `${process.env.REACT_APP_URL}/api/periodic_task/`,
         {
@@ -26,8 +30,10 @@ class PlannerStore {
       this.plannerTasks = [...res.results];
 
       setError("");
+      this.isFetching = false;
     } catch (e) {
       setError(e.message);
+      this.isFetching = false;
     }
   };
 

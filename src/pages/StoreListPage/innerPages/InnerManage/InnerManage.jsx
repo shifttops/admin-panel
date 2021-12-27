@@ -20,33 +20,42 @@ import {
 import { useState } from "react";
 import routes from "../../../../constants/routes";
 import { NavLink } from "react-router-dom";
+import { observer } from "mobx-react";
+import StoresStore from "../../../../store/StoresStore";
 
-export default function InnerManage(props) {
-  const [log_id, setLogId] = useState('');
+const InnerManage = observer((props) => {
+  const [log_id, setLogId] = useState("");
+
+  const { isCamerasStatusFetching, isBrowserRefreshing } = StoresStore;
+
   const manageMapper = [
     {
       title: "Update algorithm version",
       url: null,
       type: manageItemTypes.yellow,
       icon: <VersionManageIcon />,
+      isFetching: null,
     },
     {
       title: "Update weights",
       url: null,
       type: manageItemTypes.green,
       icon: <WeightIcon />,
+      isFetching: null,
     },
     {
       title: "Refresh browser",
       url: "/refresh_browser",
       type: manageItemTypes.red,
       icon: <RefreshIcon />,
+      isFetching: isBrowserRefreshing,
     },
     {
       title: "Reboot all cameras",
       url: "/reboot_cameras",
       type: manageItemTypes.red,
       icon: <VideoManageIcon />,
+      isFetching: isCamerasStatusFetching,
     },
   ];
 
@@ -56,32 +65,15 @@ export default function InnerManage(props) {
       <MaintenanceScreen {...props} />
       {manageMapper.map((item) => (
         <ManageItem
-          key={item.titl}
+          key={item.title}
           type={item.type}
           Icon={item.icon}
           title={item.title}
           url={item.url}
           setLogId={setLogId}
+          isFetching={item.isFetching}
         />
       ))}
-      {/* <ManageItem
-        ActionButtons={ActionButtons}
-        type={manageItemTypes.green}
-        Icon={WeightIcon}
-        title="Update weights"
-      />
-      <ManageItem
-        ActionButtons={ActionButtons}
-        type={manageItemTypes.red}
-        Icon={RefreshIcon}
-        title="Refresh browser"
-      />
-      <ManageItem
-        ActionButtons={ActionButtons}
-        type={manageItemTypes.red}
-        Icon={VideoManageIcon}
-        title="Reboot all cameras"
-      /> */}
       <div className={log_id ? styles.popup : styles.closed}>
         {log_id ? (
           <NavLink to={`${routes.scripts_logs}/${log_id.task_id}`}>
@@ -97,4 +89,6 @@ export default function InnerManage(props) {
       />
     </div>
   );
-}
+});
+
+export default InnerManage;

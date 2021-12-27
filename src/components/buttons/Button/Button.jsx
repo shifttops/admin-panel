@@ -10,10 +10,9 @@ const Button = React.forwardRef(
       disabled,
       className,
       Icon = () => null,
-      onClick,
+      onClick = () => null,
       type = "button",
       fetching,
-      loaderClassName,
     },
     ref
   ) => (
@@ -28,7 +27,7 @@ const Button = React.forwardRef(
           <Icon /> {text}
         </>
       ) : (
-        <Loader className={loaderClassName} />
+        <Loader types={["disabled"]} />
       )}
     </button>
   )

@@ -14,6 +14,8 @@ const InnerChat = observer(() => {
     messagesData,
     chatFilesData,
     chatInterval,
+    isChatMessagesFetching,
+    isChatFilesFetching,
     getMessages,
     getStoreChatFiles,
     editMessage,
@@ -52,6 +54,8 @@ const InnerChat = observer(() => {
         deleteMessage={deleteMessage}
         editStoreChatFile={editStoreChatFile}
         deleteStoreChatFile={deleteStoreChatFile}
+        isChatMessagesFetching={isChatMessagesFetching}
+        isChatFilesFetching={isChatFilesFetching}
       />
       <ToastsContainer
         store={ToastsStore}

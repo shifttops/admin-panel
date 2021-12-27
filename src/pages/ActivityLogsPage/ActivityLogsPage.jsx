@@ -166,7 +166,14 @@ const ActivityLogsPage = observer(() => {
                 />
               </td>
               <td>{log.event_type}</td>
-              <Description log={log} />
+              {log.error_time ? (
+                <Description
+                  className={styles.fail}
+                  message={log.description}
+                />
+              ) : (
+                <td className={styles.success}>Success</td>
+              )}
               <td>{log.store_id}</td>
               <td>
                 {moment(
