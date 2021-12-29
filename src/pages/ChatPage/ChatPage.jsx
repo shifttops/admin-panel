@@ -9,6 +9,11 @@ import moment from "moment";
 import ChatListItem from "../../components/Chat/ChatListItem";
 import Chat from "../../components/Chat";
 import { FavoriteFillIcon, MoreIcon } from "../../icons";
+import {
+  ToastsContainer,
+  ToastsContainerPosition,
+  ToastsStore,
+} from "react-toasts";
 
 const ChatPage = observer((props) => {
   const location = useLocation();
@@ -26,6 +31,10 @@ const ChatPage = observer((props) => {
       if (curChat) setCurrentChat(curChat);
     }
   }, [location, chatData]);
+
+  useEffect(() => {
+    ToastsStore.error("This page under construct", 3000, "toast");
+  }, []);
 
   return (
     <div className={styles.wrapper}>
@@ -65,6 +74,10 @@ const ChatPage = observer((props) => {
           <span>Choose dialog</span>
         </div>
       )}
+      <ToastsContainer
+        store={ToastsStore}
+        position={ToastsContainerPosition.BOTTOM_RIGHT}
+      />
     </div>
   );
 });

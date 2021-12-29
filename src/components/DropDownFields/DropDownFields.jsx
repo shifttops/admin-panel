@@ -198,7 +198,7 @@ const DropDownFields = observer(
                           ? `${Math.round(storeInfo[item.keyName])} ${
                               item.keyName.includes("util") ? "%" : ""
                             }`
-                          : ""}
+                          : "N/A"}
                       </span>
                     </div>
                   </div>

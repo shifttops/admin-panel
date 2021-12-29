@@ -157,12 +157,15 @@ const ScriptsLogsPage = observer(() => {
       <div className={styles.pageHead}>
         <div className={styles.pageInfo}>
           <h2 className={styles.title}>Scripts logs</h2>
-          <SearchQuick setSearch={setSearch} placeholderText={"Search by playbook"}/>
+          <SearchQuick
+            setSearch={setSearch}
+            placeholderText={"Search by playbook"}
+          />
         </div>
-        <div className={styles.button}>
+        {/*        <div className={styles.button}>
           <Button className={styles.btnBorder} text="Report" />
           <Button Icon={DateIcon} text="Last 24 hours" />
-        </div>
+        </div>*/}
       </div>
       {running_logs.length ? (
         <>
@@ -235,7 +238,9 @@ const ScriptsLogsPage = observer(() => {
                         : "N/A"
                       : item.key === "arguments"
                       ? JSON.stringify(JSON.parse(log[item.key]), null, "\t")
-                      : log[item.key] ? JSON.stringify(log[item.key], null, "\t") : "N/A"}
+                      : log[item.key]
+                      ? JSON.stringify(log[item.key], null, "\t")
+                      : "N/A"}
                   </td>
                 ))}
               </tr>

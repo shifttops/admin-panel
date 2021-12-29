@@ -60,7 +60,7 @@ const InnerHead = observer((props) => {
                 // Icon={CheckIcon}
               />
               <Button
-                text="Restart"
+                text="Refresh"
                 fetching={isRefreshing}
                 Icon={RestartIcon}
                 className={styles.yellowBorder}
