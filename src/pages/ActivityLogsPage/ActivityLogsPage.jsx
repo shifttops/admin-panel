@@ -119,10 +119,10 @@ const ActivityLogsPage = observer(() => {
             placeholderText={"Search by store id"}
           />
         </div>
-        <div className={styles.button}>
+        {/*        <div className={styles.button}>
           <Button className={styles.btnBorder} text="Report" />
           <Button Icon={DateIcon} text="Last 24 hours" />
-        </div>
+        </div>*/}
       </div>
       <table className={styles.table}>
         <thead className={styles.tableHead}>
