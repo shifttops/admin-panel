@@ -1,14 +1,22 @@
 import { makeAutoObservable, observable } from "mobx";
 import { refreshToken } from "../helpers/AuthHelper";
 import { ToastsStore } from "react-toasts";
+import { isArray } from "@craco/craco/lib/utils";
 
 class AppStore {
   isSidebarOpen = observable.box(true);
   isSidebarOverlap = false;
+
   notificationsData = observable.box([]);
   unreadNotificationCount = 0;
+
   searchStores = observable.box([]);
+
   isLoadingSearch = 0;
+  isLoadingNotificationSettings = false;
+  isUpdatingNotificationSettings = false;
+
+  notificationSettings = observable.box([]);
 
   constructor() {
     makeAutoObservable(this);
@@ -33,33 +41,94 @@ class AppStore {
     };
 
     this.socket.onmessage = (event) => {
-      this.notificationsData.set(JSON.parse(event.data));
+      const data = JSON.parse(event.data);
+      if (isArray(data)) {
+        console.log("array notifications data", data);
+        this.notificationsData.set([
+          ...data.reverse(),
+          ...this.notificationsData.get(),
+        ]);
+      } else {
+        console.log("object notifications data", data);
+        this.notificationsData.set([
+          { ...data },
+          ...this.notificationsData.get(),
+        ]);
+      }
       this.unreadNotificationCount = this.notificationsData.get().length;
-      console.log(JSON.parse(event.data).length);
     };
   };
 
-  readNotification = async (
-    setError = (error) => console.log(`Error: ${error}`)
-  ) => {
+  getNotificationSettings = async () => {
     try {
+      this.isLoadingNotificationSettings = true;
       await refreshToken();
 
       const resp = await fetch(
-        `${process.env.REACT_APP_URL}/api/update_last_view_notification/`,
+        `${process.env.REACT_APP_URL}/api/get_user_notification_types/`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Token ${localStorage.getItem("access")}`,
+          },
+        }
+      );
+
+      if (resp.status === 200) {
+        const res = await resp.json();
+        this.notificationSettings.set(res.notification_types);
+      } else ToastsStore.error("Error with settings getting", 3000, "toast");
+
+      this.isLoadingNotificationSettings = false;
+    } catch (e) {
+      this.isLoadingNotificationSettings = false;
+      ToastsStore.error(e.message, 3000, "toast");
+    }
+  };
+
+  updateNotificationsSettings = async ({
+    isDateOnly = false,
+    isSettingsOnly = false,
+    notificationsList,
+  }) => {
+    try {
+      if (isSettingsOnly) this.isUpdatingNotificationSettings = true;
+      await refreshToken();
+
+      const resp = await fetch(
+        `${process.env.REACT_APP_URL}/api/update_event_data/`,
         {
           method: "POST",
           headers: {
             Authorization: `Token ${localStorage.getItem("access")}`,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ date: new Date() }),
+          body: JSON.stringify(
+            isDateOnly
+              ? {
+                  date: new Date(),
+                }
+              : isSettingsOnly
+              ? {
+                  notifications_types: notificationsList,
+                }
+              : null
+          ),
         }
       );
 
-      this.unreadNotificationCount = 0;
+      if (resp.status === 200) {
+        if (isSettingsOnly) {
+          this.notificationSettings.set(notificationsList);
+          ToastsStore.success("Saved successfully", 3000, "toast");
+        }
+      } else ToastsStore.error("Error with saving", 3000, "toast");
+
+      if (isDateOnly) this.unreadNotificationCount = 0;
+      if (isSettingsOnly) this.isUpdatingNotificationSettings = false;
     } catch (e) {
-      setError(e.error);
+      this.isUpdatingNotificationSettings = false;
+      ToastsStore.error(e.message, 3000, "toast");
     }
   };
 

@@ -226,3 +226,26 @@ export const filtersMapper = [
     name: "store_type",
   },
 ];
+
+export const notificationSettingsMapper = [
+  {
+    label: "New restaurants",
+    field: "new_stores",
+  },
+  {
+    label: "Changing restaurant statuses",
+    field: "store_status_change",
+  },
+  {
+    label: "New messages in chat with the restaurant",
+    field: "new_messages",
+  },
+  {
+    label: "Results or errors on scripts running",
+    field: "result_or_error_scripts",
+  },
+  {
+    label: "Scripts launching",
+    field: "scripts_running",
+  },
+];

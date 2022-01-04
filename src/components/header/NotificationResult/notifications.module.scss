@@ -24,8 +24,11 @@
   }
 
   &__head {
+    position: sticky;
+    background-color: $color-grey;
+    top: 0;
     font-size: 16px;
-    padding: 18px 20px 16px 24px;
+    padding: 16px 20px 14px 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -33,9 +36,27 @@
   }
 
   &__title {
-    font-weight: 700;
-    line-height: 20px;
-    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    &__icon {
+      svg {
+        width: 14px;
+        margin-left: 10px;
+        margin-top: 2px;
+        color: $color-black-05;
+        transition: all 0.3s ease;
+
+        &:hover {
+          cursor: pointer;
+          color: $color-black;
+        }
+      }
+    }
+
+    span {
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
   }
 
   &__actions {
@@ -51,8 +72,9 @@
 
   &__info {
     &__empty {
-      padding: 12px 20px 12px 24px;
+      padding: 24px 0 18px 0;
       font-size: 16px;
+      text-align: center;
     }
   }
 
