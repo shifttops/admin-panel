@@ -2,14 +2,64 @@ import styles from "./settings-page.module.scss";
 import Button from "components/buttons/Button";
 import Checkbox from "components/Checkbox";
 import SliderCheckbox from "components/SliderCheckbox";
+import { observer } from "mobx-react";
+import AppStore from "../../store/AppStore";
+import { notificationSettingsMapper } from "../../helpers/mappers";
+import Loader from "../../components/Loader";
+import {
+  ToastsContainer,
+  ToastsContainerPosition,
+  ToastsStore,
+} from "react-toasts";
+import { useEffect, useState } from "react";
 
-export default function SettingsPage(params) {
+const SettingsPage = observer((props) => {
+  const {
+    notificationSettings,
+    updateNotificationsSettings,
+    getNotificationSettings,
+    isLoadingNotificationSettings,
+    isUpdatingNotificationSettings,
+  } = AppStore;
+
+  const [notificationsList, setNotificationsList] = useState([]);
+
+  useEffect(async () => {
+    await getNotificationSettings();
+    setNotificationsList(notificationSettings.get());
+
+    return () => {
+      if (notificationsList.length) setNotificationsList([]);
+    };
+  }, [notificationSettings]);
+
+  const handleNotificationSettingsChange = (e, field) => {
+    if (e.currentTarget.checked) {
+      setNotificationsList((prevState) => [...prevState, field]);
+    } else {
+      const newArray = [...notificationsList];
+      newArray.splice(newArray.indexOf(field), 1);
+      setNotificationsList(newArray);
+    }
+  };
+
+  const handleSave = async () =>
+    await updateNotificationsSettings({
+      isSettingsOnly: true,
+      notificationsList,
+    });
+
   return (
     <div className="page">
       <div className={styles.pageHead}>
         <h2 className={styles.title}>Settings</h2>
         <div className={styles.button}>
-          <Button text="Save" className={styles.btnSave} />
+          <Button
+            fetching={isUpdatingNotificationSettings}
+            onClick={handleSave}
+            text="Save"
+            className={styles.btnSave}
+          />
         </div>
       </div>
       <div className={styles.tabs}>
@@ -22,23 +72,30 @@ export default function SettingsPage(params) {
       <div className={styles.block}>
         <div className={styles.category}>
           <p className={styles.name}>Notification</p>
-          <p className={styles.descr}>Receive notifications</p>
+          <p className={styles.descr}>Select the type of notifications</p>
         </div>
         <div className={styles.settings}>
-          <Checkbox label="New restaurants" className={styles.checkbox} />
-          <Checkbox
-            label="Changing restaurant statuses"
-            className={styles.checkbox}
-          />
-          <Checkbox label="Restaurant openings" className={styles.checkbox} />
-          <Checkbox
-            label="New messages in chat with the restaurant"
-            className={styles.checkbox}
-          />
-          <Checkbox
-            label="Of performing scheduled events"
-            className={styles.checkbox}
-          />
+          {!isLoadingNotificationSettings ? (
+            notificationSettingsMapper.map((item) => (
+              <Checkbox
+                key={`${item.field}:${
+                  notificationsList.includes(item.field)
+                    ? "checked"
+                    : "unchecked"
+                }`}
+                label={item.label}
+                checked={notificationsList.includes(item.field)}
+                className={styles.checkbox}
+                onChange={(e) =>
+                  handleNotificationSettingsChange(e, item.field)
+                }
+              />
+            ))
+          ) : (
+            <div className={styles.loader}>
+              <Loader types={["small"]} />
+            </div>
+          )}
         </div>
       </div>
       <div className={styles.block}>
@@ -73,6 +130,12 @@ export default function SettingsPage(params) {
           </div>
         </div>
       </div>
+      <ToastsContainer
+        store={ToastsStore}
+        position={ToastsContainerPosition.BOTTOM_RIGHT}
+      />
     </div>
   );
-}
+});
+
+export default SettingsPage;

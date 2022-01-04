@@ -701,6 +701,10 @@ class StoresStore {
         }
       );
 
+      if (url === "/refresh") this.isRefreshing = false;
+      if (url === "/refresh_browser") this.isBrowserRefreshing = false;
+      if (url === "/reboot_cameras") this.isCamerasStatusFetching = false;
+
       if (resp.status === 200) {
         if (url === "/refresh") {
           ToastsStore.success("Tasks created", 3000, "toast");
@@ -711,10 +715,6 @@ class StoresStore {
         const res = await resp.json();
         ToastsStore.error(res.error, 3000, "toast");
       }
-
-      this.isRefreshing = false;
-      this.isBrowserRefreshing = false;
-      this.isCamerasStatusFetching = false;
     } catch (e) {
       this.isRefreshing = false;
       this.isBrowserRefreshing = false;

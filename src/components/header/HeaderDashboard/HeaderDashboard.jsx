@@ -7,13 +7,18 @@ import NotificationResult from "components/header/NotificationResult";
 import Account from "components/header/Account";
 import AppStore from "../../../store/AppStore";
 import { observer } from "mobx-react";
+// import useSound from "use-sound";
 
 const HeaderDashboard = observer(({ sidebarToggle }) => {
   const [searchValue, setSearchValue] = useState("");
   const [resCount, setResCount] = useState(0);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const [readNotifications, setReadNotifications] = useState([]);
+  // const [play] = useSound('');
+
   const {
     unreadNotificationCount,
+    // notificationsData,
     getStoresForSearch,
     searchStores,
     isLoadingSearch,
@@ -34,7 +39,9 @@ const HeaderDashboard = observer(({ sidebarToggle }) => {
   };
 
   const notificationBlurHandler = () => {
-    setIsNotificationOpen(false);
+    setTimeout(() => {
+      setIsNotificationOpen(false);
+    }, 115);
   };
 
   const abortRef = useRef(false);
@@ -57,6 +64,10 @@ const HeaderDashboard = observer(({ sidebarToggle }) => {
 
     return () => searchStores.get().clear();
   }, [searchValue]);
+
+  /*  useEffect(() => {
+    if(notificationsData.get().length) play()
+  }, [notificationsData])*/
 
   return (
     <header className={styles.header}>
@@ -93,7 +104,11 @@ const HeaderDashboard = observer(({ sidebarToggle }) => {
         <div className={styles.header__icons}>
           <ButtonIcon Icon={ChatIcon} />
           <div className={styles.header__bellWrapper}>
-            <ButtonIcon Icon={BellIcon} onClick={notificationClickHandler} />
+            <ButtonIcon
+              Icon={BellIcon}
+              onClick={notificationClickHandler}
+              onBlur={notificationBlurHandler}
+            />
             {unreadNotificationCount ? (
               <span className={styles.indicator}>
                 <p>
@@ -103,9 +118,12 @@ const HeaderDashboard = observer(({ sidebarToggle }) => {
                 </p>
               </span>
             ) : null}
-            {isNotificationOpen && (
-              <NotificationResult onBlur={notificationBlurHandler} />
-            )}
+            {isNotificationOpen ? (
+              <NotificationResult
+                readNotifications={readNotifications}
+                setReadNotifications={setReadNotifications}
+              />
+            ) : null}
           </div>
         </div>
         <Account />

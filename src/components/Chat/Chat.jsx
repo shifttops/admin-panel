@@ -74,8 +74,8 @@ const Chat = ({
     return datesArray
       .filter((date, index) => datesArray.indexOf(date) === index)
       .sort((dateA, dateB) => {
-        if (dateA > dateB) return -1;
-        else if (dateA < dateB) return 1;
+        if (moment(dateA).isAfter(dateB)) return -1;
+        else if (moment(dateA).isBefore(dateB)) return 1;
       })
       .filter((date) =>
         findDate ? date === moment(findDate).format("DD MMMM YYYY") : true
