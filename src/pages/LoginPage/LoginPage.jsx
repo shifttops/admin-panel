@@ -70,7 +70,7 @@ export default function LoginPage() {
       <h1 className={styles.title}>Welcome back</h1>
       <form className={styles.form}>
         {error && (
-          <p className={styles.errorText}>Please enter a valid email address</p>
+          <p className={styles.errorText}>Please enter a valid Credentials</p>
         )}
         <InputLogin placeholder="Login" value={login} setValue={setLogin} />
         <InputPassword

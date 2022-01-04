@@ -26,7 +26,7 @@ const SettingsPage = observer((props) => {
 
   useEffect(async () => {
     await getNotificationSettings();
-    setNotificationsList(notificationSettings.get());
+    setNotificationsList(notificationSettings.get() ? notificationSettings.get() : []);
 
     return () => {
       if (notificationsList.length) setNotificationsList([]);

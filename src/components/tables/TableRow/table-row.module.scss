@@ -54,7 +54,6 @@
     line-height: 16px;
     letter-spacing: -0.03em;
     font-weight: 700;
-    color: $color-yellow;
     height: 30px;
     display: flex;
     align-items: center;
@@ -68,7 +67,6 @@
     width: 100%;
     max-width: 180px;
     position: relative;
-    background-color: $color-yellow-opacity;
 
     @media screen and (max-width: 1140px) {
       font-size: 11px;
