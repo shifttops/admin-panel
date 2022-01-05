@@ -6,6 +6,7 @@ import StoresStore from "../../store/StoresStore";
 import { observer } from "mobx-react";
 import Popup from "reactjs-popup";
 import PopupComponent from "../popups/PopupComponent/PopupComponent";
+import Loader from "../Loader";
 
 const MaintenanceScreen = observer((props) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -18,6 +19,7 @@ const MaintenanceScreen = observer((props) => {
     setMaintenanceScreen,
     updateJiraStatus,
     isJiraRefreshing,
+    isStatusFetching,
   } = StoresStore;
 
   const store_id = +props.match.params.id;
@@ -44,22 +46,27 @@ const MaintenanceScreen = observer((props) => {
           <div className={styles.maintenanceScreen__title}>
             Current maintenance screen:
           </div>
-          <div
-            className={styles.currentScreen}
-            onClick={() => setIsVisible((prevVisibility) => !prevVisibility)}
-          >
-            <span className={styles.currentScreen__text}>
-              {storeInfo.maintenance_screen
-                ? storeInfo.maintenance_screen
-                : "Nothing chosen"}
-            </span>
-            {maintenanceScreens.get() && maintenanceScreens.get()[0] !== "" && (
-              <ArrowDownIcon
-                className={styles.currentScreen__icon}
-                isOpen={isVisible}
-              />
-            )}
-          </div>
+          {!isStatusFetching ? (
+            <div
+              className={styles.currentScreen}
+              onClick={() => setIsVisible((prevVisibility) => !prevVisibility)}
+            >
+              <span className={styles.currentScreen__text}>
+                {storeInfo.maintenance_screen && !isStatusFetching
+                  ? storeInfo.maintenance_screen
+                  : "Nothing chosen"}
+              </span>
+              {maintenanceScreens.get() &&
+                maintenanceScreens.get()[0] !== "" && (
+                  <ArrowDownIcon
+                    className={styles.currentScreen__icon}
+                    isOpen={isVisible}
+                  />
+                )}
+            </div>
+          ) : (
+            <Loader types={["small"]} />
+          )}
           {maintenanceScreens.get() && maintenanceScreens.get()[0] !== "" && (
             <div
               className={

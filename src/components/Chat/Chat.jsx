@@ -157,7 +157,11 @@ const Chat = ({
             </div>
           </div>
           <div className={styles.messages}>
-            {!isChatMessagesFetching && chatData.length ? (
+            {!isChatMessagesFetching &&
+            chatData.length &&
+            chatData.filter((message) =>
+              message.message.toLowerCase().includes(search.toLowerCase())
+            ).length ? (
               <>
                 {favoriteMessages.length ? (
                   <div>
@@ -252,9 +256,13 @@ const Chat = ({
               <div className={styles.noMessages}>
                 {isChatMessagesFetching ? (
                   <Loader types={["medium"]} />
-                ) : (
+                ) : !chatData.length ? (
                   "No messages"
-                )}
+                ) : !chatData.filter((message) =>
+                    message.message.toLowerCase().includes(search.toLowerCase())
+                  ).length && !favoriteMessages.length ? (
+                  "No messages find"
+                ) : null}
               </div>
             )}
           </div>

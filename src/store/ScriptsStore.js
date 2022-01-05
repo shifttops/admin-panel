@@ -10,6 +10,7 @@ class ScriptsStore {
   isHostsFetching = false;
   isScriptsFetching = false;
   isLaunching = false;
+  isLogFetching = false;
 
   scripts = [];
   parentScriptSource = "";
@@ -497,6 +498,8 @@ class ScriptsStore {
     try {
       await refreshToken();
 
+      this.isLogFetching = true;
+
       const resp = await fetch(
         `${process.env.REACT_APP_URL}/api/${
           +task_id == task_id ? "ansible_playbook_logs/" : "execution_status/"
@@ -513,7 +516,9 @@ class ScriptsStore {
         this.logInfo = res;
         setError("");
       } else setError("Some error");
+      this.isLogFetching = false;
     } catch (e) {
+      this.isLogFetching = false;
       setError(e.message);
     }
   };

@@ -162,10 +162,6 @@ const ScriptsLogsPage = observer(() => {
             placeholderText={"Search by playbook"}
           />
         </div>
-        {/*        <div className={styles.button}>
-          <Button className={styles.btnBorder} text="Report" />
-          <Button Icon={DateIcon} text="Last 24 hours" />
-        </div>*/}
       </div>
       {running_logs.length ? (
         <>

@@ -57,7 +57,13 @@
   tbody tr {
     height: 72px;
     cursor: pointer;
-    transition: all 0.3s ease 0s;
+
+    &:hover {
+      td {
+        transition: all 0.3s ease 0s;
+        background-color: $color-grey;
+      }
+    }
   }
 
   th {
@@ -177,9 +183,12 @@
 }
 
 .logs_type_name {
+  text-align: center;
   margin: 20px 0px 20px 0px;
-  padding-bottom: 5px;
-  border-bottom: 1px solid rgba(51, 51, 51, 0.3);
+  color: $color-black-05;
+  font-weight: 700;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(51, 51, 51, 0.2);
   font-size: 18px;
   @media(min-width: 2120px){
     font-size: 26px;
@@ -221,7 +230,7 @@ td.success {
   &__search {
     div {
       position: absolute;
-      top: 80px;
+      top: 35px;
       left: calc(50% - 40px);
     }
     right: 0;

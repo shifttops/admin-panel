@@ -6,9 +6,10 @@ import React, { useEffect, useRef, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import NotificationItem from "../../NotificationItem";
 import { SettingsIcon } from "../../../icons";
+import cn from "classnames";
 
 const NotificationResult = observer(
-  ({ readNotifications, setReadNotifications }) => {
+  ({ readNotifications, setReadNotifications, isVisible }) => {
     const history = useHistory();
     const {
       notificationsData,
@@ -40,7 +41,11 @@ const NotificationResult = observer(
     }, [inView]);
 
     return (
-      <div className={styles.notifications}>
+      <div
+        className={cn(styles.notifications, {
+          [styles.notifications__visible]: isVisible,
+        })}
+      >
         <div className={styles.notifications__head}>
           <div className={styles.notifications__title}>
             <span>Notifications</span>
@@ -69,10 +74,10 @@ const NotificationResult = observer(
               </div>
             ) : null}
           </div>
-          {/*<div className={styles.notifications__icon}>
+          {/*          <div className={styles.notifications__icon}>
           <img src={notificationsIcon} alt="" />
         </div>*/}
-          <div ref={ref} />
+          {isVisible ? <div ref={ref} className={styles.ref} /> : null}
           {readNotifications.length
             ? readNotifications.map((item) => (
                 <div className={styles.notifications__info}>

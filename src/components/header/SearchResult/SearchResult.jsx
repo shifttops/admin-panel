@@ -49,7 +49,10 @@ const SearchResult = ({
               field: "store_type",
             },
           ].map((item) => (
-            <p className={styles.searchResult__info}>
+            <p
+              key={`${item.label}${store.store_id}`}
+              className={styles.searchResult__info}
+            >
               {item.label}:{" "}
               <span>{store[item.field] ? store[item.field] : "N/A"}</span>
             </p>

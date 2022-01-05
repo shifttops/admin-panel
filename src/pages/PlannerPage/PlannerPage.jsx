@@ -26,6 +26,7 @@ import Loader from "../../components/Loader";
 
 const PlannerPage = observer(() => {
   const [error, setError] = useState("");
+  const [search, setSearch] = useState("");
   const history = useHistory();
   const { getPlannerTasks, plannerTasks, isFetching } = PlannerStore;
 
@@ -38,7 +39,10 @@ const PlannerPage = observer(() => {
       <div className={styles.pageHead}>
         <div className={styles.pageInfo}>
           <h2 className={styles.title}>Planner</h2>
-          <SearchQuick />
+          <SearchQuick
+            setSearch={setSearch}
+            placeholderText={"Search by name"}
+          />
         </div>
         <div className={styles.buttons}>
           {/*<div className={styles.group}>
@@ -49,7 +53,11 @@ const PlannerPage = observer(() => {
           <Button onClick={() => history.push("/scripts")} text="New task" />
         </div>
       </div>
-      {!isFetching && plannerTasks.length ? (
+      {!isFetching &&
+      plannerTasks.length &&
+      plannerTasks.filter((task) =>
+        task.name.toLowerCase().includes(search.toLowerCase())
+      ).length ? (
         <table className={styles.table}>
           <thead className={styles.head}>
             <tr>
@@ -66,21 +74,33 @@ const PlannerPage = observer(() => {
             </tr>
           </thead>
           <tbody>
-            {plannerTasks.map((task) => (
-              <PlannerItem
-                key={task.name}
-                className={styles.name}
-                globalStore
-                Icon={PauseIcon}
-                iconColor={iconButtonTypes.red}
-                taskData={task}
-              />
-            ))}
+            {plannerTasks
+              .filter((task) =>
+                task.name.toLowerCase().includes(search.toLowerCase())
+              )
+              .map((task) => (
+                <PlannerItem
+                  key={task.name}
+                  className={styles.name}
+                  globalStore
+                  Icon={PauseIcon}
+                  iconColor={iconButtonTypes.red}
+                  taskData={task}
+                />
+              ))}
           </tbody>
         </table>
       ) : (
         <div className={styles.loader}>
-          {isFetching ? <Loader types={["medium"]} /> : "No planner tasks"}
+          {isFetching ? (
+            <Loader types={["medium"]} />
+          ) : !plannerTasks.length ? (
+            "No planner tasks"
+          ) : !plannerTasks.filter((task) =>
+              task.name.toLowerCase().includes(search.toLowerCase())
+            ).length ? (
+            "Tasks with this name not founded"
+          ) : null}
         </div>
       )}
       <ToastsContainer

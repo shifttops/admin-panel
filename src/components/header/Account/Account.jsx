@@ -1,6 +1,6 @@
 import styles from "./account.module.scss";
 import accountIcon from "images/accountIcon.svg";
-import AccountResult from "components/header/AccountResult";
+import AccountResult from "../AccountResult";
 import { useState } from "react";
 import { ArrowDownIcon } from "../../../icons";
 

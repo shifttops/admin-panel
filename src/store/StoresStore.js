@@ -20,6 +20,7 @@ class StoresStore {
   isCamerasStatusFetching = false;
   isPlannerFetching = false;
   isServersFetching = false;
+  isStatusFetching = false;
 
   isChatMessagesFetching = false;
   isChatFilesFetching = false;
@@ -539,6 +540,8 @@ class StoresStore {
   getMaintenanceScreens = async (setError) => {
     try {
       await refreshToken();
+      this.isStatusFetching = true;
+
       const resp = await fetch(`${process.env.REACT_APP_URL}/api/status/`, {
         method: "GET",
         headers: {
@@ -546,12 +549,16 @@ class StoresStore {
         },
       });
 
-      const res = await resp.json();
-      this.maintenanceScreensData = [...res.results];
-      this.updateMaintenanceScreens();
+      if (resp.status === 200) {
+        const res = await resp.json();
+        this.maintenanceScreensData = [...res.results];
+        this.updateMaintenanceScreens();
+      } else ToastsStore.error(`Error ${resp.status}`, 3000, "toast");
 
+      this.isStatusFetching = false;
       setError("");
     } catch (e) {
+      this.isStatusFetching = false;
       setError(e.message);
     }
   };
