@@ -9,6 +9,7 @@ import routes from "../../constants/routes";
 
 export default function LoginPage() {
   const [login, setLogin] = useState("");
+  const [isFetching, setIsFetching] = useState(false);
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
   const history = useHistory();
@@ -24,6 +25,8 @@ export default function LoginPage() {
   const handleLogIn = async (e) => {
     e.preventDefault();
     try {
+      setIsFetching(true);
+
       const resp = await fetch(`${process.env.REACT_APP_URL}/token/`, {
         method: "POST",
         headers: {
@@ -53,8 +56,10 @@ export default function LoginPage() {
         localStorage.removeItem("refresh_date");
         localStorage.removeItem("userName");
       }
+      setIsFetching(false);
     } catch (e) {
       console.log(e);
+      setIsFetching(false);
       setError(true);
       localStorage.removeItem("access");
       localStorage.removeItem("refresh");
@@ -83,6 +88,7 @@ export default function LoginPage() {
         </NavLink>
         <Button
           text="Sign in"
+          fetching={isFetching}
           className={styles.btn}
           onClick={handleLogIn}
           type="submit"
