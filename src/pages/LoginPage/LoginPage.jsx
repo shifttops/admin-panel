@@ -78,7 +78,7 @@ export default function LoginPage() {
           value={password}
           setValue={setPassword}
         />
-        <NavLink className={styles.link} to="/">
+        <NavLink className={styles.link} to="/login">
           Forgot your password?
         </NavLink>
         <Button

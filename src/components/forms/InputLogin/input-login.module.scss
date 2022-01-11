@@ -8,7 +8,7 @@
   padding: 12px 16px 8px 12px;
   width: 100%;
   max-width: 400px;
-  background: #ffffff;
+  background-color: #ffffff;
   border: 1px solid #e0e0e0;
   border-radius: 4px;
   font-size: 16px;
@@ -21,6 +21,18 @@
     line-height: 20px;
     letter-spacing: -0.03em;
     color: rgba(51, 51, 51, 0.7);
+  }
+  transition: background-color 0.3s ease;
+
+  &:focus{
+    background-color: #e8e8e8;
+    &:hover {
+      background-color: #e8e8e8;
+    }
+  }
+
+  &:hover{
+    background-color: #d9d9d9;
   }
 }
 
