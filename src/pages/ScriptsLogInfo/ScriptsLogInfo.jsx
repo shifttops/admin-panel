@@ -37,6 +37,8 @@ const ScriptsLogInfo = observer((props) => {
                 {logInfo[key] !== null && logInfo[key] !== undefined
                   ? logInfo[key].ansible_output
                     ? logInfo[key].ansible_output.toString()
+                    : key.includes("time")
+                    ? moment(logInfo[key]).format("DD MMMM YYYY, HH:mm")
                     : logInfo[key].toString()
                   : "N/A"}
               </span>
