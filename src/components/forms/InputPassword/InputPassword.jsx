@@ -1,7 +1,5 @@
-import styles from "components/forms/InputPassword/input-password.module.scss";
-import ButtonIcon from "../../buttons/ButtonIcon";
+import styles from "./input-password.module.scss";
 import { useState } from "react";
-import Button from "../../buttons/Button";
 import cn from "classnames";
 
 export default function InputPassword({ placeholder, value, setValue }) {
@@ -18,7 +16,8 @@ export default function InputPassword({ placeholder, value, setValue }) {
         onChange={(e) => setValue(e.target.value)}
       />
       <div
-        onClick={() => setIsPasswordVisible((prevState) => !prevState)}
+        onMouseEnter={() => setIsPasswordVisible(true)}
+        onMouseLeave={() => setIsPasswordVisible(false)}
         className={cn(styles.passwordControl, {
           [styles.passwordControl__visible]: isPasswordVisible,
         })}
