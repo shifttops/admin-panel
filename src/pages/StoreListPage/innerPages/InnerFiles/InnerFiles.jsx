@@ -23,8 +23,6 @@ import cn from "classnames";
 import React, { useEffect, useState } from "react";
 import viewTypes from "types/viewTypes";
 import iconButtonTypes from "types/iconButtonTypes";
-import minFiles from "images/min-files.jpg";
-import playFile from "images/playFile.svg";
 import StoresStore from "../../../../store/StoresStore";
 import { refreshToken } from "../../../../helpers/AuthHelper";
 
@@ -47,7 +45,7 @@ export default function InnerFiles() {
         await refreshToken();
 
         const resp = await fetch(
-          `${process.env.REACT_APP_URL}/api/display_store_files/${storeInfo.store_id}/`,
+          `${process.env.REACT_APP_URL}/api/display_store_minio_files/${storeInfo.store_id}/`,
           {
             method: "GET",
             headers: {
@@ -127,9 +125,9 @@ export default function InnerFiles() {
               <React.Fragment key={file.date}>
                 <Checkbox label={file.date} className={styles.checkbox} />
                 <div className={styles.cards}>
-                  {file.files.map((file) => (
+                  {/*                  {file.files.map((file) => (
                     <ImageCard key={file} file={file} />
-                  ))}
+                  ))}*/}
                   {/* <ImageCard />
                   <ImageCard />
                   <ImageCard /> */}

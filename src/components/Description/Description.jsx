@@ -7,7 +7,7 @@ const Description = ({ message, className }) => {
 
   return (
     <td
-      className={cn(className, {
+      className={cn(styles.description, className, {
         [styles.visible]: isDescriptionVisible,
       })}
     >

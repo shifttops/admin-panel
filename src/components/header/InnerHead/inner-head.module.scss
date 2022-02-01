@@ -32,20 +32,6 @@
     margin-bottom: 35px;
   }
 
-  &__back {
-    font-size: 0.8em;
-    line-height: 16px;
-    text-transform: uppercase;
-    color: #333333;
-    padding-left: 22px;
-    margin-bottom: 33px;
-    background-image: url(../../../images/back.svg);
-    background-repeat: no-repeat;
-    background-position: top 1.5px left;
-    cursor: pointer;
-    display: inline-block;
-  }
-
   &__status {
     display: flex;
     align-items: center;

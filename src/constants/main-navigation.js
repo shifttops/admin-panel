@@ -9,6 +9,8 @@ import {
   PlannerIcon,
   PlannerStrokeIcon,
   ChatMenuIcon,
+  ScriptLogIcon,
+  TicketIcon,
 } from "icons";
 import StoreListPage from "pages/StoreListPage";
 import UsersPage from "pages/UsersPage";
@@ -20,7 +22,7 @@ import PlannerPage from "pages/PlannerPage";
 import GroupPage from "pages/GroupPage";
 import ChatPage from "pages/ChatPage";
 import ScriptsLogsPage from "pages/ScriptsLogsPage";
-import { ScriptLogIcon } from "../icons";
+import TicketsPage from "../pages/TicketsPage";
 
 const mainNavigation = [
   {
@@ -28,6 +30,12 @@ const mainNavigation = [
     name: "Store list",
     Component: StoreListPage,
     icon: <HomeIcon />,
+  },
+  {
+    to: routes.tickets,
+    name: "Tickets list",
+    Component: TicketsPage,
+    icon: <TicketIcon />,
   },
   {
     to: routes.users,
@@ -77,12 +85,12 @@ const mainNavigation = [
     Component: PlannerPage,
     icon: <PlannerStrokeIcon />,
   },
-  {
+  /*  {
     to: routes.mcdStores,
     name: "Group",
     Component: GroupPage,
     icon: <GroupIcon />,
-  },
+  },*/
   {
     to: routes.chat,
     name: "Chat",

@@ -7,7 +7,7 @@ import ButtonIcon from "components/buttons/ButtonIcon";
 import statusButtonTypes from "types/statusButtonTypes";
 import cn from "classnames";
 import { useState } from "react";
-import { statusMapper } from "../../../helpers/mappers";
+import { storeStatusMapper } from "../../../helpers/mappers";
 
 const statusButtonTypeMap = {
   [statusButtonTypes.deployed]: styles.deployed,
@@ -74,11 +74,11 @@ export default function TableRow({
         <div
           className={cn(
             styles.store__icon,
-            statusMapper.find((item) => item.name === status)?.className
+            storeStatusMapper.find((item) => item.name === status)?.className
           )}
         >
           {StatusIcon}
-          {statusMapper.find((item) => item.name === status)?.visibleName}
+          {storeStatusMapper.find((item) => item.name === status)?.visibleName}
         </div>
       </td>
       <td>{date_ready_deployed}</td>

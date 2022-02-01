@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { toJS } from "mobx";
 import Loader from "../../../../components/Loader";
+import ImageCard from "../../../../components/cards/ImageCard1";
 
 const InnerCameras = observer((props) => {
   const { storeInfo, cameras, isCamerasFetching } = StoresStore;
@@ -150,12 +151,21 @@ const InnerCameras = observer((props) => {
                 ))}
             </tbody>
           </table>
-
           <div className={styles.cards}>
             {cameras.get() &&
               cameras
                 .get()
-                .map((camera) => <FileCard key={camera.id} camera={camera} />)}
+                .map((camera) => (
+                  <ImageCard
+                    url={camera.preview}
+                    name={`${camera.view_name} .${
+                      camera.ip_address &&
+                      camera.ip_address.split(".")[
+                        camera.ip_address.split(".").length - 1
+                      ]
+                    }`}
+                  />
+                ))}
           </div>
         </>
       ) : (

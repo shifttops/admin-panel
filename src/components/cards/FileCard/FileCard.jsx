@@ -1,39 +1,104 @@
 import styles from "./file-card.module.scss";
 import ButtonIcon from "components/buttons/ButtonIcon";
-import { MoreIcon } from "icons";
 import { useState } from "react";
-import Loader from "../../Loader";
+import {
+  createMapper,
+  getFileFormat,
+  getFileName,
+  getImageForFile,
+} from "../../../helpers/functions";
+import { DeleteIcon, SaveVideo } from "../../../icons";
+import cn from "classnames";
+import withMoreMenu from "../../../helpers/HOC/withMoreMenu";
+import { saveAs } from "file-saver";
 
-const FileCard = ({ camera }) => {
-  const [isImageReady, setIsImageReady] = useState(false);
+const FileCard = ({
+  file,
+  className,
+  onClick,
+  onDelete,
+  onEdit,
+  onDownload,
+  withMenu,
+}) => {
+  const [isEditMode, setIsEditMode] = useState(false);
+
+  const handleImageClick = (e) => {
+    if (onClick) onClick();
+  };
+
+  const handleDownload = (e) => {
+    saveAs(file.file_url, getFileName(file.file, "/"));
+    if (onDownload) onDownload();
+  };
+
+  const handleEdit = (e) => {
+    setIsEditMode(true);
+  };
+
+  const handleEditSave = () => {
+    setIsEditMode(false);
+    if (onEdit) onEdit();
+  };
+
+  const handleDelete = (e) => {
+    if (onDelete) onDelete();
+  };
+
+  const Name = ({ name, isEditMode }) => (
+    <p className={styles.card__name}>{name}</p>
+  );
+
+  const moreMapper = createMapper({
+    titles: [
+      "Download", //"Edit",
+      "Delete",
+    ],
+    icons: [
+      SaveVideo, //EditIcon,
+      DeleteIcon,
+    ],
+    functions: [
+      handleDownload,
+      // handleEdit,
+      handleDelete,
+    ],
+  });
 
   return (
-    <div className={styles.card}>
-      <img
-        onLoad={() => setIsImageReady(true)}
-        onError={() => setIsImageReady(false)}
-        src={
-          camera.preview
-            ? `${process.env.REACT_APP_URL}${camera.preview}`
-            : "https://i.imgur.com/OVmimIN.jpg"
-        }
-        alt=""
-      />
-      {!isImageReady ? (
-        <div className={styles.loader}>
-          <Loader types={["medium", "grey"]} />
-        </div>
-      ) : null}
-      <div className={styles.cameraDescr}>
-        <div className={styles.info}>
-          <p className={styles.cameraName}>{`${camera.view_name} .${
-            camera.ip_address &&
-            camera.ip_address.split(".")[
-              camera.ip_address.split(".").length - 1
-            ]
-          }`}</p>
-          <ButtonIcon Icon={MoreIcon} className={styles.cardMore} />
-        </div>
+    <div className={cn(styles.card, className)}>
+      <div className={styles.card__imageBox}>
+        <img
+          onClick={(e) => handleImageClick(e)}
+          src={getImageForFile(getFileFormat(getFileName(file.file, "/")))}
+          alt=""
+        />
+      </div>
+      <div className={styles.card__info}>
+        {withMenu ? (
+          withMoreMenu({
+            Component: Name,
+            ...{
+              componentProps: {
+                name: getFileName(file.file, "/"),
+                isEditMode,
+              },
+              ...{
+                moreMapper,
+                name: getFileName(file.file, "/"),
+              },
+            },
+          })
+        ) : (
+          <>
+            <Name name={getFileName(file.file, "/")} />
+            <ButtonIcon
+              className={styles.cardMore}
+              Icon={SaveVideo}
+              onClick={handleDownload}
+            />
+          </>
+        )}
       </div>
     </div>
   );

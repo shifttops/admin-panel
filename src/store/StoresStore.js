@@ -21,6 +21,7 @@ class StoresStore {
   isPlannerFetching = false;
   isServersFetching = false;
   isStatusFetching = false;
+  isTicketsFetching = false;
 
   isChatMessagesFetching = false;
   isChatFilesFetching = false;
@@ -41,6 +42,7 @@ class StoresStore {
   messagesData = observable.box([]);
   chatFilesData = observable.box([]);
   chatInterval = observable.box(null);
+  storeTickets = observable.box([]);
 
   constructor() {
     makeAutoObservable(
@@ -127,6 +129,17 @@ class StoresStore {
             this.storeInfo.store_id,
             (msg) => msg && console.log("msg", msg)
           );
+        }
+      }
+    );
+
+    reaction(
+      () => this.storeTickets.get(),
+      (tickets) => {
+        if (!tickets) {
+          this.getStoreTickets({
+            store_id: this.storeInfo.store_id,
+          });
         }
       }
     );
@@ -689,6 +702,38 @@ class StoresStore {
     }
   };
 
+  getStoreTickets = async ({ store_id }) => {
+    try {
+      await refreshToken();
+
+      this.isTicketsFetching = true;
+
+      const resp = await fetch(
+        `${process.env.REACT_APP_URL}/api/store/${store_id}/tickets/`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Token ${localStorage.getItem("access")}`,
+          },
+        }
+      );
+
+      if (resp.status === 200) {
+        const res = await resp.json();
+        this.storeTickets.set([...res]);
+        if (!res.results.length)
+          ToastsStore.error("No tickets on this store", 3000, "toast");
+      } else {
+        const res = await resp.json();
+        ToastsStore.error(res.error, 3000, "toast");
+      }
+      this.isTicketsFetching = false;
+    } catch (e) {
+      this.isTicketsFetching = false;
+      ToastsStore.error(e.message, 3000, "toast");
+    }
+  };
+
   manageStore = async (url) => {
     try {
       await refreshToken();
@@ -836,7 +881,6 @@ class StoresStore {
       formData.set("is_message_pinned", is_message_pinned);
       if (files && files.length) {
         files.map((file) => formData.append("files", file));
-        console.log(1);
       } else formData.set("files", files);
 
       const resp = await fetch(

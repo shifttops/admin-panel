@@ -35,7 +35,6 @@ const InnerHistory = observer((props) => {
         <div className={styles.search}>
           <h2 className={styles.title}>History</h2>
           <SearchQuick />
-          <ButtonIcon Icon={SortIcon} />
         </div>
         <div className={styles.buttons}>
           <Button text="Choose period" className={styles.border} />
@@ -67,9 +66,9 @@ const InnerHistory = observer((props) => {
                 <td>{moment(item.error_time).format("DD.MM.YYYY")}</td>
                 <td>{moment(item.error_time).format("HH:mm")}</td>
                 <td>
-                  <NavLink to={routes.storeInfo}>
-                    <ButtonIcon Icon={MoreIcon} />
-                  </NavLink>
+                  {/*  <NavLink to={routes.storeInfo}>*/}
+                  {/*    <ButtonIcon Icon={MoreIcon} />*/}
+                  {/*  </NavLink>*/}
                 </td>
               </tr>
             ))}

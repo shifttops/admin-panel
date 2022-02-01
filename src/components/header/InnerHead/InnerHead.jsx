@@ -10,7 +10,8 @@ import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import routes from "../../../constants/routes";
 import StoresStore from "../../../store/StoresStore";
-import { statusMapper } from "../../../helpers/mappers";
+import { storeStatusMapper } from "../../../helpers/mappers";
+import BackLink from "../../BackLink";
 
 const InnerHead = observer((props) => {
   const location = useLocation();
@@ -38,9 +39,7 @@ const InnerHead = observer((props) => {
   return (
     <div className={styles.innerStore}>
       <div className={styles.innerStore__head}>
-        <Link className={styles.innerStore__back} to={routes.home}>
-          Back to Store list
-        </Link>
+        <BackLink path={routes.home} text={"Back to Store list"} />
         <div className={styles.innerStore__status}>
           <div className={styles.innerStore__wrap}>
             <p className={styles.innerStore__number}>
@@ -49,12 +48,14 @@ const InnerHead = observer((props) => {
             <div className={styles.innerStore__buttons}>
               <Button
                 className={
-                  statusMapper.find((item) => item.name === storeInfo.status)
-                    ?.class
+                  storeStatusMapper.find(
+                    (item) => item.name === storeInfo.status
+                  )?.class
                 }
                 text={
-                  statusMapper.find((item) => item.name === storeInfo.status)
-                    ?.visibleName
+                  storeStatusMapper.find(
+                    (item) => item.name === storeInfo.status
+                  )?.visibleName
                 }
                 fetching={isStoreInfoFetching}
                 // Icon={CheckIcon}

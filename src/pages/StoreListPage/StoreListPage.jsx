@@ -1,5 +1,5 @@
 import styles from "./store-list-page.module.scss";
-import TableHead from "components/tables/TableHead";
+import TableHead from "../../components/tables/TableHead";
 import TableRow from "components/tables/TableRow";
 import DashboardHead from "components/header/DashboardHead";
 import { useEffect, useRef, useState } from "react";

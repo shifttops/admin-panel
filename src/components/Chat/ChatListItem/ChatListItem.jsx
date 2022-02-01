@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import styles from "./chat_list_item.module.scss";
+import styles from "./chat-list-item.module.scss";
 import { FavoriteStrokeIcon, PinFillIcon } from "../../../icons";
 
 const ChatListItem = ({ chat, isActive }) => (

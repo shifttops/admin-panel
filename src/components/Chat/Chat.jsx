@@ -9,7 +9,6 @@ import {
   MoreIcon,
 } from "../../icons";
 import MessageItem from "../MessageItem";
-import ChatFilesField from "./ChatFilesField";
 import ChatInput from "./ChatInput";
 import moment from "moment";
 import cn from "classnames";
@@ -17,6 +16,11 @@ import DatePicker from "react-datepicker";
 import Button from "../buttons/Button";
 import "./customDatePicker.scss";
 import Loader from "../Loader";
+import AttachmentsField from "./AttachmentsField";
+import FavoriteMessagesField from "./FavoriteMessagesField";
+import InfoField from "./InfoField";
+import withDropDown from "../../helpers/HOC/withDropDown";
+import DateComp from "../Date";
 
 const Chat = ({
   chatData,
@@ -98,6 +102,38 @@ const Chat = ({
       return dateMoment.format("DD MMMM YYYY");
     }
   };
+
+  const chatFilesMapper = [
+    {
+      title: "info",
+      Component: InfoField,
+      props: {
+        isChatMessagesFetching,
+        items: chatFilesData,
+        messagesCount: chatData.length,
+      },
+    },
+    {
+      title: "favorite",
+      Component: FavoriteMessagesField,
+      props: {
+        isChatMessagesFetching,
+        items: favoriteMessages,
+        handleFavoriteAdd,
+      },
+    },
+    {
+      title: "attachments",
+      Component: AttachmentsField,
+      props: {
+        items: chatFilesData,
+        editStoreChatFile,
+        deleteStoreChatFile,
+        store_id,
+        isChatFilesFetching,
+      },
+    },
+  ];
 
   return (
     <div className={styles.chatWrapper}>
@@ -205,7 +241,9 @@ const Chat = ({
                           .includes(search.toLowerCase())
                     ).length ? (
                       <div className={styles.messages__date}>
-                        <span>{humanizeDate(date)}</span>
+                        <span>
+                          <DateComp date={date} dateOnly />
+                        </span>
                       </div>
                     ) : null}
                     {chatData
@@ -282,23 +320,9 @@ const Chat = ({
         </div>
       </div>
       <div className={styles.files}>
-        {["info", "favorite", "attachments"].map((name) => (
-          <ChatFilesField
-            title={name}
-            messagesCount={chatData.length}
-            items={
-              ["info", "attachments"].includes(name)
-                ? chatFilesData
-                : favoriteMessages
-            }
-            handleFavoriteAdd={handleFavoriteAdd}
-            isChatMessagesFetching={isChatMessagesFetching}
-            isChatFilesFetching={isChatFilesFetching}
-            editStoreChatFile={editStoreChatFile}
-            deleteStoreChatFile={deleteStoreChatFile}
-            store_id={store_id}
-          />
-        ))}
+        {chatFilesMapper.map(({ title, Component, props }) =>
+          withDropDown({ title, Component, ...{ ...props } })
+        )}
       </div>
     </div>
   );
