@@ -89,38 +89,13 @@
 }
 
 .files {
-  display: inline-flex;
+  display: grid;
+  width: 100%;
   align-items: center;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
   padding-bottom: 10px;
   flex-wrap: wrap;
-  &__file{
-    border: 1px dashed $color-black-05;
-    padding: 7px 15px 7px 8px;
-    border-radius: 5px;
-    align-items: center;
-    margin-right: 10px;
-    display: flex;
-    transition: all 0.3s ease 0s;
-    &__name {
-      margin-top: 2px;
-      color: $color-black-05;
-      font-size: 18px;
-      margin-right: 8px;
-    }
-    &__icon{
-      &__close {
-        margin-top: 5px;
-
-        &:hover {
-          color: $color-red;
-        }
-      }
-    }
-
-    &:hover {
-      background-color: $color-black-007;
-    }
-  }
 }
 
 .reply {

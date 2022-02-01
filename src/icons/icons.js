@@ -1199,3 +1199,65 @@ export const TimeIcon = ({ color = "#515151", ...props }) => (
     </g>
   </svg>
 );
+
+export const ZipIcon = ({ color = "#515151", ...props }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    viewBox="0 0 470 468"
+  >
+    <defs>
+      <filter
+        id="a"
+        width="111.8%"
+        height="111.9%"
+        x="-5.9%"
+        y="-3.9%"
+        filterUnits="objectBoundingBox"
+      >
+        <feOffset dy="5" in="SourceAlpha" result="shadowOffsetOuter1" />
+        <feGaussianBlur
+          in="shadowOffsetOuter1"
+          result="shadowBlurOuter1"
+          stdDeviation="4"
+        />
+        <feColorMatrix
+          in="shadowBlurOuter1"
+          result="shadowMatrixOuter1"
+          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.078125 0"
+        />
+        <feOffset dy="4" in="SourceAlpha" result="shadowOffsetOuter2" />
+        <feGaussianBlur
+          in="shadowOffsetOuter2"
+          result="shadowBlurOuter2"
+          stdDeviation="5.5"
+        />
+        <feColorMatrix
+          in="shadowBlurOuter2"
+          result="shadowMatrixOuter2"
+          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.210824275 0"
+        />
+        <feMerge>
+          <feMergeNode in="shadowMatrixOuter1" />
+          <feMergeNode in="shadowMatrixOuter2" />
+        </feMerge>
+      </filter>
+      <path
+        id="b"
+        d="M9.635 132.808C24.782 59.782 71.388 19.109 144.085 6.822c53.74-9.081 107.5-9.196 161.15.255 74.852 13.185 119.85 56.23 134.185 130.36 11.075 57.29 11.249 115.191-.174 172.427-15.324 72.52-63.132 117.285-135.561 129.527-53.74 9.08-107.5 9.195-161.15-.255-74.852-13.186-120.05-58.38-134.384-132.509-11.64-57.668-10.52-115.935 1.484-173.82z"
+      />
+    </defs>
+    <g fill="none" fillRule="evenodd" transform="translate(-21 -26)">
+      <g transform="translate(32 33)">
+        <use fill="#000" filter="url(#a)" xlinkHref="#b" />
+        <use fill="#F4A72E" xlinkHref="#b" />
+      </g>
+      <path
+        fill="#FFF"
+        d="M329.892 283.125v-90.792h17.788v90.543c0 23.857-19.34 43.198-43.198 43.198H147.333v-17.788h157.398c13.896 0 25.161-11.265 25.161-25.16zM227.498 148.5H347.68v17.667H227.844a19.3 19.3 0 0 1-13.748-5.754l-22.416-22.746h-24.494v7.696h-14.52v-7.696h-34v187.666H101v-190.39c0-8.253 6.69-14.943 14.943-14.943h76.807c4 0 7.837 1.589 10.666 4.418l24.082 24.082zm-74.832 26.362v-17.529h14.52v17.529h-14.52zm.001 29.181v-17.53h14.52v17.53h-14.52zm1.885 25.815c0-3.1 2.536-5.635 5.635-5.635 3.097 0 5.633 2.536 5.633 5.635v17.59c0 3.1-2.535 5.636-5.633 5.636-3.1 0-5.636-2.536-5.636-5.635v-17.591zm-11.25-1.15v19.25c0 9.144 7.48 16.626 16.625 16.626 9.144 0 16.625-7.482 16.625-16.625v-19.25c0-9.144-7.481-16.625-16.625-16.625s-16.625 7.48-16.625 16.625z"
+        transform="translate(32 33)"
+      />
+    </g>
+  </svg>
+);

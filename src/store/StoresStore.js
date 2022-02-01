@@ -4,6 +4,8 @@ import { refreshToken } from "../helpers/AuthHelper";
 import queryString from "query-string";
 import { createDateFilters } from "../helpers/filters";
 import { ToastsStore } from "react-toasts";
+import Api from "../api";
+import { getFileName } from "../helpers/functions";
 
 class StoresStore {
   isLoading = 0;
@@ -22,6 +24,7 @@ class StoresStore {
   isServersFetching = false;
   isStatusFetching = false;
   isTicketsFetching = false;
+  isConfigurationFilesFetching = false;
 
   isChatMessagesFetching = false;
   isChatFilesFetching = false;
@@ -43,20 +46,10 @@ class StoresStore {
   chatFilesData = observable.box([]);
   chatInterval = observable.box(null);
   storeTickets = observable.box([]);
+  configurationFiles = observable.box([]);
 
   constructor() {
-    makeAutoObservable(
-      this
-      //   , {
-      //   storeInfo: observable,
-      //   stores: observable,
-      //   searchStores: computed,
-      //   getStores: action,
-      //   getStoreInfo: action,
-      //   getStoreHardware: action,
-      //   getStoreServer: action,
-      // }
-    );
+    makeAutoObservable(this);
     reaction(
       () => this.storeInfo.status,
       (status, previousValue, reaction) => {
@@ -138,6 +131,17 @@ class StoresStore {
       (tickets) => {
         if (!tickets) {
           this.getStoreTickets({
+            store_id: this.storeInfo.store_id,
+          });
+        }
+      }
+    );
+
+    reaction(
+      () => this.configurationFiles.get(),
+      (files) => {
+        if (!files) {
+          this.getStoreConfigurationFiles({
             store_id: this.storeInfo.store_id,
           });
         }
@@ -970,6 +974,60 @@ class StoresStore {
       ToastsStore.error(e.message, 3000, "toast");
     }
   };
+
+  getStoreConfigurationFiles = async ({ store_id }) => {
+    try {
+      this.isConfigurationFilesFetching = true;
+      await refreshToken();
+
+      const resp = await Api.get(
+        `/display_store_configuration_files/${store_id}/`,
+        {
+          headers: {
+            Authorization: `Token ${localStorage.getItem("access")}`,
+          },
+        }
+      );
+
+      if (resp.status === 200) this.configurationFiles.set([...resp.data]);
+      else ToastsStore.error(resp.data.detail, 3000, "toast");
+      this.isConfigurationFilesFetching = false;
+    } catch (e) {
+      this.isConfigurationFilesFetching = false;
+      ToastsStore.error(e.message, 3000, "toast");
+    }
+  };
+
+  downloadMinioFile = async ({ store_id, suffix, fileName }) => {
+    try {
+      await refreshToken();
+
+      const resp = await fetch(
+        `${process.env.REACT_APP_URL}/api/download_file_minio/`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Token ${localStorage.getItem("access")}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ suffix, store_id }),
+        }
+      );
+
+      if (resp.status === 200) {
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(await resp.blob());
+        link.download = getFileName(fileName, "/");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } else ToastsStore.error("Error on download", 3000, "toast");
+    } catch (e) {
+      ToastsStore.error(e.message, 3000, "toast");
+    }
+  };
+
+  uploadMinioFile = async ({ store_id, suffix, file }) => {};
 }
 
 export default new StoresStore();

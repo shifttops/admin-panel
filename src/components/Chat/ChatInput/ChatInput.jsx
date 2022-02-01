@@ -4,17 +4,13 @@ import ButtonIcon from "../../buttons/ButtonIcon";
 import { CloseIcon, EmojiIcon, PinFileIcon } from "../../../icons";
 import Button from "../../buttons/Button";
 import StoresStore from "../../../store/StoresStore";
-import {
-  getFileFormat,
-  getFileName,
-  getIconForFile,
-  getTypeIconForFile,
-} from "../../../helpers/functions";
+import { getFileName } from "../../../helpers/functions";
 import cn from "classnames";
 import moment from "moment";
 import Picker from "emoji-picker-react";
 import { FileDrop } from "react-file-drop";
 import "./file-drop.scss";
+import FileUploaded from "../../FileUploaded";
 
 const ChatInput = ({
   store_id,
@@ -193,39 +189,14 @@ const ChatInput = ({
       {files.length ? (
         <div className={styles.files}>
           {files.map((file) => (
-            <div className={styles.files__file}>
-              <span className={styles.files__file__icon}>
-                <ButtonIcon
-                  disabled
-                  Icon={getIconForFile(
-                    getFileFormat(
-                      isEditMode && file.file
-                        ? getFileName(file.file, "/")
-                        : file.name
-                    )
-                  )}
-                  type={getTypeIconForFile(
-                    getFileFormat(
-                      isEditMode && file.file
-                        ? getFileName(file.file, "/")
-                        : file.name
-                    )
-                  )}
-                />
-              </span>
-              <span className={styles.files__file__name}>
-                {isEditMode && file.file
+            <FileUploaded
+              onRemove={() => handleRemoveFile(file)}
+              fileName={
+                isEditMode && file.file
                   ? getFileName(file.file, "/")
-                  : file.name}
-              </span>
-              <div
-                className={styles.files__file__icon__close}
-                color={"rgba(38,38,38,0.72)"}
-                onClick={() => handleRemoveFile(file)}
-              >
-                <CloseIcon />
-              </div>
-            </div>
+                  : file.name
+              }
+            />
           ))}
         </div>
       ) : null}

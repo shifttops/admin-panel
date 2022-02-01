@@ -24,6 +24,7 @@ import { FileDrop } from "react-file-drop";
 import "../../../components/Chat/ChatInput/file-drop.scss";
 import TicketsStore from "../../../store/TicketsStore";
 import { useHistory } from "react-router-dom";
+import FileUploaded from "../../../components/FileUploaded";
 
 const AddTicketPage = observer(() => {
   const history = useHistory();
@@ -206,23 +207,10 @@ const AddTicketPage = observer(() => {
           {files.length ? (
             <div className={styles.files}>
               {files.map((file) => (
-                <div className={styles.files__file}>
-                  <span className={styles.files__file__icon}>
-                    <ButtonIcon
-                      disabled
-                      Icon={getIconForFile(getFileFormat(file.name))}
-                      type={getTypeIconForFile(getFileFormat(file.name))}
-                    />
-                  </span>
-                  <span className={styles.files__file__name}>{file.name}</span>
-                  <div
-                    className={styles.files__file__icon__close}
-                    color={"rgba(38,38,38,0.72)"}
-                    onClick={() => handleRemoveFile(file)}
-                  >
-                    <CloseIcon />
-                  </div>
-                </div>
+                <FileUploaded
+                  fileName={file.name}
+                  onRemove={() => handleRemoveFile(file)}
+                />
               ))}
             </div>
           ) : null}
