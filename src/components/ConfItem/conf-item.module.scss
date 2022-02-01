@@ -6,12 +6,13 @@
   line-height: 20px;
   letter-spacing: -0.01em;
   color: $color-black;
+
   span {
     font-weight: 400;
   }
 }
 
-.buttons{
+.buttons {
   display: flex;
   max-width: 100px;
 }
@@ -30,4 +31,9 @@
   letter-spacing: -0.03em;
   color: $color-black;
   opacity: 0.5;
+}
+
+.loader {
+  width: 40px;
+  text-align: center;
 }

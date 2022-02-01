@@ -88,35 +88,6 @@
   grid-template-columns: repeat(4, 1fr);
   gap: 10px;
   align-items: center;
-
-  &__file{
-    border: 1px dashed $color-black-05;
-    padding: 7px 15px 7px 8px;
-    border-radius: 5px;
-    display: inline-grid;
-    grid-template-columns: 40px 1fr 10px;
-    column-gap: 10px;
-    width: 100%;
-    transition: all 0.3s ease 0s;
-    align-items: center;
-
-    &__name {
-      margin-top: 4px;
-      color: $color-black-05;
-      font-size: 18px;
-    }
-
-    &__icon{
-      &__close {
-        margin-top: 5px;
-        cursor: pointer;
-      }
-    }
-
-    &:hover {
-      background-color: $color-black-007;
-    }
-  }
 }
 
 .fileDrop {

@@ -13,6 +13,7 @@ import {
 import TicketsStore from "../../../store/TicketsStore";
 import Loader from "../../Loader";
 import { ToastsStore } from "react-toasts";
+import FileUploaded from "../../FileUploaded";
 
 const TicketComments = ({ comments, isSending, isFetching }) => {
   const inputRef = useRef(null);
@@ -62,23 +63,10 @@ const TicketComments = ({ comments, isSending, isFetching }) => {
         {files.length ? (
           <div className={styles.files}>
             {files.map((file) => (
-              <div className={styles.files__file}>
-                <span className={styles.files__file__icon}>
-                  <ButtonIcon
-                    disabled
-                    Icon={getIconForFile(getFileFormat(file.name))}
-                    type={getTypeIconForFile(getFileFormat(file.name))}
-                  />
-                </span>
-                <span className={styles.files__file__name}>{file.name}</span>
-                <div
-                  className={styles.files__file__icon__close}
-                  color={"rgba(38, 38, 38, 0.72)"}
-                  onClick={() => handleRemoveFile(file)}
-                >
-                  <CloseIcon />
-                </div>
-              </div>
+              <FileUploaded
+                onRemove={() => handleRemoveFile(file)}
+                fileName={file.name}
+              />
             ))}
           </div>
         ) : null}

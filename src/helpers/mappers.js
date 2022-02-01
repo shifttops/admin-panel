@@ -1,13 +1,13 @@
 import styles from "../components/buttons/Button/button.module.scss";
 import stylesTickets from "../components/Ticket/TicketStatus/ticket-status.module.scss";
-import { DocIcon, ImagesIcon, PptIcon, XlsIcon } from "../icons";
+import { DocIcon, ImagesIcon, PptIcon, XlsIcon, ZipIcon } from "../icons";
 import iconButtonTypes from "../types/iconButtonTypes";
 
 import docImage from "../images/docImage.png";
 import xlsImage from "../images/xlsImage.png";
 import pptImage from "../images/pptImage.png";
 import pdfImage from "../images/pdfImage.png";
-import folderImage from "../images/folderImage.png";
+import zipImage from "../images/zipImage.png";
 
 export const storeStatusMapper = [
   {
@@ -315,8 +315,8 @@ export const fileTypesMapper = [
   },
   {
     types: ["zip", "rar"],
-    image: folderImage,
-    icon: ImagesIcon,
+    image: zipImage,
+    icon: ZipIcon,
     type: iconButtonTypes.yellow,
   },
 ];
