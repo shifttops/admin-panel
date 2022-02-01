@@ -9,6 +9,8 @@ import { saveAs } from "file-saver";
 import { createMapper, getFileName } from "../../../helpers/functions";
 import { ToastsContainer, ToastsStore } from "react-toasts";
 import withMoreMenu from "../../../helpers/HOC/withMoreMenu";
+import Popup from "reactjs-popup";
+import ImagePopup from "../../popups/ImagePopup";
 
 const imageCardTypes = {
   small: styles.small,
@@ -97,20 +99,39 @@ const ImageCard = ({
 
   return (
     <div className={cn(styles.card, className, imageCardTypes[type])}>
-      <div className={styles.card__imageBox}>
-        <img
-          onClick={(e) => handleImageClick(e)}
-          onLoad={(e) => handleLoad(e)}
-          onError={(e) => handleError(e)}
-          src={currentUrl}
-          alt=""
-        />
-        {!isImageReady && currentUrl !== noImage ? (
-          <div className={styles.loader}>
-            <Loader types={["medium", "grey"]} />
-          </div>
-        ) : null}
-      </div>
+      {isImageReady && currentUrl !== noImage ? (
+        <Popup
+          modal
+          trigger={
+            <div className={styles.card__imageBox}>
+              <img
+                onClick={(e) => handleImageClick(e)}
+                onLoad={(e) => handleLoad(e)}
+                onError={(e) => handleError(e)}
+                src={currentUrl}
+                alt=""
+              />
+            </div>
+          }
+        >
+          {(close) => <ImagePopup url={currentUrl} onClose={close} />}
+        </Popup>
+      ) : (
+        <div className={styles.card__imageBox}>
+          <img
+            onClick={(e) => handleImageClick(e)}
+            onLoad={(e) => handleLoad(e)}
+            onError={(e) => handleError(e)}
+            src={currentUrl}
+            alt=""
+          />
+          {!isImageReady && currentUrl !== noImage ? (
+            <div className={styles.loader}>
+              <Loader types={["medium", "grey"]} />
+            </div>
+          ) : null}
+        </div>
+      )}
       <div className={styles.card__info}>
         {withMenu ? (
           withMoreMenu({

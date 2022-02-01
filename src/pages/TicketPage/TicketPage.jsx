@@ -73,7 +73,7 @@ const TicketPage = observer((props) => {
   const handleTicketDelete = async (close) => {
     const status = await deleteTicket({ id: +props.match.params.id });
 
-    if (status === 204) history.push("/tickets");
+    if (+status === 204) history.push("/tickets");
     close();
   };
 

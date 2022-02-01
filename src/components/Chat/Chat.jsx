@@ -86,23 +86,6 @@ const Chat = ({
       );
   };
 
-  const humanizeDate = (date) => {
-    const dateMoment = moment(date);
-    const dateFormatted = dateMoment.format("DD MMMM YYYY");
-
-    if (dateFormatted === moment().format("DD MMMM YYYY")) {
-      return "Today";
-    } else if (
-      dateFormatted === moment().subtract(1, "days").format("DD MMMM YYYY")
-    ) {
-      return "Yesterday";
-    } else if (dateMoment.year() === moment().year()) {
-      return dateMoment.format("DD MMMM");
-    } else {
-      return dateMoment.format("DD MMMM YYYY");
-    }
-  };
-
   const chatFilesMapper = [
     {
       title: "info",
