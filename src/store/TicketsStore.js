@@ -169,7 +169,7 @@ class TicketsStore {
 
       if (resp.status === 200) {
         this.ticketInfo = { ...(await resp.json()) };
-      } else ToastsStore.error(resp.detail, 3000, "toast");
+      } else ToastsStore.error((await resp.json()).detail, 3000, "toast");
       this.isTicketFetching = false;
     } catch (e) {
       this.isTicketFetching = false;

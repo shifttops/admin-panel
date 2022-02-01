@@ -386,10 +386,6 @@ const TicketPage = observer((props) => {
               setOtherType={setOtherType}
             />
           </div>
-          <ToastsContainer
-            store={ToastsStore}
-            position={ToastsContainerPosition.BOTTOM_RIGHT}
-          />
         </>
       ) : (
         <div className={styles.loader}>
@@ -400,6 +396,10 @@ const TicketPage = observer((props) => {
           )}
         </div>
       )}
+      <ToastsContainer
+        store={ToastsStore}
+        position={ToastsContainerPosition.BOTTOM_RIGHT}
+      />
     </div>
   ) : (
     <AddTicketPage />
