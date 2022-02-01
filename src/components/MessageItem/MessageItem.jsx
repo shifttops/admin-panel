@@ -8,6 +8,9 @@ import { DeleteIcon, EditIcon } from "../../icons";
 import Popup from "reactjs-popup";
 import PopupComponent from "../popups/PopupComponent/PopupComponent";
 import MessageItemFile from "./MessageItemFile";
+import DateComp from "../Date";
+import UserAccount from "../UserAccount";
+import File from "../File";
 
 const MessageItem = ({
   Icon = () => null,
@@ -52,27 +55,24 @@ const MessageItem = ({
     <div className={styles.message}>
       <div className={styles.message__head}>
         <div className={styles.message__info}>
-          <span
+          <UserAccount
+            accountName={
+              message.first_name.length && message.last_name.length
+                ? `${message.first_name} ${message.last_name}`
+                : `User ${message.user}`
+            }
             className={cn(styles.message__sender, {
               [styles.message__sender__you]:
                 localStorage.getItem("userName") ===
                 `${message.first_name} ${message.last_name}`,
             })}
-          >
-            {message.first_name.length && message.last_name.length
-              ? `${message.first_name} ${message.last_name}`
-              : `User ${message.user}`}
-          </span>
+          />
           <span
             className={cn(styles.message__time, {
               [styles.message__time__favorite]: favoriteMessage,
             })}
           >
-            {!favoriteMessage
-              ? moment(message.created).format("HH:mm")
-              : moment().year() === moment(message.created).year()
-              ? moment(message.created).format("DD MMMM, HH:mm")
-              : moment(message.created).format("DD MMMM YYYY, HH:mm")}
+            <DateComp date={message.created} timeOnly={!favoriteMessage} />
           </span>
           {!favoriteMessage ? (
             <span
@@ -87,7 +87,7 @@ const MessageItem = ({
               Reply
             </span>
           ) : null}
-          {!favoriteMessage ? <ChatCheckIcon /> : null}
+          {/*{!favoriteMessage ? <ChatCheckIcon /> : null}*/}
         </div>
         <div className={styles.message__buttons}>
           {localStorage.getItem("userName") ===
@@ -145,30 +145,32 @@ const MessageItem = ({
       </div>
       <p className={styles.message__text}>{message.message}</p>
       {message.files.length ? (
-        <div className={styles.message__files}>
+        <div className={cn(styles.message__files)}>
           {Array.from(message.files).map((file) => (
-            <MessageItemFile file={file} />
+            <File file={file} />
           ))}
         </div>
       ) : null}
       {Object.keys(repliedMessage).length ? (
         <div className={styles.message__replyMessage}>
-          <span
+          <UserAccount
+            accountName={
+              repliedMessage.first_name.length &&
+              repliedMessage.last_name.length
+                ? `${repliedMessage.first_name} ${repliedMessage.last_name}`
+                : `User ${repliedMessage.user}`
+            }
             className={cn(styles.message__sender, {
               [styles.message__sender__you]:
                 localStorage.getItem("userName") ===
                 `${repliedMessage.first_name} ${repliedMessage.last_name}`,
             })}
-          >
-            {repliedMessage.first_name.length && repliedMessage.last_name.length
-              ? `${repliedMessage.first_name} ${repliedMessage.last_name}`
-              : `User ${repliedMessage.user}`}
-          </span>
+          />
           <p className={styles.message__text}>{repliedMessage.message}</p>
           {repliedMessage.files.length ? (
             <div className={styles.message__files}>
               {Array.from(repliedMessage.files).map((file) => (
-                <MessageItemFile file={file} />
+                <File file={file} />
               ))}
             </div>
           ) : null}

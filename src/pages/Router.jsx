@@ -18,6 +18,7 @@ import {
 } from "../constants/inner-navigation";
 import ScriptsLogInfo from "./ScriptsLogInfo/ScriptsLogInfo";
 import AppStore from "../store/AppStore";
+import TicketPage from "./TicketPage";
 
 export default function CustomRouter() {
   const { sidebarToggle } = AppStore;
@@ -59,6 +60,11 @@ export default function CustomRouter() {
                   path={`${routes.scripts_logs}/:id`}
                   exact
                   component={(props) => <ScriptsLogInfo {...props} />}
+                />
+                <Route
+                  path={`${routes.tickets}/:id`}
+                  exact
+                  component={(props) => <TicketPage {...props} />}
                 />
                 {innerNavigation.map(({ to, Component }) => (
                   <Route

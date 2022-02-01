@@ -1,0 +1,75 @@
+@import "../../../scss/variables";
+
+.label {
+  max-width: 700px;
+  font-size: 16px;
+  color: $color-black-05;
+  display: inline-grid;
+  grid-template-columns: 125px 300px;
+  column-gap: 40px;
+  align-items: center;
+
+  &__withError {
+    grid-template-columns: 125px 300px 1fr;
+  }
+
+  &:not(:last-child) {
+    margin-bottom: 15px;
+  }
+
+  &__title {
+    text-align: right;
+    position: relative;
+
+    &::after {
+      content: '';
+      width: 1px;
+      height: 70%;
+      position: absolute;
+      right: -20px;
+      top: 15%;
+      background-color: $color-black-007;
+    }
+  }
+}
+
+.input {
+  position: relative;
+
+  input, select {
+    width: 100%;
+  }
+
+  textarea {
+    resize: none;
+    width: 100%;
+    overflow-y: auto;
+    height: 100px;
+  }
+
+  textarea, input {
+    outline: none;
+
+    border-radius: $border-radius;
+    border: 1px solid $color-black-007;
+    padding: 4px 12px;
+    color: $color-black-05;
+  }
+}
+
+.error {
+  textarea, input {
+    border-radius: $border-radius;
+    border: 1px solid $color-red;
+  }
+}
+
+.errorBlock {
+  margin-top: 1px;
+  color: #DB0007FF;
+  text-align: left;
+}
+
+.datePicker {
+  width: 100%;
+}

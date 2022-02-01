@@ -1,5 +1,15 @@
 import styles from "../components/buttons/Button/button.module.scss";
-export const statusMapper = [
+import stylesTickets from "../components/Ticket/TicketStatus/ticket-status.module.scss";
+import { DocIcon, ImagesIcon, PptIcon, XlsIcon } from "../icons";
+import iconButtonTypes from "../types/iconButtonTypes";
+
+import docImage from "../images/docImage.png";
+import xlsImage from "../images/xlsImage.png";
+import pptImage from "../images/pptImage.png";
+import pdfImage from "../images/pdfImage.png";
+import folderImage from "../images/folderImage.png";
+
+export const storeStatusMapper = [
   {
     visibleName: "Store Deployed",
     name: "Store Deployed",
@@ -247,5 +257,155 @@ export const notificationSettingsMapper = [
   {
     label: "Scripts launching",
     field: "scripts_running",
+  },
+];
+
+export const ticketStatusMapper = [
+  {
+    visibleName: "Waiting for support",
+    name: "SUPPORT",
+    className: stylesTickets.blue,
+  },
+  {
+    visibleName: "In progress",
+    name: "PROGRESS",
+    className: stylesTickets.blue,
+  },
+  {
+    visibleName: "Resolved",
+    name: "RESOLVED",
+    className: stylesTickets.green,
+  },
+  {
+    visibleName: "Canceled",
+    name: "CANCELED",
+    className: stylesTickets.red,
+  },
+];
+
+export const fileTypesMapper = [
+  {
+    types: ["jpg", "jpeg", "png", "webp", "svg"],
+    icon: ImagesIcon,
+    type: iconButtonTypes.grey,
+  },
+  {
+    types: ["docx", "doc", "txt", "rtf"],
+    image: docImage,
+    icon: DocIcon,
+    type: iconButtonTypes.blue,
+  },
+  {
+    types: ["xls", "xlsx"],
+    image: xlsImage,
+    icon: XlsIcon,
+    type: iconButtonTypes.green,
+  },
+  {
+    types: ["ppt", "pptx"],
+    image: pptImage,
+    icon: PptIcon,
+    type: iconButtonTypes.yellow,
+  },
+  {
+    types: ["pdf"],
+    image: pdfImage,
+    icon: ImagesIcon,
+    type: iconButtonTypes.grey,
+  },
+  {
+    types: ["zip", "rar"],
+    image: folderImage,
+    icon: ImagesIcon,
+    type: iconButtonTypes.yellow,
+  },
+];
+
+export const ticketDetailsMapper = [
+  {
+    title: "Assignee",
+    field: "assignee",
+  },
+  {
+    title: "Ticket type",
+    field: "type",
+  },
+  {
+    title: "Reporter",
+    field: "reporter",
+  },
+  {
+    title: "Priority",
+    field: "priority",
+  },
+  {
+    title: "Stores",
+    field: "stores",
+  },
+];
+
+export const ticketPriorityMapper = [
+  {
+    visibleName: "Very high",
+    name: "HIGHEST",
+    Icon: () => {},
+  },
+  {
+    visibleName: "High",
+    name: "HIGH",
+    Icon: () => {},
+  },
+  {
+    visibleName: "Low",
+    name: "LOW",
+    Icon: () => {},
+  },
+  {
+    visibleName: "Very low",
+    name: "LOWEST",
+    Icon: () => {},
+  },
+];
+
+export const ticketTypesMapper = [
+  {
+    visibleName: "Ghost Cars",
+    name: "GHOSTCARS",
+  },
+  {
+    visibleName: "No metrics",
+    name: "NO_METRICS",
+  },
+  {
+    visibleName: "MDB-error",
+    name: "MDB_ERROR",
+  },
+  {
+    visibleName: "Cameras position issue",
+    name: "CAMERA_POSITION",
+  },
+  {
+    visibleName: "Camera is up/down",
+    name: "CAMERA_IS_UP_DOWN",
+  },
+  {
+    visibleName: "No dashboard",
+    name: "NO_DASHBORD",
+  },
+  {
+    visibleName: "VMS change",
+    name: "VMS_CHANGE",
+  },
+  {
+    visibleName: "Server restart",
+    name: "SERVER_RESTART",
+  },
+  {
+    visibleName: "Dashboard latency",
+    name: "DASHBORD_LATENCY",
+  },
+  {
+    visibleName: "Other",
+    name: "OTHER_TYPE",
   },
 ];

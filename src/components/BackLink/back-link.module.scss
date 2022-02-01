@@ -1,0 +1,19 @@
+@import "../../scss/variables";
+
+.link {
+  cursor: pointer;
+  margin-bottom: 40px;
+  background: url('../../images/back.svg') 0 2px no-repeat;
+  display: inline-block;
+  &:hover {
+    text-decoration: underline;
+    color: $color-black-05;
+  }
+
+  span {
+    text-transform: uppercase;
+    margin-left: 25px;
+    font-size: 12px;
+    transition: all 0.3s ease;
+  }
+}

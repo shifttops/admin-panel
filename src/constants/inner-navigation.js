@@ -10,6 +10,7 @@ import InnerFiles from "pages/StoreListPage/innerPages/InnerFiles";
 import InnerManage from "pages/StoreListPage/innerPages/InnerManage";
 import InnerEdit from "../pages/ScriptsPage/InnerEdit/InnerEdit";
 import InnerLaunch from "../pages/ScriptsPage/InnerLaunch/InnerLaunch";
+import InnerTickets from "../pages/StoreListPage/innerPages/InnerTickets";
 
 export const innerNavigation = [
   { to: routes.storeInfo, name: "Store Info", Component: InnerInfo },
@@ -34,6 +35,11 @@ export const innerNavigation = [
     to: routes.innerCameras,
     name: "Cameras",
     Component: InnerCameras,
+  },
+  {
+    to: routes.innerTickets,
+    name: "Tickets",
+    Component: InnerTickets,
   },
   {
     to: routes.innerConfiguration,
@@ -66,6 +72,6 @@ export const presetNavigation = [
     name: "Preset",
     Component: InnerLaunch,
   },
-]
+];
 
 // export default innerNavigation;

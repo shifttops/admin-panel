@@ -3,6 +3,12 @@
   overflow: visible !important;
 }
 
+.description {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
 .button {
   display: block;
   max-width: 50px;
@@ -10,8 +16,9 @@
   color: rgba(0, 0, 0, 0.26);
   font-weight: 400;
   transition: all 0.3s ease 0s;
-  @media(any-hover: hover){
-    &:hover{
+  @media(any-hover: hover) {
+    &:hover {
+      cursor: pointer;
       color: rgba(37, 37, 37, 0.64);
     }
   }

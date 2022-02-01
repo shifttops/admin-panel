@@ -4,7 +4,7 @@ import styles from "./notification__item.module.scss";
 import { NavLink } from "react-router-dom";
 import cn from "classnames";
 import routes from "../../constants/routes";
-import { statusMapper } from "../../helpers/mappers";
+import { storeStatusMapper } from "../../helpers/mappers";
 
 const NotificationItem = ({ item, isRead }) => {
   const notificationsTypes = [
@@ -14,7 +14,7 @@ const NotificationItem = ({ item, isRead }) => {
       path: `${routes.innerChat}/${item.store_id}`,
     },
     {
-      types: statusMapper.map((item) => item.name),
+      types: [...storeStatusMapper.map((item) => item.name), "Store errors"],
       visibleName: item.event_type,
       path: `${routes.storeInfo}/${item.store_id}`,
     },
@@ -35,7 +35,7 @@ const NotificationItem = ({ item, isRead }) => {
       to={
         notificationsTypes.find((route) =>
           route.types.includes(item.event_type)
-        ).path
+        )?.path
       }
       className={styles.notification}
       key={item.id}

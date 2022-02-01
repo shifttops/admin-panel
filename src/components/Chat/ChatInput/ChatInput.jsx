@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import styles from "./chat_input.module.scss";
+import styles from "./chat-input.module.scss";
 import ButtonIcon from "../../buttons/ButtonIcon";
 import { CloseIcon, EmojiIcon, PinFileIcon } from "../../../icons";
 import Button from "../../buttons/Button";

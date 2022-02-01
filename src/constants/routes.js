@@ -13,6 +13,8 @@ const routes = {
   innerHistory: "/stores/inner-history",
   innerPlanner: "/stores/inner-planner",
   innerStatistic: "/stores/inner-statistic",
+  innerTickets: "/stores/inner-tickets",
+  tickets: "/tickets",
   login: "/login",
   logs: "/logs",
   scripts_logs: "/scripts-logs",

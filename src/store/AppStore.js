@@ -2,6 +2,7 @@ import { makeAutoObservable, observable } from "mobx";
 import { refreshToken } from "../helpers/AuthHelper";
 import { ToastsStore } from "react-toasts";
 import { isArray } from "@craco/craco/lib/utils";
+import TicketsStore from "./TicketsStore";
 
 class AppStore {
   isSidebarOpen = observable.box(true);
@@ -11,6 +12,8 @@ class AppStore {
   unreadNotificationCount = 0;
 
   searchStores = observable.box([]);
+  allStores = observable.box([]);
+  isLoadingAllStores = false;
 
   isLoadingSearch = 0;
   isLoadingNotificationSettings = false;
@@ -31,7 +34,10 @@ class AppStore {
       )}/ws/?token=${localStorage.getItem("access")}`
     );
 
-    this.socket.onopen = () => console.log("socket connected");
+    this.socket.onopen = async () => {
+      console.log("socket connected");
+      await Promise.all([TicketsStore.getAssigneeList(), this.getAllStores()]);
+    };
 
     this.socket.onclose = () => {
       console.log("socket disconnected");
@@ -180,6 +186,29 @@ class AppStore {
       this.isLoadingSearch--;
     } catch (e) {
       this.isLoadingSearch--;
+    }
+  };
+
+  getAllStores = async () => {
+    try {
+      this.isLoadingAllStores = true;
+      await refreshToken();
+
+      const resp = await fetch(
+        `${process.env.REACT_APP_URL}/api/store/?limit=9999&offset=0`,
+        {
+          headers: {
+            Authorization: `Token ${localStorage.getItem("access")}`,
+          },
+        }
+      );
+
+      if (resp.status === 200) this.allStores.set((await resp.json()).results);
+      else ToastsStore.error((await resp.json()).error, 3000, "toast");
+      this.isLoadingAllStores = false;
+    } catch (e) {
+      this.isLoadingAllStores = false;
+      ToastsStore.error(e.message, 3000, "toast");
     }
   };
 }
