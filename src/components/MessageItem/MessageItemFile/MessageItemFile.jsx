@@ -8,7 +8,7 @@ import {
 import ButtonIcon from "../../buttons/ButtonIcon";
 import { saveAs } from "file-saver";
 import { fileTypesMapper } from "../../../helpers/mappers";
-import ImageCard from "../../cards/ImageCard1";
+import ImageCard from "../../cards/ImageCard";
 import cn from "classnames";
 
 const MessageItemFile = ({ file, fileEditMode, setNewFileName }) => {

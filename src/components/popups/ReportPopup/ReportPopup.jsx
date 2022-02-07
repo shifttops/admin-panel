@@ -2,7 +2,6 @@ import styles from "./report-popup.module.scss";
 import DatePicker from "react-datepicker";
 import { CloseIcon, DateIcon } from "icons";
 import Checkbox from "components/Checkbox";
-import global from "scss/global.scss";
 import ButtonChoice from "components/buttons/ButtonChoice";
 import Button from "components/buttons/Button";
 import { useState } from "react";

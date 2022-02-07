@@ -1,16 +1,15 @@
 import styles from "./button.module.scss";
 import cn from "classnames";
 import { useState } from "react";
-import { useHistory } from "react-router-dom";
-import queryString from "query-string";
 import DatePicker from "react-datepicker";
 import InputRange from "react-input-range";
 import "react-input-range/lib/css/index.css";
 import "react-datepicker/dist/react-datepicker.css";
-import { toJS } from "mobx";
 import { observer } from "mobx-react";
 import StoresStore from "../../../store/StoresStore";
 import Checkbox from "../../Checkbox";
+import { ArrowDownIcon } from "../../../icons";
+import "./custom-input-range.scss";
 
 const FilterDropdownButton = observer(
   ({
@@ -71,6 +70,7 @@ const FilterDropdownButton = observer(
           type={type}
         >
           {text}
+          <ArrowDownIcon isOpen={isOpen} />
         </button>
         {isOpen && (
           <div className={styles.inside_div}>
@@ -125,11 +125,28 @@ const FilterDropdownButton = observer(
             ) : (
               filterValues.map((filter, i) =>
                 (filterKey === "status" ? filter : filter[filterKey]) ? (
-                  <div className={styles.checkbox_div} key={`${text}${i}`}>
+                  <div
+                    className={cn(styles.checkbox_div, {
+                      [styles.checkbox_div__checked]:
+                        enabledFiltersForKey.includes(
+                          filterKey === "status" ? filter : filter[filterKey]
+                        ),
+                    })}
+                    key={`${text}${i}`}
+                  >
                     <Checkbox
-                      label={filterKey === "status" ? filter : filter[filterKey]}
-                      onChange={(e) => handleCheckFilter(e, filterKey === "status" ? filter : filter[filterKey])}
-                      checked={enabledFiltersForKey.includes(filterKey === "status" ? filter : filter[filterKey])}
+                      label={
+                        filterKey === "status" ? filter : filter[filterKey]
+                      }
+                      onChange={(e) =>
+                        handleCheckFilter(
+                          e,
+                          filterKey === "status" ? filter : filter[filterKey]
+                        )
+                      }
+                      checked={enabledFiltersForKey.includes(
+                        filterKey === "status" ? filter : filter[filterKey]
+                      )}
                     />
                   </div>
                 ) : null

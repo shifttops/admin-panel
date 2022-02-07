@@ -1,16 +1,4 @@
-import styles from "./map.module.scss";
-import { VersionIcon } from "icons";
-import Button from "components/buttons/Button";
-import ButtonIcon from "components/buttons/ButtonIcon";
-import { observer } from "mobx-react";
-import StoresStore from "../../store/StoresStore";
-
-import {
-  withScriptjs,
-  withGoogleMap,
-  GoogleMap,
-  Marker,
-} from "react-google-maps";
+import { withScriptjs, withGoogleMap, GoogleMap } from "react-google-maps";
 import { useHistory } from "react-router-dom";
 import routes from "../../constants/routes";
 

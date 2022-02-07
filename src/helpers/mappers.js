@@ -1,6 +1,13 @@
 import styles from "../components/buttons/Button/button.module.scss";
 import stylesTickets from "../components/Ticket/TicketStatus/ticket-status.module.scss";
-import { DocIcon, ImagesIcon, PptIcon, XlsIcon, ZipIcon } from "../icons";
+import {
+  DocIcon,
+  ImagesIcon,
+  PptIcon,
+  VideoIcon,
+  XlsIcon,
+  ZipIcon,
+} from "../icons";
 import iconButtonTypes from "../types/iconButtonTypes";
 
 import docImage from "../images/docImage.png";
@@ -290,6 +297,11 @@ export const fileTypesMapper = [
     type: iconButtonTypes.grey,
   },
   {
+    types: ["mp4", "mkv", "mov", "avi", "flv"],
+    icon: VideoIcon,
+    type: iconButtonTypes.grey,
+  },
+  {
     types: ["docx", "doc", "txt", "rtf"],
     image: docImage,
     icon: DocIcon,
@@ -314,7 +326,7 @@ export const fileTypesMapper = [
     type: iconButtonTypes.grey,
   },
   {
-    types: ["zip", "rar"],
+    types: ["zip", "rar", "gz"],
     image: zipImage,
     icon: ZipIcon,
     type: iconButtonTypes.yellow,

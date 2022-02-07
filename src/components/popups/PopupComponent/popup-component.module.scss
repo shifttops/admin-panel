@@ -13,6 +13,13 @@
   justify-content: space-between;
   svg {
     cursor: pointer;
+    path {
+      transition: fill 0.3s ease;
+    }
+
+    &:hover path {
+      fill: $color-red;
+    }
   }
 }
 

@@ -12,24 +12,26 @@ import {
   SortIcon,
   VideoIcon,
 } from "icons";
-import FolderCard from "components/cards/FolderCard";
 import Checkbox from "components/Checkbox";
-import ImageCard from "components/cards/ImageCard";
-import VideoCard from "components/cards/VideoCard";
 import FilesFolderRow from "components/tables/FilesFolderRow";
-import FilesTableHead from "components/tables/FilesTableHead";
-import FilesRow from "components/tables/FilesRow";
+import FilesTableHead from "../../../../components/tables/FilesTableHead";
+import FilesRow from "../../../../components/tables/FilesRow";
 import cn from "classnames";
 import React, { useEffect, useState } from "react";
-import viewTypes from "types/viewTypes";
+import viewTypes from "../../../../types/viewTypes";
 import iconButtonTypes from "types/iconButtonTypes";
 import StoresStore from "../../../../store/StoresStore";
-import { refreshToken } from "../../../../helpers/AuthHelper";
+import moment from "moment";
+import File from "../../../../components/File";
+import { observer } from "mobx-react";
+import Loader from "../../../../components/Loader";
+import FolderCard from "../../../../components/cards/FolderCard";
 
-export default function InnerFiles() {
+const InnerFiles = observer((props) => {
+  const { storeInfo, isFilesFetching, storeFiles: files } = StoresStore;
+
   const [viewType, setViewType] = useState(viewTypes.grid);
-  const { storeInfo } = StoresStore;
-  const [files, setFiles] = useState([]);
+  const [dates, setDates] = useState([]);
 
   const setGridView = () => {
     setViewType(viewTypes.grid);
@@ -39,37 +41,23 @@ export default function InnerFiles() {
     setViewType(viewTypes.lines);
   };
 
+  const store_id = +props.match.params.id;
+
   useEffect(() => {
-    const getFiles = async () => {
-      try {
-        await refreshToken();
-
-        const resp = await fetch(
-          `${process.env.REACT_APP_URL}/api/display_store_minio_files/${storeInfo.store_id}/`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Token ${localStorage.getItem("access")}`,
-            },
-          }
-        );
-        if (resp.status === 200) {
-          const res = await resp.json();
-          const files = Object.keys(res)
-            .sort((a, b) => new Date(b) - new Date(a))
-            .map((key) => ({ files: res[key], date: key }));
-          setFiles(files);
-          // this.metrics.set({ ...res });
-          // setError("");
-        }
-      } catch (e) {
-        // setError(e.message);
-        console.log(e.message);
-      }
-    };
-
-    getFiles();
+    if (storeInfo.store_id === store_id) {
+      files.set(null);
+    }
   }, []);
+
+  useEffect(() => {
+    if (files.get() && files.get().length) {
+      setDates([
+        ...new Set(
+          files.get().map(({ created }) => created.format("DD MMMM YYYY"))
+        ),
+      ]);
+    }
+  }, [files.get()]);
 
   return (
     <div className={styles.wrapper}>
@@ -77,7 +65,6 @@ export default function InnerFiles() {
         <div className={styles.headInfo}>
           <h2 className={styles.title}>Folders</h2>
           <SearchQuick />
-          <ButtonIcon Icon={SortIcon} />
         </div>
         <div className={styles.buttons}>
           <div className={styles.viewButton}>
@@ -105,14 +92,8 @@ export default function InnerFiles() {
           <Button text="Create folder" Icon={AddFolderIcon} />
         </div>
       </div>
-
-      {viewType === viewTypes.grid && (
-        <>
-          <div className={styles.cards}>
-            <FolderCard />
-            <FolderCard />
-          </div>
-          <div className={styles.hr}></div>
+      {files.get() && files.get().length && !isFilesFetching ? (
+        viewType === viewTypes.grid ? (
           <div className={styles.inner}>
             <div className={styles.head}>
               <h2 className={styles.title}>Files</h2>
@@ -121,58 +102,85 @@ export default function InnerFiles() {
                 <ButtonIcon Icon={VideoIcon} />
               </div>
             </div>
-            {files.map((file) => (
-              <React.Fragment key={file.date}>
-                <Checkbox label={file.date} className={styles.checkbox} />
-                <div className={styles.cards}>
-                  {/*                  {file.files.map((file) => (
-                    <ImageCard key={file} file={file} />
-                  ))}*/}
-                  {/* <ImageCard />
-                  <ImageCard />
-                  <ImageCard /> */}
-                </div>
-              </React.Fragment>
-            ))}
-            {/* : ""} */}
+            {dates.length
+              ? dates.map((date) => (
+                  <React.Fragment key={date}>
+                    <Checkbox
+                      label={`${moment.weekdays(
+                        moment(date).isoWeekday()
+                      )}, ${date}`}
+                      className={styles.checkbox}
+                    />
+                    <div className={styles.cards}>
+                      {files
+                        .get()
+                        .filter(({ created }) =>
+                          moment(date).isSame(created, "days")
+                        )
+                        .sort((fileA, fileB) => {
+                          if (fileA.created.isAfter(fileB.created)) return -1;
+                          else if (fileA.created.isBefore(fileB.created))
+                            return 1;
+                          else return 0;
+                        })
+                        .map(({ created, filename }) => (
+                          <div>
+                            <File
+                              file={{
+                                file: filename,
+                                file_url: filename,
+                                created,
+                              }}
+                              cardFile
+                            />
+                          </div>
+                        ))}
+                    </div>
+                  </React.Fragment>
+                ))
+              : null}
           </div>
-          <div className={styles.inner}>
-            <Checkbox label="Fri, 12  March" className={styles.checkbox} />
-            <div className={styles.cards}>
-              <VideoCard />
-            </div>
+        ) : viewType === viewTypes.lines ? (
+          <div className={styles.lines}>
+            {/*            <table className={styles.table}>
+              <FilesTableHead thText="files" />
+              <tbody>
+                <FilesFolderRow label="Video" />
+                <FilesFolderRow label="Photo" />
+                <FilesFolderRow label="Screensavers" />
+              </tbody>
+            </table>*/}
+            {/*<div className={styles.hrLines}></div>*/}
+            <table className={cn(styles.table, styles.tableFiles)}>
+              <FilesTableHead thText="File size" />
+              <tbody>
+                {files.get().map(({ created, filename }) => (
+                  <React.Fragment key={created}>
+                    <FilesRow
+                      file={{
+                        file: filename,
+                        file_url: filename,
+                        created,
+                      }}
+                      key={created}
+                    />
+                  </React.Fragment>
+                ))}
+              </tbody>
+            </table>
           </div>
-        </>
-      )}
-      {viewType === viewTypes.lines && (
-        <div className={styles.lines}>
-          <table className={styles.table}>
-            <FilesTableHead thText="files" />
-            <tbody>
-              <FilesFolderRow label="Video" />
-              <FilesFolderRow label="Photo" />
-              <FilesFolderRow label="Screensavers" />
-            </tbody>
-          </table>
-          <div className={styles.hrLines}></div>
-          <table className={cn(styles.table, styles.tableFiles)}>
-            <FilesTableHead thText="File size" />
-            <tbody>
-              {files.map((file) => (
-                <React.Fragment key={file.date}>
-                  <Checkbox
-                    label={file.date}
-                    className={styles.checkboxTable}
-                  />
-                  {file.files.map((file) => (
-                    <FilesRow file={file} key={file} />
-                  ))}
-                </React.Fragment>
-              ))}
-            </tbody>
-          </table>
+        ) : null
+      ) : (
+        <div className={styles.loader}>
+          {isFilesFetching ? (
+            <Loader types={["medium"]} />
+          ) : (
+            "No files on this store"
+          )}
         </div>
       )}
     </div>
   );
-}
+});
+
+export default InnerFiles;

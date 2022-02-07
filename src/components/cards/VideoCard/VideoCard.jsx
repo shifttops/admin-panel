@@ -3,8 +3,10 @@ import ButtonIcon from "components/buttons/ButtonIcon";
 import { MoreIcon } from "icons";
 import image from "images/image-files.jpg";
 import Checkbox from "components/Checkbox";
+import { getFileName } from "../../../helpers/functions";
+import DateComp from "../../Date";
 
-export default function VideoCard() {
+const VideoCard = ({ file }) => {
   return (
     <div className={styles.card}>
       <div className={styles.header}>
@@ -19,11 +21,15 @@ export default function VideoCard() {
       </div>
 
       <div className={styles.info}>
-        <p className={styles.title}>
-          ID: 20209 - <span className={styles.name}>Video_013</span>
-        </p>
-        <p className={styles.date}>4 days ago</p>
+        <div>
+          <span className={styles.name}>{getFileName(file.file, "/")}</span>
+          <p className={styles.date}>
+            {file.created ? <DateComp timeOnly date={file.created} /> : null}
+          </p>
+        </div>
       </div>
     </div>
   );
-}
+};
+
+export default VideoCard;

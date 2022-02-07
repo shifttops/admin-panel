@@ -9,7 +9,6 @@ import {
 import SearchQuick from "components/search/SearchQuick";
 import Button from "components/buttons/Button";
 import ConfItem from "../../../../components/ConfItem";
-import iconButtonTypes from "types/iconButtonTypes";
 import { observer } from "mobx-react";
 import StoresStore from "../../../../store/StoresStore";
 import { useEffect, useState } from "react";

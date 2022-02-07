@@ -1,8 +1,5 @@
 import styles from "./filter-popup.module.scss";
 import { CloseIcon, DateIcon } from "icons";
-import Checkbox from "components/Checkbox";
-import global from "scss/global.scss";
-import ButtonChoice from "components/buttons/ButtonChoice";
 import Button from "components/buttons/Button";
 import StoresStore from "../../../store/StoresStore";
 import { observer } from "mobx-react";
@@ -13,24 +10,29 @@ import FilterDropdownButton from "../../buttons/FilterDropdownButton";
 import { useHistory, useLocation } from "react-router-dom";
 import queryString from "query-string";
 import { toJS } from "mobx";
+import { ToastsStore } from "react-toasts";
+import Loader from "../../Loader";
 
 const FilterPopup = observer(({ onClose }) => {
-  const { filters, getFilters, enabledFilters, getStores } = StoresStore;
+  const { filters, getFilters, enabledFilters, isFiltersFetching } =
+    StoresStore;
   const [error, setError] = useState(false);
-  // const [enabledFilters, setEnabledFilters] = useState(queryString.parse(location.search, { arrayFormat: 'comma' }));
   const history = useHistory();
   const location = useLocation();
 
   const applyFilters = (e) => {
     console.log(toJS(enabledFilters));
-    history.push({
-      pathname: location.pathname,
-      search: queryString.stringify(enabledFilters, {
-        arrayFormat: "comma",
-        // skipNull: true,
-        // skipEmptyString: true,
-      }),
-    });
+
+    if (Object.keys(toJS(enabledFilters)).length) {
+      history.push({
+        pathname: location.pathname,
+        search: queryString.stringify(enabledFilters, {
+          arrayFormat: "comma",
+          // skipNull: true,
+          // skipEmptyString: true,
+        }),
+      });
+    } else ToastsStore.error("Select at least 1 option", 3000, "toast");
     // getStores(setError);
   };
 
@@ -50,52 +52,39 @@ const FilterPopup = observer(({ onClose }) => {
       </div>
       <form>
         <div className={styles.block}>
-          <p className={styles.category}>Choose category</p>
-          {filters &&
-            Object.keys(filters).map((filterKey) => (
-              <FilterDropdownButton
-                enabledFiltersForKey={
-                  // filterKey === "date_created" ||
-                  // filterKey === "date_deployment"
-                  //   ? [
-                  //       enabledFilters[`${filterKey}__range`],
-                  //       // enabledFilters[`${filterKey}__range`],
-                  //     ]
-                  //   :
-                  enabledFilters[filterKey]
-                }
-                key={filterKey}
-                allEnabledFilters={enabledFilters}
-                text={
-                  filtersMapper.find((item) => item.name === filterKey)
-                    ?.visibleName
-                }
-                filterKey={filterKey}
-                filterValues={filters[filterKey]}
-              />
-              // <Checkbox className={styles.checkbox} label={filtersMapper.find(item => item.name === filterKey)?.visibleName} />
-
-              // <Checkbox className={styles.checkbox} label="Events" />
-              // <Checkbox className={styles.checkbox} label="System status" />
-              // <Checkbox className={styles.checkbox} label="Status of devices" />
-            ))}
+          {!isFiltersFetching ? (
+            <>
+              <p className={styles.category}>Choose category</p>
+              {filters
+                ? Object.keys(filters).map((filterKey) => (
+                    <FilterDropdownButton
+                      enabledFiltersForKey={enabledFilters[filterKey]}
+                      key={filterKey}
+                      allEnabledFilters={enabledFilters}
+                      text={
+                        filtersMapper.find((item) => item.name === filterKey)
+                          ?.visibleName
+                      }
+                      filterKey={filterKey}
+                      filterValues={filters[filterKey]}
+                    />
+                  ))
+                : null}
+            </>
+          ) : (
+            <div className={styles.loader}>
+              <Loader types={["small"]} />
+            </div>
+          )}
         </div>
-        {/* <div className={styles.block}>
-          <p className={styles.category}>Format</p>
-          <ButtonChoice text="Excel" />
-          <ButtonChoice text="PDF" />
-          <ButtonChoice text="Web" />
-          <div className={styles.popupButton}>
-            <Button text="Create report" />
-          </div>
-        </div> */}
-        <button
-          className={styles.applyButton}
-          type="button"
-          onClick={applyFilters}
-        >
-          Apply
-        </button>
+        <div className={styles.applyButton}>
+          <Button
+            disabled={isFiltersFetching}
+            text={"Apply"}
+            onClick={applyFilters}
+            type="button"
+          />
+        </div>
       </form>
     </div>
   );

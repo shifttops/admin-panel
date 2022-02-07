@@ -1,32 +1,27 @@
 import styles from "./checkouts_popup.module.scss";
 import { CloseIcon, DateIcon } from "icons";
-import Checkbox from "components/Checkbox";
-import global from "scss/global.scss";
-import ButtonChoice from "components/buttons/ButtonChoice";
+import Checkbox from "../../../components/Checkbox";
 import Button from "components/buttons/Button";
 import { observer } from "mobx-react";
 import { useEffect } from "react";
 import { useState } from "react";
-import { filtersMapper } from "../../../helpers/mappers";
-import FilterDropdownButton from "../../buttons/FilterDropdownButton";
 import { useHistory, useLocation } from "react-router-dom";
-import queryString from "query-string";
-import { toJS } from "mobx";
 import ScriptsStore from "../../../store/ScriptsStore";
 import { ToastsStore } from "react-toasts";
 import routes from "../../../constants/routes";
+import DateComp from "../../Date";
+import cn from "classnames";
 
 const CheckoutsPopup = observer(({ onClose }) => {
   const { checkouts, script, scripts, checkoutScript, getCheckouts } =
     ScriptsStore;
   const [error, setError] = useState(false);
-  // const [enabledFilters, setEnabledFilters] = useState(queryString.parse(location.search, { arrayFormat: 'comma' }));
   const history = useHistory();
   const location = useLocation();
   const [checked, setIsChecked] = useState("");
 
   const handleChange = (id) => {
-    setIsChecked(() => (checked === id ? "" : id));
+    setIsChecked((prevState) => (prevState === id ? "" : id));
   };
 
   const handleCheckout = async () => {
@@ -63,52 +58,48 @@ const CheckoutsPopup = observer(({ onClose }) => {
         <div className={styles.block}>
           <p className={styles.category}>Choose version</p>
           {Object.keys(checkouts).map((key) => (
-              <div className={styles.checkouts_block} key={key}>
-                <p>
-                  {checkouts[key].length
-                    ? key === "rollback"
-                      ? "Previous version"
-                      : "Next versions"
-                    : ""}
-                </p>
+            <div className={styles.checkouts__block} key={key}>
+              <p>
                 {checkouts[key].length
-                  ? checkouts[key].map((script) => (
-                      <div className={styles.checkout} key={script.playbook_id}>
-                        <div
-                          className={styles.checkout_item}
-                          key={script.playbook_id}
+                  ? key === "rollback"
+                    ? "Previous version"
+                    : "Next versions"
+                  : ""}
+              </p>
+              {checkouts[key].length
+                ? checkouts[key].map((script) => (
+                    <div className={styles.checkout} key={script.playbook_id}>
+                      <div
+                        className={styles.checkout_item}
+                        key={script.playbook_id}
+                      >
+                        <label
+                          className={cn(styles.checkout__label, {
+                            [styles.checkout__label__checked]:
+                              checked === script.playbook_id,
+                          })}
                         >
+                          <span className={styles.checkout__name}>
+                            <span>{script.name}</span> -{" "}
+                            <DateComp date={script.date_created} />
+                          </span>
                           <input
                             type="checkbox"
+                            className={styles.checkout__input}
                             checked={checked && script.playbook_id === checked}
                             onChange={() => handleChange(script.playbook_id)}
-                            id={script.playbook_id}
                           />
-                          <label htmlFor={script.playbook_id}>
-                            {script.name} -{" "}
-                            {new Date(script.date_created).toLocaleDateString(
-                              "en-US",
-                              { hour12: false }
-                            )}{" "}
-                            {new Date(script.date_created).toLocaleTimeString(
-                              "en-US",
-                              { hour12: false }
-                            )}
-                          </label>
-                        </div>
+                        </label>
                       </div>
-                    ))
-                  : ""}
-              </div>
-            ))}
+                    </div>
+                  ))
+                : null}
+            </div>
+          ))}
         </div>
-        <button
-          className={styles.applyButton}
-          type="button"
-          onClick={handleCheckout}
-        >
-          Apply
-        </button>
+        <div className={styles.applyButton}>
+          <Button onClick={handleCheckout} text={"Apply"} type="button" />
+        </div>
       </form>
     </div>
   );
