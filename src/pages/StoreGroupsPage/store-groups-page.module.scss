@@ -14,7 +14,7 @@
 
 .title {
   margin-right: 34px;
-  @media(min-width: 2120px){
+  @media(min-width: 2120px) {
     font-size: 28px;
   }
 }
@@ -44,7 +44,7 @@
     background: rgba(51, 51, 51, 0.07);
     color: #f9c941;
     font-size: 13px;
-    @media(min-width: 2120px){
+    @media(min-width: 2120px) {
       font-size: 22px;
       padding: 26px 32px 20px 32px;
     }
@@ -55,7 +55,7 @@
     font-weight: 400;
   }
 
-  
+
   th:first-child {
     text-align: left;
     border-radius: 4px 0px 0px 4px;
@@ -67,11 +67,12 @@
   }
 
   td {
+    transition: background-color 0.3s ease;
     vertical-align: middle;
     line-height: 18px;
     letter-spacing: -0.03em;
     padding: 13px 0px 9px 16px;
-    @media(min-width: 2120px){
+    @media(min-width: 2120px) {
       font-size: 22px;
       padding: 26px 0px 18px 32px;
     }
@@ -105,13 +106,21 @@
   td:nth-child(2) {
     text-align: left;
   }
+
+  &__item {
+    cursor: pointer;
+
+    &:hover td {
+      background-color: rgba(51, 51, 51, 0.03);
+    }
+  }
 }
 
-.checkbox{
-  span{
+.checkbox {
+  span {
     font-weight: 700;
     font-size: 16px;
-    @media(min-width: 2120px){
+    @media(min-width: 2120px) {
       font-size: 22px;
     }
     line-height: 20px;
@@ -120,7 +129,7 @@
   }
 }
 
-.deleteIcon{
+.deleteIcon {
   color: rgba(51, 51, 51, 0.3);
   margin-right: 16px;
 }

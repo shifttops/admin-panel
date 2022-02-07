@@ -1,5 +1,5 @@
 import cn from "classnames";
-import styles from "../cards/ImageCard1/image-card.module.scss";
+import styles from "../cards/ImageCard/image-card.module.scss";
 import Popup from "reactjs-popup";
 import PopupComponent from "../popups/PopupComponent/PopupComponent";
 import { useEffect, useRef } from "react";

@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { toJS } from "mobx";
 import Loader from "../../../../components/Loader";
-import ImageCard from "../../../../components/cards/ImageCard1";
+import ImageCard from "../../../../components/cards/ImageCard";
 
 const InnerCameras = observer((props) => {
   const { storeInfo, cameras, isCamerasFetching } = StoresStore;

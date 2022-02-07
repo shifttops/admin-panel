@@ -11,8 +11,19 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   svg {
     cursor: pointer;
+
+    path {
+      transition: fill 0.3s ease;
+    }
+
+    &:hover {
+      path {
+        fill: $color-red;
+      }
+    }
   }
 }
 
@@ -28,12 +39,13 @@
   padding: 24px;
   // border-bottom: 1px solid #f2f2f2;
   max-height: 80vh;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .date {
   display: flex;
   align-items: center;
+
   input {
     background: #ffffff;
     border: 1px solid #f2f2f2;
@@ -61,15 +73,11 @@
 }
 
 .applyButton {
-  border-radius: $border-radius;
-  display: flex;
-  margin-left: auto;
-  margin-right: 24px;
-  border: 1px solid $color-green;
-  background-color: $color-green;
-  color: #fff;
-  padding: 5px 15px;
-  margin-bottom: 20px;
+  text-align: right;
+
+  button {
+    margin: 0 24px 10px auto;
+  }
 }
 
 .category {
@@ -83,10 +91,12 @@
 
 .checkbox {
   margin-bottom: 6px;
+
   span {
     font-size: 14px;
     line-height: 18px;
   }
+
   span::before {
     margin-right: 12px;
   }
@@ -94,7 +104,13 @@
 
 .popupButton {
   margin-top: 44px;
+
   button {
     margin-left: auto;
   }
+}
+
+.loader {
+  padding: 10px 0;
+  text-align: center;
 }

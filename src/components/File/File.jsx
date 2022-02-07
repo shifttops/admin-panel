@@ -7,13 +7,14 @@ import {
   getIconForFile,
   getTypeIconForFile,
 } from "../../helpers/functions";
-import ImageCard from "../cards/ImageCard1";
+import ImageCard from "../cards/ImageCard";
 import FileCard from "../cards/FileCard";
 import { saveAs } from "file-saver";
 import ButtonIcon from "../buttons/ButtonIcon";
 import { DeleteIcon, EditIcon, SaveVideo } from "../../icons";
 import withMoreMenu from "../../helpers/HOC/withMoreMenu";
 import { useState } from "react";
+import VideoCard from "../cards/VideoCard";
 
 const File = ({
   file,
@@ -105,6 +106,10 @@ const File = ({
           onDelete={handleFileDelete}
           // onEdit={onEdit ? onEdit : () => {}}
         />
+      ) : fileTypesMapper[1].types.includes(
+          getFileFormat(getFileName(file.file, "/"))
+        ) ? (
+        <VideoCard file={file} />
       ) : cardFile ? (
         <FileCard file={file} onDelete={handleFileDelete} withMenu={withMore} />
       ) : (

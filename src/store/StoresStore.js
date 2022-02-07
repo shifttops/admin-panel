@@ -8,6 +8,9 @@ import Api from "../api";
 import { getFileName } from "../helpers/functions";
 
 class StoresStore {
+  isFiltersFetching = false;
+  isMapFetching = false;
+
   isLoading = 0;
 
   isRefreshing = false;
@@ -25,6 +28,7 @@ class StoresStore {
   isStatusFetching = false;
   isTicketsFetching = false;
   isConfigurationFilesFetching = false;
+  isFilesFetching = false;
 
   isChatMessagesFetching = false;
   isChatFilesFetching = false;
@@ -47,6 +51,8 @@ class StoresStore {
   chatInterval = observable.box(null);
   storeTickets = observable.box([]);
   configurationFiles = observable.box([]);
+  storeFiles = observable.box([]);
+  coordinates = observable.box([]);
 
   constructor() {
     makeAutoObservable(this);
@@ -142,6 +148,17 @@ class StoresStore {
       (files) => {
         if (!files) {
           this.getStoreConfigurationFiles({
+            store_id: this.storeInfo.store_id,
+          });
+        }
+      }
+    );
+
+    reaction(
+      () => this.storeFiles.get(),
+      (files) => {
+        if (!files) {
+          this.getStoreMinioFiles({
             store_id: this.storeInfo.store_id,
           });
         }
@@ -509,6 +526,7 @@ class StoresStore {
 
   getFilters = async (setError) => {
     try {
+      this.isFiltersFetching = true;
       await refreshToken();
 
       const resp = await fetch(`${process.env.REACT_APP_URL}/api/filters/`, {
@@ -522,7 +540,10 @@ class StoresStore {
         this.filters = { ...res };
         setError("");
       }
+      this.isFiltersFetching = false;
     } catch (e) {
+      this.isFiltersFetching = false;
+
       setError(e.message);
     }
   };
@@ -998,6 +1019,35 @@ class StoresStore {
     }
   };
 
+  getStoreMinioFiles = async ({ store_id }) => {
+    try {
+      this.isFilesFetching = true;
+      await refreshToken();
+
+      const { data, status } = await Api.get(
+        `/display_store_minio_files/${store_id}/`,
+        {
+          headers: {
+            Authorization: `Token ${localStorage.getItem("access")}`,
+          },
+        }
+      );
+
+      if (status === 200)
+        this.storeFiles.set([
+          ...data.map(({ date_upload: date, filename }) => ({
+            created: moment(date),
+            filename,
+          })),
+        ]);
+      else ToastsStore.error(data.detail, 3000, "toast");
+      this.isFilesFetching = false;
+    } catch (e) {
+      this.isFilesFetching = false;
+      ToastsStore.error(e.message, 3000, "toast");
+    }
+  };
+
   downloadMinioFile = async ({ store_id, suffix, fileName }) => {
     try {
       await refreshToken();
@@ -1028,6 +1078,30 @@ class StoresStore {
   };
 
   uploadMinioFile = async ({ store_id, suffix, file }) => {};
+
+  getStoresCoordinates = async () => {
+    try {
+      this.isMapFetching = true;
+      await refreshToken();
+
+      const { data, status } = await Api.get(
+        `/coordinates/?limit=9999&offset=0`,
+        {
+          headers: {
+            Authorization: `Token ${localStorage.getItem("access")}`,
+          },
+        }
+      );
+
+      if (status === 200) {
+        this.coordinates.set(data.results);
+      } else ToastsStore.error(JSON.stringify(data), 3000, "toast");
+      this.isMapFetching = false;
+    } catch (e) {
+      this.isMapFetching = false;
+      ToastsStore.error(e.message, 3000, "toast");
+    }
+  };
 }
 
 export default new StoresStore();

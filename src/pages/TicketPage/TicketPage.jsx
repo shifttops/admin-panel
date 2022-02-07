@@ -16,7 +16,7 @@ import {
 import Popup from "reactjs-popup";
 import PopupComponent from "../../components/popups/PopupComponent/PopupComponent";
 import UserAccount from "../../components/UserAccount";
-import ImageCard from "../../components/cards/ImageCard1";
+import ImageCard from "../../components/cards/ImageCard";
 import Lightbox from "react-image-lightbox";
 import {
   ToastsContainer,

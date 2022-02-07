@@ -89,7 +89,9 @@ const InnerStatistic = observer((props) => {
             ) : (
               <tr className={styles.loader}>
                 <td />
-                <Loader types={["medium"]} />
+                <td>
+                  <Loader types={["small"]} />
+                </td>
                 <td />
               </tr>
             )}

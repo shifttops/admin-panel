@@ -1,50 +1,165 @@
 import styles from "./image-card.module.scss";
-import ButtonIcon from "components/buttons/ButtonIcon";
-import { MoreIcon } from "icons";
-import image from "images/accountIcon.png";
-import Checkbox from "components/Checkbox";
-import { refreshToken } from "../../../helpers/AuthHelper";
+import { useEffect, useState } from "react";
+import Loader from "../../Loader";
+import ButtonIcon from "../../buttons/ButtonIcon";
+import { DeleteIcon, EditIcon, MoreIcon, SaveVideo } from "../../../icons";
+import cn from "classnames";
+import noImage from "../../../images/noImage.jpg";
+import { saveAs } from "file-saver";
+import { createMapper, getFileName } from "../../../helpers/functions";
+import { ToastsContainer, ToastsStore } from "react-toasts";
+import withMoreMenu from "../../../helpers/HOC/withMoreMenu";
+import Popup from "reactjs-popup";
+import ImagePopup from "../../popups/ImagePopup";
 
-export default function ImageCard({ file }) {
-  const handleClick = async () => {
-    const suffix = file.split('_').slice(2).join('_').split('.')[0];
-    const store_id = file.split('_')[0];
-    try {
-      await refreshToken();
+const imageCardTypes = {
+  small: styles.small,
+  big: styles.big,
+};
 
-      const resp = await fetch(
-        `${process.env.REACT_APP_URL}/api/download_file_minio/`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Token ${localStorage.getItem("access")}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ suffix, store_id }),
-        }
-      );
-      const res = await resp.blob();
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(res);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link)
-    } catch (e) {
-      console.log(e.message);
-    }
+const ImageCard = ({
+  url,
+  name = "Image",
+  className,
+  onClick,
+  onDelete,
+  onEdit,
+  onDownload,
+  onError,
+  onLoad,
+  type,
+  withMenu,
+}) => {
+  const [isImageReady, setIsImageReady] = useState(false);
+  const [currentUrl, setCurrentUrl] = useState(
+    url ? `${process.env.REACT_APP_URL}${url}` : noImage
+  );
+  const [isEditMode, setIsEditMode] = useState(false);
+
+  const handleLoad = (e) => {
+    setIsImageReady(true);
+    if (onLoad) onLoad(e);
   };
 
+  const handleError = (e) => {
+    setCurrentUrl(noImage);
+    if (onError) onError(e);
+  };
+
+  const handleImageClick = (e) => {
+    if (onClick) onClick();
+  };
+
+  const handleDownload = (e) => {
+    if (currentUrl !== noImage) {
+      saveAs(currentUrl, name);
+    } else ToastsStore.error("No image to download", 3000, "toast");
+    if (onDownload) onDownload();
+  };
+
+  const handleEdit = (e) => {
+    setIsEditMode(true);
+  };
+
+  const handleEditSave = () => {
+    setIsEditMode(false);
+    if (onEdit) onEdit();
+  };
+
+  const handleDelete = (e) => {
+    if (onDelete) onDelete();
+  };
+
+  useEffect(() => {
+    if (url) setCurrentUrl(`${process.env.REACT_APP_URL}${url}`);
+    else {
+      setCurrentUrl(noImage);
+    }
+  }, [url]);
+
+  const Name = ({ name, isEditMode }) => (
+    <p className={styles.card__name}>{name}</p>
+  );
+
+  const moreMapper = createMapper({
+    titles: [
+      "Download", //"Edit",
+      "Delete",
+    ],
+    icons: [
+      SaveVideo, //EditIcon,
+      DeleteIcon,
+    ],
+    functions: [
+      handleDownload,
+      // handleEdit,
+      handleDelete,
+    ],
+  });
+
   return (
-    <div className={styles.card} onClick={handleClick}>
-      <img src={image} />
-      <div className={styles.header}>
-        <Checkbox />
-        <ButtonIcon Icon={MoreIcon} />
-      </div>
-      <div className={styles.info}>
-        <p className={styles.title}>{file}</p>
-        {/* <p className={styles.date}>4 days ago</p> */}
+    <div className={cn(styles.card, className, imageCardTypes[type])}>
+      {isImageReady && currentUrl !== noImage ? (
+        <Popup
+          modal
+          trigger={
+            <div className={styles.card__imageBox}>
+              <img
+                onClick={(e) => handleImageClick(e)}
+                onLoad={(e) => handleLoad(e)}
+                onError={(e) => handleError(e)}
+                src={currentUrl}
+                alt=""
+              />
+            </div>
+          }
+        >
+          {(close) => <ImagePopup url={currentUrl} onClose={close} />}
+        </Popup>
+      ) : (
+        <div className={styles.card__imageBox}>
+          <img
+            onClick={(e) => handleImageClick(e)}
+            onLoad={(e) => handleLoad(e)}
+            onError={(e) => handleError(e)}
+            src={currentUrl}
+            alt=""
+          />
+          {!isImageReady && currentUrl !== noImage ? (
+            <div className={styles.loader}>
+              <Loader types={["medium", "grey"]} />
+            </div>
+          ) : null}
+        </div>
+      )}
+      <div className={styles.card__info}>
+        {withMenu ? (
+          withMoreMenu({
+            Component: Name,
+            ...{
+              componentProps: {
+                name,
+                isEditMode,
+              },
+              ...{
+                moreMapper,
+                name,
+              },
+            },
+          })
+        ) : (
+          <>
+            <Name name={name} />
+            <ButtonIcon
+              className={styles.cardMore}
+              Icon={SaveVideo}
+              onClick={handleDownload}
+            />
+          </>
+        )}
       </div>
     </div>
   );
-}
+};
+
+export default ImageCard;

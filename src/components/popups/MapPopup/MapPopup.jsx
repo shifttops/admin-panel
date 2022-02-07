@@ -4,42 +4,18 @@ import Map from "../../Map";
 import { refreshToken } from "../../../helpers/AuthHelper";
 import { useEffect, useState } from "react";
 import Loader from "../../Loader";
+import { observer } from "mobx-react";
+import StoresStore from "../../../store/StoresStore";
 
-const MapPopup = ({ onClose, onClick, buttonText, titleText }) => {
-  const [coords, setCoords] = useState([]);
-  const [isMapFetching, setIsMapFetching] = useState(false);
+const MapPopup = observer(({ onClose, onClick, buttonText, titleText }) => {
+  const {
+    getStoresCoordinates: getCoords,
+    isMapFetching,
+    coordinates,
+  } = StoresStore;
 
-  useEffect(() => {
-    const getCoords = async () => {
-      try {
-        await refreshToken();
-
-        setIsMapFetching(true);
-
-        const resp = await fetch(
-          `${process.env.REACT_APP_URL}/api/coordinates/?limit=9999&offset=0`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Token ${localStorage.getItem("access")}`,
-            },
-          }
-        );
-        if (resp.status === 200) {
-          const res = await resp.json();
-          setCoords(res.results);
-          // this.metrics.set({ ...res });
-          // setError("");
-        }
-        setIsMapFetching(false);
-      } catch (e) {
-        setIsMapFetching(false);
-        // setError(e.message);
-        console.log(e.message);
-      }
-    };
-
-    getCoords();
+  useEffect(async () => {
+    if (!coordinates.get().length) await getCoords();
   }, []);
 
   return (
@@ -57,7 +33,7 @@ const MapPopup = ({ onClose, onClick, buttonText, titleText }) => {
           loadingElement={<div style={{ height: `100%` }} />}
           containerElement={<div style={{ height: `100%` }} />}
           mapElement={<div style={{ height: `100%` }} />}
-          coords={coords}
+          coords={coordinates.get()}
         />
       ) : (
         <div className={styles.loader}>
@@ -66,6 +42,6 @@ const MapPopup = ({ onClose, onClick, buttonText, titleText }) => {
       )}
     </div>
   );
-};
+});
 
 export default MapPopup;

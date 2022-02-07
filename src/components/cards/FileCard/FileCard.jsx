@@ -11,6 +11,7 @@ import { DeleteIcon, SaveVideo } from "../../../icons";
 import cn from "classnames";
 import withMoreMenu from "../../../helpers/HOC/withMoreMenu";
 import { saveAs } from "file-saver";
+import DateComp from "../../Date";
 
 const FileCard = ({
   file,
@@ -45,8 +46,13 @@ const FileCard = ({
     if (onDelete) onDelete();
   };
 
-  const Name = ({ name, isEditMode }) => (
-    <p className={styles.card__name}>{name}</p>
+  const Name = ({ name, date = null, isEditMode }) => (
+    <div className={styles.card__name}>
+      {name}
+      <p className={styles.card__date}>
+        {date ? <DateComp date={date} timeOnly /> : null}
+      </p>
+    </div>
   );
 
   const moreMapper = createMapper({
@@ -82,6 +88,7 @@ const FileCard = ({
               componentProps: {
                 name: getFileName(file.file, "/"),
                 isEditMode,
+                date: file.created ? file.created : null,
               },
               ...{
                 moreMapper,
@@ -91,7 +98,10 @@ const FileCard = ({
           })
         ) : (
           <>
-            <Name name={getFileName(file.file, "/")} />
+            <Name
+              name={getFileName(file.file, "/")}
+              date={file.created ? file.created : null}
+            />
             <ButtonIcon
               className={styles.cardMore}
               Icon={SaveVideo}

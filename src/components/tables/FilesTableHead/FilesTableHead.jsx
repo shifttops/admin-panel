@@ -8,9 +8,9 @@ export default function FilesTableHead({ thText }) {
         <th>
           <Checkbox label="Title" />
         </th>
-        <th>{thText}</th>
+        {/*<th>{thText}</th>*/}
         <th>Created</th>
-        <th>Last Edited</th>
+        {/*<th>Last Edited</th>*/}
         <th> </th>
       </tr>
     </thead>

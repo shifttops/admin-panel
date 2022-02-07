@@ -1,15 +1,7 @@
 import styles from "./store-groups-page.module.scss";
 import SearchQuick from "components/search/SearchQuick";
 import ButtonIcon from "components/buttons/ButtonIcon";
-import {
-  CheckIcon,
-  DeleteIcon,
-  ErrorIcon,
-  MoreIcon,
-  PauseIcon,
-  PlannerIcon,
-  PlayIcon,
-} from "icons";
+import { DeleteIcon, MoreIcon } from "icons";
 import Button from "components/buttons/Button";
 import Checkbox from "components/Checkbox";
 import { observer } from "mobx-react";
@@ -58,9 +50,16 @@ const StoreGroupsPage = observer(() => {
         </thead>
         <tbody>
           {groups.map((group) => (
-            <tr key={group.id} onClick={() => handleClick(group.id)}>
+            <tr
+              className={styles.table__item}
+              key={group.id}
+              onClick={() => handleClick(group.id)}
+            >
               <td className={styles.name}>
-                <Checkbox className={styles.checkbox} label={group.owner ? group.owner: ""} />
+                <Checkbox
+                  className={styles.checkbox}
+                  label={group.owner ? group.owner : ""}
+                />
               </td>
               <td className={styles.text}>{group.name}</td>
               <td className={styles.text}>{group.count} restaurants</td>
