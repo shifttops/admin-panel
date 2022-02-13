@@ -4,47 +4,17 @@ import StoresStore from "../../../../store/StoresStore";
 import styles from "./InnerTickets.module.scss";
 import Loader from "../../../../components/Loader";
 import TicketsTableRow from "../../../../components/tables/TicketsTableRow";
-import cn from "classnames";
 import { AddGroupIcon, SortIcon } from "../../../../icons";
 import Button from "../../../../components/buttons/Button";
 import routes from "../../../../constants/routes";
 import { useHistory } from "react-router-dom";
+import { ticketsTableItems } from "../../../../helpers/mappers";
+import { datesSort } from "../../../../helpers/functions/sort/datesSort";
 
 const InnerTickets = observer((props) => {
   const history = useHistory();
 
   const { storeInfo, storeTickets, isTicketsFetching } = StoresStore;
-
-  const items = [
-    {
-      visibleName: "Type",
-      key: "type",
-    },
-    {
-      visibleName: "Key",
-      key: "id",
-    },
-    {
-      visibleName: "Summary",
-      key: "name",
-    },
-    {
-      visibleName: "Reporter",
-      key: "user",
-    },
-    {
-      visibleName: "Assignee",
-      key: "assignee",
-    },
-    {
-      visibleName: "Status",
-      key: "status",
-    },
-    {
-      visibleName: "Created",
-      key: "created",
-    },
-  ];
 
   const store_id = +props.match.params.id;
 
@@ -71,15 +41,36 @@ const InnerTickets = observer((props) => {
           <table className={styles.table}>
             <thead>
               <tr>
-                {items.map((item) => (
+                {ticketsTableItems.map((item) => (
                   <th>{item.visibleName}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
-              {storeTickets.get().map((ticket) => (
-                <TicketsTableRow ticket={ticket} />
-              ))}
+              {[...storeTickets.get()]
+                .sort((ticketLeft, ticketRight) =>
+                  datesSort(
+                    ticketLeft.first_response_time,
+                    ticketRight.first_response_time
+                  )
+                )
+                .map((ticket) => (
+                  <TicketsTableRow
+                    name={ticket.name}
+                    reason={ticket.reason}
+                    user={ticket.user}
+                    owner_last_name={ticket.owner_last_name}
+                    owner_first_name={ticket.owner_first_name}
+                    id={ticket.id}
+                    first_response_time={ticket.first_response_time}
+                    assignee_last_name={ticket.assignee_last_name}
+                    assignee_first_name={ticket.assignee_first_name}
+                    assignee={ticket.assignee}
+                    ticketType={ticket.type}
+                    ticketStatus={ticket.status}
+                    other_type={ticket.other_type}
+                  />
+                ))}
             </tbody>
           </table>
         </>

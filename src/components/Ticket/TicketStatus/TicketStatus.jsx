@@ -18,7 +18,7 @@ const TicketStatus = ({
 
   useEffect(() => {
     const onClick = (e) => {
-      if (!ref.current.contains(e.target)) setIsOpen(false);
+      if (ref.current) if (!ref.current.contains(e.target)) setIsOpen(false);
     };
 
     document.addEventListener("click", onClick);
@@ -27,7 +27,10 @@ const TicketStatus = ({
   }, []);
 
   return (
-    <div ref={ref} className={cn(styles.body, { [styles.centered]: centered })}>
+    <div
+      ref={ref}
+      className={cn(styles.body, { [styles.body__centered]: centered })}
+    >
       <div
         className={cn(
           styles.status,

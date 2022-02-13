@@ -1,0 +1,9 @@
+@import "../../scss/variables";
+
+.rdrDayNumber span {
+  color: $color-black;
+}
+
+.rdrDayToday .rdrDayNumber span::after {
+  background-color: $color-black-05;
+}

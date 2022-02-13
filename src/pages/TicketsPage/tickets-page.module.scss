@@ -1,11 +1,14 @@
 @import "../../scss/variables";
+@import "../../components/tables/TableHead/table-head.module";
 
 .wrapper {
-  padding: 35px;
+  padding: 36px;
   width: 100%;
+  overflow: hidden;
 }
 
 .header {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -14,6 +17,30 @@
   &__info {
     display: flex;
     align-items: center;
+  }
+
+  &__buttons {
+    display: inline-grid;
+    grid-template-columns: repeat(3, auto);
+    gap: 20px;
+  }
+
+  &__period {
+    display: flex;
+    align-items: center;
+    width: 300px;
+    p {
+      font-weight: 700;
+    }
+
+    div {
+      margin-left: 10px;
+      color: $color-black-05;
+
+      div span {
+        font-weight: 700;
+      }
+    }
   }
 }
 
@@ -25,6 +52,7 @@
 }
 
 .table {
+  position: relative;
   width: 100%;
   border-spacing: 0;
 
@@ -60,52 +88,24 @@
 }
 
 .loader {
+  display: block;
+  margin: 0 auto;
   text-align: center;
   padding: 20px 0;
   font-size: 16px;
-}
 
-.th {
-  svg {
-    transition: opacity 0.3s ease 0s, transform 0.3s ease 0s;
-    opacity: 0;
-    margin-left: 2px;
-    color: #333;
-  }
-
-  .invertedSvg {
-    transform: rotate(180deg);
-  }
-
-  @media screen and (max-width: 1140px) {
-    vertical-align: top;
-  }
-
-  &:hover {
-    color: #333;
-    -webkit-text-stroke: 0.7px #333;
-
-    svg {
-      opacity: 1;
+  &__search {
+    div {
+      position: absolute;
+      top: 30px;
+      left: calc(50% - 40px);
     }
-  }
-
-  &::after {
-    display: block;
-    content: attr(data-text);
-    font-weight: 700;
-    height: 0;
-    overflow: hidden;
-    visibility: hidden;
-  }
-
-  &__selected {
-    color: #333;
-    -webkit-text-stroke: 0.7px #333;
-
-    svg {
-      opacity: 1;
-    }
+    right: 0;
+    top: 0;
+    position: absolute;
+    z-index: 5;
+    width: 100%;
+    height: 100%;
   }
 }
 
@@ -121,5 +121,46 @@
   &:hover {
     color: #899d33;
     text-decoration: underline;
+
+    svg {
+      path {
+        fill: #899d33;
+      }
+    }
+  }
+
+  svg {
+    path {
+      transition: fill 0.3s ease;
+      fill: $color-green;
+    }
+  }
+
+  &__withIcon {
+    position: relative;
+
+    span {
+      svg  {
+        transform: rotate(180deg);
+        margin-left: 10px;
+      }
+    }
+  }
+}
+
+.dateRangePicker {
+  position: absolute;
+  top: calc(100% + 20px);
+  right: 10%;
+  z-index: 100;
+  border-radius: $border-radius;
+  border: 1px solid $color-black-007;
+  background-color: #fff;
+
+  &__buttons {
+    padding: 10px 50px;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
   }
 }

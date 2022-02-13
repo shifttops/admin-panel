@@ -1,8 +1,7 @@
-import styles from "../../../pages/TicketPage/ticket-page.module.scss";
+import styles from "../TicketInfo/ticket-info.module.scss";
 import cn from "classnames";
 import { TimeIcon } from "../../../icons";
 import DateComp from "../../Date";
-import DatePicker from "react-datepicker";
 import moment from "moment";
 
 const TicketsSLA = ({ isEditMode, frTime, setFRTime }) => {

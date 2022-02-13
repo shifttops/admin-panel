@@ -1,30 +1,31 @@
 import { observer } from "mobx-react";
 import styles from "./add-ticket-page.module.scss";
-import BackLink from "../../../components/BackLink";
-import routes from "../../../constants/routes";
+import BackLink from "../../components/BackLink";
+import routes from "../../constants/routes";
 import React, { useEffect, useState } from "react";
 import {
   ticketPriorityMapper,
+  ticketReasonMapper,
   ticketTypesMapper,
-} from "../../../helpers/mappers";
-import Button from "../../../components/buttons/Button";
+} from "../../helpers/mappers";
+import Button from "../../components/buttons/Button";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import AddTicketFormItem from "../../../components/forms/AddTicketFormItem";
-import { AttachIcon, CloseIcon, PinFileIcon } from "../../../icons";
-import ButtonIcon from "../../../components/buttons/ButtonIcon";
+import AddTicketFormItem from "../../components/forms/AddTicketFormItem";
+import { AttachIcon, CloseIcon, PinFileIcon } from "../../icons";
+import ButtonIcon from "../../components/buttons/ButtonIcon";
 import {
   getFileFormat,
   getFileName,
   getIconForFile,
   getTypeIconForFile,
-} from "../../../helpers/functions";
+} from "../../helpers/functions";
 import cn from "classnames";
 import { FileDrop } from "react-file-drop";
-import "../../../components/Chat/ChatInput/file-drop.scss";
-import TicketsStore from "../../../store/TicketsStore";
+import "../../components/Chat/ChatInput/file-drop.scss";
+import TicketsStore from "../../store/TicketsStore";
 import { useHistory } from "react-router-dom";
-import FileUploaded from "../../../components/FileUploaded";
+import FileUploaded from "../../components/FileUploaded";
 
 const AddTicketPage = observer(() => {
   const history = useHistory();
@@ -73,6 +74,13 @@ const AddTicketPage = observer(() => {
       required: true,
       type: "select",
       mapper: ticketPriorityMapper,
+    },
+    {
+      label: "Choose reason",
+      field: "reason",
+      required: true,
+      type: "select",
+      mapper: ticketReasonMapper,
     },
     {
       label: "Describe the problem",

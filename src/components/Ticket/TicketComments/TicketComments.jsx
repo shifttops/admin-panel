@@ -2,14 +2,8 @@ import styles from "./ticket-comments.module.scss";
 import Comment from "../../Comment";
 import UserAccount from "../../UserAccount";
 import { CloseIcon, PinFileIcon, ReportIcon } from "../../../icons";
-import ButtonIcon from "../../buttons/ButtonIcon";
 import Button from "../../buttons/Button";
 import React, { useRef, useState } from "react";
-import {
-  getFileFormat,
-  getIconForFile,
-  getTypeIconForFile,
-} from "../../../helpers/functions";
 import TicketsStore from "../../../store/TicketsStore";
 import Loader from "../../Loader";
 import { ToastsStore } from "react-toasts";

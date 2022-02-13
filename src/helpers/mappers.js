@@ -276,7 +276,7 @@ export const ticketStatusMapper = [
   {
     visibleName: "In progress",
     name: "PROGRESS",
-    className: stylesTickets.blue,
+    className: stylesTickets.yellow,
   },
   {
     visibleName: "Resolved",
@@ -341,6 +341,10 @@ export const ticketDetailsMapper = [
   {
     title: "Ticket type",
     field: "type",
+  },
+  {
+    title: "Reason",
+    field: "reason",
   },
   {
     title: "Reporter",
@@ -419,5 +423,199 @@ export const ticketTypesMapper = [
   {
     visibleName: "Other",
     name: "OTHER_TYPE",
+  },
+];
+
+export const ticketReasonMapper = [
+  {
+    name: "WIS_HARDWARE",
+    visibleName: "Wis Hardware",
+    className: stylesTickets.blue,
+  },
+  {
+    name: "SOFTWARE",
+    visibleName: "Software",
+    className: stylesTickets.yellow,
+  },
+  {
+    name: "OTHER",
+    visibleName: "Other",
+    className: stylesTickets.red,
+  },
+];
+
+export const ticketsStatsChartsMapper = [
+  {
+    mapper: ticketReasonMapper,
+    title: "Number of tickets by classification",
+    type: "vertical",
+    field: "reason",
+  },
+  {
+    mapper: ticketStatusMapper,
+    title: "Number of tickets by status",
+    type: "vertical",
+    field: "status",
+  },
+  {
+    mapper: ticketTypesMapper.slice(0, -1),
+    title: "Number of tickets by topic",
+    type: "horizontal",
+    field: "type",
+  },
+];
+
+export const ticketsStatsTablesMapper = [
+  {
+    title: "Total tickets",
+    mapper: ticketReasonMapper,
+    types: ticketTypesMapper.map((item) => item.name),
+    field: "reason",
+  },
+  {
+    title: "Total ghost cars tickets",
+    mapper: ticketStatusMapper,
+    types: ["GHOSTCARS"],
+    field: "status",
+  },
+  {
+    title: "Total algorythm/dashboard problem tickets",
+    mapper: ticketStatusMapper,
+    types: ["NO_METRICS", "NO_DASHBORD", "DASHBORD_LATENCY"],
+    field: "status",
+  },
+  {
+    title:
+      "Total VMS restarted tickets (request to restard dashboard)/Servers changed",
+    mapper: ticketStatusMapper,
+    types: ["VMS_CHANGE", "SERVER_RESTART"],
+    field: "status",
+  },
+  {
+    title: "Total camera problem tickets",
+    mapper: ticketStatusMapper,
+    types: ["CAMERA_IS_UP_DOWN", "CAMERA_POSITION"],
+    field: "status",
+  },
+];
+
+export const ticketsStatsPdfTableMapper = [
+  {
+    name: "id",
+    visibleName: "Key",
+  },
+  {
+    name: "name",
+    visibleName: "Summary",
+  },
+  {
+    name: "user",
+    visibleName: "Reporter",
+  },
+  {
+    name: "first_response_time",
+    visibleName: "Created",
+  },
+  {
+    name: "stores",
+    visibleName: "Stores",
+  },
+  {
+    name: "status",
+    visibleName: "Status",
+  },
+  {
+    name: "reason",
+    visibleName: "Reason",
+  },
+  {
+    name: "type",
+    visibleName: "Type",
+  },
+];
+
+export const ticketsTableItems = [
+  {
+    visibleName: "Type",
+    key: "type",
+  },
+  {
+    visibleName: "Key",
+    key: "id",
+  },
+  {
+    visibleName: "Summary",
+    key: "name",
+  },
+  {
+    visibleName: "Reporter",
+    key: "user",
+  },
+  {
+    visibleName: "Assignee",
+    key: "assignee",
+  },
+  {
+    visibleName: "Status",
+    key: "status",
+  },
+  {
+    visibleName: "Reason",
+    key: "reason",
+  },
+  {
+    visibleName: "Created",
+    key: "first_response_time",
+  },
+];
+
+export const storeCamerasMapper = [
+  {
+    visibleName: "Name",
+    name: "view_name",
+  },
+  {
+    visibleName: "IP",
+    name: "ip_address",
+  },
+  {
+    visibleName: "Can record",
+    name: "can_record_video",
+  },
+  {
+    visibleName: "Profile3 configured",
+    name: "is_profile3_configured",
+  },
+  {
+    visibleName: "Profile5 configured",
+    name: "is_profile5_configured",
+  },
+  {
+    visibleName: "User configured",
+    name: "is_user_configured",
+  },
+  {
+    visibleName: "Admin configured",
+    name: "is_admin_configured",
+  },
+  {
+    visibleName: "Packet loss",
+    name: "packet_loss",
+  },
+  {
+    visibleName: "Ping",
+    name: "ping",
+  },
+  {
+    visibleName: "Reachable",
+    name: "reachable",
+  },
+  {
+    visibleName: "Working",
+    name: "passed",
+  },
+  {
+    visibleName: "Updated",
+    name: "timestamp",
   },
 ];

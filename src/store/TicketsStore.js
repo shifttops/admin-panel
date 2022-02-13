@@ -3,6 +3,7 @@ import { makeAutoObservable, observable, observe } from "mobx";
 import { ToastsStore } from "react-toasts";
 import { refreshToken } from "../helpers/AuthHelper";
 import Api from "../api";
+import moment from "moment";
 
 class TicketsStore {
   isAssigneeListFetching = false;
@@ -13,6 +14,7 @@ class TicketsStore {
   isTicketFetching = false;
   isTicketDeleteFetching = false;
   isTicketEditFetching = false;
+  isTicketAnswerFetching = false;
 
   isFilesFetching = false;
 
@@ -21,6 +23,13 @@ class TicketsStore {
 
   tickets = observable.box([]);
   ticketInfo = {};
+  statsPeriod = observable.box({
+    startDate: new Date(),
+    endDate: new Date(),
+    key: "selection",
+  });
+
+  filteredTickets = observable.box([]);
 
   assigneeList = observable.box([]);
 
@@ -61,6 +70,8 @@ class TicketsStore {
     offset = this.tickets.get().length,
     signal = null,
     setResCount,
+    start = null,
+    end = null,
   }) => {
     try {
       await refreshToken();
@@ -73,6 +84,8 @@ class TicketsStore {
       if (search.length) {
         url += `&search=${search}`;
       }
+      if (start && end)
+        url += `&start=${JSON.stringify(start)}&end=${JSON.stringify(end)}`;
 
       const resp = await fetch(url, {
         method: "GET",
@@ -89,11 +102,39 @@ class TicketsStore {
 
         if (res.count) {
           this.tickets.set(
-            !offset ? [...res.results] : [...this.tickets.get, ...res.results]
+            !offset ? [...res.results] : [...this.tickets.get(), ...res.results]
           );
-          console.log(this.tickets.get());
         } else ToastsStore.error("No tickets find", 3000, "toast");
       } else ToastsStore.error("Server error", 3000, "toast");
+
+      this.isTicketsFetching = false;
+    } catch (e) {
+      this.isTicketsFetching = false;
+      ToastsStore.error(e.message, 3000, "toast");
+    }
+  };
+
+  getAllTicketsByPeriod = async ({ start, end }) => {
+    try {
+      this.isTicketsFetching = true;
+      await refreshToken();
+
+      const { status, data } = await Api.get(
+        `/ticket/?limit=${99999}&offset=${0}&start=${JSON.stringify(
+          start
+        )}&end=${JSON.stringify(end)}`,
+        {
+          headers: {
+            Authorization: `Token ${localStorage.getItem("access")}`,
+          },
+        }
+      );
+
+      if (status === 200) {
+        if (data.count) {
+          this.filteredTickets.set([...data.results]);
+        } else ToastsStore.error("No tickets find", 3000, "toast");
+      } else ToastsStore.error(data.detail, 3000, "toast");
 
       this.isTicketsFetching = false;
     } catch (e) {
@@ -125,6 +166,7 @@ class TicketsStore {
       body.append("description", data.description);
 
       body.append("assignee", data.assignee);
+      body.append("reason", data.reason);
 
       body.append(
         "name",
@@ -190,6 +232,7 @@ class TicketsStore {
       body.append("id", this.ticketInfo.id);
       body.append("priority", data.priority);
       body.append("status", data.status);
+      body.append("reason", data.reason);
 
       data.stores.map((store) => body.append("stores", store));
 
@@ -382,6 +425,33 @@ class TicketsStore {
       this.isFilesFetching = false;
     } catch (e) {
       this.isFilesFetching = false;
+      ToastsStore.error(e.message, 3000, "toast");
+    }
+  };
+
+  sendTicketByEmail = async ({ message }) => {
+    try {
+      this.isTicketAnswerFetching = true;
+      await refreshToken();
+
+      const { status, data } = await Api.post(
+        `ticket/${this.ticketInfo.id}/send_ticket_answer/`,
+        { message },
+        {
+          headers: {
+            Authorization: `Token ${localStorage.getItem("access")}`,
+            "Content-type": "application/json",
+          },
+        }
+      );
+
+      if (status === 201)
+        ToastsStore.success("Sent successfully", 3000, "toast");
+      else ToastsStore.error(data.detail, 3000, "toast");
+
+      this.isTicketAnswerFetching = false;
+    } catch (e) {
+      this.isTicketAnswerFetching = false;
       ToastsStore.error(e.message, 3000, "toast");
     }
   };

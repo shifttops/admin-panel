@@ -9,64 +9,16 @@ import { observer } from "mobx-react";
 import StoresStore from "../../../../store/StoresStore";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { toJS } from "mobx";
 import Loader from "../../../../components/Loader";
 import ImageCard from "../../../../components/cards/ImageCard";
+import { storeCamerasMapper } from "../../../../helpers/mappers";
+import moment from "moment";
+import DateComp from "../../../../components/Date";
 
 const InnerCameras = observer((props) => {
   const { storeInfo, cameras, isCamerasFetching } = StoresStore;
   const [error, setError] = useState("");
   const history = useHistory();
-  const mapperCameras = [
-    {
-      visibleName: "Name",
-      name: "view_name",
-    },
-    {
-      visibleName: "IP",
-      name: "ip_address",
-    },
-    {
-      visibleName: "Can record",
-      name: "can_record_video",
-    },
-    {
-      visibleName: "Profile3 configured",
-      name: "is_profile3_configured",
-    },
-    {
-      visibleName: "Profile5 configured",
-      name: "is_profile5_configured",
-    },
-    {
-      visibleName: "User configured",
-      name: "is_user_configured",
-    },
-    {
-      visibleName: "Admin configured",
-      name: "is_admin_configured",
-    },
-    {
-      visibleName: "Packet loss",
-      name: "packet_loss",
-    },
-    {
-      visibleName: "Ping",
-      name: "ping",
-    },
-    {
-      visibleName: "Reachable",
-      name: "reachable",
-    },
-    {
-      visibleName: "Working",
-      name: "passed",
-    },
-    {
-      visibleName: "Updated",
-      name: "timestamp",
-    },
-  ];
 
   const addStyles = (key, value) => {
     if (key === "packet_loss") {
@@ -113,7 +65,7 @@ const InnerCameras = observer((props) => {
           <table className={styles.table}>
             <thead>
               <tr>
-                {mapperCameras.map((key) => (
+                {storeCamerasMapper.map((key) => (
                   <th className={styles.table_keys} key={key.name}>
                     {key.visibleName}
                   </th>
@@ -124,27 +76,23 @@ const InnerCameras = observer((props) => {
               {cameras.get() &&
                 cameras.get().map((camera) => (
                   <tr key={camera.view_name}>
-                    {mapperCameras.map((key) => (
+                    {storeCamerasMapper.map((key) => (
                       <td
                         key={key.name}
                         className={addStyles(key.name, camera[key.name])}
                       >
                         {camera[key.name] !== undefined &&
-                        key.name === "timestamp"
-                          ? `${new Date(
-                              camera[key.name]
-                            ).toLocaleDateString()} ${new Date(
-                              camera[key.name]
-                            ).toLocaleTimeString("en-US", { hour12: false })}`
-                          : key.name === "packet_loss"
-                          ? `${
-                              camera[key.name] ? camera[key.name] + "%" : "N/A"
-                            }`
-                          : key.name === "ping"
-                          ? `${
-                              camera[key.name] ? camera[key.name] + "ms" : "N/A"
-                            }`
-                          : camera[key.name]}
+                        key.name === "timestamp" ? (
+                          <DateComp date={camera[key.name]} />
+                        ) : key.name === "packet_loss" ? (
+                          `${camera[key.name] ? camera[key.name] + "%" : "N/A"}`
+                        ) : key.name === "ping" ? (
+                          `${
+                            camera[key.name] ? camera[key.name] + "ms" : "N/A"
+                          }`
+                        ) : (
+                          camera[key.name]
+                        )}
                       </td>
                     ))}
                   </tr>

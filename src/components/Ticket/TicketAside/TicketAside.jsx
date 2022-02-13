@@ -24,6 +24,8 @@ const TicketAside = ({
   isAssigneeListFetching,
   setOtherType,
   otherType,
+  reason,
+  setReason,
 }) => {
   const asideMapper = [
     {
@@ -53,6 +55,8 @@ const TicketAside = ({
         isAssigneeListFetching,
         setOtherType,
         otherType,
+        reason,
+        setReason,
       },
     },
   ];

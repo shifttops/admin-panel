@@ -1,0 +1,126 @@
+@import "../../scss/variables";
+
+.wrapper {
+  padding: 36px;
+  width: 100%;
+  overflow-y: hidden;
+}
+
+.header {
+  &__info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid $color-black-007;
+
+  &__period {
+    display: flex;
+    align-items: center;
+    width: 300px;
+    p {
+      font-weight: 700;
+    }
+
+    div {
+      margin-left: 10px;
+      color: $color-black-05;
+
+      div span {
+        font-weight: 700;
+      }
+    }
+  }
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: 40% 55%;
+  height: 100%;
+  gap: 5%;
+}
+
+.charts {
+  width: 100%;
+  &__body {
+    display: grid;
+    grid-template-rows: repeat(2, 47%);
+  }
+
+  div:not(:last-child) {
+    margin-bottom: 40px;
+  }
+}
+
+.subtitle {
+  font-size: 20px;
+  text-align: center;
+}
+
+.tables {
+  margin-top: 20px;
+  display: grid;
+  grid-template-rows: repeat(4, 1fr);
+  row-gap: 20px;
+}
+
+.table {
+  margin: 0 auto;
+  border-spacing: 0;
+
+  thead {
+    tr {
+      tr {
+        width: 100%;
+      }
+    }
+  }
+
+  &__head {
+    background-color: #f6f6f6;
+    border: 1px solid $color-black-007;
+    color: $color-black-05;
+    padding: 10px;
+  }
+
+  &__item {
+    text-align: center;
+
+    &:first-child {
+      border-left: 1px solid $color-black-007;
+      border-right: 1px solid $color-black-007;
+      border-bottom-left-radius: $border-radius;
+    }
+
+    &:last-child {
+      border-right: 1px solid $color-black-007;
+      border-bottom-right-radius: $border-radius;
+    }
+  }
+
+  &__title {
+    border: 1px solid $color-black-007;
+    border-top-left-radius: $border-radius;
+    width: 350px;
+  }
+
+  &__ticketsCount {
+    width: 700px;
+    border-top-right-radius: $border-radius;
+  }
+}
+
+.status {
+  color: $color-grey;
+  padding: 10px;
+  border-right: 1px solid $color-black-007;
+}
+
+.loader {
+  padding: 10px 0;
+  text-align: center;
+  font-size: 16px;
+}
