@@ -226,7 +226,7 @@ class TicketsStore {
 
       const body = new FormData();
 
-      body.append("type", data.type);
+      if (data.type) body.append("type", data.type);
       if (data.type === "OTHER_TYPE") body.append("other_type", data.otherType);
 
       body.append("id", this.ticketInfo.id);
