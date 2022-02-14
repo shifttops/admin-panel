@@ -1,8 +1,9 @@
-import styles from "../../../pages/TicketPage/ticket-page.module.scss";
+import styles from "../TicketInfo/ticket-info.module.scss";
 import UserAccount from "../../UserAccount";
 import {
   ticketDetailsMapper,
   ticketPriorityMapper,
+  ticketReasonMapper,
   ticketTypesMapper,
 } from "../../../helpers/mappers";
 import Select from "../../Select";
@@ -28,6 +29,8 @@ const TicketDetails = ({
   isAssigneeListFetching,
   setOtherType,
   otherType,
+  reason,
+  setReason,
 }) => {
   const history = useHistory();
   const [mapper, setMapper] = useState(ticketDetailsMapper);
@@ -35,18 +38,20 @@ const TicketDetails = ({
   useEffect(() => {
     const newMapper = [...mapper];
 
-    if (
-      type.name === "OTHER_TYPE" &&
-      !newMapper.filter((item) => item.field === "other_type").length
-    ) {
-      newMapper.push({ title: "Other type", field: "other_type" });
-      setMapper(newMapper);
-    } else if (
-      type.name !== "OTHER_TYPE" &&
-      newMapper.filter((item) => item.field === "other_type").length
-    ) {
-      newMapper.splice(-1, 1);
-      setMapper(newMapper);
+    if (type) {
+      if (
+        type.name === "OTHER_TYPE" &&
+        !newMapper.filter((item) => item.field === "other_type").length
+      ) {
+        newMapper.push({ title: "Other type", field: "other_type" });
+        setMapper(newMapper);
+      } else if (
+        type.name !== "OTHER_TYPE" &&
+        newMapper.filter((item) => item.field === "other_type").length
+      ) {
+        newMapper.splice(-1, 1);
+        setMapper(newMapper);
+      }
     }
   }, [type]);
 
@@ -100,20 +105,23 @@ const TicketDetails = ({
                 ) : (
                   <UserAccount
                     accountName={
+                      ticket.assignee_first_name &&
                       ticket.assignee_first_name.length
                         ? `${ticket.assignee_first_name} ${ticket.assignee_last_name}`
-                        : `User ${ticket.assignee}`
+                        : ticket.assignee
+                        ? `User ${ticket.assignee}`
+                        : "No assignee"
                     }
                   />
                 )
               ) : (
                 <UserAccount
                   accountName={
-                    ticket.owner_first_name.length
+                    ticket.owner_first_name && ticket.owner_first_name.length
                       ? `${ticket.owner_first_name} ${ticket.owner_last_name}`
                       : ticket.user
                       ? `User ${ticket.user}`
-                      : null
+                      : "N/A"
                   }
                 />
               )
@@ -128,7 +136,7 @@ const TicketDetails = ({
                 <Select
                   field={item.field}
                   mapper={ticketPriorityMapper}
-                  value={priority.name}
+                  value={priority ? priority.name : null}
                   onClick={(item) => setPriority(item)}
                 />
               )
@@ -143,12 +151,27 @@ const TicketDetails = ({
                 <Select
                   field={item.field}
                   mapper={ticketTypesMapper}
-                  value={type.name}
+                  value={type ? type.name : null}
                   onClick={(item) => setType(item)}
                 />
               )
             ) : item.field === "other_type" && isEditMode ? (
               <Input onChange={setOtherType} initialValue={otherType} />
+            ) : item.field === "reason" ? (
+              !isEditMode ? (
+                reason ? (
+                  reason.visibleName
+                ) : (
+                  "N/A"
+                )
+              ) : (
+                <Select
+                  field={item.field}
+                  mapper={ticketReasonMapper}
+                  value={reason ? reason.name : null}
+                  onClick={(newReason) => setReason(newReason)}
+                />
+              )
             ) : ticket[item.field] ? (
               ticket[item.field]
             ) : (

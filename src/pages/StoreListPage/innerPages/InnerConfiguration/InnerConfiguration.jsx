@@ -67,6 +67,7 @@ const InnerConfiguration = observer((props) => {
         </div>
       </div>
       {!isLoading &&
+      files &&
       files.get() &&
       files.get().length &&
       files

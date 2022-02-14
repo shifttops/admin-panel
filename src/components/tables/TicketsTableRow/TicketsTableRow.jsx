@@ -5,35 +5,50 @@ import UserAccount from "../../UserAccount";
 import TicketStatus from "../../Ticket/TicketStatus";
 import moment from "moment";
 import {
+  ticketReasonMapper,
   ticketStatusMapper,
   ticketTypesMapper,
 } from "../../../helpers/mappers";
 
-const TicketsTableRow = ({ ticket }) => {
+const TicketsTableRow = ({
+  id,
+  first_response_time,
+  ticketType,
+  ticketStatus,
+  other_type,
+  name,
+  owner_first_name,
+  owner_last_name,
+  user,
+  assignee,
+  assignee_first_name,
+  assignee_last_name,
+  reason,
+}) => {
   const history = useHistory();
 
   return (
     <tr
-      key={`ticket-${ticket.id}`}
-      onClick={() => history.push(`${routes.tickets}/${ticket.id}`)}
+      key={`ticket-${id}`}
+      onClick={() => history.push(`${routes.tickets}/${id}`)}
     >
       <td>
-        {ticketTypesMapper.find((type) => type.name === ticket.type)
-          ? ticketTypesMapper.find((type) => type.name === ticket.type)
+        {ticketTypesMapper.find((type) => type.name === ticketType)
+          ? ticketTypesMapper.find((type) => type.name === ticketType)
               .visibleName
-          : ticket.other_type
-          ? ticket.other_type
+          : other_type
+          ? other_type
           : "N/A"}
       </td>
-      <td>McD-{ticket.id}</td>
-      <td className={styles.titleField}>{ticket.name}</td>
+      <td>McD-{id}</td>
+      <td className={styles.titleField}>{name}</td>
       <td>
         <UserAccount
           accountName={
-            ticket.user
-              ? ticket.owner_first_name.length
-                ? `${ticket.owner_first_name} ${ticket.owner_last_name}`
-                : `User ${ticket.user}`
+            user
+              ? owner_first_name.length
+                ? `${owner_first_name} ${owner_last_name}`
+                : `User ${user}`
               : "N/A"
           }
         />
@@ -41,10 +56,10 @@ const TicketsTableRow = ({ ticket }) => {
       <td>
         <UserAccount
           accountName={
-            ticket.assignee
-              ? ticket.assignee_first_name.length
-                ? `${ticket.assignee_first_name} ${ticket.assignee_last_name}`
-                : `User ${ticket.assignee}`
+            assignee
+              ? assignee_first_name.length
+                ? `${assignee_first_name} ${assignee_last_name}`
+                : `User ${assignee}`
               : "No assignee"
           }
         />
@@ -53,17 +68,30 @@ const TicketsTableRow = ({ ticket }) => {
         <TicketStatus
           className={styles.status}
           currentStatus={
-            ticket.status
+            ticketStatus
               ? ticketStatusMapper.find(
-                  (status) => status.name === ticket.status
+                  (status) => status.name === ticketStatus
                 )
               : ticketStatusMapper.find((status) => status.name === "SUPPORT")
           }
-          centered
+          centered={true}
+        />
+      </td>
+      <td>
+        <TicketStatus
+          className={styles.status}
+          currentStatus={
+            reason
+              ? ticketReasonMapper.find(
+                  (reasonMapper) => reasonMapper.name === reason
+                )
+              : ticketReasonMapper.find((status) => status.name === "OTHER")
+          }
+          centered={true}
         />
       </td>
       {/*<td>{moment(ticket.created).format("DD.MM.YYYY, HH:mm")}</td>*/}
-      <td>{moment(ticket.first_response_time).format("DD.MM.YYYY, HH:mm")}</td>
+      <td>{moment(first_response_time).format("DD.MM.YYYY, HH:mm")}</td>
     </tr>
   );
 };

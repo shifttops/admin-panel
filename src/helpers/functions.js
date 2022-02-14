@@ -1,5 +1,6 @@
 import { fileTypesMapper } from "./mappers";
 import moment from "moment";
+import { isSchema } from "yup";
 
 export const getFileName = (file, sep) =>
   file.split(sep)[file.split(sep).length - 1];
@@ -23,12 +24,12 @@ export const humanizeDate = (date, dateNow = new Date()) => {
   const newDate = moment(date);
   const now = moment(dateNow);
 
-  if (newDate.year() === now.year()) {
-    if (newDate.month() === now.month()) {
-      if (newDate.day() === now.day()) return "Today";
-      else if (newDate.day() === moment(now).subtract(1, "days").day())
+  if (moment(newDate).isSame(now, "year")) {
+    if (moment(newDate).isSame(now, "month")) {
+      if (moment(newDate).isSame(now, "day")) return "Today";
+      else if (newDate.day() === moment(dateNow).subtract(1, "days").day())
         return "Yesterday";
-      else if (newDate.day() === moment(now).add(1, "days").day())
+      else if (newDate.day() === moment(dateNow).add(1, "days").day())
         return "Tomorrow";
       else return newDate.format("DD MMMM");
     } else return newDate.format("DD MMMM");

@@ -127,7 +127,7 @@ const ActivityLogsPage = observer(() => {
       <table className={styles.table}>
         <thead className={styles.tableHead}>
           <tr>
-            <th>
+            <th className={styles.table__sort}>
               <Checkbox label="user" />
             </th>
             {items.map((item) => (
@@ -152,7 +152,7 @@ const ActivityLogsPage = observer(() => {
                 />
               </th>
             ))}
-            <th>Time</th>
+            <th className={styles.table__sort}>Time</th>
             <th className={styles.table__sort} />
           </tr>
         </thead>
