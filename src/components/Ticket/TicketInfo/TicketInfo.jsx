@@ -244,8 +244,9 @@ const TicketInfo = observer(({ id }) => {
                 >
                   {(close) => (
                     <InputPopup
+                      link={ticketInfo.customer_mail}
                       titleText={"Send to email"}
-                      text={"Write your message here:"}
+                      text={"Write your message to "}
                       buttonText={"Send"}
                       placeholder={"Type message..."}
                       onClose={close}

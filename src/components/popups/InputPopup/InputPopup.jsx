@@ -11,6 +11,7 @@ const InputPopup = ({
   titleText,
   text,
   placeholder = "Input your text here..",
+  link = null,
 }) => {
   const [message, setMessage] = useState("");
 
@@ -32,6 +33,11 @@ const InputPopup = ({
       <form>
         <div className={styles.block}>
           <span>{text}</span>
+          {link ? (
+            <a target="_blank" href={`mailto:${link}`}>
+              {link}
+            </a>
+          ) : null}
           <textarea
             placeholder={placeholder}
             value={message}

@@ -44,6 +44,18 @@
     white-space: pre-wrap;
   }
 
+  a {
+    font-size: 14px;
+    color: $color-black-05;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      color: $color-green;
+      text-decoration: underline;
+    }
+  }
+
   textarea {
     resize: none;
     outline: none;
