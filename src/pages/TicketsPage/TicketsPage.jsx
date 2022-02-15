@@ -122,17 +122,23 @@ const TicketsPage = observer(() => {
     const { type, field } = sort;
     const { startDate: start, endDate: end } = period.get();
 
+    const reqBody = {
+      search,
+      field,
+      type,
+      limit,
+      offset: 0,
+      signal: abortRef.current.signal,
+      setResCount,
+    };
+    if (isPeriodSelected) {
+      reqBody.start = start;
+      reqBody.end = end;
+    }
+
     if (refTickets.current) {
       getTickets({
-        search,
-        field,
-        type,
-        limit,
-        offset: 0,
-        signal: abortRef.current.signal,
-        setResCount,
-        start,
-        end,
+        ...reqBody,
       });
     }
 
@@ -154,8 +160,14 @@ const TicketsPage = observer(() => {
     const { type, field } = sort;
     const { startDate: start, endDate: end } = period.get();
 
+    const reqBody = { search, field, type, limit, setResCount };
+    if (isPeriodSelected) {
+      reqBody.start = start;
+      reqBody.end = end;
+    }
+
     if (inView) {
-      getTickets({ search, field, type, limit, setResCount, start, end });
+      getTickets({ ...reqBody });
     }
   }, [inView]);
 
@@ -208,7 +220,7 @@ const TicketsPage = observer(() => {
               isDateRangeVisible ? "Close" : "Choose period to analyse"
             } `}
             Icon={DateIcon}
-            disabled={isTicketsFetching || !tickets.get().length}
+            disabled={isTicketsFetching}
             className={`${isDateRangeVisible ? "maintenance" : null}`}
           />
           <Button

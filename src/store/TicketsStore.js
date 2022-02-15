@@ -85,7 +85,9 @@ class TicketsStore {
         url += `&search=${search}`;
       }
       if (start && end)
-        url += `&start=${JSON.stringify(start)}&end=${JSON.stringify(end)}`;
+        url += `&start=${JSON.parse(JSON.stringify(start))}&end=${JSON.parse(
+          JSON.stringify(end)
+        )}`;
 
       const resp = await fetch(url, {
         method: "GET",
@@ -120,9 +122,9 @@ class TicketsStore {
       await refreshToken();
 
       const { status, data } = await Api.get(
-        `/ticket/?limit=${99999}&offset=${0}&start=${JSON.stringify(
-          start
-        )}&end=${JSON.stringify(end)}`,
+        `/ticket/?limit=${99999}&offset=${0}&start=${JSON.parse(
+          JSON.stringify(start)
+        )}&end=${JSON.parse(JSON.stringify(end))}`,
         {
           headers: {
             Authorization: `Token ${localStorage.getItem("access")}`,
@@ -226,7 +228,7 @@ class TicketsStore {
 
       const body = new FormData();
 
-      body.append("type", data.type);
+      if (data.type) body.append("type", data.type);
       if (data.type === "OTHER_TYPE") body.append("other_type", data.otherType);
 
       body.append("id", this.ticketInfo.id);
@@ -240,7 +242,8 @@ class TicketsStore {
         data.files.map((file) => body.append("files", file));
 
       body.append("description", data.description);
-      body.append("assignee", data.assignee);
+      if (data.assignee !== "No assignee")
+        body.append("assignee", data.assignee);
       body.append(
         "name",
         `[McD-${this.ticketInfo.id}] #${data.stores} ${

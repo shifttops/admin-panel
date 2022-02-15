@@ -138,7 +138,7 @@ const TicketInfo = observer(({ id }) => {
           description: text,
           first_response_time: frTime,
           priority: priority.name,
-          type: type.name,
+          type: type ? type.name : null,
           otherType,
           stores,
           assignee,
@@ -155,11 +155,6 @@ const TicketInfo = observer(({ id }) => {
         ? ticketInfo.description
         : ""
     );
-    // setFRTime(
-    //   ticketInfo.created
-    //     ? moment(ticketInfo.created).add(3, "hours")
-    //     : moment(new Date())
-    // );
     setFRTime(
       ticketInfo.first_response_time
         ? moment(ticketInfo.first_response_time).add(3, "hours")
