@@ -70,7 +70,7 @@ const TicketsTableRow = ({
           currentStatus={
             ticketStatus
               ? ticketStatusMapper.find(
-                  (status) => status.name === ticketStatus
+                  (status) => status.name === ticketStatus.toUpperCase()
                 )
               : ticketStatusMapper.find((status) => status.name === "SUPPORT")
           }
