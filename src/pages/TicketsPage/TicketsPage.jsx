@@ -40,7 +40,7 @@ const TicketsPage = observer(() => {
   } = TicketsStore;
 
   const [search, setSearch] = useState("");
-  const [sort, setSort] = useState({ type: "none" });
+  const [sort, setSort] = useState({ type: "desc", field: "id" });
   const [limit, setLimit] = useState(30);
   const [resCount, setResCount] = useState(0);
   const [isDateRangeVisible, setIsDateRangeVisible] = useState(false);
@@ -146,10 +146,14 @@ const TicketsPage = observer(() => {
   }, [search, sort]);
 
   useEffect(() => {
+    const { type, field } = sort;
+
     if (!tickets.get().length && !refTickets.current)
       getTickets({
         limit,
         setResCount,
+        type,
+        field,
       });
     refTickets.current = true;
 

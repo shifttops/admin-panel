@@ -336,7 +336,7 @@ const TicketInfo = observer(({ id }) => {
                 ) : text.length ? (
                   <>
                     <span className={styles.subtitle}>Description</span>
-                    {text}
+                    <div className={styles.text}>{text}</div>
                   </>
                 ) : null}
               </div>
