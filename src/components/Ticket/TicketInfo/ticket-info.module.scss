@@ -274,3 +274,10 @@
     text-decoration: underline;
   }
 }
+
+.text {
+  max-height: 300px;
+  max-width: 55vw;
+  overflow: auto;
+  margin: 0 auto;
+}
