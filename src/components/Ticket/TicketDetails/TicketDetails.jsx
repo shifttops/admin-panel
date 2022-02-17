@@ -121,6 +121,8 @@ const TicketDetails = ({
                       ? `${ticket.owner_first_name} ${ticket.owner_last_name}`
                       : ticket.user
                       ? `User ${ticket.user}`
+                      : ticket.customer_mail
+                      ? ticket.customer_mail
                       : "N/A"
                   }
                 />

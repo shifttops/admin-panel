@@ -24,6 +24,7 @@ const TicketsTableRow = ({
   assignee_first_name,
   assignee_last_name,
   reason,
+  customer_mail,
 }) => {
   const history = useHistory();
 
@@ -49,6 +50,8 @@ const TicketsTableRow = ({
               ? owner_first_name.length
                 ? `${owner_first_name} ${owner_last_name}`
                 : `User ${user}`
+              : customer_mail
+              ? customer_mail
               : "N/A"
           }
         />

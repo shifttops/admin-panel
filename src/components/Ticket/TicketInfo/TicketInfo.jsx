@@ -303,8 +303,10 @@ const TicketInfo = observer(({ id }) => {
                   <UserAccount
                     className={styles.description__header__reporter}
                     accountName={
-                      ticketInfo.owner_first_name &&
-                      ticketInfo.owner_first_name.length
+                      ticketInfo.customer_mail
+                        ? ticketInfo.customer_mail
+                        : ticketInfo.owner_first_name &&
+                          ticketInfo.owner_first_name.length
                         ? `${ticketInfo.owner_first_name} ${ticketInfo.owner_last_name}`
                         : ticketInfo.user
                         ? `User ${ticketInfo.user}`
