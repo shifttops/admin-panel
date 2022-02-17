@@ -5,6 +5,7 @@ import { NavLink } from "react-router-dom";
 import cn from "classnames";
 import routes from "../../constants/routes";
 import { storeStatusMapper } from "../../helpers/mappers";
+import DateComp from "../Date";
 
 const NotificationItem = ({ item, isRead }) => {
   const notificationsTypes = [
@@ -28,6 +29,15 @@ const NotificationItem = ({ item, isRead }) => {
       visibleName: "Script running on this store",
       path: `${routes.storeInfo}/${item.store_id}`,
     },
+    {
+      types: ["new_ticket"],
+      visibleName: `New ticket ${
+        item.store_ids && item.store_ids.length
+          ? "on " + JSON.stringify(item.store_ids).slice(1, -1)
+          : null
+      }`,
+      path: `${routes.tickets}/${item.id}`,
+    },
   ];
 
   return (
@@ -47,20 +57,26 @@ const NotificationItem = ({ item, isRead }) => {
           { [styles.notification__read]: isRead }
         )}
       >
-        <span className={styles.notification__store}>
-          Store ID: {item.store_id}
-        </span>
+        <div className={styles.notification__info}>
+          <span className={styles.notification__store}>
+            {item.event_type === "new_ticket"
+              ? item.description
+              : `Store ID: ${item.store_id}`}
+          </span>
+          <span className={styles.notification__time}>
+            {item.changed_on ? (
+              <DateComp date={item.changed_on} />
+            ) : (
+              <DateComp date={item.error_time} />
+            )}
+          </span>
+        </div>
         <span className={styles.notification__name}>
           {
             notificationsTypes.find((route) =>
               route.types.includes(item.event_type)
             ).visibleName
           }
-        </span>
-        <span className={styles.notification__time}>
-          {item.changed_on
-            ? new Date(item.changed_on).toLocaleString()
-            : new Date(item.error_time).toLocaleString()}
         </span>
       </div>
     </NavLink>

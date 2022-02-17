@@ -292,6 +292,7 @@ const TicketsPage = observer(() => {
               owner_last_name={ticket.owner_last_name}
               user={ticket.user}
               reason={ticket.reason}
+              customer_mail={ticket.customer_mail}
             />
           ))}
         </tbody>

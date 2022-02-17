@@ -11,10 +11,8 @@
   }
 
   &__label {
-    display: inline-grid;
     font-size: 16px;
     color: $color-black;
-    grid-template-columns: 32% 1fr 1fr;
     column-gap: 10px;
   }
 
@@ -24,6 +22,7 @@
   }
 
   &__name {
+    margin-top: 20px;
   }
 
   &__time {
@@ -46,5 +45,10 @@
     .notification__store {
       color: $color-black-05;
     }
+  }
+
+  &__info {
+    display: flex;
+    justify-content: space-between;
   }
 }

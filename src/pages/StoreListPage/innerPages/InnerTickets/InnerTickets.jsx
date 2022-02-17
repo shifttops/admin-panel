@@ -69,6 +69,7 @@ const InnerTickets = observer((props) => {
                     ticketType={ticket.type}
                     ticketStatus={ticket.status}
                     other_type={ticket.other_type}
+                    customer_mail={ticket.customer_mail}
                   />
                 ))}
             </tbody>
