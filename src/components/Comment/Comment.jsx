@@ -24,12 +24,11 @@ const Comment = ({
   onFileDelete,
 }) => {
   const [isEditMode, setIsEditMode] = useState(false);
-  const [isFileDropVisible, setIsFileDropVisible] = useState(false);
   const [commentText, setCommentText] = useState("");
   const [commentFiles, setCommentFiles] = useState([]);
 
   useEffect(() => {
-    if (text.length) setCommentText(text);
+    if (text && text.length) setCommentText(text);
     else setCommentText("");
   }, [text]);
 
@@ -56,28 +55,6 @@ const Comment = ({
       } else ToastsStore.error("Comment text can`t be empty", 3000, "toast");
     } else ToastsStore.error("No changes in comment to save", 3000, "toast");
   };
-
-  const handleDragFiles = (e) => {
-    setCommentFiles((prevState) => [...prevState, ...Array.from(e)]);
-    setIsFileDropVisible(false);
-  };
-
-  const handleRemoveFile = (file) => {
-    const newFiles = [...commentFiles];
-
-    newFiles.splice(
-      commentFiles.indexOf(files.find((item) => item.name === file.name)),
-      1
-    );
-
-    setCommentFiles(newFiles);
-  };
-
-  const handleChooseFiles = (e) =>
-    setCommentFiles((prevState) => [
-      ...prevState,
-      ...Array.from(e.target.files),
-    ]);
 
   const HeaderInfo = ({ owner_first_name, owner_last_name, user, date }) => (
     <div className={styles.comment__header__info}>
@@ -159,60 +136,6 @@ const Comment = ({
             </div>
           </div>
         ) : null}
-        {/*        {isEditMode ? (
-          <div>
-            {commentFiles.length ? (
-              <div className={styles.files}>
-                {commentFiles.map((file) => (
-                  <div className={styles.files__file}>
-                    <span className={styles.files__file__icon}>
-                      <ButtonIcon
-                        disabled
-                        Icon={getIconForFile(getFileFormat(file.name))}
-                        type={getTypeIconForFile(getFileFormat(file.name))}
-                      />
-                    </span>
-                    <span className={styles.files__file__name}>
-                      {file.name}
-                    </span>
-                    <div
-                      className={styles.files__file__icon__close}
-                      color={"rgba(38,38,38,0.72)"}
-                      onClick={() => handleRemoveFile(file)}
-                    >
-                      <CloseIcon />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : null}
-            <label
-              htmlFor="addTicketFiles"
-              className={cn(styles.files__label, styles.fileDrop)}
-            >
-              <FileDrop
-                className={cn("file-drop", { ["visible"]: isFileDropVisible })}
-                onFrameDragEnter={() => setIsFileDropVisible(true)}
-                onFrameDragLeave={() => setIsFileDropVisible(false)}
-                onFrameDrop={() => setIsFileDropVisible(false)}
-                onDrop={(e) => handleDragFiles(e)}
-              >
-                Drop files here!
-              </FileDrop>
-              <div className={styles.icon}>
-                <PinFileIcon />
-              </div>
-              <span>Click or drag here to add files</span>
-            </label>
-            <input
-              className={styles.files__label__input}
-              id="addTicketFiles"
-              type="file"
-              onChange={handleChooseFiles}
-              multiple
-            />
-          </div>
-        ) : null}*/}
       </div>
     </div>
   );

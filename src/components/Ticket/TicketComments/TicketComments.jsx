@@ -36,7 +36,7 @@ const TicketComments = ({ comments, isSending, isFetching }) => {
     setFiles([...files, ...Array.from(e.target.files)]);
 
   const handleSend = async () => {
-    if (!!message.trim().length) {
+    if (!!message.trim().length || files.length) {
       await addTicketComment({ message, files });
 
       setMessage("");
