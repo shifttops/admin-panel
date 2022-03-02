@@ -112,7 +112,7 @@ class TicketsStore {
       this.isTicketsFetching = false;
     } catch (e) {
       this.isTicketsFetching = false;
-      ToastsStore.error(e.message, 3000, "toast");
+      console.log(e.message);
     }
   };
 

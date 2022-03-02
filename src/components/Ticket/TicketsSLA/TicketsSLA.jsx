@@ -2,19 +2,14 @@ import styles from "../TicketInfo/ticket-info.module.scss";
 import cn from "classnames";
 import { TimeIcon } from "../../../icons";
 import DateComp from "../../Date";
-import moment from "moment";
 
-const TicketsSLA = ({ isEditMode, frTime, setFRTime }) => {
+const TicketsSLA = ({ frTime }) => {
   const slasMapper = [
     {
       title: "First response time",
       date: frTime,
     },
   ];
-
-  const handleDateChange = ({ newDate }) => {
-    setFRTime(moment(newDate));
-  };
 
   return (
     <div className={styles.details}>
@@ -26,17 +21,6 @@ const TicketsSLA = ({ isEditMode, frTime, setFRTime }) => {
               <TimeIcon color={`rgba(51, 51, 51, 0.5)`} />
             </span>
             <DateComp date={date} />
-            {/*{!isEditMode ? (
-              <DateComp date={date} />
-            ) : (
-              <DatePicker
-                selected={date.toDate()}
-                className={styles.date}
-                dateFormat={"dd MMMM yyyy, HH:mm"}
-                onChange={(newDate) => handleDateChange({ newDate })}
-                showTimeSelect
-              />
-            )}*/}
           </div>
         </div>
       ))}

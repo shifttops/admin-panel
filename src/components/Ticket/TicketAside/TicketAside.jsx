@@ -3,13 +3,12 @@ import TicketDetails from "../TicketDetails";
 import styles from "./aside.module.scss";
 import TicketStatus from "../TicketStatus";
 import withDropDown from "../../../helpers/HOC/withDropDown";
+import moment from "moment";
 
 const TicketAside = ({
   ticket,
   isEditMode,
   isDetailsOpened,
-  frTime,
-  setFRTime,
   currentStatus,
   setCurrentStatus,
   priority,
@@ -32,9 +31,9 @@ const TicketAside = ({
       Component: TicketsSLA,
       title: "SLA`s",
       props: {
-        isEditMode,
-        frTime,
-        setFRTime,
+        frTime: ticket.first_response_time
+          ? moment(ticket.first_response_time).add(3, "hours")
+          : moment(new Date()),
       },
     },
     {

@@ -57,7 +57,6 @@ const TicketInfo = observer(({ id }) => {
   // const [isLightBoxVisible, setIsLightBoxVisible] = useState(true);
 
   const [text, setText] = useState("");
-  const [frTime, setFRTime] = useState(moment(new Date()));
   const [currentStatus, setCurrentStatus] = useState({});
   const [priority, setPriority] = useState(null);
   const [type, setType] = useState(null);
@@ -75,14 +74,6 @@ const TicketInfo = observer(({ id }) => {
 
   const validateEditing = () => {
     if (!!(text !== ticketInfo.description && text.trim().length)) return true;
-    else if (
-      !moment(frTime).isSame(
-        ticketInfo.first_response_time
-          ? moment(ticketInfo.first_response_time).add(3, "hours")
-          : moment(new Date())
-      )
-    )
-      return true;
     else if (assignee !== ticketInfo.assignee) return true;
     else if (
       currentStatus.name !==
@@ -136,7 +127,6 @@ const TicketInfo = observer(({ id }) => {
         data: {
           status: currentStatus.name,
           description: text,
-          first_response_time: frTime,
           priority: priority.name,
           type: type ? type.name : null,
           otherType,
@@ -154,11 +144,6 @@ const TicketInfo = observer(({ id }) => {
       ticketInfo.description && ticketInfo.description.length
         ? ticketInfo.description
         : ""
-    );
-    setFRTime(
-      ticketInfo.first_response_time
-        ? moment(ticketInfo.first_response_time).add(3, "hours")
-        : moment(new Date())
     );
     setCurrentStatus(
       ticketStatusMapper.find(
@@ -218,6 +203,12 @@ const TicketInfo = observer(({ id }) => {
       TicketsStore.ticketInfo = {};
     };
   }, []);
+
+  useEffect(() => {
+    if (Object.keys(ticketInfo).length && id) {
+      getTicket({ id });
+    }
+  }, [id]);
 
   return Object.keys(ticketInfo).length && !isTicketFetching ? (
     <>
@@ -396,8 +387,6 @@ const TicketInfo = observer(({ id }) => {
           ticket={ticketInfo}
           isDetailsOpened={isDetailsOpened}
           isEditMode={isEditMode}
-          frTime={frTime}
-          setFRTime={setFRTime}
           priority={priority}
           setPriority={setPriority}
           type={type}
