@@ -235,6 +235,7 @@ class TicketsStore {
       body.append("priority", data.priority);
       body.append("status", data.status);
       body.append("reason", data.reason);
+      body.append("from_mail", this.ticketInfo.from_mail);
 
       data.stores.map((store) => body.append("stores", store));
 
