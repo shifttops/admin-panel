@@ -34,9 +34,14 @@ const NotificationItem = ({ item, isRead }) => {
       visibleName: `New ticket ${
         item.store_ids && item.store_ids.length
           ? "on " + JSON.stringify(item.store_ids).slice(1, -1)
-          : null
+          : ""
       }`,
-      path: `${routes.tickets}/${item.id}`,
+      path: `${routes.tickets}/${item.ticket_id}`,
+    },
+    {
+      types: ["new_comment"],
+      visibleName: item.description,
+      path: `${routes.tickets}/${item.ticket_id}`,
     },
   ];
 
@@ -61,6 +66,8 @@ const NotificationItem = ({ item, isRead }) => {
           <span className={styles.notification__store}>
             {item.event_type === "new_ticket"
               ? item.description
+              : item.event_type === "new_comment"
+              ? `New comment on [McD-${item.ticket_id}]`
               : `Store ID: ${item.store_id}`}
           </span>
           <span className={styles.notification__time}>
@@ -72,11 +79,13 @@ const NotificationItem = ({ item, isRead }) => {
           </span>
         </div>
         <span className={styles.notification__name}>
-          {
-            notificationsTypes.find((route) =>
-              route.types.includes(item.event_type)
-            ).visibleName
-          }
+          {notificationsTypes.find((route) =>
+            route.types.includes(item.event_type)
+          )
+            ? notificationsTypes.find((route) =>
+                route.types.includes(item.event_type)
+              ).visibleName
+            : null}
         </span>
       </div>
     </NavLink>

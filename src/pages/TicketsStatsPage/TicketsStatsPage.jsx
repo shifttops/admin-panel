@@ -96,6 +96,8 @@ const TicketsStatsPage = observer(() => {
             : item.visibleName === "Reporter" && ticket[item.name]
             ? ticket.owner_first_name && ticket.owner_first_name.length
               ? `${ticket.owner_first_name} ${ticket.owner_last_name}`
+              : ticket.customer_mail
+              ? ticket.customer_mail
               : `[User ${ticket[item.name]}]`
             : item.visibleName === "Reason" && ticket[item.name]
             ? ticketReasonMapper.find(({ name }) => name === ticket[item.name])

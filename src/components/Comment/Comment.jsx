@@ -1,21 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { CloseIcon, DeleteIcon, EditIcon, PinFileIcon } from "../../icons";
+import { DeleteIcon, EditIcon } from "../../icons";
 import styles from "./comment.module.scss";
 import UserAccount from "../UserAccount";
 import DateComp from "../Date";
 import withMoreMenu from "../../helpers/HOC/withMoreMenu";
 import Button from "../buttons/Button";
-import {
-  createMapper,
-  getFileFormat,
-  getIconForFile,
-  getTypeIconForFile,
-} from "../../helpers/functions";
+import { createMapper } from "../../helpers/functions";
 import File from "../File";
 import { ToastsStore } from "react-toasts";
-import ButtonIcon from "../buttons/ButtonIcon";
-import cn from "classnames";
-import { FileDrop } from "react-file-drop";
 
 const Comment = ({
   comment: {
@@ -40,8 +32,6 @@ const Comment = ({
     if (text.length) setCommentText(text);
     else setCommentText("");
   }, [text]);
-
-  useEffect(() => {});
 
   useEffect(() => {
     if (!isEditMode) setCommentText(text);
@@ -93,9 +83,11 @@ const Comment = ({
     <div className={styles.comment__header__info}>
       <UserAccount
         accountName={
-          owner_first_name.length
-            ? `${owner_first_name} ${owner_last_name}`
-            : `User ${user}`
+          (owner_first_name && owner_last_name) || user
+            ? owner_first_name.length
+              ? `${owner_first_name} ${owner_last_name}`
+              : `User ${user}`
+            : ""
         }
         className={styles.comment__sender}
       />
