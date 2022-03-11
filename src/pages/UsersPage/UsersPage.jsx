@@ -2,142 +2,299 @@ import styles from "./users-page.module.scss";
 import SearchQuick from "components/search/SearchQuick";
 import ButtonIcon from "components/buttons/ButtonIcon";
 import { ArrowDownIcon, DeclineIcon, MoreIcon, SortIcon } from "icons";
-import Button from "components/buttons/Button";
-import Checkbox from "components/Checkbox";
-import AccessButton from "components/buttons/AccessButton";
-import { useEffect, useState } from "react";
-import { refreshToken } from "../../helpers/AuthHelper";
+import Button from "../../components/buttons/Button";
+import Checkbox from "../../components/Checkbox";
+import AccessButton from "../../components/buttons/AccessButton";
+import { useEffect, useRef, useState } from "react";
+import cn from "classnames";
+import { observer } from "mobx-react";
+import UsersStore from "../../store/UsersStore";
+import Loader from "../../components/Loader";
+import Popup from "reactjs-popup";
+import PopupComponent from "../../components/popups/PopupComponent/PopupComponent";
+import useClickOutside from "../../helpers/hooks/useClickOutside";
+import { AcceptIcon } from "../../icons";
 
-export default function UsersPage(params) {
-  const [isRoleSelect, setIsRoleSelect] = useState(false);
-  const [users, setUsers] = useState([]);
+const UsersPage = observer(() => {
+  const [search, setSearch] = useState("");
 
-  const isRoleSelectClickHandler = () => {
-    setIsRoleSelect((prevState) => !prevState);
-  };
-
-  const isRoleSelectBlurHandler = () => {
-    setIsRoleSelect(false);
-  };
+  const {
+    users,
+    permissions,
+    getUsers,
+    getPermissions,
+    isUsersFetching,
+    isPermissionsFetching,
+    setPermissions,
+    isPermissionsSetFetching,
+  } = UsersStore;
 
   useEffect(() => {
-    const getUsers = async () => {
-      try {
-        await refreshToken();
+    if (!users.get().length) {
+      getUsers();
+    }
 
-        const resp = await fetch(
-          `${process.env.REACT_APP_URL}/api/get_users`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Token ${localStorage.getItem("access")}`,
-            },
-          }
-        );
-        const res = await resp.json();
-        console.log(res.filter(item => item.user_permissions?.length))
+    if (!permissions.get().length) {
+      getPermissions();
+    }
 
-        setUsers(res);
-
-      } catch (e) {
-        console.log(e.message);
-      }
+    return () => {
+      UsersStore.users.get().clear();
+      UsersStore.permissions.get().clear();
     };
-
-    const getPermissions = async () => {
-      try {
-        await refreshToken();
-
-        const resp = await fetch(
-          `${process.env.REACT_APP_URL}/api/get_set_permissions`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Token ${localStorage.getItem("access")}`,
-            },
-          }
-        );
-        const res = await resp.json();
-        
-
-      } catch (e) {
-        console.log(e.message);
-      }
-    };
-
-
-    getUsers();
-    getPermissions();
-  }, [])
+  }, []);
 
   return (
     <div className="page">
       <div className={styles.pageHead}>
         <div className={styles.pageInfo}>
           <h2 className={styles.title}>Users</h2>
-          <SearchQuick />
-          <ButtonIcon Icon={SortIcon} className={styles.btnIcon} />
+          <SearchQuick
+            setSearch={setSearch}
+            placeholderText="Find user by name"
+          />
         </div>
         <div className={styles.button}>
-          <Button text="Invate" />
+          <Button text="Invite" />
         </div>
       </div>
-      <table className={styles.table}>
-        <thead className={styles.head}>
-          <tr>
-            <th>
-              <Checkbox label="username" />
-            </th>
-            <th className={styles.role}>role</th>
-            <th>Access 1</th>
-            <th>Access 2</th>
-            <th>Access 3</th>
-            <th> </th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map(user => (
-            <tr className={styles.name} key={user.username}>
-              <td className={styles.name}>
-              <Checkbox className={styles.checkbox} label={user.username} />
-            </td>
-            <td
-              className={styles.dropdown}
-              onClick={isRoleSelectClickHandler}
-              onBlur={isRoleSelectBlurHandler}
-            >
-              Manager <ArrowDownIcon />
-              {isRoleSelect && (
-                <div className={styles.wrap}>
-                  <p className={styles.head}>Choose a role</p>
-                  <div className={styles.item}>Marketing Coordinator</div>
-                  <div className={styles.item}>Dog Trainer</div>
-                  <div className={styles.item}>Web Designer</div>
-                  <div className={styles.item}>Medical Assistant</div>
-                  <div className={styles.itemButtons}>
-                    <Button text="Apply" />
-                    <Button text="Cancel" className={styles.btnBorder} />
-                  </div>
-                </div>
-              )}
-            </td>
-            <td className={styles.icon}>
-              <AccessButton />
-            </td>
-            <td className={styles.icon}>
-              <DeclineIcon />
-            </td>
-            <td className={styles.icon}>
-              <AccessButton />
-            </td>
-            <td>
-              <ButtonIcon Icon={MoreIcon} className={styles.btnMore} />
-            </td>
+      {users.get().length && !isUsersFetching ? (
+        <table className={styles.table}>
+          <thead className={styles.head}>
+            <tr>
+              <th>
+                <Checkbox label="username" />
+              </th>
+              <th className={styles.role}>permissions</th>
+              <th>Staff access</th>
+              <th>Super user access</th>
+              <th>E-mail</th>
+              <th />
             </tr>
-          ))}
-         
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {users
+              .get()
+              .filter(({ username, last_name, first_name }) =>
+                last_name?.length && first_name?.length
+                  ? `${first_name} ${last_name}`
+                      .toLowerCase()
+                      .includes(search.toLowerCase())
+                  : username.toLowerCase().includes(search.toLowerCase())
+              )
+              .map(
+                ({
+                  pk,
+                  username,
+                  last_name,
+                  first_name,
+                  is_staff,
+                  is_superuser,
+                  user_permissions,
+                  email,
+                }) => (
+                  <tr className={styles.name} key={`user-${pk}`}>
+                    <td className={styles.name}>
+                      <Checkbox
+                        className={styles.checkbox}
+                        label={
+                          last_name?.length && first_name?.length
+                            ? `${first_name} ${last_name}`
+                            : username
+                        }
+                      />
+                    </td>
+                    <RolesDropdown
+                      permissions={permissions.get()}
+                      userPermissions={user_permissions}
+                      userName={
+                        last_name?.length && first_name?.length
+                          ? `${first_name} ${last_name}`
+                          : username
+                      }
+                      isFetching={isPermissionsFetching}
+                      isSetFetching={isPermissionsSetFetching}
+                      setPermissions={setPermissions}
+                      userId={pk}
+                    />
+                    <td className={styles.icon}>
+                      {is_staff ? <AcceptIcon /> : <DeclineIcon />}
+                    </td>
+                    <td className={styles.icon}>
+                      {is_superuser ? <AcceptIcon /> : <DeclineIcon />}
+                    </td>
+                    <td className={styles.icon}>
+                      {email?.length ? (
+                        <a className={styles.link} href={`mailto:${email}`}>
+                          {email}
+                        </a>
+                      ) : (
+                        "-"
+                      )}
+                    </td>
+                    <td>
+                      <ButtonIcon Icon={MoreIcon} className={styles.btnMore} />
+                    </td>
+                  </tr>
+                )
+              )}
+          </tbody>
+        </table>
+      ) : (
+        <div className={styles.loader}>
+          {isUsersFetching ? <Loader types={["medium"]} /> : "No users to show"}
+        </div>
+      )}
     </div>
   );
-}
+});
+
+export default UsersPage;
+
+const RolesDropdown = ({
+  permissions,
+  userPermissions,
+  userName,
+  isFetching,
+  isSetFetching,
+  setPermissions,
+  userId,
+}) => {
+  const ref = useRef(null);
+  const [isRoleSelect, setIsRoleSelect] = useState(false);
+  const [newPermissions, setNewPermissions] = useState([]);
+
+  useEffect(() => {
+    setNewPermissions(userPermissions);
+  }, [userPermissions]);
+
+  const isRoleSelectClickHandler = () =>
+    setIsRoleSelect((prevState) => !prevState);
+
+  useClickOutside({ ref, onClickOutside: () => setIsRoleSelect(false) });
+
+  const handleSet = () => {
+    const ids = newPermissions.map(({ id }) => id);
+
+    setPermissions({
+      permissionsIds: ids,
+      action: "update",
+      userId,
+    });
+    setIsRoleSelect(false);
+  };
+
+  const handlePermissionsChange = (e, permission) => {
+    setNewPermissions((prevState) => {
+      const newState = [...prevState];
+
+      if (e.target.checked) {
+        newState.push(permission);
+      } else {
+        newState.splice(newState.indexOf(permission), 1);
+      }
+
+      return newState;
+    });
+  };
+
+  const handleAllSelect = (e) => {
+    if (e.target.checked) {
+      setNewPermissions([...permissions]);
+    } else {
+      setNewPermissions([]);
+    }
+  };
+
+  const handleClear = () => {
+    setNewPermissions([]);
+    setIsRoleSelect(false);
+  };
+
+  return (
+    <td className={styles.dropdown} ref={ref}>
+      <p onClick={isRoleSelectClickHandler}>
+        Permissions <ArrowDownIcon isOpen={isRoleSelect} />
+      </p>
+      {isRoleSelect ? (
+        <div className={styles.wrap}>
+          {!isFetching ? (
+            <>
+              <p className={styles.head}>Choose a permissions to user</p>
+              <Checkbox
+                className={cn(styles.item, {
+                  [styles.item__selected]:
+                    newPermissions.length === permissions.length,
+                })}
+                label="Select all"
+                onChange={(e) => handleAllSelect(e)}
+                checked={newPermissions.length === permissions.length}
+              />
+              {permissions.map((item) => (
+                <Checkbox
+                  className={cn(styles.item, {
+                    [styles.item__selected]: newPermissions.find(
+                      (perm) => item.id === perm.id
+                    ),
+                  })}
+                  label={item.name}
+                  onChange={(e) => handlePermissionsChange(e, item)}
+                  checked={newPermissions.find((perm) => item.id === perm.id)}
+                />
+              ))}
+              <div className={styles.itemButtons}>
+                <Popup
+                  modal
+                  trigger={<Button text="Set" fetching={isSetFetching} />}
+                >
+                  {(close) => (
+                    <PopupComponent
+                      onClose={close}
+                      titleText="Set permissions"
+                      buttonText="Set permissions"
+                      text="You sure you want to set"
+                      dedicatedText={
+                        newPermissions.length !== permissions.length
+                          ? newPermissions.map(
+                              (permission, index) =>
+                                permission.name +
+                                `${
+                                  index !== newPermissions.length - 1
+                                    ? ", "
+                                    : ""
+                                }`
+                            )
+                          : "All"
+                      }
+                      additionalText={`${
+                        newPermissions.length > 1
+                          ? "these"
+                          : !!newPermissions.length
+                          ? "this"
+                          : ""
+                      } ${!!newPermissions.length ? "permission" : ""} ${
+                        newPermissions.length > 1 ? "s" : ""
+                      } to`}
+                      additionalDedicatedText={userName}
+                      additionalText2="?"
+                      onClick={handleSet}
+                    />
+                  )}
+                </Popup>
+                <Button
+                  text="Cancel"
+                  className={"maintenance"}
+                  onClick={handleClear}
+                />
+              </div>
+            </>
+          ) : (
+            <div className={styles.loader}>
+              <Loader types={["small"]} />
+            </div>
+          )}
+        </div>
+      ) : null}
+    </td>
+  );
+};

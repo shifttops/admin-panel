@@ -1,22 +1,31 @@
 import styles from "./account.module.scss";
 import accountIcon from "images/accountIcon.svg";
 import AccountResult from "../AccountResult";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { ArrowDownIcon } from "../../../icons";
+import useClickOutside from "../../../helpers/hooks/useClickOutside";
 
 export default function Account({ onClick }) {
-  const [isAccountInfo, setIsAccountInfo] = useState(false);
+  const ref = useRef(null);
+
+  const [isAccountInfoVisible, setIsAccountInfoVisible] = useState(false);
 
   const isAccountClickHandler = () => {
-    setIsAccountInfo((prevState) => !prevState);
+    setIsAccountInfoVisible((prevState) => !prevState);
   };
 
   const isAccountBlurHandler = () => {
-    setIsAccountInfo(false);
+    setIsAccountInfoVisible(false);
   };
+
+  useClickOutside({
+    ref,
+    onClickOutside: () => setIsAccountInfoVisible(false),
+  });
 
   return (
     <div
+      ref={ref}
       className={styles.headerAccount}
       onClick={isAccountClickHandler}
       onBlur={isAccountBlurHandler}
@@ -28,9 +37,9 @@ export default function Account({ onClick }) {
         <p className={styles.headerAccount__name}>
           {localStorage.getItem("userName")}
         </p>
-        <ArrowDownIcon isOpen={isAccountInfo} />
+        <ArrowDownIcon isOpen={isAccountInfoVisible} />
       </div>
-      <AccountResult isVisible={isAccountInfo} />
+      <AccountResult isVisible={isAccountInfoVisible} />
     </div>
   );
 }

@@ -2,8 +2,8 @@ import styles from "./search-result.module.scss";
 import { useHistory } from "react-router-dom";
 import Loader from "../../Loader";
 import { useInView } from "react-intersection-observer";
-import { useEffect, useState } from "react";
-import cn from "classnames";
+import { useEffect, useRef, useState } from "react";
+import useClickOutside from "../../../helpers/hooks/useClickOutside";
 
 const SearchResult = ({
   setSearchValue,
@@ -13,8 +13,8 @@ const SearchResult = ({
   search,
   resCount,
   setResCount,
-  isVisible,
 }) => {
+  const searchRef = useRef(null);
   const history = useHistory();
 
   const { ref, inView, entry } = useInView({
@@ -32,8 +32,10 @@ const SearchResult = ({
     }
   }, [inView]);
 
+  useClickOutside({ ref: searchRef, onClickOutside: () => setSearchValue("") });
+
   return (
-    <div className={styles.searchResult}>
+    <div ref={searchRef} className={styles.searchResult}>
       {stores.map((store) => (
         <div
           className={styles.searchResult__item}

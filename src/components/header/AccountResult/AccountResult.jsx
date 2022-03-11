@@ -2,7 +2,7 @@ import styles from "../Account/account.module.scss";
 import { useHistory } from "react-router-dom";
 import cn from "classnames";
 
-export default function AccountResult({ isVisible }) {
+const AccountResult = ({ isVisible }) => {
   const history = useHistory();
   const handleLogOut = () => {
     localStorage.removeItem("access");
@@ -35,4 +35,6 @@ export default function AccountResult({ isVisible }) {
       </div>
     </div>
   );
-}
+};
+
+export default AccountResult;

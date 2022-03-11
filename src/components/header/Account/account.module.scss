@@ -22,7 +22,7 @@
     min-width: 239px;
     position: absolute;
     z-index: 6;
-    top: 0;
+    top: 100%;
     left: -25px;
     margin-top: 17px;
     background-color: #fff;
@@ -38,7 +38,6 @@
     &__visible {
       visibility: visible;
       opacity: 1;
-      top: 100%;
     }
   }
 

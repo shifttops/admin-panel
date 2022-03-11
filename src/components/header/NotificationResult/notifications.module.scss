@@ -1,16 +1,16 @@
 @import "../../../scss/variables";
 
 .notifications {
-  z-index: -10;
+  z-index: 10;
   position: absolute;
   right: 0;
-  top: 0;
-  opacity: 0;
-  visibility: hidden;
+  top: 100%;
+  opacity: 1;
+  visibility: visible;
   background-color: #fff;
   border: 1px solid #f2f2f2;
-  box-shadow: 0px 6px 14px -6px rgba(24, 39, 75, 0.12),
-  0px 10px 32px -4px rgba(24, 39, 75, 0.1);
+  box-shadow: 0px 6px 14px -6px rgba(24, 39, 75, 0.15),
+  0px 10px 32px -4px rgba(24, 39, 75, 0.15);
   border-radius: $border-radius;
   width: 430px;
   margin-top: 16px;
@@ -18,19 +18,7 @@
   transition: all 0.3s ease;
   max-height: 300px;
   overflow-y: auto;
-
-  &__visible {
-    z-index: 10;
-    top: 100%;
-    opacity: 1;
-    visibility: visible;
-  }
-
-  &.show-block {
-    transition: all 0.5s ease 0s;
-    visibility: visible;
-    opacity: 1;
-  }
+  animation: animationVisible 0.5s ease;
 
   &__head {
     position: sticky;

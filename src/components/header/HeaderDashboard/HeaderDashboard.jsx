@@ -7,9 +7,12 @@ import NotificationResult from "components/header/NotificationResult";
 import Account from "../Account";
 import AppStore from "../../../store/AppStore";
 import { observer } from "mobx-react";
+import useClickOutside from "../../../helpers/hooks/useClickOutside";
 // import useSound from "use-sound";
 
 const HeaderDashboard = observer(({ sidebarToggle }) => {
+  const notificationsRef = useRef(null);
+
   const [searchValue, setSearchValue] = useState("");
   const [resCount, setResCount] = useState(0);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
@@ -28,20 +31,8 @@ const HeaderDashboard = observer(({ sidebarToggle }) => {
     setSearchValue(e.target.value);
   };
 
-  const searchBlurHandler = () => {
-    setTimeout(() => {
-      setSearchValue("");
-    }, 300);
-  };
-
   const notificationClickHandler = () => {
     setIsNotificationOpen((prevState) => !prevState);
-  };
-
-  const notificationBlurHandler = () => {
-    setTimeout(() => {
-      setIsNotificationOpen(false);
-    }, 300);
   };
 
   const abortRef = useRef(false);
@@ -68,6 +59,10 @@ const HeaderDashboard = observer(({ sidebarToggle }) => {
   /*  useEffect(() => {
     if(notificationsData.get().length) play()
   }, [notificationsData])*/
+  useClickOutside({
+    ref: notificationsRef,
+    onClickOutside: () => setIsNotificationOpen(false),
+  });
 
   return (
     <header className={styles.header}>
@@ -81,7 +76,6 @@ const HeaderDashboard = observer(({ sidebarToggle }) => {
               <input
                 className={styles.header__searchInput}
                 onChange={searchChangeHandler}
-                onBlur={searchBlurHandler}
                 value={searchValue}
                 type="text"
                 placeholder="Find restaurant..."
@@ -101,9 +95,9 @@ const HeaderDashboard = observer(({ sidebarToggle }) => {
             ) : null}
           </div>
         </div>
-        <div className={styles.header__icons} onBlur={notificationBlurHandler}>
+        <div className={styles.header__icons}>
           <ButtonIcon Icon={ChatIcon} />
-          <div className={styles.header__bellWrapper}>
+          <div ref={notificationsRef} className={styles.header__bellWrapper}>
             <ButtonIcon Icon={BellIcon} onClick={notificationClickHandler} />
             {unreadNotificationCount ? (
               <span className={styles.indicator}>
@@ -114,11 +108,12 @@ const HeaderDashboard = observer(({ sidebarToggle }) => {
                 </p>
               </span>
             ) : null}
-            <NotificationResult
-              isVisible={isNotificationOpen}
-              readNotifications={readNotifications}
-              setReadNotifications={setReadNotifications}
-            />
+            {isNotificationOpen ? (
+              <NotificationResult
+                readNotifications={readNotifications}
+                setReadNotifications={setReadNotifications}
+              />
+            ) : null}
           </div>
         </div>
         <Account />

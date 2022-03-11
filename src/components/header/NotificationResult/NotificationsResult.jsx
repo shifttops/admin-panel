@@ -2,14 +2,13 @@ import { Link, useHistory } from "react-router-dom";
 import styles from "./notifications.module.scss";
 import AppStore from "../../../store/AppStore";
 import { observer } from "mobx-react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import NotificationItem from "../../NotificationItem";
 import { SettingsIcon } from "../../../icons";
-import cn from "classnames";
 
 const NotificationResult = observer(
-  ({ readNotifications, setReadNotifications, isVisible }) => {
+  ({ readNotifications, setReadNotifications }) => {
     const history = useHistory();
     const {
       notificationsData,
@@ -41,11 +40,7 @@ const NotificationResult = observer(
     }, [inView]);
 
     return (
-      <div
-        className={cn(styles.notifications, {
-          [styles.notifications__visible]: isVisible,
-        })}
-      >
+      <div className={styles.notifications}>
         <div className={styles.notifications__head}>
           <div className={styles.notifications__title}>
             <span>Notifications</span>
@@ -77,7 +72,7 @@ const NotificationResult = observer(
           {/*          <div className={styles.notifications__icon}>
           <img src={notificationsIcon} alt="" />
         </div>*/}
-          {isVisible ? <div ref={ref} className={styles.ref} /> : null}
+          <div ref={ref} className={styles.ref} />
           {readNotifications.length
             ? readNotifications.map((item) => (
                 <div className={styles.notifications__info}>

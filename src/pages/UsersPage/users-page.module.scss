@@ -37,7 +37,6 @@
 
   tbody tr {
     height: 72px;
-    cursor: pointer;
     transition: all 0.3s ease 0s;
   }
 
@@ -73,13 +72,11 @@
     border-top: 1px solid #f2f2f2;
     border-bottom: 1px solid #f2f2f2;
     background: #fff;
-    letter-spacing: -0.03em;
 
     &:first-child {
       width: 300px;
       text-align: left;
-      padding-left: 18px;
-      padding: 11px 0px 6px 18px;
+      padding: 11px 0 6px 18px;
     }
 
     &:last-child {
@@ -113,12 +110,25 @@
 }
 
 th.role {
-  text-align: left;
+  text-align: center;
 }
 
 td.dropdown {
-  text-align: left;
-  width: 200px;
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+  svg path {
+    transition: fill 0.3s ease;
+  }
+
+  &:hover {
+    color: $color-green;
+
+    svg path {
+      fill: $color-green;
+    }
+  }
 }
 
 .dropdown {
@@ -132,16 +142,22 @@ td.dropdown {
 }
 
 .wrap {
+  z-index: 5;
   position: absolute;
-  top: 50px;
+  top: 60px;
   left: 0px;
   text-align: initial;
-  background: #ffffff;
+  background-color: #ffffff;
   border: 1px solid #f2f2f2;
-  box-shadow: 0px 6px 14px -6px rgba(24, 39, 75, 0.12),
-    0px 10px 32px -4px rgba(24, 39, 75, 0.1);
-  border-radius: 4px;
+  border-radius: $border-radius;
+
+  box-shadow: 0px 6px 18px -6px rgba(24, 39, 75, 0.15),
+  0px 10px 32px -4px rgba(24, 39, 75, 0.15);
+
   max-width: 280px;
+  max-height: 400px;
+  overflow-y: auto;
+  animation: animationVisible 0.5s ease;
 }
 
 .head {
@@ -151,32 +167,57 @@ td.dropdown {
   font-weight: 700;
   padding: 18px 20px 16px 20px;
   border-bottom: 1px solid #f2f2f2;
+  color: $color-black;
+  position: sticky;
+  top: 0;
+  background-color: #fff;
 }
 
 .item {
-  padding: 18px 20px 16px 20px;
+  padding: 10px 15px;
   font-size: 16px;
   line-height: 20px;
   letter-spacing: -0.03em;
   color: $color-black;
   border-bottom: 1px solid #f2f2f2;
-  transition: all 0.3s ease 0s;
-  cursor: pointer;
+  transition: all 0.3s ease;
+
   &:hover {
     background-color: rgba(51, 51, 51, 0.05);
+  }
+
+  &__selected {
+    color: $color-green;
   }
 }
 
 .itemButtons {
   display: flex;
   align-items: center;
-  padding: 18px 20px 18px 20px;
+  position: sticky;
+  bottom: 0;
+  background-color: #fff;
+  justify-content: space-between;
+  border-top: 1px solid #f2f2f2;
+  padding: 5px;
+
+  button {
+    padding: 5px 16px;
+    font-size: 14px;
+  }
 }
 
-.btnBorder {
-  color: $color-green;
-  background-color: #fff;
-  border: 1px solid $color-green;
-  margin-left: 8px;
-  display: inline-flex;
+.loader {
+  padding: 10px 0;
+  text-align: center;
+  font-size: 16px;
+}
+
+.link {
+  transition: all 0.3s ease;
+
+  &:hover {
+    color: $color-green;
+    text-decoration: underline;
+  }
 }
