@@ -1,13 +1,15 @@
 @import "../../scss/variables";
 
-.maintenanceScreen{
+.maintenanceScreen {
   position: relative;
   transition: all 0.3s ease 0s;
+
   &:hover {
     box-shadow: 0px 4px 6px -4px rgba(24, 39, 75, 0.12),
     0px 8px 8px -4px rgba(24, 39, 75, 0.08);
   }
-  &__icon{
+
+  &__icon {
     color: #101f72;
     background-color: rgba(16, 31, 114, 0.1);
     width: 42px;
@@ -18,7 +20,8 @@
     align-items: center;
     margin-right: 16px;
   }
-  &__body{
+
+  &__body {
     width: 100%;
     display: flex;
     align-items: center;
@@ -31,16 +34,20 @@
     cursor: pointer;
     transition: all 0.3s ease 0s;
   }
-  &__title{
+
+  &__title {
     font-size: 16px;
-    @media(min-width: 2120px){
+    @media(min-width: 2120px) {
       font-size: 22px;
     }
     font-weight: 700;
-    margin-right: 10px;
+    margin-right: 20px;
   }
-  &__button{}
-  &__content{
+
+  &__button {
+  }
+
+  &__content {
     display: flex;
     position: relative;
     align-items: center;
@@ -51,53 +58,64 @@
   color: $color-black;
   background-color: $color-grey;
   border-radius: $border-radius;
-  border: 1px solid $color-black-05;
+  border: 1px solid $color-black-007;
   padding: 5px 7px;
+  transition: background-color 0.3s ease;
 
-  &__text{
+  &__text {
     font-size: 16px;
-    @media(min-width: 2120px){
+    @media(min-width: 2120px) {
       font-size: 22px;
     }
   }
-  &__icon{
-    margin-left: 5px;
+
+  &__icon {
+    margin-left: 10px;
+  }
+
+  &:hover {
+    background-color: $color-black-007;
   }
 }
 
-.dropDown{
-  box-shadow: 0 4px 6px -4px rgba(24, 39, 75, 0.12), 0 8px 8px -4px rgba(24, 39, 75, 0.08);
+.dropDown {
+  box-shadow: 0 6px 12px -6px rgba(24, 39, 75, 0.08),
+  0 10px 12px -4px rgba(24, 39, 75, 0.08);
   margin-top: 5px;
   border-radius: $border-radius;
-  border: 1px solid $color-black-05;
+  border: 1px solid $color-black-007;
   background-color: #fff;
-
-  display: block;
+  font-size: 16px;
   position: absolute;
   transition: all 0.3s ease 0s;
   top: 100%;
-  right: 50%;
-  &__visible{
-    visibility: visible;
-    opacity: 1;
-    font-size: 16px;
-    @media(min-width: 2120px){
-      font-size: 22px;
-    }
-    z-index: 5;
-    right: 0;
-  }
-  &__hidden{
-    visibility: hidden;
-    opacity: 0;
-  }
-  &__body{
+  right: 0;
+  z-index: 5;
+  animation: anim 0.5s ease;
+
+  &__body {
     display: flex;
     flex-direction: column;
   }
 }
 
-.innerScreen{
+@keyframes anim {
+  0% {
+    opacity: 0;
+    box-shadow: none;
+    right: 50%;
+  }
+  75% {
+    opacity: 1;
+    right: 0;
+  }
+  100% {
+    box-shadow: 0 6px 12px -6px rgba(24, 39, 75, 0.08),
+    0 10px 12px -4px rgba(24, 39, 75, 0.08);
+  }
+}
+
+.innerScreen {
   padding: 10px 20px;
   box-sizing: content-box;
   height: 100%;
@@ -109,23 +127,23 @@
   transition: background-color 0.3s ease 0s, color 0.3s ease 0s;
   color: #999999;
 
-  &:not(:last-child){
+  &:not(:last-child) {
     border-bottom: 1px solid $color-black-05;
   }
-  @media(any-hover: hover){
-    &:hover{
-      background-color: #d4d4d4;
+
+  @media(any-hover: hover) {
+    &:hover {
+      background-color: $color-black-007;
       color: #777777;
     }
   }
-  &__current{
-    background-color: $color-green;
-    color: #f2f2f2;
-    @media(any-hover: hover){
-      &:hover{
-        background-color: $color-green;
-        color: #f2f2f2;
-      }
+
+  &__current {
+    color: $color-green;
+
+    &:hover {
+      color: $color-green;
+      background-color: #fff;
     }
   }
 }

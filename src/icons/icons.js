@@ -912,6 +912,50 @@ export const VersionManageIcon = (props) => (
   </svg>
 );
 
+export const StatusIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+    <rect width="256" height="256" fill="none" />
+    <polyline
+      fill="none"
+      stroke="#000"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="16"
+      points="112 192 80 224 48 192"
+    />
+    <line
+      x1="80"
+      x2="80"
+      y1="32"
+      y2="224"
+      fill="none"
+      stroke="#000"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="16"
+    />
+    <polyline
+      fill="none"
+      stroke="#000"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="16"
+      points="144 64 176 32 208 64"
+    />
+    <line
+      x1="176"
+      x2="176"
+      y1="224"
+      y2="32"
+      fill="none"
+      stroke="#000"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="16"
+    />
+  </svg>
+);
+
 export const WeightIcon = (props) => (
   <svg
     width="20"

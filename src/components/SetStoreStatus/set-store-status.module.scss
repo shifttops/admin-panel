@@ -1,0 +1,144 @@
+@import "../../scss/variables";
+
+.item {
+  padding: 16px 16px 14px 16px;
+  background: #ffffff;
+  border: 1px solid #f2f2f2;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease 0s;
+
+  &:hover {
+    box-shadow: 0px 4px 6px -4px rgba(24, 39, 75, 0.12),
+    0px 8px 8px -4px rgba(24, 39, 75, 0.08);
+  }
+}
+
+.info {
+  display: flex;
+  align-items: center;
+  position: relative;
+
+  button {
+    margin-left: 20px;
+  }
+}
+
+.title {
+  margin-top: 4px;
+  font-size: 16px;
+  @media(min-width: 2120px) {
+    font-size: 22px;
+  }
+  line-height: 20px;
+  letter-spacing: -0.01em;
+  font-weight: 700;
+  color: #333333;
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 40%;
+  background-color: #fff;
+  border: 1px solid $color-black-007;
+  box-shadow: 0px 10px 16px rgba(51, 51, 51, 0.15);
+  border-radius: $border-radius;
+  z-index: 101;
+  animation: animationVisible 0.5s ease;
+  max-height: 400px;
+  overflow-y: auto;
+  width: 75%;
+
+  &__selected {
+    color: $color-green;
+  }
+
+  &__item {
+    padding: 10px 15px;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.3s ease;
+
+    &:hover {
+      color: $color-black;
+    }
+
+    &:not(:last-child) {
+      border-bottom: 1px solid $color-black-007;
+    }
+  }
+}
+
+.screen {
+  &__text {
+    margin: 4px 0;
+    font-weight: 700;
+    border-bottom: 1px solid $color-black-007;
+  }
+
+  &__title {
+    transition: all 0.3s ease;
+
+    svg {
+      path {
+        transition: fill 0.3s ease;
+      }
+
+      margin-left: 7px;
+    }
+
+    &:hover {
+      color: #899d33;
+
+      svg path {
+        fill: #899d33;
+      }
+    }
+  }
+
+  &__item {
+    padding: 10px;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid $color-black-007;
+    }
+
+    transition: all 0.3s ease;
+
+    &:hover {
+      color: #899d33;
+    }
+  }
+}
+
+.statusWithout {
+  transition: all 0.3s ease;
+
+  &:hover {
+    color: #899d33;
+  }
+}
+
+.icon {
+  width: 42px;
+  height: 37px;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 16px;
+  background-color: rgba(169, 194, 63, 0.1);
+
+  svg {
+    width: 22px;
+
+    polyline, line {
+      stroke: $color-green;
+    }
+  }
+}

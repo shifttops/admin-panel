@@ -1,16 +1,12 @@
 import styles from "./inner-manage.module.scss";
-import ManageItem from "components/ManageItem";
+import ManageItem from "../../../../components/ManageItem";
 import manageItemTypes from "types/manageItemTypes";
 import {
   RefreshIcon,
-  ScreenIcon,
-  VersionIcon,
   VersionManageIcon,
   VideoManageIcon,
   WeightIcon,
-} from "icons";
-import Button from "components/buttons/Button";
-import ButtonIcon from "components/buttons/ButtonIcon";
+} from "../../../../icons";
 import MaintenanceScreen from "../../../../components/MaintenanceScreen";
 import {
   ToastsContainer,
@@ -22,6 +18,9 @@ import routes from "../../../../constants/routes";
 import { NavLink } from "react-router-dom";
 import { observer } from "mobx-react";
 import StoresStore from "../../../../store/StoresStore";
+import cn from "classnames";
+import ActionButtons from "../../../../components/ActionButtons";
+import SetStoreStatus from "../../../../components/SetStoreStatus";
 
 const InnerManage = observer((props) => {
   const [log_id, setLogId] = useState("");
@@ -62,6 +61,7 @@ const InnerManage = observer((props) => {
   return (
     <div className={styles.wrapper}>
       <h2 className={styles.title}>Manage store</h2>
+      <SetStoreStatus />
       <MaintenanceScreen {...props} />
       {manageMapper.map((item) => (
         <ManageItem

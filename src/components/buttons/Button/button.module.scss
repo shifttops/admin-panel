@@ -43,7 +43,12 @@
 
   svg {
     margin-right: 8px;
-    margin-top: -4px;
+    margin-top: -2px;
+  }
+
+  span {
+    display: inline-flex;
+    align-items: center;
   }
 }
 
@@ -65,11 +70,12 @@
 }
 
 .deployed {
-  background: #a9c23f;
+  background-color: #a9c23f;
   color: #fff;
+
   @media(any-hover: hover){
     &:hover{
-      background: #a9c23f;
+      background-color: rgb(151, 171, 44);
       color: #fff;
     }
   }

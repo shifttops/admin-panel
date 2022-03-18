@@ -4,7 +4,7 @@ import cn from "classnames";
 import SliderCheckbox from "components/SliderCheckbox";
 import StoresStore from "../../store/StoresStore";
 import { observer } from "mobx-react";
-import DropDownFields from "../DropDownFields";
+import DropDownFields from "../dropdown/DropDownFields";
 import Loader from "../Loader";
 
 const AdditionalInfo = observer(({ leftTitle, rightTitle }) => {

@@ -1,7 +1,7 @@
 import styles from "./dropdown_fields.module.scss";
 import { ArrowDownIcon, SpeedIcon, TempIcon } from "icons";
 import cn from "classnames";
-import StoresStore from "../../store/StoresStore";
+import StoresStore from "../../../store/StoresStore";
 import { observer } from "mobx-react";
 import { useState } from "react";
 

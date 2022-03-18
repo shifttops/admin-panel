@@ -25,7 +25,7 @@ export default function ManageItem({
         <p className={styles.title}>{title}</p>
       </div>
       <div className={styles.buttons}>
-        <p className={styles.date}>Last updated 7 days ago</p>
+        {/*<p className={styles.date}>Last updated 7 days ago</p>*/}
         <ActionButtons isFetching={isFetching} url={url} setLogId={setLogId} />
       </div>
     </div>

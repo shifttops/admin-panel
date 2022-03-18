@@ -1,7 +1,7 @@
 import styles from "./inner-head.module.scss";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { observer } from "mobx-react";
-import Button from "components/buttons/Button";
+import Button from "../../../components/buttons/Button";
 import { CheckIcon, PrintIcon, ReportIcon, RestartIcon } from "icons";
 import ButtonIcon from "components/buttons/ButtonIcon";
 import Popup from "reactjs-popup";
@@ -12,6 +12,9 @@ import routes from "../../../constants/routes";
 import StoresStore from "../../../store/StoresStore";
 import { storeStatusMapper } from "../../../helpers/mappers";
 import BackLink from "../../BackLink";
+import cn from "classnames";
+import PopupComponent from "../../popups/PopupComponent/PopupComponent";
+import { ArrowDownIcon } from "../../../icons";
 
 const InnerHead = observer((props) => {
   const location = useLocation();
@@ -19,11 +22,11 @@ const InnerHead = observer((props) => {
   const {
     storeInfo,
     manageStore,
-    getStoreInfo,
     isRefreshing,
     isStoreInfoFetching,
+    setStoreStatus,
+    isStoreStatusFetching,
   } = StoresStore;
-  const [log_id, setLogId] = useState("");
 
   const handleClick = async () => {
     manageStore("/refresh");
@@ -57,8 +60,7 @@ const InnerHead = observer((props) => {
                     (item) => item.name === storeInfo.status
                   )?.visibleName
                 }
-                fetching={isStoreInfoFetching}
-                // Icon={CheckIcon}
+                fetching={isStoreInfoFetching || isStoreStatusFetching}
               />
               <Button
                 text="Refresh"

@@ -13,6 +13,7 @@ const Button = React.forwardRef(
       onClick = () => null,
       type = "button",
       fetching,
+      iconProps = {},
     },
     ref
   ) => (
@@ -23,9 +24,9 @@ const Button = React.forwardRef(
       type={type}
     >
       {!fetching ? (
-        <>
-          <Icon /> {text}
-        </>
+        <span>
+          <Icon {...iconProps} /> {text}
+        </span>
       ) : (
         <Loader types={["disabled"]} />
       )}

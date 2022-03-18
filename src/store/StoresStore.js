@@ -29,6 +29,7 @@ class StoresStore {
   isTicketsFetching = false;
   isConfigurationFilesFetching = false;
   isFilesFetching = false;
+  isStoreStatusFetching = false;
 
   isChatMessagesFetching = false;
   isChatFilesFetching = false;
@@ -1099,6 +1100,35 @@ class StoresStore {
       this.isMapFetching = false;
     } catch (e) {
       this.isMapFetching = false;
+      ToastsStore.error(e.message, 3000, "toast");
+    }
+  };
+
+  setStoreStatus = async ({ storeStatus, title }) => {
+    try {
+      this.isStoreStatusFetching = true;
+      await refreshToken();
+
+      const { data, status } = await Api.post(
+        `/set_store_status/${this.storeInfo.store_id}`,
+        { status: storeStatus, title: title },
+        {
+          headers: {
+            Authorization: `Token ${localStorage.getItem("access")}`,
+          },
+        }
+      );
+
+      if (status === 200) {
+        this.storeInfo = {
+          ...this.storeInfo,
+          status: storeStatus,
+          maintenance_screen: title,
+        };
+      } else ToastsStore.error(JSON.stringify(data), 3000, "toast");
+      this.isStoreStatusFetching = false;
+    } catch (e) {
+      this.isStoreStatusFetching = false;
       ToastsStore.error(e.message, 3000, "toast");
     }
   };
