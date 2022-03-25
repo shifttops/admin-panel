@@ -1,11 +1,4 @@
 import styles from "./inner-configuration.module.scss";
-import {
-  ErrorIcon,
-  PauseIcon,
-  PlannerIcon,
-  PlayIcon,
-  ProcessIcon,
-} from "icons";
 import SearchQuick from "components/search/SearchQuick";
 import Button from "components/buttons/Button";
 import ConfItem from "../../../../components/ConfItem";
@@ -25,7 +18,7 @@ import FileUploaded from "../../../../components/FileUploaded";
 const InnerConfiguration = observer((props) => {
   const {
     storeInfo,
-    configurationFiles: files,
+    configurationFiles,
     isConfigurationFilesFetching: isLoading,
     downloadMinioFile,
   } = StoresStore;
@@ -33,12 +26,12 @@ const InnerConfiguration = observer((props) => {
   const [search, setSearch] = useState("");
   const [file, setFile] = useState(null);
 
-  const store_id = +props.match.params.id;
-
   useEffect(() => {
-    if (storeInfo.store_id === store_id) {
-      files.set(null);
+    if (storeInfo.store_id === +props.match.params.id) {
+      configurationFiles.set(null);
     }
+
+    return () => configurationFiles.set([]);
   }, []);
 
   return (
@@ -67,10 +60,10 @@ const InnerConfiguration = observer((props) => {
         </div>
       </div>
       {!isLoading &&
-      files &&
-      files.get() &&
-      files.get().length &&
-      files
+      configurationFiles &&
+      configurationFiles.get() &&
+      configurationFiles.get().length &&
+      configurationFiles
         .get()
         .filter(({ filename }) => getFileName(filename, "/").includes(search))
         .length ? (
@@ -85,7 +78,7 @@ const InnerConfiguration = observer((props) => {
           <tbody>
             {/*<ConfItem Icon={PauseIcon} iconColor={iconButtonTypes.red} />
             <ConfItem Icon={PlayIcon} iconColor={iconButtonTypes.green} />*/}
-            {files
+            {configurationFiles
               .get()
               .filter(({ filename }) =>
                 getFileName(filename, "/").includes(search)
@@ -99,7 +92,8 @@ const InnerConfiguration = observer((props) => {
         <div className={styles.loader}>
           {isLoading ? (
             <Loader types={["medium"]} />
-          ) : !files
+          ) : configurationFiles.get() &&
+            !configurationFiles
               .get()
               .filter(({ filename }) =>
                 getFileName(filename, "/").includes(search)

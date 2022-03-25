@@ -23,7 +23,7 @@
 .ticket {
   position: relative;
   display: grid;
-  grid-template-columns: 1fr 400px;
+  grid-template-columns: 1fr minmax(200px, 400px);
   column-gap: 20px;
 
   &__body {
@@ -79,7 +79,6 @@
 
     &__field {
       display: flex;
-      width: 100%;
       align-items: center;
     }
   }
@@ -185,9 +184,8 @@
     width: 100%;
     height: 100%;
     display: grid;
-    justify-content: center;
     align-items: center;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fill, 300px);
     grid-auto-rows: minmax(20px, 250px);
     background-color: #fdfdfd;
     column-gap: 20px;
@@ -277,7 +275,7 @@
 
 .text {
   max-height: 300px;
-  max-width: 55vw;
+  max-width: 100%;
+  white-space: pre-wrap;
   overflow: auto;
-  margin: 0 auto;
 }

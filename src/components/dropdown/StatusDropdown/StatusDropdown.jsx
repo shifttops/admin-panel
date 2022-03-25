@@ -2,26 +2,27 @@ import { useState } from "react";
 import cn from "classnames";
 import styles from "../../SetStoreStatus/set-store-status.module.scss";
 import { ArrowDownIcon } from "../../../icons";
-import StatusDropdownScreens from "../StatusDropdownScreens";
 import Popup from "reactjs-popup";
 import PopupComponent from "../../popups/PopupComponent/PopupComponent";
+import StatusDropdownScreens from "../StatusDropdownScreens";
 
 const StatusDropdown = ({
   storeStatus,
   status,
   maintenanceScreens,
   setStoreStatus,
+  storeScreen,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   return (
     <div className={cn(styles.dropdown__item)}>
-      {maintenanceScreens.length &&
-      maintenanceScreens[0].length &&
-      status.name !== storeStatus ? (
+      {maintenanceScreens.length && maintenanceScreens[0].length ? (
         <div className={styles.screen}>
           <div
-            className={cn(styles.screen__title)}
+            className={cn(styles.screen__title, {
+              [styles.screen__title__selected]: storeStatus === status.name,
+            })}
             onClick={() => setIsVisible((prevState) => !prevState)}
           >
             {status.visibleName} <ArrowDownIcon isOpen={isVisible} />
@@ -31,13 +32,14 @@ const StatusDropdown = ({
               <p className={styles.screen__text} />
               <StatusDropdownScreens
                 status={status}
+                storeScreen={storeScreen}
                 setStoreStatus={setStoreStatus}
                 maintenanceScreens={maintenanceScreens}
               />
             </>
           ) : null}
         </div>
-      ) : status.name !== storeStatus ? (
+      ) : storeStatus !== status.name ? (
         <Popup
           modal
           trigger={
@@ -63,7 +65,9 @@ const StatusDropdown = ({
           )}
         </Popup>
       ) : (
-        <div className={styles.dropdown__selected}>{status.visibleName}</div>
+        <div className={styles.screen__title__selected}>
+          {status.visibleName}
+        </div>
       )}
     </div>
   );

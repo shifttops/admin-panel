@@ -8,6 +8,7 @@ import TicketsStore from "../../../store/TicketsStore";
 import Loader from "../../Loader";
 import { ToastsStore } from "react-toasts";
 import FileUploaded from "../../FileUploaded";
+import moment from "moment";
 
 const TicketComments = ({ comments, isSending, isFetching }) => {
   const inputRef = useRef(null);
@@ -87,14 +88,23 @@ const TicketComments = ({ comments, isSending, isFetching }) => {
           <Button fetching={isSending} text={"Send"} onClick={handleSend} />
         </div>
         {comments.length && !isFetching ? (
-          comments.map((comment) => (
-            <Comment
-              comment={comment}
-              onDelete={deleteTicketComment}
-              onEdit={editTicketComment}
-              onFileDelete={deleteTicketFile}
-            />
-          ))
+          comments
+            .sort(({ created: createdA }, { created: createdB }) => {
+              const dateA = moment(createdA);
+              const dateB = moment(createdB);
+
+              if (dateA.isAfter(dateB)) return -1;
+              else if (dateA.isBefore(dateB)) return 1;
+              else return 0;
+            })
+            .map((comment) => (
+              <Comment
+                comment={comment}
+                onDelete={deleteTicketComment}
+                onEdit={editTicketComment}
+                onFileDelete={deleteTicketFile}
+              />
+            ))
         ) : isFetching ? (
           <div className={styles.loader}>
             <Loader types={["small"]} />

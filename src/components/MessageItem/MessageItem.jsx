@@ -57,7 +57,10 @@ const MessageItem = ({
         <div className={styles.message__info}>
           <UserAccount
             accountName={
-              message.first_name.length && message.last_name.length
+              message.first_name &&
+              message.last_name &&
+              message.first_name.length &&
+              message.last_name.length
                 ? `${message.first_name} ${message.last_name}`
                 : `User ${message.user}`
             }
@@ -155,6 +158,8 @@ const MessageItem = ({
         <div className={styles.message__replyMessage}>
           <UserAccount
             accountName={
+              repliedMessage.first_name &&
+              repliedMessage.last_name &&
               repliedMessage.first_name.length &&
               repliedMessage.last_name.length
                 ? `${repliedMessage.first_name} ${repliedMessage.last_name}`

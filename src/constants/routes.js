@@ -14,6 +14,7 @@ const routes = {
   innerPlanner: "/stores/inner-planner",
   innerStatistic: "/stores/inner-statistic",
   innerTickets: "/stores/inner-tickets",
+  innerSchedule: "/stores/inner-schedule",
   tickets: "/tickets",
   login: "/login",
   logs: "/logs",

@@ -1,10 +1,5 @@
 import styles from "./inner-camers.module.scss";
-import ButtonIcon from "components/buttons/ButtonIcon";
-import { OpenPathIcon, RefreshIcon, SaveVideo } from "icons";
 import Button from "components/buttons/Button";
-import FileCard from "components/cards/FileCard";
-import cameraScreen from "images/cameraScreen.jpg";
-import cameraScreen2 from "images/cameraScreen2.jpg";
 import { observer } from "mobx-react";
 import StoresStore from "../../../../store/StoresStore";
 import { useEffect, useState } from "react";
@@ -12,7 +7,6 @@ import { useHistory } from "react-router-dom";
 import Loader from "../../../../components/Loader";
 import ImageCard from "../../../../components/cards/ImageCard";
 import { storeCamerasMapper } from "../../../../helpers/mappers";
-import moment from "moment";
 import DateComp from "../../../../components/Date";
 
 const InnerCameras = observer((props) => {

@@ -13,8 +13,21 @@ const iconButtonClassNameTypeMap = {
   [iconButtonTypes.grey]: styles.greyButton,
 };
 
-const ButtonIcon = React.forwardRef(({ Icon = () => null, onClick, onBlur, type, className, style, disabled }, ref) => (
+const ButtonIcon = React.forwardRef(
+  (
+    {
+      Icon = () => null,
+      onClick,
+      onBlur = () => {},
+      type,
+      className,
+      style,
+      disabled,
+    },
+    ref
+  ) => (
     <button
+      type="button"
       style={style}
       onClick={onClick}
       onBlur={onBlur}

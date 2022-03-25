@@ -30,6 +30,7 @@ class StoresStore {
   isConfigurationFilesFetching = false;
   isFilesFetching = false;
   isStoreStatusFetching = false;
+  isScheduleFetching = false;
 
   isChatMessagesFetching = false;
   isChatFilesFetching = false;
@@ -54,6 +55,7 @@ class StoresStore {
   configurationFiles = observable.box([]);
   storeFiles = observable.box([]);
   coordinates = observable.box([]);
+  schedule = observable.box([]);
 
   constructor() {
     makeAutoObservable(this);
@@ -162,6 +164,15 @@ class StoresStore {
           this.getStoreMinioFiles({
             store_id: this.storeInfo.store_id,
           });
+        }
+      }
+    );
+
+    reaction(
+      () => this.schedule.get(),
+      async (schedule) => {
+        if (!schedule) {
+          await this.getStoreSchedule();
         }
       }
     );
@@ -631,71 +642,6 @@ class StoresStore {
     ]);
   };
 
-  setMaintenanceScreen = async ({ setError, screen }) => {
-    try {
-      await refreshToken();
-
-      const resp = await fetch(
-        `${process.env.REACT_APP_URL}/api/set_store_status/${this.storeInfo.store_id}`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Token ${localStorage.getItem("access")}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            status: this.storeInfo.status,
-            title: screen,
-          }),
-        }
-      );
-
-      if (resp.status === 200) {
-        setError("");
-
-        this.storeInfo.maintenance_screen = screen;
-      } else {
-        const res = await resp.json();
-        ToastsStore.error(res.error, 3000, "toast");
-      }
-    } catch (e) {
-      setError(e.message);
-    }
-  };
-
-  updateJiraStatus = async ({ store_id, setError }) => {
-    try {
-      await refreshToken();
-
-      this.isJiraRefreshing = true;
-
-      const resp = await fetch(
-        `${process.env.REACT_APP_URL}/api/status/refresh`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Token ${localStorage.getItem("access")}`,
-          },
-        }
-      );
-
-      if (resp.status === 200) {
-        ToastsStore.success("Updated", 3000, "toast");
-        setTimeout(() => {
-          this.getStoreInfo(store_id, setError);
-        }, 5000);
-      } else {
-        const res = await resp.json();
-        ToastsStore.error(res.error, 3000, "toast");
-      }
-
-      this.isJiraRefreshing = false;
-    } catch (e) {
-      this.isJiraRefreshing = false;
-      ToastsStore.error(e.message, 3000, "toast");
-    }
-  };
-
   getStorePeriodicTasks = async (store_id, setError) => {
     try {
       await refreshToken();
@@ -1129,6 +1075,30 @@ class StoresStore {
       this.isStoreStatusFetching = false;
     } catch (e) {
       this.isStoreStatusFetching = false;
+      ToastsStore.error(e.message, 3000, "toast");
+    }
+  };
+
+  getStoreSchedule = async () => {
+    try {
+      this.isScheduleFetching = true;
+      await refreshToken();
+
+      const { data, status } = await Api.get(
+        `/store/${this.storeInfo.store_id}/schedule`,
+        {
+          headers: {
+            Authorization: `Token ${localStorage.getItem("access")}`,
+          },
+        }
+      );
+
+      if (status === 200) {
+        this.schedule.set([...data]);
+      } else ToastsStore.error(JSON.stringify(data), 3000, "toast");
+      this.isScheduleFetching = false;
+    } catch (e) {
+      this.isScheduleFetching = false;
       ToastsStore.error(e.message, 3000, "toast");
     }
   };

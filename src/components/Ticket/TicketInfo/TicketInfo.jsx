@@ -16,7 +16,6 @@ import TicketAside from "../TicketAside";
 import { useHistory } from "react-router-dom";
 import TicketsStore from "../../../store/TicketsStore";
 import { useEffect, useState } from "react";
-import moment from "moment";
 import {
   ticketPriorityMapper,
   ticketReasonMapper,
@@ -51,7 +50,6 @@ const TicketInfo = observer(({ id }) => {
     isTicketAnswerFetching,
   } = TicketsStore;
 
-  const [isDetailsOpened] = useState(true);
   const [isEditMode, setIsEditMode] = useState(false);
   const [isAttachmentsVisible, setIsAttachmentsVisible] = useState(true);
   // const [isLightBoxVisible, setIsLightBoxVisible] = useState(true);
@@ -385,7 +383,7 @@ const TicketInfo = observer(({ id }) => {
           currentStatus={currentStatus}
           setCurrentStatus={setCurrentStatus}
           ticket={ticketInfo}
-          isDetailsOpened={isDetailsOpened}
+          isDetailsOpened={true}
           isEditMode={isEditMode}
           priority={priority}
           setPriority={setPriority}

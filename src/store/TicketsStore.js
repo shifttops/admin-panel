@@ -449,9 +449,10 @@ class TicketsStore {
         }
       );
 
-      if (status === 201)
+      if (status === 200) {
         ToastsStore.success("Sent successfully", 3000, "toast");
-      else ToastsStore.error(data.detail, 3000, "toast");
+        await this.getTicketComments();
+      } else ToastsStore.error(data.detail, 3000, "toast");
 
       this.isTicketAnswerFetching = false;
     } catch (e) {

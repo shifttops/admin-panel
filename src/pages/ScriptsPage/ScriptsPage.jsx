@@ -1,6 +1,5 @@
 import SearchQuick from "components/search/SearchQuick";
-import ButtonIcon from "components/buttons/ButtonIcon";
-import { MoreIcon, SortIcon, CloseIcon } from "icons";
+import { CloseIcon } from "icons";
 import styles from "./scripts-page.module.scss";
 import Button from "components/buttons/Button";
 import routes from "../../constants/routes";

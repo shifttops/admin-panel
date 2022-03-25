@@ -43,10 +43,11 @@ const Chat = ({
   const [findDate, setFindDate] = useState(null);
   const [scroll, setScroll] = useState(null);
 
-  const handleScroll = () => setScroll(window.scrollY);
-
   useEffect(() => {
+    const handleScroll = () => setScroll(window.scrollY);
+
     window.addEventListener("scroll", handleScroll);
+
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 

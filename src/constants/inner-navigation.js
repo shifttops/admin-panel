@@ -11,9 +11,11 @@ import InnerManage from "pages/StoreListPage/innerPages/InnerManage";
 import InnerEdit from "../pages/ScriptsPage/InnerEdit/InnerEdit";
 import InnerLaunch from "../pages/ScriptsPage/InnerLaunch/InnerLaunch";
 import InnerTickets from "../pages/StoreListPage/innerPages/InnerTickets";
+import InnerSchedule from "../pages/StoreListPage/innerPages/InnerSchedule";
 
 export const innerNavigation = [
   { to: routes.storeInfo, name: "Store Info", Component: InnerInfo },
+  { to: routes.innerSchedule, name: "Schedule", Component: InnerSchedule },
   {
     to: routes.manageStore,
     name: "Manage Store",

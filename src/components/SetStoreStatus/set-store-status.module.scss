@@ -99,6 +99,14 @@
         fill: #899d33;
       }
     }
+
+    &__selected {
+      color: $color-green;
+
+      svg path {
+        fill: #899d33;
+      }
+    }
   }
 
   &__item {
@@ -112,6 +120,14 @@
 
     &:hover {
       color: #899d33;
+    }
+
+    &__selected {
+      color: $color-green;
+
+      &:hover {
+        color: $color-green;
+      }
     }
   }
 }
@@ -132,7 +148,8 @@
   justify-content: center;
   align-items: center;
   margin-right: 16px;
-  background-color: rgba(169, 194, 63, 0.1);
+  color: #101f72;
+  background-color: rgba(16, 31, 114, 0.1);
 
   svg {
     width: 22px;

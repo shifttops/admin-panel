@@ -97,3 +97,21 @@
     align-self: flex-end;
   }
 }
+
+.files {
+  margin-top: 10px;
+  position: relative;
+
+  &__text {
+    color: $color-black;
+    font-weight: 700;
+    margin-top: 10px;
+    font-size: 13px;
+  }
+
+  &__content {
+    display: grid;
+    grid-template-rows: repeat(auto-fit, auto);
+    gap: 10px;
+  }
+}

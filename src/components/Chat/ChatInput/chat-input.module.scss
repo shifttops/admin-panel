@@ -159,8 +159,12 @@
 .emoji {
   &__picker {
     position: absolute;
-    bottom: 60px;
+    bottom: 40px;
     left: 0;
+    box-shadow: 0 6px 18px -6px rgba(24, 39, 75, 0.15),
+    0 10px 32px -4px rgba(24, 39, 75, 0.15);
+
+    animation: animationVisible 0.5s ease;
   }
 
   &__button {

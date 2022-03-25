@@ -7,7 +7,6 @@ import {
   VideoManageIcon,
   WeightIcon,
 } from "../../../../icons";
-import MaintenanceScreen from "../../../../components/MaintenanceScreen";
 import {
   ToastsContainer,
   ToastsContainerPosition,
@@ -18,8 +17,6 @@ import routes from "../../../../constants/routes";
 import { NavLink } from "react-router-dom";
 import { observer } from "mobx-react";
 import StoresStore from "../../../../store/StoresStore";
-import cn from "classnames";
-import ActionButtons from "../../../../components/ActionButtons";
 import SetStoreStatus from "../../../../components/SetStoreStatus";
 
 const InnerManage = observer((props) => {
@@ -61,8 +58,7 @@ const InnerManage = observer((props) => {
   return (
     <div className={styles.wrapper}>
       <h2 className={styles.title}>Manage store</h2>
-      <SetStoreStatus />
-      <MaintenanceScreen {...props} />
+      <SetStoreStatus {...props} />
       {manageMapper.map((item) => (
         <ManageItem
           key={item.title}

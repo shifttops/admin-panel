@@ -11,6 +11,7 @@ import Picker from "emoji-picker-react";
 import { FileDrop } from "react-file-drop";
 import "./file-drop.scss";
 import FileUploaded from "../../FileUploaded";
+import useClickOutside from "../../../helpers/hooks/useClickOutside";
 
 const ChatInput = ({
   store_id,
@@ -28,6 +29,8 @@ const ChatInput = ({
   const [emoji, setEmoji] = useState(null);
   const [isEmojiPickerVisible, setIsEmojiPickerVisible] = useState(false);
   const [isFileDropVisible, setIsFileDropVisible] = useState(false);
+
+  const emojiRef = useRef(null);
 
   const handleRemoveFile = (file) => {
     const newFiles = [...files];
@@ -141,6 +144,11 @@ const ChatInput = ({
     if (!isReplyMode && !isEditMode) setMessage("");
   }, [isReplyMode]);
 
+  useClickOutside({
+    ref: emojiRef,
+    onClickOutside: () => setIsEmojiPickerVisible(false),
+  });
+
   return (
     <form className={styles.chatForm}>
       <FileDrop
@@ -225,23 +233,23 @@ const ChatInput = ({
               </div>
             </label>
           </form>
-          <div
-            className={styles.emoji__button}
-            onClick={() => setIsEmojiPickerVisible((prev) => !prev)}
-          >
-            <ButtonIcon Icon={EmojiIcon} disabled />
+          <div ref={emojiRef} className={styles.emoji__button}>
+            <ButtonIcon
+              Icon={EmojiIcon}
+              onClick={() => setIsEmojiPickerVisible((prev) => !prev)}
+            />
+            {isEmojiPickerVisible ? (
+              <div className={styles.emoji__picker}>
+                <Picker
+                  onEmojiClick={(event, emoji) => setEmoji(emoji)}
+                  disableSkinTonePicker
+                  native
+                  disableAutoFocus
+                  disableSearchBar
+                />
+              </div>
+            ) : null}
           </div>
-          {isEmojiPickerVisible ? (
-            <div className={styles.emoji__picker}>
-              <Picker
-                onEmojiClick={(event, emoji) => setEmoji(emoji)}
-                disableSkinTonePicker
-                native
-                disableAutoFocus
-                disableSearchBar
-              />
-            </div>
-          ) : null}
         </div>
         {isEditMode ? (
           <div className={styles.chatForm__actions}>
