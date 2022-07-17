@@ -1,5 +1,6 @@
 {
   "name": "admin_panel",
+  "homepage": "https://shifttops.github.io/admin-panel",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -49,6 +50,8 @@
   "scripts": {
     "start": "craco build && serve -l 3000 -s build",
     "dev": "PORT=3006 craco start --mode development",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject"
@@ -72,6 +75,7 @@
     ]
   },
   "devDependencies": {
-    "babel-plugin-module-resolver": "^4.1.0"
+    "babel-plugin-module-resolver": "^4.1.0",
+    "gh-pages": "^4.0.0"
   }
 }
