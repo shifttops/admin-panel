@@ -10,12 +10,12 @@ import Loader from "../Loader";
 const AdditionalInfo = observer(({ leftTitle, rightTitle }) => {
   const items = [
     {
-      name: "Cameras",
-      result: "All cameras are working",
-      error: "All cameras are working",
+      name: "Камеры",
+      result: "Все камеры работают",
+      error: "Ошибка",
     },
     {
-      name: "Lateral cameras",
+      name: "Боковые камеры",
     },
   ];
 
@@ -60,7 +60,7 @@ const AdditionalInfo = observer(({ leftTitle, rightTitle }) => {
             {isCamerasStatusFetching || isStoreInfoFetching ? (
               <Loader types={["small"]} />
             ) : (
-              "No cameras"
+              "Нет камер"
             )}
           </div>
         )}
@@ -68,7 +68,7 @@ const AdditionalInfo = observer(({ leftTitle, rightTitle }) => {
 
       <div className={styles.item}>
         <p className={cn(styles.category, styles.categoryDropdown)}>
-          Lateral cameras
+          Боковые камеры
         </p>
         {!isCamerasStatusFetching &&
         !isStoreInfoFetching &&
@@ -80,14 +80,14 @@ const AdditionalInfo = observer(({ leftTitle, rightTitle }) => {
           >
             {storeInfo.is_all_lateral_works
               ? "All cameras are working"
-              : "Check failed"}
+              : "Не найдено камер"}
           </div>
         ) : !isCamerasStatusFetching &&
           !isStoreInfoFetching &&
           (!storeInfo.cameras ||
             !storeInfo.cameras.length ||
             storeInfo.is_all_lateral_works === undefined) ? (
-          <div className={styles.error}>Check failed</div>
+          <div className={styles.error}>Не найдено камер</div>
         ) : (
           <Loader types={["small"]} />
         )}

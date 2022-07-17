@@ -14,6 +14,7 @@ import Popup from "reactjs-popup";
 import PopupComponent from "../../components/popups/PopupComponent/PopupComponent";
 import useClickOutside from "../../helpers/hooks/useClickOutside";
 import { AcceptIcon } from "../../icons";
+import { computedFn } from "mobx-utils";
 
 const UsersPage = observer(() => {
   const [search, setSearch] = useState("");
@@ -48,26 +49,28 @@ const UsersPage = observer(() => {
     <div className="page">
       <div className={styles.pageHead}>
         <div className={styles.pageInfo}>
-          <h2 className={styles.title}>Users</h2>
+          <h2 className={styles.title}>Пользователи</h2>
           <SearchQuick
             setSearch={setSearch}
-            placeholderText="Find user by name"
+            placeholderText="Найти пользователя по имени"
           />
         </div>
         <div className={styles.button}>
-          <Button text="Invite" />
+          <Button text="Пригласить" />
         </div>
       </div>
-      {users.get().length && !isUsersFetching ? (
+      {computedFn(
+        (users, isUsersFetching) => users.get().length && !isUsersFetching
+      )(users, isUsersFetching) ? (
         <table className={styles.table}>
           <thead className={styles.head}>
             <tr>
               <th>
                 <Checkbox label="username" />
               </th>
-              <th className={styles.role}>permissions</th>
-              <th>Staff access</th>
-              <th>Super user access</th>
+              <th className={styles.role}>Разрешения</th>
+              <th>Доступ персонала</th>
+              <th>Доступ супер-пользователя</th>
               <th>E-mail</th>
               <th />
             </tr>
@@ -142,7 +145,7 @@ const UsersPage = observer(() => {
         </table>
       ) : (
         <div className={styles.loader}>
-          {isUsersFetching ? <Loader types={["medium"]} /> : "No users to show"}
+          {isUsersFetching ? <Loader types={["medium"]} /> : "Не найдено ни одного пользователя"}
         </div>
       )}
     </div>

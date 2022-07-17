@@ -4,7 +4,7 @@ import noImage from "../../images/accountIcon.svg";
 
 const UserAccount = ({
   image = noImage,
-  accountName = "User name",
+  accountName = "Имя пользователя",
   className,
 }) => {
   return (

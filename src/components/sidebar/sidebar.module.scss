@@ -4,7 +4,7 @@
   position: sticky;
   top: 0;
   width: 90px;
-  background-color: $color-black;
+  background-color: $color-black-007;
   padding: 25px;
   display: flex;
   flex-direction: column;
@@ -13,10 +13,7 @@
   z-index: 1;
   transition: 0.3s;
 
-  font-size: 14px;
-  @media(min-width: 2120px){
-    font-size: 22px;
-  }
+  font-size: 13px;
 
   &__title {
     display: none;
@@ -33,7 +30,8 @@
 
   &__icon {
     margin-bottom: 35px;
-    color: $color-grey;
+    color: $color-green;
+
     svg{
       width: 20px;
     }
@@ -72,9 +70,9 @@
   }
 
   &__title {
-    font-size: 1em;
+    font-size: 14px;
     line-height: 16px;
-    color: #ffc300;
+    color: $color-red;
     text-transform: uppercase;
     margin-bottom: 15px;
     padding-left: 20px;
@@ -98,7 +96,7 @@
   }
 
   .sidebar__item {
-    color: $color-grey;
+    color: $color-green;
     display: inline-flex;
     align-items: center;
     font-size: 1.2em;

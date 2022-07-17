@@ -31,7 +31,7 @@ const InnerPlanner = observer((props) => {
   return (
     <div className={styles.planner}>
       <div className={styles.planner__head}>
-        <h2 className="title">Planner</h2>
+        <h2 className="title">Планировщик</h2>
         <div className={styles.planner__buttons}>
           {/*<div className={styles.planner__process}>
             <ButtonIcon
@@ -43,7 +43,7 @@ const InnerPlanner = observer((props) => {
           </div>
           <ButtonIcon Icon={PlannerIcon} />*/}
           <div className={styles.planner__button}>
-            <Button onClick={() => history.push("/scripts")} text="New task" />
+            <Button onClick={() => history.push("/scripts")} text="Новая задача" />
           </div>
         </div>
       </div>
@@ -82,7 +82,7 @@ const InnerPlanner = observer((props) => {
           {isPlannerFetching ? (
             <Loader types={["medium"]} />
           ) : (
-            "No planner tasks on this store"
+            "Нет задач для планировщика на этой АЗС"
           )}
         </div>
       )}

@@ -52,15 +52,15 @@ const InnerStatistic = observer((props) => {
   return (
     <>
       <div className={styles.head}>
-        <h2 className={styles.title}>Metrics</h2>
-        <Button Icon={DateIcon} text="Today" />
+        <h2 className={styles.title}>Статистика</h2>
+        <Button Icon={DateIcon} text="Сегодня" />
       </div>
       <div className={styles.wrapper}>
         <table className={styles.metrics}>
           <thead className={styles.tableHead}>
             <tr>
-              <th>Metrics</th>
-              <th>Period</th>
+              <th>Метрика</th>
+              <th>Период</th>
               <th></th>
             </tr>
           </thead>
@@ -97,7 +97,7 @@ const InnerStatistic = observer((props) => {
             )}
           </tbody>
         </table>
-        <AdditionalInfo leftTitle="hardware" rightTitle="Last 24 hours" />
+        <AdditionalInfo leftTitle="Физическое оборудование" rightTitle="Последние 24 часа" />
       </div>
     </>
   );

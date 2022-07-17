@@ -38,7 +38,7 @@ const InnerConfiguration = observer((props) => {
     <div className={styles.wrapper}>
       <div className={styles.head}>
         <div className={styles.headSearch}>
-          <h2 className={styles.title}>Configuration</h2>
+          <h2 className={styles.title}>Конфигурация</h2>
           <SearchQuick setSearch={setSearch} />
         </div>
         <div className={styles.buttons}>
@@ -56,7 +56,7 @@ const InnerConfiguration = observer((props) => {
             </div>
             <input type="file" onChange={(e) => setFile(e.target.files[0])} />
           </label>
-          <Button type={"button"} text="Upload file" />
+          <Button type={"button"} text="Загрузить файл" />
         </div>
       </div>
       {!isLoading &&
@@ -100,7 +100,7 @@ const InnerConfiguration = observer((props) => {
               ).length ? (
             "No files founded"
           ) : (
-            "No configuration files on this store"
+            "Нет файлов конфигураций для этой АЗС"
           )}
         </div>
       )}

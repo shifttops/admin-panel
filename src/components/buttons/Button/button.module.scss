@@ -19,7 +19,7 @@
   transition: all 0.2s ease 0s;
   @media(any-hover: hover){
       &:hover{
-        background-color: rgb(151, 171, 44);
+        background-color: rgb(1, 132, 87);
         color: rgba(245, 245, 245, 0.99);
       }
   }
@@ -66,16 +66,16 @@
   margin-right: 16px;
   background-color: transparent;
   color: $color-green;
-  border: 1px solid #a9c23f;
+  border: 1px solid $color-green;
 }
 
 .deployed {
-  background-color: #a9c23f;
+  background-color: $color-green;
   color: #fff;
 
   @media(any-hover: hover){
     &:hover{
-      background-color: rgb(151, 171, 44);
+      background-color: rgb(1, 132, 87);
       color: #fff;
     }
   }
@@ -100,11 +100,11 @@
 // }
 .deployment {
   color: $color-green;
-  background-color: rgba(169, 194, 63, 0.1);
+  background-color: rgba(1, 175, 115, 0.1);
   @media(any-hover: hover){
     &:hover{
       color: $color-green;
-      background-color: rgba(169, 194, 63, 0.1);
+      background-color: rgba(1, 175, 115, 0.1);
     }
   }
 }
@@ -120,7 +120,7 @@
   @media(any-hover: hover){
     &:hover{
       color: #fff;
-      background-color: #c00004;
+      background-color: #d03438;
     }
   }
 }

@@ -18,92 +18,38 @@ import zipImage from "../images/zipImage.png";
 
 export const storeStatusMapper = [
   {
-    visibleName: "Store Deployed",
-    name: "Store Deployed",
+    visibleName: "Работает",
+    name: "Работает",
     className: styles.deployed,
     class: "deployed",
   },
   {
-    visibleName: "Go Live",
-    name: "Go Live",
+    visibleName: "Конфигурация",
+    name: "Конфигурация",
     className: styles.test,
     class: "test",
   },
   {
-    visibleName: "Algorithm configuring",
-    name: "Algorithm configuring",
+    visibleName: "Установка",
+    name: "Установка",
     className: styles.test,
     class: "test",
   },
   {
-    visibleName: "MCD blocked",
-    name: "MCD blocked",
+    visibleName: "Тест",
+    name: "Тест",
     className: styles.test,
     class: "test",
   },
   {
-    visibleName: "Deployment",
-    name: "Deployment",
+    visibleName: "На обслуживании",
+    name: "На обслуживании",
     className: styles.test,
     class: "test",
   },
   {
-    visibleName: "Epic Backlog",
-    name: "Epic Backlog",
-    className: styles.test,
-    class: "test",
-  },
-  {
-    visibleName: "Store testing",
-    name: "Store testing",
-    className: styles.test,
-    class: "test",
-  },
-  {
-    visibleName: "Software Issues",
-    name: "Software issues",
-    className: styles.maintenance,
-    class: "maintenance",
-  },
-  {
-    visibleName: "Hardware issues",
-    name: "Hardware issues",
-    className: styles.maintenance,
-    class: "maintenance",
-  },
-  {
-    visibleName: "Cameras position issue",
-    name: "Cameras position issue",
-    className: styles.test,
-    class: "test",
-  },
-  {
-    visibleName: "Under Maintenance",
-    name: "Under Maintenance",
-    className: styles.test,
-    class: "test",
-  },
-  {
-    visibleName: "Blocked",
-    name: "Blocked",
-    className: styles.test,
-    class: "maintenance",
-  },
-  {
-    visibleName: "Additional settings",
-    name: "Additional settings",
-    className: styles.test,
-    class: "test",
-  },
-  {
-    visibleName: "Dashboard deployment",
-    name: "Dashboard deployment",
-    className: styles.test,
-    class: "test",
-  },
-  {
-    visibleName: "Dashboard configuring",
-    name: "Dashboard configuring",
+    visibleName: "Готов к установке",
+    name: "Готов к установке",
     className: styles.test,
     class: "test",
   },
@@ -156,52 +102,32 @@ export const filtersRequestMapper = [
 
 export const categoryMapper = [
   {
-    visibleName: "Country",
+    visibleName: "Страна",
     name: "country",
   },
   {
-    visibleName: "State",
-    name: "state",
-  },
-  {
-    visibleName: "Region",
+    visibleName: "Регион",
     name: "county",
   },
   {
-    visibleName: "Location",
+    visibleName: "Адрес",
     name: "address",
   },
   {
-    visibleName: "ZipCode",
+    visibleName: "Почтовый индекс",
     name: "zipcode",
   },
   {
-    visibleName: "Store type",
+    visibleName: "Тип АЗС",
     name: "store_type",
   },
   {
-    visibleName: "Building type",
-    name: "building",
-  },
-  {
-    visibleName: "Number of drive zone",
-    name: "driveZones",
-  },
-  {
-    visibleName: "Date of deployment",
+    visibleName: "Дата запуска",
     name: "dod",
   },
   {
-    visibleName: "Ready for deployment date",
+    visibleName: "Дата установкм",
     name: "rfd",
-  },
-  {
-    visibleName: "fourDigitRestaurantID",
-    name: "fourDigitRestaurantID",
-  },
-  {
-    visibleName: "threeDigitRestaurantID",
-    name: "threeDigitRestaurantID",
   },
 ];
 
@@ -246,24 +172,16 @@ export const filtersMapper = [
 
 export const notificationSettingsMapper = [
   {
-    label: "New restaurants",
+    label: "Новые АЗС",
     field: "new_stores",
   },
   {
-    label: "Changing restaurant statuses",
+    label: "Изменение статуса АЗС",
     field: "store_status_change",
   },
   {
-    label: "New messages in chat with the restaurant",
+    label: "Новые сообщения в чатах АЗС",
     field: "new_messages",
-  },
-  {
-    label: "Results or errors on scripts running",
-    field: "result_or_error_scripts",
-  },
-  {
-    label: "Scripts launching",
-    field: "scripts_running",
   },
 ];
 

@@ -234,7 +234,9 @@ const TicketInfo = observer(({ id }) => {
                       buttonText={"Send"}
                       placeholder={"Type message..."}
                       onClose={close}
-                      onClick={(message) => sendTicketByEmail({ message })}
+                      onClick={(message, files) =>
+                        sendTicketByEmail({ message, files })
+                      }
                     />
                   )}
                 </Popup>

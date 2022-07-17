@@ -63,7 +63,7 @@ const InnerFiles = observer((props) => {
     <div className={styles.wrapper}>
       <div className={styles.head}>
         <div className={styles.headInfo}>
-          <h2 className={styles.title}>Folders</h2>
+          <h2 className={styles.title}>Папки</h2>
           <SearchQuick />
         </div>
         <div className={styles.buttons}>
@@ -89,7 +89,7 @@ const InnerFiles = observer((props) => {
             className={styles.deleteButton + " " + styles.headBtn}
             disabled
           />
-          <Button text="Create folder" Icon={AddFolderIcon} />
+          <Button text="Создать папку" Icon={AddFolderIcon} />
         </div>
       </div>
       {files.get() && files.get().length && !isFilesFetching ? (
@@ -175,7 +175,7 @@ const InnerFiles = observer((props) => {
           {isFilesFetching ? (
             <Loader types={["medium"]} />
           ) : (
-            "No files on this store"
+            "Нет файлов для этой АЗС"
           )}
         </div>
       )}

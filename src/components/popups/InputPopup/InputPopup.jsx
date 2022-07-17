@@ -37,7 +37,7 @@ const InputPopup = ({
   };
   const handleClick = () => {
     if (!!message.trim().length || !!files.length) {
-      onClick(message.trim());
+      onClick(message.trim(), files);
       onClose();
     } else ToastsStore.error("You can`t send empty message", 3000, "toast");
   };

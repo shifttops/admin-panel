@@ -24,7 +24,7 @@ const ActionButtons = observer(({ url, setLogId, isFetching }) => {
       <Button
         fetching={isFetching}
         disabled={!url}
-        text="Update"
+        text="Обновить"
         onClick={handleClick}
       />
     </div>

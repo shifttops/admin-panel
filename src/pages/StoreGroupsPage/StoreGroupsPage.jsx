@@ -28,23 +28,23 @@ const StoreGroupsPage = observer(() => {
     <div className="page">
       <div className={styles.pageHead}>
         <div className={styles.pageInfo}>
-          <h2 className={styles.title}>Store groups</h2>
+          <h2 className={styles.title}>Группы АЗС</h2>
           <SearchQuick />
         </div>
         <div className={styles.buttons}>
           <ButtonIcon Icon={DeleteIcon} className={styles.deleteIcon} />
-          <Button text="Create group" />
+          <Button text="Создать группу" />
         </div>
       </div>
       <table className={styles.table}>
         <thead className={styles.head}>
           <tr>
             <th>
-              <Checkbox label="user" />
+              <Checkbox label="Пользователь" />
             </th>
-            <th>Name</th>
-            <th>Stores</th>
-            <th>Type</th>
+            <th>Имя</th>
+            <th>АЗС</th>
+            <th>Тип</th>
             <th />
           </tr>
         </thead>

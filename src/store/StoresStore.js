@@ -1,11 +1,11 @@
-import { makeAutoObservable, observable, reaction } from "mobx";
+import {makeAutoObservable, observable, reaction} from "mobx";
 import moment from "moment";
-import { refreshToken } from "../helpers/AuthHelper";
+import {refreshToken} from "../helpers/AuthHelper";
 import queryString from "query-string";
-import { createDateFilters } from "../helpers/filters";
-import { ToastsStore } from "react-toasts";
+import {createDateFilters} from "../helpers/filters";
+import {ToastsStore} from "react-toasts";
 import Api from "../api";
-import { getFileName } from "../helpers/functions";
+import {getFileName} from "../helpers/functions";
 
 class StoresStore {
   isFiltersFetching = false;
@@ -35,14 +35,43 @@ class StoresStore {
   isChatMessagesFetching = false;
   isChatFilesFetching = false;
 
-  storeInfo = {};
-  stores = [];
+  storeInfo = {
+    store_id: 20209,
+    address: "ул. Рябиновая, 12",
+    county: "Москва",
+    country: "Россия",
+    store_type: "Франшиза",
+    rfd: new Date().toLocaleDateString(),
+    dod: new Date().toLocaleDateString(),
+    status: 'Готов к установке',
+    zipcode: 210027,
+  };
+  stores = [
+    {
+      store_id: 20209,
+      address: "ул. Рябиновая, 12",
+      store_county: "Москва",
+      store_type: "Франшиза",
+      date_deployment: new Date(),
+      date_created: new Date(),
+      status: 'Готов к установке',
+    },
+    {
+      store_id: 20210,
+      address: "ул. Мира, 2А",
+      store_county: "Владимир",
+      store_type: "Собственная",
+      date_deployment: new Date(),
+      date_created: new Date(),
+      status: 'Работает',
+    },
+  ];
   storeErrors = observable.box([]);
   metrics = observable.box({});
   filters = {};
   cameras = observable.box([]);
   enabledFilters = {
-    ...queryString.parse(window.location.search, { arrayFormat: "comma" }),
+    ...queryString.parse(window.location.search, {arrayFormat: "comma"}),
   };
   maintenanceScreens = observable.box([]);
   maintenanceScreensData = [];
@@ -55,7 +84,21 @@ class StoresStore {
   configurationFiles = observable.box([]);
   storeFiles = observable.box([]);
   coordinates = observable.box([]);
-  schedule = observable.box([]);
+  schedule = observable.box([
+    {
+      start_datetime: new Date(),
+      end_datetime: new Date(),
+    },
+    {
+      start_datetime: new Date(),
+      end_datetime: new Date(),
+    },
+    {
+      start_datetime: new Date(),
+      end_datetime: new Date(),
+      latest: true,
+    }
+  ]);
 
   constructor() {
     makeAutoObservable(this);
@@ -76,7 +119,7 @@ class StoresStore {
       () => this.storeInfo.store_id,
       (store_id, previousValue, reaction) => {
         if (store_id && store_id !== previousValue) {
-          this.storeInfo = { store_id: store_id };
+          this.storeInfo = {store_id: store_id};
           this.getStoreInfo(store_id, (msg) => msg && console.log("msg", msg));
         }
       }
@@ -213,37 +256,57 @@ class StoresStore {
         });
       }
 
-      const resp = await fetch(url, {
-        method: "GET",
-        headers: {
-          Authorization: `Token ${localStorage.getItem("access")}`,
-        },
-        signal,
-      });
-
-      if (resp.status === 200) {
-        const res = await resp.json();
-
-        this.stores = offset
-          ? [...this.stores, ...res.results]
-          : [...res.results];
-
-        setResCount(res.count);
-
-        if (!res.count) {
-          ToastsStore.error("No stores find", 3000, "toast");
-        }
-      } else {
-        const res = await resp.json();
-
-        ToastsStore.error(res.error, 3000, "toast");
-      }
+      // const resp = await fetch(url, {
+      //   method: "GET",
+      //   headers: {
+      //     Authorization: `Token ${localStorage.getItem("access")}`,
+      //   },
+      //   signal,
+      // });
+      // if (resp.status === 200) {
+      //   const res = await resp.json();
+      //
+      //   this.stores = offset
+      //     ? [...this.stores, ...res.results]
+      //     : [...res.results];
+      //
+      //   setResCount(res.count);
+      //
+      //   if (!res.count) {
+      //     ToastsStore.error("No stores find", 3000, "toast");
+      //   }
+      // } else {
+      //   const res = await resp.json();
+      //
+      //   ToastsStore.error(res.error, 3000, "toast");
+      // }
 
       this.isLoading--;
     } catch (e) {
       this.isLoading--;
 
       setError(e.message);
+    } finally {
+      this.stores = [
+        {
+          store_id: 20209,
+          address: "ул. Рябиновая, 12",
+          store_county: "Москва",
+          store_type: "Франшиза",
+          date_deployment: new Date(),
+          date_created: new Date(),
+          status: 'Готов к установке',
+        },
+        {
+          store_id: 20210,
+          address: "ул. Мира, 2А",
+          store_county: "Владимир",
+          store_type: "Собственная",
+          date_deployment: new Date(),
+          date_created: new Date(),
+          status: 'Работает',
+        },
+      ]
     }
   };
 
@@ -270,7 +333,7 @@ class StoresStore {
         res.dod = res.date_deployment
           ? moment(res.date_deployment).format("DD.MM.YYYY")
           : "N/A";
-        this.storeInfo = { ...this.storeInfo, ...res };
+        this.storeInfo = {...this.storeInfo, ...res};
 
         this.isStoreInfoFetching = false;
         if (res) {
@@ -280,9 +343,9 @@ class StoresStore {
               : null,
             res.server_id && res.server_id[0]
               ? await this.getServersInfo({
-                  servers_id: res.server_id,
-                  setError,
-                })
+                servers_id: res.server_id,
+                setError,
+              })
               : null,
             res.cameras && res.cameras.length
               ? await this.getStoreCameraStatus(id, setError)
@@ -308,13 +371,13 @@ class StoresStore {
     }
   };
 
-  getServersInfo = async ({ servers_id, setError }) => {
+  getServersInfo = async ({servers_id, setError}) => {
     this.isServersFetching = true;
 
     const servers = await Promise.all(
       servers_id.map(async (server_id) => ({
-        ...(await this.getStoreServer({ server_id, setError })),
-        software: await this.getServerSoftware({ server_id, setError }),
+        ...(await this.getStoreServer({server_id, setError})),
+        software: await this.getServerSoftware({server_id, setError}),
       }))
     ).catch((e) => setError(e.message));
 
@@ -342,7 +405,7 @@ class StoresStore {
       if (resp.status === 200) {
         const res = await resp.json();
 
-        this.storeInfo = { ...this.storeInfo, ...res };
+        this.storeInfo = {...this.storeInfo, ...res};
         setError("");
       }
     } catch (e) {
@@ -350,7 +413,7 @@ class StoresStore {
     }
   };
 
-  getServerSoftware = async ({ server_id, setError }) => {
+  getServerSoftware = async ({server_id, setError}) => {
     try {
       await refreshToken();
 
@@ -395,7 +458,7 @@ class StoresStore {
         const res = await resp.json();
         this.storeInfo.cameras = this.storeInfo.cameras.map((camera) => {
           const cameraId = Object.keys(res).find((item) => camera.id === +item);
-          return { ...res[cameraId], ...camera };
+          return {...res[cameraId], ...camera};
         });
         this.storeInfo.is_all_lateral_works = res.is_all_lateral_works;
         setError("");
@@ -426,7 +489,7 @@ class StoresStore {
       const res = await resp.json();
 
       const newRes = res.map((camera) => {
-        camera = { ...camera, ...camera.detail };
+        camera = {...camera, ...camera.detail};
         delete camera.detail;
         return camera;
       });
@@ -459,11 +522,11 @@ class StoresStore {
       res_location.threeDigitRestaurantID = parseInt(
         this.storeInfo.store_id.toString().slice(2)
       );
-      this.storeInfo = { ...this.storeInfo, ...res_location };
+      this.storeInfo = {...this.storeInfo, ...res_location};
     }
   };
 
-  getStoreServer = async ({ server_id, setError }) => {
+  getStoreServer = async ({server_id, setError}) => {
     try {
       const resp = await fetch(
         `${process.env.REACT_APP_URL}/api/server/${server_id}/`,
@@ -485,7 +548,7 @@ class StoresStore {
     }
   };
 
-  getHardwareSetup = async ({ id, setError }) => {
+  getHardwareSetup = async ({id, setError}) => {
     try {
       await refreshToken();
 
@@ -549,7 +612,7 @@ class StoresStore {
       });
       if (resp.status === 200) {
         const res = await resp.json();
-        this.filters = { ...res };
+        this.filters = {...res};
         setError("");
       }
       this.isFiltersFetching = false;
@@ -572,11 +635,11 @@ class StoresStore {
           Authorization: `Token ${localStorage.getItem("access")}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ store_id }),
+        body: JSON.stringify({store_id}),
       });
       if (resp.status === 200) {
         const res = await resp.json();
-        this.metrics.set({ ...res });
+        this.metrics.set({...res});
         setError("");
       } else this.metrics.set({});
 
@@ -674,7 +737,7 @@ class StoresStore {
     }
   };
 
-  getStoreTickets = async ({ store_id }) => {
+  getStoreTickets = async ({store_id}) => {
     try {
       await refreshToken();
 
@@ -747,7 +810,7 @@ class StoresStore {
     }
   };
 
-  getMessages = async ({ store_id }) => {
+  getMessages = async ({store_id}) => {
     try {
       await refreshToken();
 
@@ -772,7 +835,7 @@ class StoresStore {
     }
   };
 
-  getStoreChatFiles = async ({ store_id }) => {
+  getStoreChatFiles = async ({store_id}) => {
     try {
       await refreshToken();
 
@@ -797,21 +860,21 @@ class StoresStore {
     }
   };
 
-  getNewStoreChatData = async ({ store_id }) => {
+  getNewStoreChatData = async ({store_id}) => {
     clearInterval(this.chatInterval.get());
 
-    await this.getMessages({ store_id });
-    await this.getStoreChatFiles({ store_id });
+    await this.getMessages({store_id});
+    await this.getStoreChatFiles({store_id});
 
     this.chatInterval.set(
       setInterval(() => {
-        this.getMessages({ store_id });
-        this.getStoreChatFiles({ store_id });
+        this.getMessages({store_id});
+        this.getStoreChatFiles({store_id});
       }, 20000)
     );
   };
 
-  sendMessage = async ({ store_id, message, files, parent_id }) => {
+  sendMessage = async ({store_id, message, files, parent_id}) => {
     try {
       await refreshToken();
 
@@ -829,7 +892,7 @@ class StoresStore {
         body: formData,
       });
 
-      if (resp.status === 201) this.getNewStoreChatData({ store_id });
+      if (resp.status === 201) this.getNewStoreChatData({store_id});
       else ToastsStore.error(resp.detail, 3000, "toast");
     } catch (e) {
       ToastsStore.error(e.message, 3000, "toast");
@@ -837,12 +900,12 @@ class StoresStore {
   };
 
   editMessage = async ({
-    message,
-    is_message_pinned,
-    store_id,
-    id,
-    files = null,
-  }) => {
+                         message,
+                         is_message_pinned,
+                         store_id,
+                         id,
+                         files = null,
+                       }) => {
     try {
       await refreshToken();
 
@@ -866,14 +929,14 @@ class StoresStore {
         }
       );
 
-      if (resp.status === 200) this.getNewStoreChatData({ store_id });
+      if (resp.status === 200) this.getNewStoreChatData({store_id});
       else ToastsStore.error(resp.detail, 3000, "toast");
     } catch (e) {
       ToastsStore.error(e.message, 3000, "toast");
     }
   };
 
-  deleteMessage = async ({ id, store_id }) => {
+  deleteMessage = async ({id, store_id}) => {
     try {
       await refreshToken();
 
@@ -887,14 +950,14 @@ class StoresStore {
         }
       );
 
-      if (resp.status === 204) this.getNewStoreChatData({ store_id });
+      if (resp.status === 204) this.getNewStoreChatData({store_id});
       else ToastsStore.error(resp.detail, 3000, "toast");
     } catch (e) {
       ToastsStore.error(e.message, 3000, "toast");
     }
   };
 
-  editStoreChatFile = async ({ file, newName, store_id }) => {
+  editStoreChatFile = async ({file, newName, store_id}) => {
     try {
       await refreshToken();
 
@@ -915,14 +978,14 @@ class StoresStore {
         }
       );
 
-      if (resp.status === 200) this.getNewStoreChatData({ store_id });
+      if (resp.status === 200) this.getNewStoreChatData({store_id});
       else ToastsStore.error("Server error", 3000, "toast");
     } catch (e) {
       ToastsStore.error(e.message, 3000, "toast");
     }
   };
 
-  deleteStoreChatFile = async ({ id, store_id }) => {
+  deleteStoreChatFile = async ({id, store_id}) => {
     try {
       await refreshToken();
 
@@ -936,14 +999,14 @@ class StoresStore {
         }
       );
 
-      if (resp.status === 204) this.getNewStoreChatData({ store_id });
+      if (resp.status === 204) this.getNewStoreChatData({store_id});
       else ToastsStore.error(resp.detail, 3000, "toast");
     } catch (e) {
       ToastsStore.error(e.message, 3000, "toast");
     }
   };
 
-  getStoreConfigurationFiles = async ({ store_id }) => {
+  getStoreConfigurationFiles = async ({store_id}) => {
     try {
       this.isConfigurationFilesFetching = true;
       await refreshToken();
@@ -966,12 +1029,12 @@ class StoresStore {
     }
   };
 
-  getStoreMinioFiles = async ({ store_id }) => {
+  getStoreMinioFiles = async ({store_id}) => {
     try {
       this.isFilesFetching = true;
       await refreshToken();
 
-      const { data, status } = await Api.get(
+      const {data, status} = await Api.get(
         `/display_store_minio_files/${store_id}/`,
         {
           headers: {
@@ -982,7 +1045,7 @@ class StoresStore {
 
       if (status === 200)
         this.storeFiles.set([
-          ...data.map(({ date_upload: date, filename }) => ({
+          ...data.map(({date_upload: date, filename}) => ({
             created: moment(date),
             filename,
           })),
@@ -995,7 +1058,7 @@ class StoresStore {
     }
   };
 
-  downloadMinioFile = async ({ store_id, suffix, fileName }) => {
+  downloadMinioFile = async ({store_id, suffix, fileName}) => {
     try {
       await refreshToken();
 
@@ -1007,7 +1070,7 @@ class StoresStore {
             Authorization: `Token ${localStorage.getItem("access")}`,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ suffix, store_id }),
+          body: JSON.stringify({suffix, store_id}),
         }
       );
 
@@ -1024,14 +1087,15 @@ class StoresStore {
     }
   };
 
-  uploadMinioFile = async ({ store_id, suffix, file }) => {};
+  uploadMinioFile = async ({store_id, suffix, file}) => {
+  };
 
   getStoresCoordinates = async () => {
     try {
       this.isMapFetching = true;
       await refreshToken();
 
-      const { data, status } = await Api.get(
+      const {data, status} = await Api.get(
         `/coordinates/?limit=9999&offset=0`,
         {
           headers: {
@@ -1050,14 +1114,14 @@ class StoresStore {
     }
   };
 
-  setStoreStatus = async ({ storeStatus, title }) => {
+  setStoreStatus = async ({storeStatus, title}) => {
     try {
       this.isStoreStatusFetching = true;
       await refreshToken();
 
-      const { data, status } = await Api.post(
+      const {data, status} = await Api.post(
         `/set_store_status/${this.storeInfo.store_id}`,
-        { status: storeStatus, title: title },
+        {status: storeStatus, title: title},
         {
           headers: {
             Authorization: `Token ${localStorage.getItem("access")}`,
@@ -1084,7 +1148,7 @@ class StoresStore {
       this.isScheduleFetching = true;
       await refreshToken();
 
-      const { data, status } = await Api.get(
+      const {data, status} = await Api.get(
         `/store/${this.storeInfo.store_id}/schedule`,
         {
           headers: {

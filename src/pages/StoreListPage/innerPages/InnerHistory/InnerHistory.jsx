@@ -33,11 +33,11 @@ const InnerHistory = observer((props) => {
     <div className={styles.wrapper}>
       <div className={styles.head}>
         <div className={styles.search}>
-          <h2 className={styles.title}>History</h2>
+          <h2 className={styles.title}>История</h2>
           <SearchQuick />
         </div>
         <div className={styles.buttons}>
-          <Button text="Choose period" className={styles.border} />
+          <Button text="Выберите период" className={styles.border} />
         </div>
       </div>
       {!isHistoryFetching && storeErrors.get() && storeErrors.get().length ? (
@@ -45,11 +45,11 @@ const InnerHistory = observer((props) => {
           <thead className={styles.tableHead}>
             <tr>
               <th>
-                <Checkbox label="event type" />
+                <Checkbox label="Тип события" />
               </th>
-              <th className={styles.iconPadding}>Message</th>
-              <th>Date</th>
-              <th>Time</th>
+              <th className={styles.iconPadding}>Сообщение</th>
+              <th>Дата</th>
+              <th>Время</th>
               <th />
             </tr>
           </thead>
@@ -79,7 +79,7 @@ const InnerHistory = observer((props) => {
           {isHistoryFetching ? (
             <Loader types={["medium"]} />
           ) : (
-            "No history on this store"
+            "Нет истории для этой АЗС"
           )}
         </div>
       )}

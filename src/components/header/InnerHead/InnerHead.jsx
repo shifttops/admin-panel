@@ -42,11 +42,11 @@ const InnerHead = observer((props) => {
   return (
     <div className={styles.innerStore}>
       <div className={styles.innerStore__head}>
-        <BackLink path={routes.home} text={"Back to Store list"} />
+        <BackLink path={routes.home} text={"Назад к списку АЗС"} />
         <div className={styles.innerStore__status}>
           <div className={styles.innerStore__wrap}>
             <p className={styles.innerStore__number}>
-              Store ID: {storeInfo.store_id}
+              АЗС ID: {storeInfo.store_id}
             </p>
             <div className={styles.innerStore__buttons}>
               <Button
@@ -63,7 +63,7 @@ const InnerHead = observer((props) => {
                 fetching={isStoreInfoFetching || isStoreStatusFetching}
               />
               <Button
-                text="Refresh"
+                text="Обновить"
                 fetching={isRefreshing}
                 Icon={RestartIcon}
                 className={styles.yellowBorder}
@@ -75,7 +75,7 @@ const InnerHead = observer((props) => {
             <div className={styles.dashboard__icon}>
               <ButtonIcon Icon={PrintIcon} className={styles.buttonIcon} />
             </div>
-            <Popup nested trigger={<Button text="Report" Icon={ReportIcon} />}>
+            <Popup nested trigger={<Button text="Отчёт" Icon={ReportIcon} />}>
               {(close) => (
                 <ReportPopup
                   onClose={close}
@@ -87,10 +87,10 @@ const InnerHead = observer((props) => {
         </div>
         <div className={styles.innerStore__info}>
           {[
-            { label: "Region", field: "county" },
-            { label: "Location", field: "address" },
+            { label: "Регион", field: "county" },
+            { label: "Локация", field: "address" },
             {
-              label: "Store type",
+              label: "Тип АЗС",
               field: "store_type",
             },
           ].map((regionItem) => (

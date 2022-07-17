@@ -27,46 +27,46 @@ import TicketsPage from "../pages/TicketsPage";
 const mainNavigation = [
   {
     to: routes.home,
-    name: "Store list",
+    name: "Список АЗС",
     Component: StoreListPage,
     icon: <HomeIcon />,
   },
-  {
-    to: routes.tickets,
-    name: "Tickets list",
-    Component: TicketsPage,
-    icon: <TicketIcon />,
-  },
+  // {
+  //   to: routes.tickets,
+  //   name: "Tickets list",
+  //   Component: TicketsPage,
+  //   icon: <TicketIcon />,
+  // },
   {
     to: routes.users,
-    name: "Users",
+    name: "Пользователи",
     Component: UsersPage,
     icon: <UserIcon />,
   },
   {
     to: routes.setting,
-    name: "Settings",
+    name: "Настройки",
     Component: SettingsPage,
     icon: <SettingsIcon />,
   },
   {
     to: routes.scripts,
-    name: "Scripts",
+    name: "Файлы",
     Component: ScriptsPage,
     icon: <FilesIcon />,
   },
   {
     to: routes.logs,
-    name: "Activity logs",
+    name: "Активити логи",
     Component: ActivityLogsPage,
     icon: <ActivityIcon />,
   },
-  {
-    to: routes.scripts_logs,
-    name: "Scripts logs",
-    Component: ScriptsLogsPage,
-    icon: <ScriptLogIcon />,
-  },
+  // {
+  //   to: routes.scripts_logs,
+  //   name: "Scripts logs",
+  //   Component: ScriptsLogsPage,
+  //   icon: <ScriptLogIcon />,
+  // },
   // {
   //   to: routes.storeInfo,
   //   name: "Store Info",
@@ -75,28 +75,28 @@ const mainNavigation = [
   // },
   {
     to: routes.groups,
-    name: "Store groups",
+    name: "Группы АЗС",
     Component: StoreGroupsPage,
     icon: <GroupIcon />,
   },
-  {
-    to: routes.planner,
-    name: "Planner",
-    Component: PlannerPage,
-    icon: <PlannerStrokeIcon />,
-  },
+  // {
+  //   to: routes.planner,
+  //   name: "Planner",
+  //   Component: PlannerPage,
+  //   icon: <PlannerStrokeIcon />,
+  // },
   /*  {
     to: routes.mcdStores,
     name: "Group",
     Component: GroupPage,
     icon: <GroupIcon />,
   },*/
-  {
-    to: routes.chat,
-    name: "Chat",
-    Component: ChatPage,
-    icon: <ChatMenuIcon />,
-  },
+  // {
+  //   to: routes.chat,
+  //   name: "Chat",
+  //   Component: ChatPage,
+  //   icon: <ChatMenuIcon />,
+  // },
 ];
 
 export default mainNavigation;

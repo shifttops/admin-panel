@@ -11,35 +11,35 @@ export default function DashboardHead({ setSearch, checkedStores }) {
   return (
     <div className={styles.dashboardHead}>
       <div className={styles.dashboardHead__searchWrapper}>
-        <p className={styles.dashboardHead__title}>Store list</p>
+        <p className={styles.dashboardHead__title}>Список АЗС</p>
         <SearchQuick setSearch={setSearch} />
         {/*<div className={styles.dashboardHead__favorite}>
           <ButtonIcon Icon={SortIcon} className={styles.sortBtn} />
         </div>*/}
       </div>
       <div className={styles.dashboardHead__buttons}>
-        <Popup
-          modal
-          trigger={
-            <Button className={styles.dashboardHead__report} text={"Map"} />
-          }
-        >
-          {(close) => <MapPopup onClose={close} titleText={"Map"}/>}
-        </Popup>
-        <Popup
-          modal
-          trigger={
-            <Button className={styles.dashboardHead__report} text={"Filter"} />
-          }
-        >
-          {(close) => <FilterPopup onClose={close} />}
-        </Popup>
+        {/*<Popup*/}
+        {/*  modal*/}
+        {/*  trigger={*/}
+        {/*    <Button className={styles.dashboardHead__report} text={"Map"} />*/}
+        {/*  }*/}
+        {/*>*/}
+        {/*  {(close) => <MapPopup onClose={close} titleText={"Map"}/>}*/}
+        {/*</Popup>*/}
+        {/*<Popup*/}
+        {/*  modal*/}
+        {/*  trigger={*/}
+        {/*    <Button className={styles.dashboardHead__report} text={"Filter"} />*/}
+        {/*  }*/}
+        {/*>*/}
+        {/*  {(close) => <FilterPopup onClose={close} />}*/}
+        {/*</Popup>*/}
         <Popup
           modal
           trigger={
             <Button
               className={styles.dashboardHead__report}
-              text={"Report"}
+              text="Отчёт"
               Icon={ReportIcon}
             />
           }

@@ -14,43 +14,43 @@ import InnerTickets from "../pages/StoreListPage/innerPages/InnerTickets";
 import InnerSchedule from "../pages/StoreListPage/innerPages/InnerSchedule";
 
 export const innerNavigation = [
-  { to: routes.storeInfo, name: "Store Info", Component: InnerInfo },
-  { to: routes.innerSchedule, name: "Schedule", Component: InnerSchedule },
+  { to: routes.storeInfo, name: "АЗС Инфо", Component: InnerInfo },
+  { to: routes.innerSchedule, name: "Расписание АЗС", Component: InnerSchedule },
   {
     to: routes.manageStore,
-    name: "Manage Store",
+    name: "Управление АЗС",
     Component: InnerManage,
   },
   {
     to: routes.innerStatistic,
-    name: "Statistic",
+    name: "Статистика",
     Component: InnerStatistic,
   },
   {
     to: routes.innerHistory,
-    name: "History",
+    name: "История",
     Component: InnerHistory,
   },
-  { to: routes.innerChat, name: "Chat", Component: InnerChat },
-  { to: routes.innerFiles, name: "Files", Component: InnerFiles },
+  { to: routes.innerChat, name: "Чат", Component: InnerChat },
+  { to: routes.innerFiles, name: "Файлы", Component: InnerFiles },
   {
     to: routes.innerCameras,
-    name: "Cameras",
+    name: "Камеры",
     Component: InnerCameras,
   },
-  {
-    to: routes.innerTickets,
-    name: "Tickets",
-    Component: InnerTickets,
-  },
+  // {
+  //   to: routes.innerTickets,
+  //   name: "Tickets",
+  //   Component: InnerTickets,
+  // },
   {
     to: routes.innerConfiguration,
-    name: "Configuration",
+    name: "Конфигурация",
     Component: InnerConfiguration,
   },
   {
     to: routes.innerPlanner,
-    name: "Planner",
+    name: "Планировщик",
     Component: InnerPlanner,
   },
 ];

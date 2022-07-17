@@ -11,37 +11,37 @@ export default function TableHead({
 }) {
   const items = [
     {
-      name: "Store ID",
+      name: "ID АЗС",
       key: "store_id",
       centered: false,
     },
     {
-      name: "Location",
+      name: "Локация",
       key: "address",
       centered: false,
     },
     {
-      name: "Region",
+      name: "Регион",
       key: "store_location__county",
       centered: false,
     },
     {
-      name: "Store type",
+      name: "Тип АЗС",
       key: "store_type",
       centered: true,
     },
     {
-      name: "Status",
+      name: "Статус",
       key: "status",
       centered: true,
     },
     {
-      name: "RFDD",
+      name: "Дата установки",
       key: "date_created",
       centered: false,
     },
     {
-      name: "DOD",
+      name: "Дата запуска",
       key: "date_deployment",
       centered: false,
     },

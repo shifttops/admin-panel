@@ -35,7 +35,7 @@ export default function Account({ onClick }) {
       </div>
       <div className={styles.headerAccount__content}>
         <p className={styles.headerAccount__name}>
-          {localStorage.getItem("userName")}
+          {localStorage.getItem("userName") || "Иван Попов"}
         </p>
         <ArrowDownIcon isOpen={isAccountInfoVisible} />
       </div>

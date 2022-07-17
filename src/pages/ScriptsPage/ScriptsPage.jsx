@@ -81,7 +81,7 @@ const ScriptsPage = observer(() => {
       <div className={styles.page}>
         <div className={styles.pageHead}>
           <div className={styles.pageInfo}>
-            <h2 className={styles.title}>Scripts</h2>
+            <h2 className={styles.title}>Скрипты</h2>
             <SearchQuick
               setSearch={setSearch}
               placeholderText={"Search by name..."}
@@ -179,7 +179,7 @@ const ScriptsPage = observer(() => {
             {isScriptsFetching ? (
               <Loader types={["medium"]} />
             ) : !scriptsByTags(tags).length ? (
-              "No scripts"
+              "Нет доступных скриптов"
             ) : !scriptsByTags(enabledTags).filter((script) =>
                 script.name.toLowerCase().includes(search.toLowerCase())
               ).length ? (

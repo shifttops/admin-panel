@@ -3,7 +3,6 @@ import { makeAutoObservable, observable, observe } from "mobx";
 import { ToastsStore } from "react-toasts";
 import { refreshToken } from "../helpers/AuthHelper";
 import Api from "../api";
-import moment from "moment";
 
 class TicketsStore {
   isAssigneeListFetching = false;
@@ -433,14 +432,19 @@ class TicketsStore {
     }
   };
 
-  sendTicketByEmail = async ({ message }) => {
+  sendTicketByEmail = async ({ message, files }) => {
     try {
       this.isTicketAnswerFetching = true;
       await refreshToken();
 
       const { status, data } = await Api.post(
         `ticket/${this.ticketInfo.id}/send_ticket_answer/`,
-        { message },
+        {
+          message,
+          files: files.map((file) =>
+            Buffer.from(JSON.stringify(file)).toString("base64")
+          ),
+        },
         {
           headers: {
             Authorization: `Token ${localStorage.getItem("access")}`,

@@ -8,10 +8,14 @@ import Account from "../Account";
 import AppStore from "../../../store/AppStore";
 import { observer } from "mobx-react";
 import useClickOutside from "../../../helpers/hooks/useClickOutside";
+import { useHistory } from "react-router-dom";
+import routes from "../../../constants/routes";
 // import useSound from "use-sound";
 
 const HeaderDashboard = observer(({ sidebarToggle }) => {
   const notificationsRef = useRef(null);
+
+  const history = useHistory();
 
   const [searchValue, setSearchValue] = useState("");
   const [resCount, setResCount] = useState(0);
@@ -78,7 +82,7 @@ const HeaderDashboard = observer(({ sidebarToggle }) => {
                 onChange={searchChangeHandler}
                 value={searchValue}
                 type="text"
-                placeholder="Find restaurant..."
+                placeholder="Найти АЗС..."
               />
             </div>
             {(!!searchValue.length && searchStores.get().length) ||
@@ -96,7 +100,10 @@ const HeaderDashboard = observer(({ sidebarToggle }) => {
           </div>
         </div>
         <div className={styles.header__icons}>
-          <ButtonIcon Icon={ChatIcon} />
+          {/*<ButtonIcon*/}
+          {/*  Icon={ChatIcon}*/}
+          {/*  onClick={() => history.push(routes.chat)}*/}
+          {/*/>*/}
           <div ref={notificationsRef} className={styles.header__bellWrapper}>
             <ButtonIcon Icon={BellIcon} onClick={notificationClickHandler} />
             {unreadNotificationCount ? (

@@ -210,7 +210,7 @@ const ChatInput = ({
       ) : null}
       <textarea
         onChange={(data) => setMessage(data.target.value)}
-        placeholder="Enter your message here..."
+        placeholder="Напишите сообщение..."
         value={message}
       />
       <div className={styles.chatForm__buttons}>
@@ -256,7 +256,7 @@ const ChatInput = ({
             <span>
               <Button
                 type="button"
-                text="Cancel editing"
+                text="Отменить редактирование"
                 onClick={() => setIsEditMode(false)}
                 className={"maintenance"}
               />
@@ -264,7 +264,7 @@ const ChatInput = ({
             <Button
               disabled={!validateEditing()}
               type="button"
-              text={"Edit"}
+              text={"Редактировать"}
               onClick={handleSend}
               className={cn({
                 ["disabled"]: !validateEditing(),
@@ -275,7 +275,7 @@ const ChatInput = ({
           <Button
             disabled={!validateMessage(message)}
             type="button"
-            text={!isReplyMode ? "Send" : "Reply"}
+            text={!isReplyMode ? "Отправить" : "Ответить"}
             onClick={handleSend}
             className={cn({
               ["disabled"]: !validateMessage(message),

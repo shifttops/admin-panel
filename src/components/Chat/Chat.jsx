@@ -89,7 +89,7 @@ const Chat = ({
 
   const chatFilesMapper = [
     {
-      title: "info",
+      title: "Информация",
       Component: InfoField,
       props: {
         isChatMessagesFetching,
@@ -98,7 +98,7 @@ const Chat = ({
       },
     },
     {
-      title: "favorite",
+      title: "Избранное",
       Component: FavoriteMessagesField,
       props: {
         isChatMessagesFetching,
@@ -107,7 +107,7 @@ const Chat = ({
       },
     },
     {
-      title: "attachments",
+      title: "Вложения",
       Component: AttachmentsField,
       props: {
         items: chatFilesData,
@@ -129,14 +129,14 @@ const Chat = ({
             })}
           >
             <h2 className={styles.title}>
-              {store_id ? `Store ID: ${store_id}` : "Chat"}
+              {store_id ? `АЗС ID: ${store_id}` : "Чат"}
             </h2>
             <div className={styles.icons}>
               <div className={styles.search}>
                 <input
                   className={styles.search__input}
                   type="text"
-                  placeholder={"Search messages..."}
+                  placeholder={"Поиск сообщений..."}
                   onChange={(e) => setSearch(e.target.value)}
                 />
               </div>
@@ -191,7 +191,7 @@ const Chat = ({
                         styles.messages__date__favorite
                       )}
                     >
-                      <span>Favorite</span>
+                      <span>Избранное</span>
                     </div>
                     {favoriteMessages.map((message) => (
                       <MessageItem
@@ -279,7 +279,7 @@ const Chat = ({
                 {isChatMessagesFetching ? (
                   <Loader types={["medium"]} />
                 ) : !chatData.length ? (
-                  "No messages"
+                  "Еще нет ни одного сообщения!"
                 ) : !chatData.filter((message) =>
                     message.message.toLowerCase().includes(search.toLowerCase())
                   ).length && !favoriteMessages.length ? (

@@ -37,19 +37,19 @@ const ActivityLogsPage = observer(() => {
 
   const items = [
     {
-      name: "Event type",
+      name: "Тип события",
       key: "event_type",
     },
     {
-      name: "Message",
+      name: "Сообщение",
       key: "type",
     },
     {
-      name: "Store id",
+      name: "АЗС ID",
       key: "store_id",
     },
     {
-      name: "Date",
+      name: "Дата",
       key: "date",
     },
   ];
@@ -113,10 +113,10 @@ const ActivityLogsPage = observer(() => {
     <div className="page">
       <div className={styles.pageHead}>
         <div className={styles.pageInfo}>
-          <h2 className={styles.title}>Activity logs</h2>
+          <h2 className={styles.title}>Активити логи</h2>
           <SearchQuick
             setSearch={setSearch}
-            placeholderText={"Search by store id"}
+            placeholderText={"Найти по АЗС ID"}
           />
         </div>
         {/*        <div className={styles.button}>
@@ -128,7 +128,7 @@ const ActivityLogsPage = observer(() => {
         <thead className={styles.tableHead}>
           <tr>
             <th className={styles.table__sort}>
-              <Checkbox label="user" />
+              <Checkbox label="Пользователь" />
             </th>
             {items.map((item) => (
               <th
@@ -152,7 +152,7 @@ const ActivityLogsPage = observer(() => {
                 />
               </th>
             ))}
-            <th className={styles.table__sort}>Time</th>
+            <th className={styles.table__sort}>Время</th>
             <th className={styles.table__sort} />
           </tr>
         </thead>

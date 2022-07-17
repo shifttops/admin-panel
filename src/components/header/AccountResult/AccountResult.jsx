@@ -20,17 +20,17 @@ const AccountResult = ({ isVisible }) => {
       })}
     >
       <p className={styles.headerAccount__InfoName}>
-        {localStorage.getItem("userName")}
+        {localStorage.getItem("userName") || "Иван Попов"}
       </p>
-      <p className={styles.headerAccount__email}>Ronald_hate_kfc@gmail.com</p>
+      <p className={styles.headerAccount__email}>ivan_popov@gmail.com</p>
       <div className={styles.headerAccount__settings}>
-        <p className={styles.headerAccount__text}>Account settings</p>
-        <p className={styles.headerAccount__text}>Help</p>
+        <p className={styles.headerAccount__text}>Настройки аккаунта</p>
+        <p className={styles.headerAccount__text}>Помощь</p>
         <button
           onClick={handleLogOut}
           className={styles.headerAccount__text + " " + styles.redText}
         >
-          Sign out
+          Выход
         </button>
       </div>
     </div>

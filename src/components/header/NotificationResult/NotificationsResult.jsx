@@ -43,7 +43,7 @@ const NotificationResult = observer(
       <div className={styles.notifications}>
         <div className={styles.notifications__head}>
           <div className={styles.notifications__title}>
-            <span>Notifications</span>
+            <span>Уведомления</span>
             <div className={styles.notifications__title__icon}>
               <SettingsIcon onClick={() => history.push("/setting")} />
             </div>
@@ -53,7 +53,7 @@ const NotificationResult = observer(
               className={styles.notifications__actions}
               onClick={handleAllRead}
             >
-              Read all
+              Прочитать все
             </p>
           ) : null}
         </div>
@@ -65,7 +65,7 @@ const NotificationResult = observer(
                 .map((item) => <NotificationItem item={item} />)
             ) : !readNotifications.length ? (
               <div className={styles.notifications__info__empty}>
-                No notifications
+                Нет уведомлений
               </div>
             ) : null}
           </div>

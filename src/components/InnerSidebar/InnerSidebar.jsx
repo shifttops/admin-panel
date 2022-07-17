@@ -31,7 +31,7 @@ const InnerSidebar = observer((props) => {
 
   return (
     <div className={styles.innerMenu}>
-      <p className={styles.innerMenu__title}>Menu</p>
+      <p className={styles.innerMenu__title}>Меню</p>
       {props.links ? (
         <>
           {props.links.map(({ to, name }) => (

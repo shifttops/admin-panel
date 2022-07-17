@@ -1,4 +1,4 @@
-import { Redirect, Route, Switch } from "react-router-dom";
+import {Redirect, Route, Switch} from "react-router-dom";
 
 import HeaderDashboard from "components/header/HeaderDashboard";
 import mainNavigation from "constants/main-navigation";
@@ -26,16 +26,12 @@ export default function CustomRouter() {
   return (
     <>
       <Switch>
-        {localStorage.getItem("access") &&
-          localStorage.getItem("access") !== "undefined" && (
-            <Redirect from="/" exact to={routes.home} />
-          )}
-        <Route exact path={routes.login}>
-          <LoginPage />
-        </Route>
-        <Route exact path={routes.newPassword}>
-          <NewPasswordPage />
-        </Route>
+        {/*<Route exact path={routes.login}>*/}
+        {/*  <LoginPage />*/}
+        {/*</Route>*/}
+        {/*<Route exact path={routes.newPassword}>*/}
+        {/*  <NewPasswordPage />*/}
+        {/*</Route>*/}
         <Route exact path={routes.emailSend}>
           <EmailSendPage />
         </Route>
@@ -106,14 +102,8 @@ export default function CustomRouter() {
             </div>
           )}
         />
-      </Switch>
-      {(!localStorage.getItem("access") ||
-        localStorage.getItem("access") === "undefined") && (
-        <Redirect to={routes.login} />
-      )}
-      {/* ) : (
         <Redirect to={routes.home} />
-    )} */}
+      </Switch>
     </>
   );
 }

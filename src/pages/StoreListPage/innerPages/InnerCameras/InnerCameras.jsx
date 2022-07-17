@@ -43,14 +43,14 @@ const InnerCameras = observer((props) => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.head}>
-        <h2 className={styles.title}>Cameras</h2>
+        <h2 className={styles.title}>Камеры</h2>
         <div className={styles.buttons}>
           {/*<ButtonIcon Icon={OpenPathIcon} />
           <ButtonIcon Icon={SaveVideo} />
           <ButtonIcon Icon={RefreshIcon} />*/}
           <Button
             onClick={() => history.push("/scripts")}
-            text="Plan video recording"
+            text="Планировать запись видео"
           />
         </div>
       </div>
@@ -115,7 +115,7 @@ const InnerCameras = observer((props) => {
           {isCamerasFetching ? (
             <Loader types={["medium"]} />
           ) : (
-            "No cameras on this store"
+            "Нет камер на этой АЗС"
           )}
         </div>
       )}

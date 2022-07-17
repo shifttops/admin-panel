@@ -11,7 +11,7 @@ const InnerInfo = observer((props) => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.info__store}>
-        <div className={styles.info__header}>Main info</div>
+        <div className={styles.info__header}>Основная информация</div>
         {!isStoreInfoFetching ? (
           <div className={styles.info__items}>
             {categoryMapper.map((item) => (
@@ -29,7 +29,7 @@ const InnerInfo = observer((props) => {
           </div>
         )}
       </div>
-      <AdditionalInfo leftTitle="Additional info" />
+      <AdditionalInfo leftTitle="Дополнительная информация" />
     </div>
   );
 });

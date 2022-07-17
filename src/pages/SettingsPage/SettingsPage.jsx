@@ -52,27 +52,27 @@ const SettingsPage = observer((props) => {
   return (
     <div className="page">
       <div className={styles.pageHead}>
-        <h2 className={styles.title}>Settings</h2>
+        <h2 className={styles.title}>Настройки</h2>
         <div className={styles.button}>
           <Button
             fetching={isUpdatingNotificationSettings}
             onClick={handleSave}
-            text="Save"
+            text="Сохранить"
             className={styles.btnSave}
           />
         </div>
       </div>
       <div className={styles.tabs}>
         <button className={styles.link + " " + styles.active}>
-          Notification
+          Уведомления
         </button>
-        <button className={styles.link}>Account</button>
-        <button className={styles.link}>Intergations</button>
+        <button className={styles.link}>Аккаунт</button>
+        <button className={styles.link}>Интеграции</button>
       </div>
       <div className={styles.block}>
         <div className={styles.category}>
-          <p className={styles.name}>Notification</p>
-          <p className={styles.descr}>Select the type of notifications</p>
+          <p className={styles.name}>Уведомления</p>
+          <p className={styles.descr}>Выберите тип уведомлений</p>
         </div>
         <div className={styles.settings}>
           {!isLoadingNotificationSettings ? (
@@ -98,7 +98,7 @@ const SettingsPage = observer((props) => {
           )}
         </div>
       </div>
-      <div className={styles.block}>
+      {/* <div className={styles.block}>
         <div className={styles.category}>
           <p className={styles.name}>How to receive notifications</p>
           <p className={styles.descr}>Receive notifications</p>
@@ -129,7 +129,7 @@ const SettingsPage = observer((props) => {
             />
           </div>
         </div>
-      </div>
+      </div> */}
       <ToastsContainer
         store={ToastsStore}
         position={ToastsContainerPosition.BOTTOM_RIGHT}

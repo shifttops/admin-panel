@@ -26,28 +26,28 @@ const InnerManage = observer((props) => {
 
   const manageMapper = [
     {
-      title: "Update algorithm version",
+      title: "Обновить версию алгоритмов",
       url: null,
       type: manageItemTypes.yellow,
       icon: <VersionManageIcon />,
       isFetching: null,
     },
     {
-      title: "Update weights",
+      title: "Обновить веса",
       url: null,
       type: manageItemTypes.green,
       icon: <WeightIcon />,
       isFetching: null,
     },
     {
-      title: "Refresh browser",
+      title: "Обновить браузер",
       url: "/refresh_browser",
       type: manageItemTypes.red,
       icon: <RefreshIcon />,
       isFetching: isBrowserRefreshing,
     },
     {
-      title: "Reboot all cameras",
+      title: "Перезапустить все камеры",
       url: "/reboot_cameras",
       type: manageItemTypes.red,
       icon: <VideoManageIcon />,
@@ -57,8 +57,8 @@ const InnerManage = observer((props) => {
 
   return (
     <div className={styles.wrapper}>
-      <h2 className={styles.title}>Manage store</h2>
-      <SetStoreStatus {...props} />
+      <h2 className={styles.title}>Управление АЗС</h2>
+      {/*<SetStoreStatus {...props} />*/}
       {manageMapper.map((item) => (
         <ManageItem
           key={item.title}
