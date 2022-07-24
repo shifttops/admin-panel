@@ -95,14 +95,13 @@ const Chart = ({
   };
 
   useEffect(() => {
-    if (chart) {
-      getChart(chart);
-    }
+    if (!chart) return;
+    getChart(chart);
   }, [chart]);
 
   return (
     <div className={styles.block}>
-      <Bar type={"bar"} data={data} options={options} />
+      <Bar type="bar" data={data} options={options} />
     </div>
   );
 };

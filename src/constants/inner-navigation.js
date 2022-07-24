@@ -12,6 +12,7 @@ import InnerEdit from "../pages/ScriptsPage/InnerEdit/InnerEdit";
 import InnerLaunch from "../pages/ScriptsPage/InnerLaunch/InnerLaunch";
 import InnerTickets from "../pages/StoreListPage/innerPages/InnerTickets";
 import InnerSchedule from "../pages/StoreListPage/innerPages/InnerSchedule";
+import InnerGraphics from "../pages/StoreListPage/innerPages/InnerGraphics";
 
 export const innerNavigation = [
   { to: routes.storeInfo, name: "АЗС Инфо", Component: InnerInfo },
@@ -52,6 +53,11 @@ export const innerNavigation = [
     to: routes.innerPlanner,
     name: "Планировщик",
     Component: InnerPlanner,
+  },
+  {
+    to: routes.innerBusiness,
+    name: "Бизнес данные",
+    Component: InnerGraphics,
   },
 ];
 

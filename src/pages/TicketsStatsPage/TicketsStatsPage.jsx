@@ -50,9 +50,7 @@ const TicketsStatsPage = observer(() => {
     return () => TicketsStore.filteredTickets.get().clear();
   }, []);
 
-  const getChart = (chart) => {
-    setCharts((prevState) => [...prevState, chart]);
-  };
+  const getChart = (chart) => setCharts((prevState) => [...prevState, chart]);
 
   const handleDownload = () => {
     setIsDownloading(true);
